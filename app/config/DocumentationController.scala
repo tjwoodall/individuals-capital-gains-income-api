@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.individualscapitalgainsincomeapi.config
+package config
 
-import com.google.inject.AbstractModule
+import controllers.Assets
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-class Module extends AbstractModule {
+import javax.inject.{Inject, Singleton}
 
-  override def configure(): Unit = {
+@Singleton
+class DocumentationController @Inject() (
+    cc: ControllerComponents,
+    assets: Assets
+) extends BackendController(cc) {
 
-    bind(classOf[AppConfig]).asEagerSingleton()
+  def asset(version: String, file: String): Action[AnyContent] = {
+    assets.at(s"/public/api/conf/$version", file)
   }
+
 }
