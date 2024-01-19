@@ -17,6 +17,7 @@
 package config
 
 import controllers.Assets
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -27,6 +28,27 @@ class DocumentationController @Inject() (
     cc: ControllerComponents,
     assets: Assets
 ) extends BackendController(cc) {
+
+  def definition(): Action[AnyContent] = Action {
+    Ok(Json.toJson("""
+        |{
+        |  "scopes": [
+        |  ],
+        |  "api": {
+        |    "name": "Individuals Capital Gains Income (MTD)",
+        |    "description": "A description of the API.",
+        |    "context": "hello",
+        |    "versions": [
+        |      {
+        |        "version": "1.0",
+        |        "status": "BETA",
+        |        "endpointsEnabled": true
+        |      }
+        |    ]
+        |  }
+        |}
+        |""".stripMargin))
+  }
 
   def asset(version: String, file: String): Action[AnyContent] = {
     assets.at(s"/public/api/conf/$version", file)
