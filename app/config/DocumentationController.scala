@@ -29,7 +29,7 @@ class DocumentationController @Inject() (
 ) extends BackendController(cc) {
 
   def definition(): Action[AnyContent] = {
-    assets.at("/public/api", "definition.json")
+    assets.at("/public/api/conf", "definition.json")
   }
 
   def asset(version: String, file: String): Action[AnyContent] = {
