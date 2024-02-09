@@ -42,7 +42,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
 
   object DefaultHandler extends Handler
   object V1Handler      extends Handler
-  object V2Handler      extends Handler
 
   private val defaultRouter = Router.from { case GET(p"") =>
     DefaultHandler
@@ -113,7 +112,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
 
     handleWithVersionRoutes("/v1", V1Handler, Version1)
   }
-
 
   "Routing requests with unsupported version" should {
     implicit val acceptHeader: Some[String] = Some("application/vnd.hmrc.5.0+json")

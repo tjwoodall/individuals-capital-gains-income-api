@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat.Defaults
-
-import javax.naming.spi.Resolver
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings}
+//import com.sun.org.apache.xml.internal.serialize.OutputFormat.Defaults
+//import javax.naming.spi.Resolver
 
 val appName = "individuals-capital-gains-income-api"
 

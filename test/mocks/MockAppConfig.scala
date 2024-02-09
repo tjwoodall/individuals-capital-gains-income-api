@@ -20,6 +20,7 @@ import config.{AppConfig, ConfidenceLevelConfig}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import routing.Version
+import play.api.Configuration
 
 trait MockAppConfig extends MockFactory {
 
@@ -44,8 +45,27 @@ trait MockAppConfig extends MockFactory {
     def tysIfsEnvironment: CallHandler[String]                     = (() => mockAppConfig.tysIfsEnv).expects()
     def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders).expects()
 
+    // Release6 Config
+    def release6BaseUrl: CallHandler[String] = (() => mockAppConfig.release6BaseUrl).expects()
+
+    def release6Token: CallHandler[String] = (() => mockAppConfig.release6Token).expects()
+
+    def release6Environment: CallHandler[String] = (() => mockAppConfig.release6Env).expects()
+
+    def release6EnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.release6EnvironmentHeaders).expects()
+
+    // api1661 Config
+    def api1661BaseUrl: CallHandler[String] = (() => mockAppConfig.api1661BaseUrl).expects()
+
+    def api1661Token: CallHandler[String] = (() => mockAppConfig.api1661Token).expects()
+
+    def api1661Environment: CallHandler[String] = (() => mockAppConfig.api1661Env).expects()
+
+    def api1661EnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.api1661EnvironmentHeaders).expects()
+
     // MTD IF Lookup Config
     def mtdIdBaseUrl: CallHandler[String]                             = (() => mockAppConfig.mtdIdBaseUrl).expects()
+    def featureSwitches: CallHandler[Configuration]                   = (() => mockAppConfig.featureSwitches).expects()
     def apiGatewayContext: CallHandler[String]                        = (() => mockAppConfig.apiGatewayContext).expects()
     def apiStatus(version: Version): CallHandler[String]              = (mockAppConfig.apiStatus(_: Version)).expects(version)
     def endpointsEnabled(version: Version): CallHandler[Boolean]      = (mockAppConfig.endpointsEnabled(_: Version)).expects(version)
