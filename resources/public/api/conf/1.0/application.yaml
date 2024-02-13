@@ -2,7 +2,7 @@ openapi: "3.0.3"
 
 info:
   version: "1.0"
-  title: Individuals Savings Income (MTD)
+  title: Individuals Capital Gains Income (MTD)
   description: |
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
@@ -46,16 +46,22 @@ components:
             read:self-assessment: Grant read access
 
 tags:
-  - name: UK Savings Account
-    description: Resources relating to an individual’s UK savings account
+  - name: Capital Gains on Residential Property Disposals
+    description: |
+      These endpoints allow a user to create, delete or amend Capitals Gains income from residential property disposals
+      
+      Resources relating to an individual's residential property disposals
 
-  - name: Savings Income
-    description: Resources relating to an individual's savings income
+  - name: Other Capital Gains and Disposals
+    description: |
+      These endpoints allow a user to create, delete or amend income from other Capital Gains and disposals
+      
+      Resources relating to an individual's other capital gains and disposals
 
 paths:
-  /individuals/savings-income/uk-accounts/{nino}:
-    $ref: "./savings_uk_accounts.yaml"
-  /individuals/savings-income/uk-accounts/{nino}/{taxYear}/{savingsAccountId}:
-    $ref: "./savings_uk_accounts_id.yaml"
-  /individuals/savings-income/other/{nino}/{taxYear}:
-    $ref: "./savings.yaml"
+  /individuals/disposals-income/residential-property/{nino}/{taxYear}:
+    $ref: "./cgt_residential.yaml"
+  /individuals/disposals-income/residential-property/{nino}/{taxYear}/ppd:
+    $ref: "./cgt_residential_ppd.yaml"
+  /individuals/disposals-income/other-gains/{nino}/{taxYear}:
+    $ref: "./cgt_other.yaml"
