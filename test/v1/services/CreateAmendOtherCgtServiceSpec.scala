@@ -76,7 +76,7 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
         ("INVALID_TAX_YEAR", TaxYearFormatError),
         ("INVALID_CORRELATIONID", InternalError),
         ("INVALID_PAYLOAD", InternalError),
-        ("INVALID_DISPOSAL_DATE", RuleDisposalDateError),
+        ("INVALID_DISPOSAL_DATE", RuleDisposalDateNotFutureError),
         ("INVALID_ACQUISITION_DATE", RuleAcquisitionDateError),
         ("SERVER_ERROR", InternalError),
         ("SERVICE_UNAVAILABLE", InternalError)

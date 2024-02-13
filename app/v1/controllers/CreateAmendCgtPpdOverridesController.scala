@@ -17,7 +17,6 @@
 package v1.controllers
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
@@ -30,8 +29,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
 import v1.controllers.requestParsers.CreateAmendCgtPpdOverridesRequestParser
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRawData
-import v1.models.response.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesHateoasData
-import v1.models.response.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesResponse.CreateAmendCgtPpdOverridesLinksFactory
+import v1.models.response.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesAuditData
 import v1.services.CreateAmendCgtPpdOverridesService
 
 import javax.inject.{Inject, Singleton}
@@ -45,7 +43,6 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
                                                       service: CreateAmendCgtPpdOverridesService,
                                                       auditService: AuditService,
                                                       nrsProxyService: NrsProxyService,
-                                                      hateoasFactory: HateoasFactory,
                                                       cc: ControllerComponents,
                                                       val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -74,7 +71,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
           service.createAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withHateoasResult(hateoasFactory)(CreateAmendCgtPpdOverridesHateoasData(nino, taxYear))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest(rawData)
     }
@@ -103,7 +100,8 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Right(Some(Json.toJson(CreateAmendCgtPpdOverridesHateoasData(nino, taxYear)))))
+                AuditResponse(httpStatus = httpStatus, response =
+                  Right(Some(Json.toJson(CreateAmendCgtPpdOverridesAuditData(nino, taxYear)))))
               ))
         }
       }

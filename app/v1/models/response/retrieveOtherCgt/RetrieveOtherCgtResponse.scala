@@ -16,10 +16,7 @@
 
 package v1.models.response.retrieveOtherCgt
 
-import api.hateoas.{HateoasLinks, HateoasLinksFactory}
 import api.models.domain.Timestamp
-import api.models.hateoas.{HateoasData, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, OFormat}
 
 case class RetrieveOtherCgtResponse(submittedOn: Timestamp,
@@ -28,21 +25,8 @@ case class RetrieveOtherCgtResponse(submittedOn: Timestamp,
                                     losses: Option[Losses],
                                     adjustments: Option[BigDecimal])
 
-object RetrieveOtherCgtResponse extends HateoasLinks {
+object RetrieveOtherCgtResponse {
   implicit val format: OFormat[RetrieveOtherCgtResponse] = Json.format[RetrieveOtherCgtResponse]
-
-  implicit object RetrieveOtherCgtLinksFactory extends HateoasLinksFactory[RetrieveOtherCgtResponse, RetrieveOtherCgtHateoasData] {
-
-    override def links(appConfig: AppConfig, data: RetrieveOtherCgtHateoasData): Seq[Link] = {
-      Seq(
-        createAmendOtherCgt(appConfig, data.nino, data.taxYear),
-        deleteOtherCgt(appConfig, data.nino, data.taxYear),
-        retrieveOtherCgt(appConfig, data.nino, data.taxYear)
-      )
-    }
-
-  }
-
 }
 
-case class RetrieveOtherCgtHateoasData(nino: String, taxYear: String) extends HateoasData
+case class RetrieveOtherCgtHateoasData(nino: String, taxYear: String)

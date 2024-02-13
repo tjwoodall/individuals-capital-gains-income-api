@@ -49,9 +49,9 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     |      }
     |   ],
     |   "api":{
-    |      "name":"Individuals Savings Income (MTD)",
-    |      "description":"An API for providing individuals savings income data",
-    |      "context":"individuals/savings-income",
+    |      "name":"Individuals Capital Gains Income (MTD)",
+    |      "description":"An API for providing individuals capital gains data",
+    |      "context":"individuals/capital-gains-income",
     |      "categories":[
     |         "INCOME_TAX_MTD"
     |      ],

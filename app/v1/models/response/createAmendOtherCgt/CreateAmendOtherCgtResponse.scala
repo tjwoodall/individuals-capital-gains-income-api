@@ -16,31 +16,11 @@
 
 package v1.models.response.createAmendOtherCgt
 
-import api.hateoas.{HateoasLinks, HateoasLinksFactory}
-import api.models.hateoas.{HateoasData, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, Writes}
 
-object CreateAmendOtherCgtResponse extends HateoasLinks {
+case class CreateAmendOtherCgtAuditData(nino: String, taxYear: String)
 
-  implicit object CreateAmendOtherCgtLinksFactory extends HateoasLinksFactory[Unit, CreateAmendOtherCgtHateoasData] {
-
-    override def links(appConfig: AppConfig, data: CreateAmendOtherCgtHateoasData): Seq[Link] = {
-      import data._
-      Seq(
-        createAmendOtherCgt(appConfig, nino, taxYear),
-        retrieveOtherCgt(appConfig, nino, taxYear),
-        deleteOtherCgt(appConfig, nino, taxYear)
-      )
-    }
-
-  }
-
-}
-
-case class CreateAmendOtherCgtHateoasData(nino: String, taxYear: String) extends HateoasData
-
-object CreateAmendOtherCgtHateoasData {
-  implicit val writes: Writes[CreateAmendOtherCgtHateoasData] = Json.writes[CreateAmendOtherCgtHateoasData]
+object CreateAmendOtherCgtAuditData {
+  implicit val writes: Writes[CreateAmendOtherCgtAuditData] = Json.writes[CreateAmendOtherCgtAuditData]
 
 }

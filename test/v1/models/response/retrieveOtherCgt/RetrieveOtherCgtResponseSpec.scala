@@ -16,11 +16,7 @@
 
 package v1.models.response.retrieveOtherCgt
 
-import api.hateoas.HateoasFactory
 import api.models.domain.Timestamp
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.{HateoasWrapper, Link}
-import mocks.MockAppConfig
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
 
@@ -171,29 +167,6 @@ class RetrieveOtherCgtResponseSpec extends UnitSpec {
     "written to JSON" should {
       "produce the expected JSON" in {
         Json.toJson(responseModel) shouldBe validResponseJson
-      }
-    }
-  }
-
-  "RetrieveOtherCgtLinksFactory" when {
-    class Test extends MockAppConfig {
-      val hateoasFactory  = new HateoasFactory(mockAppConfig)
-      val nino            = "AA111111A"
-      val taxYear: String = "2020-21"
-      MockedAppConfig.apiGatewayContext.returns("individuals/income-received").anyNumberOfTimes()
-    }
-
-    "wrapping a response model" should {
-      "expose the correct links" in new Test {
-        hateoasFactory.wrap(responseModel, RetrieveOtherCgtHateoasData(nino, taxYear)) shouldBe
-          HateoasWrapper(
-            responseModel,
-            Seq(
-              Link(s"/individuals/income-received/disposals/other-gains/$nino/$taxYear", PUT, "create-and-amend-other-capital-gains-and-disposals"),
-              Link(s"/individuals/income-received/disposals/other-gains/$nino/$taxYear", DELETE, "delete-other-capital-gains-and-disposals"),
-              Link(s"/individuals/income-received/disposals/other-gains/$nino/$taxYear", GET, "self")
-            )
-          )
       }
     }
   }

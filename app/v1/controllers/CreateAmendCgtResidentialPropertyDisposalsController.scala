@@ -17,7 +17,6 @@
 package v1.controllers
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
@@ -30,8 +29,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
 import v1.controllers.requestParsers.CreateAmendCgtResidentialPropertyDisposalsRequestParser
 import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRawData
-import v1.models.response.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsHateoasData
-import v1.models.response.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsResponse._
+import v1.models.response.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsAuditData
 import v1.services._
 
 import javax.inject.{Inject, Singleton}
@@ -45,7 +43,6 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (val authSe
                                                                       service: CreateAmendCgtResidentialPropertyDisposalsService,
                                                                       auditService: AuditService,
                                                                       nrsProxyService: NrsProxyService,
-                                                                      hateoasFactory: HateoasFactory,
                                                                       cc: ControllerComponents,
                                                                       val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -74,7 +71,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (val authSe
           service.createAndAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withHateoasResult(hateoasFactory)(CreateAmendCgtResidentialPropertyDisposalsHateoasData(nino, taxYear))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest(rawData)
     }
@@ -103,7 +100,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (val authSe
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(OK, Right(Some(Json.toJson(CreateAmendCgtResidentialPropertyDisposalsHateoasData(nino, taxYear)))))
+                AuditResponse(OK, Right(Some(Json.toJson(CreateAmendCgtResidentialPropertyDisposalsAuditData(nino, taxYear)))))
               ))
         }
       }

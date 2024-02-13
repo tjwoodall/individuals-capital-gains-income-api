@@ -291,30 +291,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
     val nino: String = "AA123456A"
     def taxYear: String
 
-    val mtdResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-cgt-residential-property-disposals"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-cgt-residential-property-disposals"
-         |      }
-         |   ]
-         |}
-       """.stripMargin
-    )
-
     def downstreamUri: String
 
     def setupStubs(): StubMapping
@@ -323,7 +299,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
       setupStubs()
       buildRequest(s"/disposals/residential-property/$nino/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -363,8 +339,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
 
         verifyNrs(validRequestJson)
       }
@@ -379,9 +353,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
         }
 
         val response: WSResponse = await(request.put(validRequestJson))
-        response.json shouldBe mtdResponse
         response.status shouldBe OK
-        response.header("Content-Type") shouldBe Some("application/json")
 
         verifyNrs(validRequestJson)
       }

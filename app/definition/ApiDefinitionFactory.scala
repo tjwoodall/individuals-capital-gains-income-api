@@ -53,8 +53,8 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) {
         )
       ),
       api = APIDefinition(
-        name = "Individuals Savings Income (MTD)",
-        description = "An API for providing individuals savings income data",
+        name = "Individuals Capital Gains Income (MTD)",
+        description = "An API for providing individuals capital gains data",
         context = appConfig.apiGatewayContext,
         categories = Seq("INCOME_TAX_MTD"),
         versions = Seq(

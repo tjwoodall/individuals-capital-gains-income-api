@@ -348,30 +348,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
     def downstreamUri: String
     def uri: String = s"/disposals/residential-property/$nino/$taxYear/ppd"
 
-    val hateoasResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-report-and-pay-capital-gains-tax-on-property-overrides"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-         |         "method":"DELETE",
-         |         "rel":"delete-report-and-pay-capital-gains-tax-on-property-overrides"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      }
-         |   ]
-         |}
-    """.stripMargin
-    )
-
     def setupStubs(): StubMapping
 
     def request: WSRequest = {
@@ -416,8 +392,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
 
         val response: WSResponse = await(request.put(validRequestBodyJson))
         response.status shouldBe OK
-        response.body[JsValue] shouldBe hateoasResponse
-        response.header("Content-Type") shouldBe Some("application/json")
 
         verifyNrs(validRequestBodyJson)
       }
@@ -432,8 +406,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
 
         val response: WSResponse = await(request.put(validRequestBodyJson))
         response.status shouldBe OK
-        response.body[JsValue] shouldBe hateoasResponse
-        response.header("Content-Type") shouldBe Some("application/json")
 
         verifyNrs(validRequestBodyJson)
       }

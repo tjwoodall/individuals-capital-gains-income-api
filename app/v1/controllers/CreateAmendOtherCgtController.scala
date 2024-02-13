@@ -17,7 +17,6 @@
 package v1.controllers
 
 import api.controllers._
-import api.hateoas.HateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
@@ -30,8 +29,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
 import v1.controllers.requestParsers.CreateAmendOtherCgtRequestParser
 import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRawData
-import v1.models.response.createAmendOtherCgt.CreateAmendOtherCgtHateoasData
-import v1.models.response.createAmendOtherCgt.CreateAmendOtherCgtResponse.CreateAmendOtherCgtLinksFactory
+import v1.models.response.createAmendOtherCgt.CreateAmendOtherCgtAuditData
 import v1.services._
 
 import javax.inject.{Inject, Singleton}
@@ -44,7 +42,6 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
                                                parser: CreateAmendOtherCgtRequestParser,
                                                service: CreateAmendOtherCgtService,
                                                nrsProxyService: NrsProxyService,
-                                               hateoasFactory: HateoasFactory,
                                                auditService: AuditService,
                                                cc: ControllerComponents,
                                                val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
@@ -73,7 +70,7 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
           service.createAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withHateoasResult(hateoasFactory)(CreateAmendOtherCgtHateoasData(nino, taxYear))
+        .withNoContentResult(OK)
 
       requestHandler.handleRequest(rawData)
     }
@@ -102,7 +99,7 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(OK, Right(Some(Json.toJson(CreateAmendOtherCgtHateoasData(nino, taxYear)))))
+                AuditResponse(OK, Right(Some(Json.toJson(CreateAmendOtherCgtAuditData(nino, taxYear)))))
               ))
         }
       }

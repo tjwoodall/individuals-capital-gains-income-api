@@ -17,15 +17,11 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.HateoasLinks
 import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.Configuration
@@ -34,7 +30,6 @@ import play.api.mvc.{AnyContentAsJson, Result}
 import v1.mocks.requestParsers.MockCreateAmendCgtPpdOverridesRequestParser
 import v1.mocks.services._
 import v1.models.request.createAmendCgtPpdOverrides._
-import v1.models.response.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -48,9 +43,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     with MockCreateAmendCgtPpdOverridesService
     with MockAuditService
     with MockNrsProxyService
-    with MockHateoasFactory
     with MockCreateAmendCgtPpdOverridesRequestParser
-    with HateoasLinks
     with MockIdGenerator {
 
   val taxYear: String = "2019-20"
@@ -132,48 +125,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
     body = requestModel
   )
 
-  val mtdResponse: JsValue = Json.parse(
-    s"""
-       |{
-       |   "links":[
-       |      {
-       |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-       |         "method":"PUT",
-       |         "rel":"create-and-amend-report-and-pay-capital-gains-tax-on-property-overrides"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-       |         "method":"DELETE",
-       |         "rel":"delete-report-and-pay-capital-gains-tax-on-property-overrides"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-       |         "method":"GET",
-       |         "rel":"self"
-       |      }
-       |   ]
-       |}
-    """.stripMargin
-  )
-
-  val hateoasLinks: List[Link] = List(
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-      method = PUT,
-      rel = "create-and-amend-report-and-pay-capital-gains-tax-on-property-overrides"
-    ),
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-      method = DELETE,
-      rel = "delete-report-and-pay-capital-gains-tax-on-property-overrides"
-    ),
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-      method = GET,
-      rel = "self"
-    )
-  )
-
   val auditData: JsValue = Json.parse(s"""
        |{
        |  "nino":"$nino",
@@ -197,11 +148,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), CreateAmendCgtPpdOverridesHateoasData(nino, taxYear))
-          .returns(HateoasWrapper((), hateoasLinks))
-
-        runOkTestWithAudit(expectedStatus = OK, Some(mtdResponse), Some(validRequestJson), Some(auditData))
+        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson), Some(auditData))
       }
     }
 
@@ -242,7 +189,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
       service = mockCreateAmendCgtPpdOverridesService,
       auditService = mockAuditService,
       nrsProxyService = mockNrsProxyService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

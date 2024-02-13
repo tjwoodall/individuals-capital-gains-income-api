@@ -28,7 +28,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
-    MockedAppConfig.apiGatewayContext returns "individuals/savings-income"
+    MockedAppConfig.apiGatewayContext returns "individuals/capital-gains"
   }
 
   private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
@@ -62,9 +62,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               )
             ),
             api = APIDefinition(
-              name = "Individuals Savings Income (MTD)",
-              description = "An API for providing individuals savings income data",
-              context = "individuals/savings-income",
+              name = "Individuals Capital Gains Income (MTD)",
+              description = "An API for providing individuals capital gains data",
+              context = "individuals/capital-gains",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
                 APIVersion(

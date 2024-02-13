@@ -17,15 +17,10 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.HateoasLinks
 import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.RelType.{CREATE_AND_AMEND_OTHER_CGT_AND_DISPOSALS, DELETE_OTHER_CGT_AND_DISPOSALS, SELF}
-import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
@@ -43,9 +38,7 @@ class RetrieveOtherCgtControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveOtherCgtService
-    with MockHateoasFactory
     with MockRetrieveOtherCgtRequestParser
-    with HateoasLinks
     with MockIdGenerator {
 
   val taxYear: String = "2019-20"
@@ -59,27 +52,6 @@ class RetrieveOtherCgtControllerSpec
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear)
   )
-
-  val amendOtherCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = PUT,
-      rel = CREATE_AND_AMEND_OTHER_CGT_AND_DISPOSALS
-    )
-
-  val retrieveOtherCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = GET,
-      rel = SELF
-    )
-
-  val deleteOtherCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = DELETE,
-      rel = DELETE_OTHER_CGT_AND_DISPOSALS
-    )
 
   val responseModel: RetrieveOtherCgtResponse = RetrieveOtherCgtResponse(
     submittedOn = Timestamp("2021-05-07T16:18:44.403Z"),
@@ -160,31 +132,7 @@ class RetrieveOtherCgtControllerSpec
      """.stripMargin
   )
 
-  val mtdResponse: JsObject = validResponseJson.as[JsObject] ++ Json
-    .parse(
-      s"""
-       |{
-       |   "links":[
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"PUT",
-       |         "rel":"create-and-amend-other-capital-gains-and-disposals"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"GET",
-       |         "rel":"self"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"DELETE",
-       |         "rel":"delete-other-capital-gains-and-disposals"
-       |      }
-       |   ]
-       |}
-    """.stripMargin
-    )
-    .as[JsObject]
+  val mtdResponse: JsObject = validResponseJson.as[JsObject]
 
   "RetrieveOtherCgtController" should {
     "return a successful response with status 200 (OK)" when {
@@ -197,17 +145,6 @@ class RetrieveOtherCgtControllerSpec
         MockRetrieveOtherCgtService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
-
-        MockHateoasFactory
-          .wrap(responseModel, RetrieveOtherCgtHateoasData(nino, taxYear))
-          .returns(
-            HateoasWrapper(
-              responseModel,
-              List(
-                amendOtherCgtLink,
-                retrieveOtherCgtLink,
-                deleteOtherCgtLink
-              )))
 
         runOkTest(
           expectedStatus = OK,
@@ -246,7 +183,6 @@ class RetrieveOtherCgtControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveOtherCgtRequestParser,
       service = mockRetrieveOtherCgtService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

@@ -17,13 +17,11 @@
 package v1.controllers
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.hateoas.HateoasFactory
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
 import v1.controllers.requestParsers.RetrieveAllResidentialPropertyCgtRequestParser
 import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRawData
-import v1.models.response.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtHateoasData
 import v1.services.RetrieveAllResidentialPropertyCgtService
 
 import javax.inject.{Inject, Singleton}
@@ -34,7 +32,6 @@ class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: En
                                                              val lookupService: MtdIdLookupService,
                                                              parser: RetrieveAllResidentialPropertyCgtRequestParser,
                                                              service: RetrieveAllResidentialPropertyCgtService,
-                                                             hateoasFactory: HateoasFactory,
                                                              cc: ControllerComponents,
                                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc) {
@@ -58,7 +55,7 @@ class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: En
       val requestHandler = RequestHandler
         .withParser(parser)
         .withService(service.retrieve)
-        .withHateoasResult(hateoasFactory)(RetrieveAllResidentialPropertyCgtHateoasData(nino, taxYear))
+        .withPlainJsonResult()
 
       requestHandler.handleRequest(rawData)
     }

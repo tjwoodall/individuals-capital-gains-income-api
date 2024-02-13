@@ -16,31 +16,11 @@
 
 package v1.models.response.createAmendCgtPpdOverrides
 
-import api.hateoas.{HateoasLinks, HateoasLinksFactory}
-import api.models.hateoas.{HateoasData, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, Writes}
 
-object CreateAmendCgtPpdOverridesResponse extends HateoasLinks {
+case class CreateAmendCgtPpdOverridesAuditData(nino: String, taxYear: String)
 
-  implicit object CreateAmendCgtPpdOverridesLinksFactory extends HateoasLinksFactory[Unit, CreateAmendCgtPpdOverridesHateoasData] {
-
-    override def links(appConfig: AppConfig, data: CreateAmendCgtPpdOverridesHateoasData): Seq[Link] = {
-      import data._
-      Seq(
-        createAmendCgtPpdOverrides(appConfig, nino, taxYear),
-        deleteCgtPpdOverrides(appConfig, nino, taxYear),
-        retrieveAllCgtPpdDisposalsOverrides(appConfig, nino, taxYear)
-      )
-    }
-
-  }
-
-}
-
-case class CreateAmendCgtPpdOverridesHateoasData(nino: String, taxYear: String) extends HateoasData
-
-object CreateAmendCgtPpdOverridesHateoasData {
-  implicit val writes: Writes[CreateAmendCgtPpdOverridesHateoasData] = Json.writes[CreateAmendCgtPpdOverridesHateoasData]
+object CreateAmendCgtPpdOverridesAuditData {
+  implicit val writes: Writes[CreateAmendCgtPpdOverridesAuditData] = Json.writes[CreateAmendCgtPpdOverridesAuditData]
 
 }

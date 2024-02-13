@@ -356,7 +356,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -371,30 +371,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
   private trait NonTysTest extends Test {
     def downstreamUrl: String = s"/income-tax/income/disposals/other-gains/$nino/$taxYear"
 
-    val mtdResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-other-capital-gains-and-disposals"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-other-capital-gains-and-disposals"
-         |      }
-         |   ]
-         |}
-   """.stripMargin
-    )
-
   }
 
   private trait TysIfsTest extends Test {
@@ -405,30 +381,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
 
     def downstreamUrl: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
-
-    val mtdResponse: JsValue = Json.parse(
-      s"""
-         |{
-         |   "links":[
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"PUT",
-         |         "rel":"create-and-amend-other-capital-gains-and-disposals"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"GET",
-         |         "rel":"self"
-         |      },
-         |      {
-         |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-         |         "method":"DELETE",
-         |         "rel":"delete-other-capital-gains-and-disposals"
-         |      }
-         |   ]
-         |}
-   """.stripMargin
-    )
 
   }
 
@@ -442,9 +394,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
-
         verifyNrs(validRequestJson)
       }
 
@@ -456,9 +405,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
-
         verifyNrs(validRequestJson)
       }
     }

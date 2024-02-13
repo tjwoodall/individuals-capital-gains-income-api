@@ -17,21 +17,16 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.HateoasLinks
 import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.{HateoasWrapper, Link, RelType}
 import api.models.outcomes.ResponseWrapper
 import play.api.mvc.Result
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
 import v1.mocks.requestParsers.MockRetrieveAllResidentialPropertyCgtRequestParser
 import v1.mocks.services.MockRetrieveAllResidentialPropertyCgtService
 import v1.models.request.retrieveAllResidentialPropertyCgt.{RetrieveAllResidentialPropertyCgtRawData, RetrieveAllResidentialPropertyCgtRequest}
-import v1.models.response.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -42,9 +37,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveAllResidentialPropertyCgtService
-    with MockHateoasFactory
     with MockRetrieveAllResidentialPropertyCgtRequestParser
-    with HateoasLinks
     with MockIdGenerator {
 
   val taxYear: String        = "2019-20"
@@ -62,41 +55,6 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     source = MtdSourceEnum.latest
   )
 
-  val retrieveAllCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-      method = GET,
-      rel = RelType.SELF
-    )
-
-  val createAndAmendPpdCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-      method = PUT,
-      rel = RelType.CREATE_AND_AMEND_CGT_PPD_OVERRIDES
-    )
-
-  val createAndAmendNonPpdCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-      method = PUT,
-      rel = RelType.CREATE_AND_AMEND_NON_PPD_CGT_AND_DISPOSALS
-    )
-
-  val deletePpdCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear/ppd",
-      method = DELETE,
-      rel = RelType.DELETE_CGT_PPD_OVERRIDES
-    )
-
-  val deleteNonPpdCgtLink: Link =
-    Link(
-      href = s"/individuals/income-received/disposals/residential-property/$nino/$taxYear",
-      method = DELETE,
-      rel = RelType.DELETE_NON_PPD_CGT_AND_DISPOSALS
-    )
-
   "retrieveAll" should {
     "return a successful response with status 200 (OK)" when {
       "given a valid request" in new Test {
@@ -108,22 +66,9 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
 
-        MockHateoasFactory
-          .wrap(responseModel, RetrieveAllResidentialPropertyCgtHateoasData(nino, taxYear))
-          .returns(
-            HateoasWrapper(
-              responseModel,
-              List(
-                createAndAmendPpdCgtLink,
-                deletePpdCgtLink,
-                createAndAmendNonPpdCgtLink,
-                deleteNonPpdCgtLink,
-                retrieveAllCgtLink
-              )))
-
         runOkTest(
           expectedStatus = OK,
-          maybeExpectedResponseBody = Some(mtdResponseWithHateoas(nino, taxYear))
+          maybeExpectedResponseBody = Some(mtdJson)
         )
       }
     }
@@ -158,7 +103,6 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
       lookupService = mockMtdIdLookupService,
       parser = mockRetrieveAllResidentialPropertyCgtRequestParser,
       service = mockRetrieveAllResidentialPropertyCgtService,
-      hateoasFactory = mockHateoasFactory,
       cc = cc,
       idGenerator = mockIdGenerator
     )

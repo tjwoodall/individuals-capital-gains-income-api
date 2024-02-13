@@ -181,32 +181,7 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
      """.stripMargin
     )
 
-    val mtdResponse: JsValue = downstreamResponse.as[JsObject] ++ Json
-      .parse(
-        s"""
-           |{
-           |   "links":[
-           |      {
-           |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-           |         "method":"PUT",
-           |         "rel":"create-and-amend-other-capital-gains-and-disposals"
-           |      },
-           |      {
-           |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-           |         "method":"DELETE",
-           |         "rel":"delete-other-capital-gains-and-disposals"
-           |      },
-           |      {
-           |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-           |         "method":"GET",
-           |         "rel":"self"
-           |      }
-           |   ]
-           |}
-       """.stripMargin
-      )
-      .as[JsObject]
-
+    val mtdResponse: JsValue = downstreamResponse.as[JsObject]
     def uri: String = s"/disposals/other-gains/$nino/$taxYear"
 
     def setupStubs(): StubMapping

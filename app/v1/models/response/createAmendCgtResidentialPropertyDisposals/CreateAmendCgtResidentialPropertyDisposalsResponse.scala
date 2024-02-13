@@ -16,34 +16,13 @@
 
 package v1.models.response.createAmendCgtResidentialPropertyDisposals
 
-import api.hateoas.{HateoasLinks, HateoasLinksFactory}
-import api.models.hateoas.{HateoasData, Link}
-import config.AppConfig
 import play.api.libs.json.{Json, Writes}
 
-object CreateAmendCgtResidentialPropertyDisposalsResponse extends HateoasLinks {
+case class CreateAmendCgtResidentialPropertyDisposalsAuditData(nino: String, taxYear: String)
 
-  implicit object CreateAmendCgtResidentialPropertyDisposalsLinksFactory
-      extends HateoasLinksFactory[Unit, CreateAmendCgtResidentialPropertyDisposalsHateoasData] {
+object CreateAmendCgtResidentialPropertyDisposalsAuditData {
 
-    override def links(appConfig: AppConfig, data: CreateAmendCgtResidentialPropertyDisposalsHateoasData): Seq[Link] = {
-      import data._
-      Seq(
-        createAmendNonPpdCgt(appConfig, nino, taxYear),
-        retrieveAllCgtPpdDisposalsOverrides(appConfig, nino, taxYear),
-        deleteNonPpdCgt(appConfig, nino, taxYear)
-      )
-    }
-
-  }
-
-}
-
-case class CreateAmendCgtResidentialPropertyDisposalsHateoasData(nino: String, taxYear: String) extends HateoasData
-
-object CreateAmendCgtResidentialPropertyDisposalsHateoasData {
-
-  implicit val writes: Writes[CreateAmendCgtResidentialPropertyDisposalsHateoasData] =
-    Json.writes[CreateAmendCgtResidentialPropertyDisposalsHateoasData]
+  implicit val writes: Writes[CreateAmendCgtResidentialPropertyDisposalsAuditData] =
+    Json.writes[CreateAmendCgtResidentialPropertyDisposalsAuditData]
 
 }
