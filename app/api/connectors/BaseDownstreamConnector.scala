@@ -115,7 +115,6 @@ trait BaseDownstreamConnector {
       case DesUri(_)                => appConfig.desDownstreamConfig
       case IfsUri(_)                => appConfig.ifsDownstreamConfig
       case TaxYearSpecificIfsUri(_) => appConfig.taxYearSpecificIfsDownstreamConfig
-      case Release6Uri(_) => appConfig.release6DownstreamConfig
       case Api1661Uri(_) => appConfig.api1661DownstreamConfig
     }
 

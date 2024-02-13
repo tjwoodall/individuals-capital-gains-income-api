@@ -45,15 +45,6 @@ trait MockAppConfig extends MockFactory {
     def tysIfsEnvironment: CallHandler[String]                     = (() => mockAppConfig.tysIfsEnv).expects()
     def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders).expects()
 
-    // Release6 Config
-    def release6BaseUrl: CallHandler[String] = (() => mockAppConfig.release6BaseUrl).expects()
-
-    def release6Token: CallHandler[String] = (() => mockAppConfig.release6Token).expects()
-
-    def release6Environment: CallHandler[String] = (() => mockAppConfig.release6Env).expects()
-
-    def release6EnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.release6EnvironmentHeaders).expects()
-
     // api1661 Config
     def api1661BaseUrl: CallHandler[String] = (() => mockAppConfig.api1661BaseUrl).expects()
 
@@ -70,7 +61,6 @@ trait MockAppConfig extends MockFactory {
     def apiStatus(version: Version): CallHandler[String]              = (mockAppConfig.apiStatus(_: Version)).expects(version)
     def endpointsEnabled(version: Version): CallHandler[Boolean]      = (mockAppConfig.endpointsEnabled(_: Version)).expects(version)
     def minimumPermittedTaxYear: CallHandler[Int]                     = (() => mockAppConfig.minimumPermittedTaxYear).expects()
-    def ukSavingsAccountAnnualSummaryMinimumTaxYear: CallHandler[Int] = (() => mockAppConfig.ukSavingsAccountAnnualSummaryMinimumTaxYear).expects()
 
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()
