@@ -40,10 +40,6 @@ object ClaimOrElectionCodesFormatError
 
 object RuleDateRangeInvalidError
     extends MtdError("RULE_DATE_RANGE_INVALID", "The date specified does not lie within the supported range", BAD_REQUEST)
-
-object SavingsAccountIdFormatError
-    extends MtdError("FORMAT_SAVINGS_ACCOUNT_ID", "The format of the supplied savings account ID is not valid", BAD_REQUEST)
-
 // Rule Errors
 
 object RuleTaxYearNotSupportedError
@@ -110,7 +106,6 @@ object RuleCessationDateBeforeTaxYearStartError
 
 object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "Tax year not ended", BAD_REQUEST)
 
-object RuleDuplicateAccountNameError extends MtdError("RULE_DUPLICATE_ACCOUNT_NAME", "Duplicate account name given for supplied NINO", BAD_REQUEST)
 //Stub errors
 object RuleIncorrectGovTestScenarioError extends MtdError("RULE_INCORRECT_GOV_TEST_SCENARIO", "The Gov-Test-Scenario was not found", BAD_REQUEST)
 

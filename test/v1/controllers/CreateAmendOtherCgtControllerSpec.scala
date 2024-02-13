@@ -17,24 +17,18 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.HateoasLinks
 import api.mocks.MockIdGenerator
-import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.{HateoasWrapper, Link}
 import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
-import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
 import v1.mocks.requestParsers.MockCreateAmendOtherCgtRequestParser
 import v1.mocks.services._
 import v1.models.request.createAmendOtherCgt._
-import v1.models.response.createAmendOtherCgt.CreateAmendOtherCgtHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -48,9 +42,7 @@ class CreateAmendOtherCgtControllerSpec
     with MockCreateAmendOtherCgtService
     with MockNrsProxyService
     with MockAuditService
-    with MockHateoasFactory
     with MockCreateAmendOtherCgtRequestParser
-    with HateoasLinks
     with MockIdGenerator {
 
   val taxYear: String = "2019-20"
@@ -144,48 +136,6 @@ class CreateAmendOtherCgtControllerSpec
     body = requestModel
   )
 
-  val mtdResponse: JsValue = Json.parse(
-    s"""
-       |{
-       |   "links":[
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"PUT",
-       |         "rel":"create-and-amend-other-capital-gains-and-disposals"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"GET",
-       |         "rel":"self"
-       |      },
-       |      {
-       |         "href":"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-       |         "method":"DELETE",
-       |         "rel":"delete-other-capital-gains-and-disposals"
-       |      }
-       |   ]
-       |}
-    """.stripMargin
-  )
-
-  val hateoasLinks: List[Link] = List(
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = PUT,
-      rel = "create-and-amend-other-capital-gains-and-disposals"
-    ),
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = GET,
-      rel = "self"
-    ),
-    Link(
-      href = s"/individuals/income-received/disposals/other-gains/$nino/$taxYear",
-      method = DELETE,
-      rel = "delete-other-capital-gains-and-disposals"
-    )
-  )
-
   val auditData: JsValue = Json.parse(s"""
                                          |{
                                          |  "nino":"$nino",
@@ -195,7 +145,6 @@ class CreateAmendOtherCgtControllerSpec
   "CreateAmendOtherCgtController" should {
     "return OK" when {
       "happy path" in new Test {
-        MockedAppConfig.apiGatewayContext.returns("individuals/income-received").anyNumberOfTimes()
 
         MockCreateAmendOtherCgtRequestParser
           .parse(rawData)
@@ -209,11 +158,7 @@ class CreateAmendOtherCgtControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        MockHateoasFactory
-          .wrap((), CreateAmendOtherCgtHateoasData(nino, taxYear))
-          .returns(HateoasWrapper((), hateoasLinks))
-
-        runOkTestWithAudit(expectedStatus = OK, Some(mtdResponse), Some(validRequestJson), Some(auditData))
+        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson), Some(auditData))
       }
     }
 
@@ -253,7 +198,6 @@ class CreateAmendOtherCgtControllerSpec
       parser = mockCreateAmendOtherCgtRequestParser,
       service = mockCreateAmendOtherCgtService,
       nrsProxyService = mockNrsProxyService,
-      hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
@@ -275,7 +219,6 @@ class CreateAmendOtherCgtControllerSpec
         )
       )
 
-    MockedAppConfig.featureSwitches.returns(Configuration("allowTemporalValidationSuspension.enabled" -> true)).anyNumberOfTimes()
   }
 
 }

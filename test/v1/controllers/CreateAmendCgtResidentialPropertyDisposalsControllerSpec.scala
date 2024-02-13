@@ -116,7 +116,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
   "CreateAmendCgtResidentialPropertyDisposalsController" should {
     "return a successful response with status OK" when {
       "happy path" in new Test {
-        MockedAppConfig.apiGatewayContext.returns("individuals/income-received").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
 
         MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
           .parse(rawData)

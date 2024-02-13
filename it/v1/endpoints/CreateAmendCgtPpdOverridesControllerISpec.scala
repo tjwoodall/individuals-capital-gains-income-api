@@ -346,7 +346,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
     def nino: String = "AA123456A"
     def taxYear: String
     def downstreamUri: String
-    def uri: String = s"/disposals/residential-property/$nino/$taxYear/ppd"
+    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
 
     def setupStubs(): StubMapping
 

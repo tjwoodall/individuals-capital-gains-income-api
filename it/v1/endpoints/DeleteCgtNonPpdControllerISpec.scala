@@ -129,7 +129,7 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino: String   = "AA123456A"
-    def mtdUri: String = s"/disposals/residential-property/$nino/$taxYear"
+    def mtdUri: String = s"/residential-property/$nino/$taxYear"
 
     def taxYear: String
     def downstreamUri: String

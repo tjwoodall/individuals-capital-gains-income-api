@@ -297,7 +297,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
 
     def request: WSRequest = {
       setupStubs()
-      buildRequest(s"/disposals/residential-property/$nino/$taxYear")
+      buildRequest(s"/residential-property/$nino/$taxYear")
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token

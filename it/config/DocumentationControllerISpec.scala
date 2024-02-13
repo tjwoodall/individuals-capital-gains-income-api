@@ -51,7 +51,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
     |   "api":{
     |      "name":"Individuals Capital Gains Income (MTD)",
     |      "description":"An API for providing individuals capital gains data",
-    |      "context":"individuals/capital-gains-income",
+    |      "context":"individuals/disposals-income",
     |      "categories":[
     |         "INCOME_TAX_MTD"
     |      ],

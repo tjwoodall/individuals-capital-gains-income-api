@@ -182,7 +182,7 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
     )
 
     val mtdResponse: JsValue = downstreamResponse.as[JsObject]
-    def uri: String = s"/disposals/other-gains/$nino/$taxYear"
+    def uri: String = s"/other-gains/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 

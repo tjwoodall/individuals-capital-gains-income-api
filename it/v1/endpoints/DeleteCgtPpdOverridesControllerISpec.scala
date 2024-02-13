@@ -35,7 +35,7 @@ class DeleteCgtPpdOverridesControllerISpec extends IntegrationBaseSpec {
     def taxYear: String
     def downstreamUri: String
 
-    def uri: String = s"/disposals/residential-property/$nino/$taxYear/ppd"
+    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
 
     def setupStubs(): StubMapping
 

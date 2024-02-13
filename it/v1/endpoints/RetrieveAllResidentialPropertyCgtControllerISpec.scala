@@ -39,7 +39,7 @@ class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSp
     def downstreamUri: String
     val downstreamResponse: JsValue = RetrieveAllResidentialPropertyCgtControllerFixture.ifsJson
 
-    def mtdUri: String       = s"/disposals/residential-property/$nino/$taxYear"
+    def mtdUri: String       = s"/residential-property/$nino/$taxYear"
     val mtdResponse: JsValue = RetrieveAllResidentialPropertyCgtControllerFixture.mtdJson
 
     def mtdQueryParams: Seq[(String, String)] =

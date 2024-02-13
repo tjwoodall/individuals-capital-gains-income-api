@@ -4,7 +4,7 @@
 [![Apache-2.0 license](http://img.shields.io/badge/license-Apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 
-The Individuals Capital Gains Income API allows a developer to create, amend, retrieve and delete data relating to Savings Income.
+The Individuals Capital Gains Income API allows a developer to create, amend, retrieve and delete data relating to Capital Gains Income.
 
 ## Requirements
 
@@ -35,7 +35,7 @@ following contents:
 
 ## Viewing OAS
 
-To view documentation locally ensure the Individuals Savings Income API is running, and run api-documentation-frontend:
+To view documentation locally ensure the Individuals Capital Gains Income API is running, and run api-documentation-frontend:
 
 ```
 ./run_local_with_dependencies.sh
@@ -59,7 +59,7 @@ You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-chan
 ## API Reference / Documentation
 
 Available on
-the [Individuals Savings Income Documentation](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-savings-income-api)
+the [Individuals Capital Gains Income Documentation](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/individuals-capital-gains-income-api)
 
 ## License
 

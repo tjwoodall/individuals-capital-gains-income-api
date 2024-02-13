@@ -141,7 +141,7 @@ class DeleteOtherCgtControllerISpec extends IntegrationBaseSpec {
     val nino: String = "AA123456A"
 
     def taxYear: String
-    def mtdUri: String = s"/disposals/other-gains/$nino/$taxYear"
+    def mtdUri: String = s"/other-gains/$nino/$taxYear"
     def downstreamUri: String
 
     def setupStubs(): StubMapping

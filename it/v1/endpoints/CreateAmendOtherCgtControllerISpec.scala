@@ -345,7 +345,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
     val nino: String    = "AA123456A"
     val taxYear: String = "2021-22"
 
-    def uri: String = s"/disposals/other-gains/$nino/$taxYear"
+    def uri: String = s"/other-gains/$nino/$taxYear"
 
     def setupStubs(): Unit = ()
 
