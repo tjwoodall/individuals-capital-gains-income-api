@@ -28,5 +28,3 @@ case class RetrieveOtherCgtResponse(submittedOn: Timestamp,
 object RetrieveOtherCgtResponse {
   implicit val format: OFormat[RetrieveOtherCgtResponse] = Json.format[RetrieveOtherCgtResponse]
 }
-
-case class RetrieveOtherCgtHateoasData(nino: String, taxYear: String)
