@@ -25,5 +25,3 @@ object RetrieveAllResidentialPropertyCgtResponse {
   implicit val format: OFormat[RetrieveAllResidentialPropertyCgtResponse] = Json.format[RetrieveAllResidentialPropertyCgtResponse]
 
 }
-
-case class RetrieveAllResidentialPropertyCgtHateoasData(nino: String, taxYear: String)

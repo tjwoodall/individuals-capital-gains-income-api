@@ -12,11 +12,9 @@
     "disposals": {"$ref": "capital_gains_other_definitions.json#/definitions/disposals"},
     "nonStandardGains": {"$ref": "capital_gains_other_definitions.json#/definitions/nonStandardGains"},
     "losses": {"$ref": "capital_gains_other_definitions.json#/definitions/losses"},
-    "adjustments": {"$ref": "capital_gains_other_definitions.json#/definitions/adjustments"},
-    "links": {"$ref":  "capital_gains_other_definitions.json#/definitions/links"}
+    "adjustments": {"$ref": "capital_gains_other_definitions.json#/definitions/adjustments"}
   },
   "required": [
-    "submittedOn",
-    "links"
+    "submittedOn"
   ]
 }

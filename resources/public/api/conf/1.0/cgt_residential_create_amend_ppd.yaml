@@ -50,15 +50,6 @@ responses:
     headers:
       X-CorrelationId:
         $ref: './common/headers.yaml#/components/parameters/correlationId'
-    content:
-      application/json:
-        schema:
-          $ref: './schemas/cgt_overrides_amend_response.json'
-        examples:
-          example-response:
-            description: Example Response
-            value:
-              $ref: './examples/cgt/residentialProperty/amend_ppd_response.json'
 
   "400":
     description: Bad request
