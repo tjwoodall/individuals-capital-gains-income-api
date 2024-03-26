@@ -18,6 +18,7 @@ description: |
   | INVALID_COMPLETION_DATE              | Simulates a scenario where the completionDate is not within the specific tax year or in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April. |
   | INVALID_DISPOSAL_DATE                | Simulates a scenario where the disposalDate is not within the specified tax year. |  
   | STATEFUL                             | Performs a stateful create or update.                                             |
+  | REQUEST_CANNOT_BE_FULFILLED          | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
 
 tags:
   - Capital Gains on Residential Property Disposals
@@ -100,3 +101,13 @@ responses:
         examples:
           CLIENT_OR_AGENT_NOT_AUTHORISED:
             $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "422":
+    description: Unprocessable Entity
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error_response.yaml'
+        examples:
+          RULE_REQUEST_CANNOT_BE_FULFILLED:
+            $ref: './common/errors.yaml#/components/examples/requestCannotBeFulfilled'

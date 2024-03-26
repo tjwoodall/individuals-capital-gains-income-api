@@ -22,6 +22,7 @@ import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
 import v1.mocks.requestParsers.MockRetrieveOtherCgtRequestParser
@@ -39,7 +40,8 @@ class RetrieveOtherCgtControllerSpec
     with MockMtdIdLookupService
     with MockRetrieveOtherCgtService
     with MockRetrieveOtherCgtRequestParser
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAppConfig {
 
   val taxYear: String = "2019-20"
 

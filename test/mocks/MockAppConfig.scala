@@ -24,7 +24,7 @@ import play.api.Configuration
 
 trait MockAppConfig extends MockFactory {
 
-  val mockAppConfig: AppConfig = mock[AppConfig]
+  implicit val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockedAppConfig {
     // DES Config
@@ -64,6 +64,9 @@ trait MockAppConfig extends MockFactory {
 
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()
+
+    def allowRequestCannotBeFulfilledHeader(version: Version): CallHandler[Boolean] =
+      (mockAppConfig.allowRequestCannotBeFulfilledHeader: Version => Boolean).expects(version)
 
   }
 

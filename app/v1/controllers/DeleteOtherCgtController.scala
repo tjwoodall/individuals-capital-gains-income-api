@@ -21,6 +21,7 @@ import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,7 +41,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
                                           service: DeleteOtherCgtService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
-                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

@@ -38,13 +38,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAmendCgtPpdOverridesController @Inject() (val authService: EnrolmentsAuthService,
                                                       val lookupService: MtdIdLookupService,
-                                                      appConfig: AppConfig,
                                                       parser: CreateAmendCgtPpdOverridesRequestParser,
                                                       service: CreateAmendCgtPpdOverridesService,
                                                       auditService: AuditService,
                                                       nrsProxyService: NrsProxyService,
                                                       cc: ControllerComponents,
-                                                      val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                      val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

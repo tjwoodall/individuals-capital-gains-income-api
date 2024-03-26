@@ -194,7 +194,6 @@ class CreateAmendOtherCgtControllerSpec
     val controller = new CreateAmendOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      appConfig = mockAppConfig,
       parser = mockCreateAmendOtherCgtRequestParser,
       service = mockCreateAmendOtherCgtService,
       nrsProxyService = mockNrsProxyService,

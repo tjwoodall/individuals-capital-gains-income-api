@@ -22,6 +22,7 @@ import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.mvc.Result
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
 import v1.mocks.requestParsers.MockRetrieveAllResidentialPropertyCgtRequestParser
@@ -38,7 +39,8 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     with MockMtdIdLookupService
     with MockRetrieveAllResidentialPropertyCgtService
     with MockRetrieveAllResidentialPropertyCgtRequestParser
-    with MockIdGenerator {
+    with MockIdGenerator
+    with MockAppConfig {
 
   val taxYear: String        = "2019-20"
   val source: Option[String] = Some("latest")

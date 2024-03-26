@@ -38,13 +38,12 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthService,
                                                val lookupService: MtdIdLookupService,
-                                               appConfig: AppConfig,
                                                parser: CreateAmendOtherCgtRequestParser,
                                                service: CreateAmendOtherCgtService,
                                                nrsProxyService: NrsProxyService,
                                                auditService: AuditService,
                                                cc: ControllerComponents,
-                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =

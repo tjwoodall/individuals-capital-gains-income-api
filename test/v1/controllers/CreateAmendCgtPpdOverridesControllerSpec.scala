@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendCgtPpdOverridesControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -125,7 +125,8 @@ class CreateAmendCgtPpdOverridesControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(s"""
+  val auditData: JsValue = Json.parse(
+    s"""
        |{
        |  "nino":"$nino",
        |  "taxYear": "$taxYear"
@@ -184,7 +185,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
     val controller = new CreateAmendCgtPpdOverridesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      appConfig = mockAppConfig,
       parser = mockCreateAmendCgtPpdOverridesRequestParser,
       service = mockCreateAmendCgtPpdOverridesService,
       auditService = mockAuditService,

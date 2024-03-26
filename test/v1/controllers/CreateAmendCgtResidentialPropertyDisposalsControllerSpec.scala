@@ -106,7 +106,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     body = requestModel
   )
 
-
   val auditData: JsValue = Json.parse(s"""
                                          |{
                                          |  "nino":"$nino",
@@ -164,7 +163,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     val controller = new CreateAmendCgtResidentialPropertyDisposalsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      appConfig = mockAppConfig,
       parser = mockCreateAmendCgtResidentialPropertyDisposalsRequestParser,
       service = mockCreateAmendCgtResidentialPropertyDisposalsService,
       auditService = mockAuditService,
