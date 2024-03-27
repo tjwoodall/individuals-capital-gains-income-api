@@ -51,6 +51,19 @@ components:
         code: MATCHING_RESOURCE_NOT_FOUND
         message: Matching resource not found
 
+    notFoundCgtOverrides:
+      description: There are no submissions found.
+      value:
+        code: MATCHING_RESOURCE_NOT_FOUND
+        message: Matching resource not found
+
+    notFoundPpdSubmissionId:
+      description: The PPD submission ID was not found.
+      value:
+        code: PPD_SUBMISSION_ID_NOT_FOUND
+        message: Matching resource not found
+        
+
     #422
 
     requestCannotBeFulfilled:
