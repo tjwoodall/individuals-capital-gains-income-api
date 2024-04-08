@@ -3,7 +3,7 @@
     "ppdYearToDate": 1999.99,
     "multiplePropertyDisposals": [
       {
-        "source": "hmrcHeld",
+        "source": "hmrc-held",
         "submittedOn": "2020-07-07T10:59:47.544Z",
         "ppdSubmissionId": "Da2467289108",
         "ppdSubmissionDate": "2020-07-07T10:59:47.544Z",
@@ -15,7 +15,7 @@
     ],
     "singlePropertyDisposals": [
       {
-        "source": "hmrcHeld",
+        "source": "hmrc-held",
         "submittedOn": "2020-07-07T10:59:47.544Z",
         "ppdSubmissionId": "Da2467289109",
         "ppdSubmissionDate": "2020-07-07T10:59:47.544Z",

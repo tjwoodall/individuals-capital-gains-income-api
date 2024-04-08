@@ -24,31 +24,31 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
 
   val multiplePropertyDisposals: MultiplePropertyDisposals =
     MultiplePropertyDisposals(
-      MtdSourceEnum.hmrcHeld,
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      "Da2467289108",
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      Some(3),
-      Some(2022),
-      Some("2022-03-08"),
-      Some(1999.99),
-      None
-    )
+    MtdSourceEnum.`hmrc-held`,
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    "Da2467289108",
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    Some(3),
+    Some(2022),
+    Some("2022-03-08"),
+    Some(1999.99),
+    None
+  )
 
   val singlePropertyDisposals: SinglePropertyDisposals =
     SinglePropertyDisposals(
-      MtdSourceEnum.hmrcHeld,
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      "Da2467289108",
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      Some("2022-02-04"),
-      "2022-03-08",
-      1999.99,
-      Some("2018-04-06"),
-      1999.99,
-      Some(1999.99),
-      Some(5000.99),
-      Some(1999.99),
+      MtdSourceEnum.`hmrc-held`,
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    "Da2467289108",
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    Some("2022-02-04"),
+    "2022-03-08",
+    1999.99,
+    Some("2018-04-06"),
+    1999.99,
+    Some(1999.99),
+    Some(5000.99),
+    Some(1999.99),
       Some(1999.99),
       Some(1999.99),
       Some(1999.99),
@@ -99,7 +99,7 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       |    "ppdYearToDate": 143.22,
       |    "multiplePropertyDisposals": [
       |      {
-      |        "source": "hmrcHeld",
+      |        "source": "hmrc-held",
       |        "submittedOn": "2020-07-06T09:37:17.000Z",
       |        "ppdSubmissionId": "Da2467289108",
       |        "ppdSubmissionDate": "2020-07-06T09:37:17.000Z",
@@ -111,7 +111,7 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       |    ],
       |    "singlePropertyDisposals": [
       |      {
-      |        "source": "hmrcHeld",
+      |        "source": "hmrc-held",
       |        "submittedOn": "2020-07-06T09:37:17.000Z",
       |        "ppdSubmissionId": "Da2467289108",
       |        "ppdSubmissionDate": "2020-07-06T09:37:17.000Z",

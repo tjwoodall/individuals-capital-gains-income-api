@@ -25,7 +25,7 @@ class MultiplePropertyDisposalsSpec extends UnitSpec {
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |        "source": "hmrcHeld",
+      |        "source": "hmrc-held",
       |        "submittedOn": "2020-07-06T09:37:17.000Z",
       |        "ppdSubmissionId": "Da2467289108",
       |        "ppdSubmissionDate": "2020-07-06T09:37:17.000Z",
@@ -54,16 +54,16 @@ class MultiplePropertyDisposalsSpec extends UnitSpec {
 
   val model: MultiplePropertyDisposals =
     MultiplePropertyDisposals(
-      MtdSourceEnum.hmrcHeld,
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      "Da2467289108",
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      Some(3),
-      Some(2022),
-      Some("2022-03-08"),
-      None,
-      Some(1999.99)
-    )
+    MtdSourceEnum.`hmrc-held`,
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    "Da2467289108",
+    Some(Timestamp("2020-07-06T09:37:17.000Z")),
+    Some(3),
+    Some(2022),
+    Some("2022-03-08"),
+    None,
+    Some(1999.99)
+  )
 
   "MultiplePropertyDisposals" when {
     "Reads" should {

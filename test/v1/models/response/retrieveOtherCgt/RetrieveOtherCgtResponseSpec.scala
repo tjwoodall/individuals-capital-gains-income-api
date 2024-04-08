@@ -16,13 +16,54 @@
 
 package v1.models.response.retrieveOtherCgt
 
+import api.models.domain.AssetType.`other-property`
 import api.models.domain.Timestamp
+import api.models.downstream.DownstreamAssetType.`otherProperty`
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
 
 class RetrieveOtherCgtResponseSpec extends UnitSpec {
 
   val validResponseJson: JsValue = Json.parse(
+    """
+      |{
+      |   "submittedOn":"2021-05-07T16:18:44.403Z",
+      |   "disposals":[
+      |      {
+      |         "assetType":"other-property",
+      |         "assetDescription":"string",
+      |         "acquisitionDate":"2021-05-07",
+      |         "disposalDate":"2021-05-07",
+      |         "disposalProceeds":59999999999.99,
+      |         "allowableCosts":59999999999.99,
+      |         "gain":59999999999.99,
+      |         "claimOrElectionCodes":[
+      |            "OTH"
+      |         ],
+      |         "gainAfterRelief":59999999999.99,
+      |         "rttTaxPaid":59999999999.99
+      |      }
+      |   ],
+      |   "nonStandardGains":{
+      |      "carriedInterestGain":19999999999.99,
+      |      "carriedInterestRttTaxPaid":19999999999.99,
+      |      "attributedGains":19999999999.99,
+      |      "attributedGainsRttTaxPaid":19999999999.99,
+      |      "otherGains":19999999999.99,
+      |      "otherGainsRttTaxPaid":19999999999.99
+      |   },
+      |   "losses":{
+      |      "broughtForwardLossesUsedInCurrentYear":29999999999.99,
+      |      "setAgainstInYearGains":29999999999.99,
+      |      "setAgainstInYearGeneralIncome":29999999999.99,
+      |      "setAgainstEarlierYear":29999999999.99
+      |   },
+      |   "adjustments":-39999999999.99
+      |}
+     """.stripMargin
+  )
+
+  val validDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
       |   "submittedOn":"2021-05-07T16:18:44.403Z",
@@ -86,7 +127,47 @@ class RetrieveOtherCgtResponseSpec extends UnitSpec {
     disposals = Some(
       Seq(
         Disposal(
-          assetType = "otherProperty",
+          assetType = `otherProperty`.toMtd,
+          assetDescription = "string",
+          acquisitionDate = "2021-05-07",
+          disposalDate = "2021-05-07",
+          disposalProceeds = 59999999999.99,
+          allowableCosts = 59999999999.99,
+          gain = Some(59999999999.99),
+          loss = None,
+          claimOrElectionCodes = Some(Seq("OTH")),
+          gainAfterRelief = Some(59999999999.99),
+          lossAfterRelief = None,
+          rttTaxPaid = Some(59999999999.99)
+        )
+      )),
+    nonStandardGains = Some(
+      NonStandardGains(
+        carriedInterestGain = Some(19999999999.99),
+        carriedInterestRttTaxPaid = Some(19999999999.99),
+        attributedGains = Some(19999999999.99),
+        attributedGainsRttTaxPaid = Some(19999999999.99),
+        otherGains = Some(19999999999.99),
+        otherGainsRttTaxPaid = Some(19999999999.99)
+      )
+    ),
+    losses = Some(
+      Losses(
+        broughtForwardLossesUsedInCurrentYear = Some(29999999999.99),
+        setAgainstInYearGains = Some(29999999999.99),
+        setAgainstInYearGeneralIncome = Some(29999999999.99),
+        setAgainstEarlierYear = Some(29999999999.99)
+      )
+    ),
+    adjustments = Some(-39999999999.99)
+  )
+
+  val downstreamResponseModel: RetrieveOtherCgtResponse = RetrieveOtherCgtResponse(
+    submittedOn = Timestamp("2021-05-07T16:18:44.403Z"),
+    disposals = Some(
+      Seq(
+        Disposal(
+          assetType = `other-property`,
           assetDescription = "string",
           acquisitionDate = "2021-05-07",
           disposalDate = "2021-05-07",
@@ -126,7 +207,7 @@ class RetrieveOtherCgtResponseSpec extends UnitSpec {
     disposals = Some(
       Seq(
         Disposal(
-          assetType = "otherProperty",
+          assetType =`otherProperty`.toMtd,
           assetDescription = "string",
           acquisitionDate = "2021-05-07",
           disposalDate = "2021-05-07",
@@ -148,7 +229,7 @@ class RetrieveOtherCgtResponseSpec extends UnitSpec {
   "RetrieveOtherCgtResponse" when {
     "read from valid JSON" should {
       "produce the expected response model" in {
-        validResponseJson.as[RetrieveOtherCgtResponse] shouldBe responseModel
+        validDownstreamResponseJson.as[RetrieveOtherCgtResponse] shouldBe downstreamResponseModel
       }
     }
 

@@ -27,7 +27,7 @@
                 "description": "Specifies the source of data to be returned.",
                 "type": "string",
                 "enum": [
-                  "hmrcHeld",
+                  "hmrc-held",
                   "user"
                 ]
               },
@@ -100,7 +100,7 @@
                 "description": "Specifies the source of data to be returned.",
                 "type": "string",
                 "enum": [
-                  "hmrcHeld",
+                  "hmrc-held",
                   "user"
                 ]
               },

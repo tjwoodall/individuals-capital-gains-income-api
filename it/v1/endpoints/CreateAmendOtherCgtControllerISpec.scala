@@ -34,7 +34,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       |{
       |   "disposals":[
       |      {
-      |         "assetType":"otherProperty",
+      |         "assetType":"other-property",
       |         "assetDescription":"string",
       |         "acquisitionDate":"2021-05-07",
       |         "disposalDate":"2021-05-07",
@@ -114,7 +114,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       |{
       |   "disposals": [
       |     {
-      |       "assetType":"otherProperty",
+      |       "assetType":"other-property",
       |       "assetDescription":"string",
       |       "acquisitionDate":"2021-05-07",
       |       "disposalDate":"2021-05-07",
@@ -158,7 +158,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       |{
       |   "disposals":[
       |      {
-      |         "assetType":"otherProperty",
+      |         "assetType":"other-property",
       |         "assetDescription":"string",
       |         "acquisitionDate":"2021-05-07",
       |         "disposalDate":"2021-05-07",
@@ -196,7 +196,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
       |{
       |   "disposals":[
       |      {
-      |         "assetType":"otherProperty",
+      |         "assetType":"other-property",
       |         "assetDescription":"string",
       |         "acquisitionDate":"2021-05-07",
       |         "disposalDate":"2021-05-07",

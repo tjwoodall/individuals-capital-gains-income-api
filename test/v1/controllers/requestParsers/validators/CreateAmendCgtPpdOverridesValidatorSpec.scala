@@ -135,6 +135,8 @@ class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatE
       |""".stripMargin
   )
 
+  private val nonsenseRequestBodyJson: JsValue = Json.parse("""{"field": "value"}""")
+
   private val missingMandatoryFieldJson: JsValue = Json.parse(
     """
       |{
@@ -554,6 +556,7 @@ class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatE
   )
 
   private val validRequestBody                          = AnyContentAsJson(validRequestJson)
+  private val nonsenseRawRequestBody                    = AnyContentAsJson(nonsenseRequestBodyJson)
   private val missingMandatoryFieldRequestBody          = AnyContentAsJson(missingMandatoryFieldJson)
   private val emptyMultiplePropertyDisposalsRequestBody = AnyContentAsJson(emptyMultiplePropertyDisposalsRequestJson)
   private val emptySinglePropertyDisposalsRequestBody   = AnyContentAsJson(emptySinglePropertyDisposalsRequestJson)
@@ -629,6 +632,12 @@ class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatE
     }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
+
+      "a non-empty JSON body is submitted without any expected fields" in new Test {
+        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, nonsenseRawRequestBody)) shouldBe
+          List(RuleIncorrectOrEmptyBodyError)
+      }
+
       "an JSON body missing a mandatory field is submitted" in new Test {
         validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, missingMandatoryFieldRequestBody)) shouldBe
           List(

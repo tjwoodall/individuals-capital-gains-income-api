@@ -52,7 +52,7 @@ class CreateAmendOtherCgtControllerSpec
       |{
       |   "disposals":[
       |      {
-      |         "assetType":"otherProperty",
+      |         "assetType":"other-property",
       |         "assetDescription":"string",
       |         "acquisitionDate":"2021-05-07",
       |         "disposalDate":"2021-05-07",
@@ -95,7 +95,7 @@ class CreateAmendOtherCgtControllerSpec
     disposals = Some(
       List(
         Disposal(
-          assetType = "otherProperty",
+          assetType = "other-property",
           assetDescription = "string",
           acquisitionDate = "2021-05-07",
           disposalDate = "2021-05-07",

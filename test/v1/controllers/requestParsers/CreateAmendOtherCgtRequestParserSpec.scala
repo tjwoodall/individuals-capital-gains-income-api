@@ -35,7 +35,7 @@ class CreateAmendOtherCgtRequestParserSpec extends UnitSpec {
       |{
       |  "disposals":[
       |    {
-      |      "assetType":"otherProperty",
+      |      "assetType":"other-property",
       |      "assetDescription":"Property Sale",
       |      "acquisitionDate":"2021-05-01",
       |      "disposalDate":"2021-06-01",
@@ -74,7 +74,7 @@ class CreateAmendOtherCgtRequestParserSpec extends UnitSpec {
     disposals = Some(
       Seq(
         Disposal(
-          assetType = "otherProperty",
+          assetType = "other-property",
           assetDescription = "Property Sale",
           acquisitionDate = "2021-05-01",
           disposalDate = "2021-06-01",
@@ -82,7 +82,7 @@ class CreateAmendOtherCgtRequestParserSpec extends UnitSpec {
           allowableCosts = 1000.12,
           gain = Some(1000.12),
           loss = None,
-          claimOrElectionCodes = Some(Seq("PRR")),
+          claimOrElectionCodes = Some(List("PRR")),
           gainAfterRelief = Some(1000.12),
           lossAfterRelief = None,
           rttTaxPaid = Some(1000.12)

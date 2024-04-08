@@ -16,9 +16,11 @@
 
 package v1.models.response.retrieveOtherCgt
 
-import play.api.libs.json.{Json, OFormat}
+import api.models.domain.AssetType
+import api.models.downstream.DownstreamAssetType
+import play.api.libs.json.{Json, OFormat, Reads}
 
-case class Disposal(assetType: String,
+case class Disposal(assetType: AssetType,
                     assetDescription: String,
                     acquisitionDate: String,
                     disposalDate: String,
@@ -31,6 +33,12 @@ case class Disposal(assetType: String,
                     lossAfterRelief: Option[BigDecimal],
                     rttTaxPaid: Option[BigDecimal])
 
+
 object Disposal {
-  implicit val format: OFormat[Disposal] = Json.format[Disposal]
+
+  implicit val format: OFormat[Disposal] = {
+    implicit val assetTypeReads: Reads[AssetType] = implicitly[Reads[DownstreamAssetType]].map(_.toMtd)
+    Json.format[Disposal]
+  }
+
 }

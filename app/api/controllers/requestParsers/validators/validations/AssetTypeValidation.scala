@@ -19,17 +19,8 @@ package api.controllers.requestParsers.validators.validations
 import api.models.domain.AssetType
 import api.models.errors.{AssetTypeFormatError, MtdError}
 
-import scala.util.{Failure, Success, Try}
-
 object AssetTypeValidation {
 
-  def validate(assetType: String, path: String): List[MtdError] = {
-    Try {
-      Option(assetType).map(AssetType.parser)
-    } match {
-      case Failure(_) => List(AssetTypeFormatError.copy(paths = Some(Seq(path))))
-      case Success(_) => NoValidationErrors
-    }
-  }
-
+  def validate(assetType: String, path: String): List[MtdError] =
+    if (AssetType.parser.isDefinedAt(assetType)) NoValidationErrors else List(AssetTypeFormatError.copy(paths = Some(List(path))))
 }

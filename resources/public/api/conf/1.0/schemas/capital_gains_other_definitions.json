@@ -10,10 +10,10 @@
             "type":"string",
             "description":"The type of asset being disposed of.",
             "enum":[
-              "otherProperty",
-              "unlistedShares",
-              "listedShares",
-              "otherAsset"
+              "other-property",
+              "unlisted-shares",
+              "listed-shares",
+              "other-asset"
             ]
           },
           "assetDescription":{

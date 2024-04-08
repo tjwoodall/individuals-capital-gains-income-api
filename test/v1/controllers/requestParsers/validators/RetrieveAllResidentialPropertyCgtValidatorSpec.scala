@@ -30,7 +30,7 @@ class RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  private val validSource  = Some("hmrcHeld")
+  private val validSource  = Some("hmrc-held")
 
   class Test extends MockCurrentDateTime with MockAppConfig {
 

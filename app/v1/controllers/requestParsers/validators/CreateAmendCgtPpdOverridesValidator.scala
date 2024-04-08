@@ -58,12 +58,16 @@ class CreateAmendCgtPpdOverridesValidator @Inject() (implicit appConfig: AppConf
     val emptyValidation: List[List[MtdError]] = List(
       requestBodyObj
         .map { body =>
-          val emptyMultiplePropertyDisposalsError =
-            if (body.multiplePropertyDisposals.exists(_.isEmpty)) List("/multiplePropertyDisposals") else List()
-          val emptySinglePropertyDisposalsError = if (body.singlePropertyDisposals.exists(_.isEmpty)) List("/singlePropertyDisposals") else List()
+          if (body == CreateAmendCgtPpdOverridesRequestBody.empty) {
+            List(RuleIncorrectOrEmptyBodyError)
+          } else {
+            val emptyMultiplePropertyDisposalsError =
+              if (body.multiplePropertyDisposals.exists(_.isEmpty)) List("/multiplePropertyDisposals") else List()
+            val emptySinglePropertyDisposalsError = if (body.singlePropertyDisposals.exists(_.isEmpty)) List("/singlePropertyDisposals") else List()
 
-          val allMissingFields = emptyMultiplePropertyDisposalsError ++ emptySinglePropertyDisposalsError
-          if (allMissingFields.isEmpty) NoValidationErrors else List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(allMissingFields)))
+            val allMissingFields = emptyMultiplePropertyDisposalsError ++ emptySinglePropertyDisposalsError
+            if (allMissingFields.isEmpty) NoValidationErrors else List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(allMissingFields)))
+          }
         }
         .getOrElse(NoValidationErrors))
 

@@ -27,7 +27,7 @@ class CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
       |{
       |   "disposals": [
       |      {
-      |         "assetType": "otherProperty",
+      |         "assetType": "other-property",
       |         "assetDescription": "Property Sale",
       |         "acquisitionDate": "2021-01-01",
       |         "disposalDate": "2021-02-01",
@@ -65,7 +65,7 @@ class CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
       |{
       |   "disposals": [
       |      {
-      |         "assetType": "otherProperty",
+      |         "assetType": "other-property",
       |         "assetDescription": "Property Sale",
       |         "acquisitionDate": "2021-01-01",
       |         "disposalDate": "2021-02-01",
@@ -79,7 +79,7 @@ class CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
       |         "rttTaxPaid": 12.12
       |      },
       |      {
-      |         "assetType":"otherProperty",
+      |         "assetType":"other-property",
       |         "assetDescription":"Property Sale",
       |         "acquisitionDate":"2021-02-01",
       |         "disposalDate":"2021-03-01",
@@ -114,7 +114,7 @@ class CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
   )
 
   val disposal: Disposal = Disposal(
-    AssetType.otherProperty.toString,
+    AssetType.`other-property`.toString,
     "Property Sale",
     "2021-01-01",
     "2021-02-01",
@@ -129,7 +129,7 @@ class CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
   )
 
   val disposal2: Disposal = Disposal(
-    AssetType.otherProperty.toString,
+    AssetType.`other-property`.toString,
     "Property Sale",
     "2021-02-01",
     "2021-03-01",

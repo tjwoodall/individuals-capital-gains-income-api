@@ -21,7 +21,7 @@ import api.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
@@ -181,7 +181,45 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
      """.stripMargin
     )
 
-    val mtdResponse: JsValue = downstreamResponse.as[JsObject]
+    val mtdResponse: JsValue = Json.parse(
+      """
+        |{
+        |   "submittedOn":"2021-05-07T16:18:44.403Z",
+        |   "disposals":[
+        |      {
+        |         "assetType":"other-property",
+        |         "assetDescription":"string",
+        |         "acquisitionDate":"2021-05-07",
+        |         "disposalDate":"2021-05-07",
+        |         "disposalProceeds":59999999999.99,
+        |         "allowableCosts":59999999999.99,
+        |         "gain":59999999999.99,
+        |         "claimOrElectionCodes":[
+        |            "OTH"
+        |         ],
+        |         "gainAfterRelief":59999999999.99,
+        |         "rttTaxPaid":59999999999.99
+        |      }
+        |   ],
+        |   "nonStandardGains":{
+        |      "carriedInterestGain":19999999999.99,
+        |      "carriedInterestRttTaxPaid":19999999999.99,
+        |      "attributedGains":19999999999.99,
+        |      "attributedGainsRttTaxPaid":19999999999.99,
+        |      "otherGains":19999999999.99,
+        |      "otherGainsRttTaxPaid":19999999999.99
+        |   },
+        |   "losses":{
+        |      "broughtForwardLossesUsedInCurrentYear":29999999999.99,
+        |      "setAgainstInYearGains":29999999999.99,
+        |      "setAgainstInYearGeneralIncome":29999999999.99,
+        |      "setAgainstEarlierYear":29999999999.99
+        |   },
+        |   "adjustments":-39999999999.99
+        |}
+     """.stripMargin
+    )
+
     def uri: String = s"/other-gains/$nino/$taxYear"
 
     def setupStubs(): StubMapping

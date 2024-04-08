@@ -37,7 +37,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -109,7 +109,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals": [
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -128,7 +128,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals": [
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -153,7 +153,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -191,7 +191,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -229,7 +229,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -243,7 +243,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |      "rttTaxPaid":1000.882
         |    },
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -281,7 +281,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"20210501",
         |      "disposalDate":"20210601",
@@ -298,7 +298,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -332,7 +332,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -356,7 +356,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2010-05-01",
         |      "disposalDate":"2010-06-01",
@@ -373,7 +373,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-07-01",
         |      "disposalDate":"2019-06-01",
@@ -390,7 +390,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",
@@ -409,7 +409,7 @@ class CreateAmendOtherCgtValidatorSpec extends UnitSpec with ValueFormatErrorMes
         |{
         |  "disposals":[
         |    {
-        |      "assetType":"otherProperty",
+        |      "assetType":"other-property",
         |      "assetDescription":"Property Sale",
         |      "acquisitionDate":"2019-05-01",
         |      "disposalDate":"2019-06-01",

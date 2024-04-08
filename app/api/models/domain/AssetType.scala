@@ -16,21 +16,31 @@
 
 package api.models.domain
 
-import play.api.libs.json.Format
+import play.api.libs.json.Writes
 import utils.enums.Enums
 
-sealed trait AssetType
+sealed trait AssetType{
+  def toDownstreamString: String
+}
 
 object AssetType {
 
-  case object otherProperty extends AssetType
+  case object `other-property` extends AssetType{
+    override def toDownstreamString: String = "otherProperty"
+  }
 
-  case object unlistedShares extends AssetType
+  case object `unlisted-shares` extends AssetType {
+    override def toDownstreamString: String = "unlistedShares"
+  }
 
-  case object listedShares extends AssetType
+  case object `listed-shares` extends AssetType {
+    override def toDownstreamString: String = "listedShares"
+  }
 
-  case object otherAsset extends AssetType
+  case object `other-asset` extends AssetType {
+    override def toDownstreamString: String = "otherAsset"
+  }
 
-  implicit val format: Format[AssetType]         = Enums.format[AssetType]
+  implicit val writes: Writes[AssetType]         = Enums.writes[AssetType]
   val parser: PartialFunction[String, AssetType] = Enums.parser[AssetType]
 }

@@ -16,7 +16,9 @@
 
 package v1.models.request.createAmendOtherCgt
 
-import play.api.libs.json.{Json, OFormat}
+import api.models.domain.AssetType
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Disposal(assetType: String,
                     assetDescription: String,
@@ -32,5 +34,22 @@ case class Disposal(assetType: String,
                     rttTaxPaid: Option[BigDecimal])
 
 object Disposal {
-  implicit val format: OFormat[Disposal] = Json.format[Disposal]
+
+  implicit val reads: Reads[Disposal] = Json.reads[Disposal]
+
+  implicit val disposalWrites: OWrites[Disposal] = (
+    (JsPath \ "assetType").write[String].contramap[String](assetType => AssetType.parser(assetType).toDownstreamString) and
+      (JsPath \ "assetDescription").write[String] and
+      (JsPath \ "acquisitionDate").write[String] and
+      (JsPath \ "disposalDate").write[String] and
+      (JsPath \ "disposalProceeds").write[BigDecimal] and
+      (JsPath \ "allowableCosts").write[BigDecimal] and
+      (JsPath \ "gain").writeNullable[BigDecimal] and
+      (JsPath \ "loss").writeNullable[BigDecimal] and
+      (JsPath \ "claimOrElectionCodes").writeNullable[Seq[String]] and
+      (JsPath \ "gainAfterRelief").writeNullable[BigDecimal] and
+      (JsPath \ "lossAfterRelief").writeNullable[BigDecimal] and
+      (JsPath \ "rttTaxPaid").writeNullable[BigDecimal]
+  )(unlift(Disposal.unapply))
+
 }
