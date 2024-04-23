@@ -1,4 +1,4 @@
-summary: Delete Other Capital Gains and Disposals
+summary: Delete Other Capital Gains and Disposals [Test only]
 description: |
   This endpoint allows the developer to delete user submitted Other Capital Gains and Disposals
   with the exception of residential property, for a given NINO and tax year.

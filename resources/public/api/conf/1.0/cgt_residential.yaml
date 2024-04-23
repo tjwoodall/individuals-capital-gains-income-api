@@ -1,6 +1,6 @@
 get:
   $ref: "./cgt_residential_retrieve_all.yaml"
-  summary: Retrieve All CGT Residential Property Disposals and Overrides
+  summary: Retrieve All CGT Residential Property Disposals and Overrides [Test only]
   security:
     - User-Restricted:
         - read:self-assessment
@@ -9,14 +9,14 @@ get:
 
 put:
   $ref: "./cgt_residential_create_amend_non_ppd.yaml"
-  summary: Create and Amend CGT Residential Property Disposals (non-PPD)
+  summary: Create and Amend CGT Residential Property Disposals (non-PPD) [Test only]
   security:
     - User-Restricted:
         - write:self-assessment
 
 delete:
   $ref: "./cgt_residential_delete_non_ppd.yaml"
-  summary: Delete CGT Residential Property Disposals (non-PPD)
+  summary: Delete CGT Residential Property Disposals (non-PPD) [Test only]
   security:
     - User-Restricted:
         - write:self-assessment
