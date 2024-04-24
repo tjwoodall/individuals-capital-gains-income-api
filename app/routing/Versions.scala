@@ -33,7 +33,6 @@ object Version {
     /** @param version
       *   expecting a JsString e.g. "1.0"
       */
-
     override def reads(version: JsValue): JsResult[Version] =
       version
         .validate[String]
@@ -46,12 +45,13 @@ object Version {
   }
 
   implicit val versionFormat: Format[Version] = Format(VersionReads, VersionWrites)
+
 }
 
 sealed trait Version {
   val name: String
+  lazy val asJson: JsValue = Json.toJson(name)
 
-  lazy val asJson: JsValue      = Json.toJson(name)
   override def toString: String = name
 }
 
@@ -124,5 +124,7 @@ object Versions {
 }
 
 sealed trait GetFromRequestError
+
 case object InvalidHeader extends GetFromRequestError
+
 case object VersionNotFound extends GetFromRequestError

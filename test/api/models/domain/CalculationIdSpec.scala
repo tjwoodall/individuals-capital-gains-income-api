@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package api.mocks.services
+package api.models.domain
 
-import api.services.NrsProxyService
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.JsValue
-import uk.gov.hmrc.http.HeaderCarrier
+import support.UnitSpec
 
-trait MockNrsProxyService extends MockFactory {
+class CalculationIdSpec extends UnitSpec {
 
-  val mockNrsProxyService: NrsProxyService = mock[NrsProxyService]
-
-  object MockNrsProxyService {
-
-    def submitAsync(nino: String, notableEvent: String, body: JsValue): CallHandler[Unit] =
-      (mockNrsProxyService
-        .submitAsync(_: String, _: String, _: JsValue)(_: HeaderCarrier))
-        .expects(nino, notableEvent, body, *)
-
+  "toString" should {
+    "return the CalculationId value" in {
+      val result = CalculationId("some id").toString
+      result shouldBe "some id"
+    }
   }
 
 }

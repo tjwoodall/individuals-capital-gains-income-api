@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations._
 import api.models.errors.MtdError
 import config.AppConfig
@@ -26,7 +26,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class RetrieveAllResidentialPropertyCgtValidator @Inject() (implicit appConfig: AppConfig)
-    extends Validator[RetrieveAllResidentialPropertyCgtRawData] {
+    extends ValidatorOld[RetrieveAllResidentialPropertyCgtRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 

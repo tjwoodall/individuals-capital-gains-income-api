@@ -17,7 +17,7 @@
 package v1.controllers
 
 import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService, NrsProxyService}
@@ -63,7 +63,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
         temporalValidationEnabled = FeatureSwitches(appConfig.featureSwitches).isTemporalValidationEnabled
       )
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService { req =>
           nrsProxyService.submitAsync(nino, "itsa-cgt-disposal-ppd", request.body)
@@ -75,8 +75,8 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {
-    new AuditHandler() {
+  private def auditHandler(nino: String, taxYear: String, request: UserRequest[JsValue]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
           ctx: RequestContext,
           ec: ExecutionContext): Unit = {
@@ -84,7 +84,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
+              GenericAuditDetailOld(
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
@@ -94,7 +94,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
 
           case Right(_: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetail(
+              GenericAuditDetailOld(
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
@@ -107,7 +107,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
     }
   }
 
-  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetailOld)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("CreateAmendCgtPpdOverrides", "Create-Amend-Cgt-Ppd-Overrides", details)
     auditService.auditEvent(event)
   }

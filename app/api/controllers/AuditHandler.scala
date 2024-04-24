@@ -16,13 +16,15 @@
 
 package api.controllers
 
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
 import api.services.AuditService
 import cats.syntax.either._
 import play.api.libs.json.{JsValue, Writes}
+import routing.Version
 
+import scala.Function.const
 import scala.concurrent.ExecutionContext
 
 trait AuditHandler extends RequestContextImplicits {
@@ -35,63 +37,47 @@ trait AuditHandler extends RequestContextImplicits {
 
 object AuditHandler {
 
-  trait AuditDetailCreator[A] {
-    def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit ctx: RequestContext): A
-  }
+  def apply(auditService: AuditService,
+            auditType: String,
+            transactionName: String,
+            apiVersion: Version,
+            params: Map[String, String],
+            requestBody: Option[JsValue] = None,
+            includeResponse: Boolean = false): AuditHandler =
+    new AuditHandlerImpl[GenericAuditDetail](
+      auditService = auditService,
+      auditType = auditType,
+      transactionName = transactionName,
+      auditDetailCreator = GenericAuditDetail.auditDetailCreator(apiVersion, params),
+      requestBody = requestBody,
+      responseBodyMap = if (includeResponse) identity else const(None)
+    )
 
   def custom[A: Writes](auditService: AuditService,
                         auditType: String,
                         transactionName: String,
                         auditDetailCreator: AuditDetailCreator[A],
                         requestBody: Option[JsValue] = None,
-                        includeResponse: Boolean = false): AuditHandler =
+                        responseBodyMap: Option[JsValue] => Option[JsValue]): AuditHandler =
     new AuditHandlerImpl[A](
       auditService = auditService,
       auditType = auditType,
       transactionName = transactionName,
       auditDetailCreator,
       requestBody = requestBody,
-      responseBodyMap = if (includeResponse) identity else _ => None
+      responseBodyMap = responseBodyMap
     )
 
-  def apply(auditService: AuditService,
-            auditType: String,
-            transactionName: String,
-            params: Map[String, String],
-            requestBody: Option[JsValue] = None,
-            includeResponse: Boolean = false): AuditHandler = {
-    custom(
-      auditService = auditService,
-      auditType = auditType,
-      transactionName = transactionName,
-      auditDetailCreator = GenericAuditDetail.auditDetailCreator(params),
-      requestBody = requestBody,
-      includeResponse = includeResponse
-    )
+  trait AuditDetailCreator[A] {
+    def createAuditDetail(userDetails: UserDetails, requestBody: Option[JsValue], auditResponse: AuditResponse)(implicit ctx: RequestContext): A
   }
 
-  def flattenedAuditing(auditService: AuditService,
-                        auditType: String,
-                        transactionName: String,
-                        params: Map[String, String],
-                        requestBody: Option[JsValue] = None,
-                        includeResponse: Boolean = false): AuditHandler = {
-    custom(
-      auditService = auditService,
-      auditType = auditType,
-      transactionName = transactionName,
-      auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(params),
-      requestBody = requestBody,
-      includeResponse = includeResponse
-    )
-  }
-
-  private class AuditHandlerImpl[A](auditService: AuditService,
-                                    auditType: String,
-                                    transactionName: String,
-                                    auditDetailCreator: AuditDetailCreator[A],
-                                    requestBody: Option[JsValue],
-                                    responseBodyMap: Option[JsValue] => Option[JsValue])(implicit writer: Writes[A])
+  private class AuditHandlerImpl[A: Writes](auditService: AuditService,
+                                            auditType: String,
+                                            transactionName: String,
+                                            auditDetailCreator: AuditDetailCreator[A],
+                                            requestBody: Option[JsValue],
+                                            responseBodyMap: Option[JsValue] => Option[JsValue])
       extends AuditHandler {
 
     def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit

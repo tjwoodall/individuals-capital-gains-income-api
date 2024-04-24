@@ -17,7 +17,7 @@
 package v1.controllers
 
 import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -56,7 +56,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
 
       val rawData: DeleteCgtNonPpdRawData = DeleteCgtNonPpdRawData(nino, taxYear)
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.deleteCgtNonPpd)
         .withAuditing(auditHandler(nino, taxYear, request))
@@ -64,8 +64,8 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
       requestHandler.handleRequest(rawData)
     }
 
-  private def auditHandler(nino: String, taxYear: String, request: UserRequest[AnyContent]): AuditHandler = {
-    new AuditHandler() {
+  private def auditHandler(nino: String, taxYear: String, request: UserRequest[AnyContent]): AuditHandlerOld = {
+    new AuditHandlerOld() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
           ctx: RequestContext,
           ec: ExecutionContext): Unit = {
@@ -73,7 +73,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetail(
+              GenericAuditDetailOld(
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
@@ -83,7 +83,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
 
           case Right(_: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetail(
+              GenericAuditDetailOld(
                 request.userDetails,
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
@@ -95,7 +95,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
     }
   }
 
-  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetailOld)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("DeleteCgtNonPpd", "Delete-Cgt-Non-Ppd", details)
     auditService.auditEvent(event)
   }

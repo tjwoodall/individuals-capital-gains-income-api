@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations.{
   AssetDescriptionValidation,
   AssetTypeValidation,
@@ -40,7 +40,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendOtherCgtValidator @Inject() (implicit appConfig: AppConfig)
-    extends Validator[CreateAmendOtherCgtRawData]
+    extends ValidatorOld[CreateAmendOtherCgtRawData]
     with ValueFormatErrorMessages
     with DisposalDateErrorMessages {
 

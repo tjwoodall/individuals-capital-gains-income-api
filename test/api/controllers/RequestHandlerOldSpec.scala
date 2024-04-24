@@ -18,13 +18,12 @@ package api.controllers
 
 import api.controllers.requestParsers.RequestParser
 import api.mocks.MockIdGenerator
-import api.mocks.services.MockAuditService
-import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.auth.UserDetails
 import api.models.errors.{ErrorWrapper, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
 import api.models.request.RawData
-import api.services.ServiceOutcome
+import api.services.{MockAuditService, ServiceOutcome}
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
@@ -38,7 +37,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
-class RequestHandlerSpec
+class RequestHandlerOldSpec
   extends UnitSpec
     with MockAuditService
     with MockIdGenerator
@@ -88,7 +87,7 @@ class RequestHandlerSpec
   "RequestHandler" when {
     "given a request" must {
       "return the correct response" in {
-        val requestHandler = RequestHandler
+        val requestHandler = RequestHandlerOld
           .withParser(mockParser)
           .withService(mockService.service)
           .withPlainJsonResult(successCode)
@@ -104,7 +103,7 @@ class RequestHandlerSpec
       }
 
       "return no content if required" in {
-        val requestHandler = RequestHandler
+        val requestHandler = RequestHandlerOld
           .withParser(mockParser)
           .withService(mockService.service)
           .withNoContentResult()
@@ -130,7 +129,7 @@ class RequestHandlerSpec
 
       "allowed in config" should {
         "return RuleRequestCannotBeFulfilled error" in {
-          val requestHandler = RequestHandler
+          val requestHandler = RequestHandlerOld
             .withParser(mockParser)
             .withService(mockService.service)
             .withNoContentResult()
@@ -158,7 +157,7 @@ class RequestHandlerSpec
 
       "not allowed in config" should {
         "return success response" in {
-          val requestHandler = RequestHandler
+          val requestHandler = RequestHandlerOld
             .withParser(mockParser)
             .withService(mockService.service)
             .withPlainJsonResult(successCode)
@@ -179,7 +178,7 @@ class RequestHandlerSpec
 
     "a request fails with validation errors" must {
       "return the errors" in {
-        val requestHandler = RequestHandler
+        val requestHandler = RequestHandlerOld
           .withParser(mockParser)
           .withService(mockService.service)
           .withPlainJsonResult(successCode)
@@ -196,7 +195,7 @@ class RequestHandlerSpec
 
     "a request fails with service errors" must {
       "return the errors" in {
-        val requestHandler = RequestHandler
+        val requestHandler = RequestHandlerOld
           .withParser(mockParser)
           .withService(mockService.service)
           .withPlainJsonResult(successCode)
@@ -220,7 +219,7 @@ class RequestHandlerSpec
 
       val requestBody = Some(JsString("REQUEST BODY"))
 
-      def auditHandler(includeResponse: Boolean = false): AuditHandler = AuditHandler(
+      def auditHandler(includeResponse: Boolean = false): AuditHandlerOld = AuditHandlerOld(
         mockAuditService,
         auditType = auditType,
         transactionName = txName,
@@ -229,7 +228,7 @@ class RequestHandlerSpec
         includeResponse = includeResponse
       )
 
-      val basicRequestHandler = RequestHandler
+      val basicRequestHandler = RequestHandlerOld
         .withParser(mockParser)
         .withService(mockService.service)
         .withPlainJsonResult(successCode)
@@ -239,7 +238,7 @@ class RequestHandlerSpec
           AuditEvent(
             auditType = auditType,
             transactionName = txName,
-            GenericAuditDetail(userDetails, params = params, request = requestBody, `X-CorrelationId` = correlationId, auditResponse)
+            GenericAuditDetailOld(userDetails, params = params, request = requestBody, `X-CorrelationId` = correlationId, auditResponse)
           ))
 
       "a request is successful" when {

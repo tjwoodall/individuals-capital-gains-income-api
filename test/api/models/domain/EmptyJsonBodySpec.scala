@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package api.mocks
+package api.models.domain
 
-import org.joda.time.DateTime
-import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
-import utils.CurrentDateTime
+import play.api.libs.json.{JsValue, Json}
+import support.UnitSpec
 
-import java.time.LocalDate
+class EmptyJsonBodySpec extends UnitSpec {
 
-trait MockCurrentDateTime extends MockFactory {
-
-  val mockCurrentDateTime: CurrentDateTime = mock[CurrentDateTime]
-
-  object MockCurrentDateTime {
-    def getDateTime: CallHandler[DateTime]   = (() => mockCurrentDateTime.getDateTime).expects()
-    def getLocalDate: CallHandler[LocalDate] = (() => mockCurrentDateTime.getLocalDate).expects()
+  "EmptyJsonBody.writes" should {
+    "return an empty JSON body" when {
+      "called" in {
+        val json            = EmptyJsonBody
+        val result: JsValue = Json.toJson(json)(EmptyJsonBody.writes)
+        result shouldBe Json.obj()
+      }
+    }
   }
 
 }

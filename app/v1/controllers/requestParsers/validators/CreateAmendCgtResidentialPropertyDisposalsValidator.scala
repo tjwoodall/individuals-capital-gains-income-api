@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations.{
   CustomerRefValidation,
   DecimalValueValidation,
@@ -37,7 +37,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendCgtResidentialPropertyDisposalsValidator @Inject() (implicit appConfig: AppConfig)
-    extends Validator[CreateAmendCgtResidentialPropertyDisposalsRawData]
+    extends ValidatorOld[CreateAmendCgtResidentialPropertyDisposalsRawData]
     with DisposalDateErrorMessages {
 
   private val validationSet = List(
