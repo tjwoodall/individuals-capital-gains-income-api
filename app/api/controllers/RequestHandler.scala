@@ -17,15 +17,17 @@
 package api.controllers
 
 import api.controllers.validators.Validator
-import api.models.errors.{ErrorWrapper, InternalError}
+import api.models.errors.{ErrorWrapper,RuleRequestCannotBeFulfilled, InternalError}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import cats.data.EitherT
 import cats.implicits._
+import config.AppConfig
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
+import routing.Version
 import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,7 +37,8 @@ trait RequestHandler {
   def handleRequest()(implicit
       ctx: RequestContext,
       request: UserRequest[_],
-      ec: ExecutionContext
+      ec: ExecutionContext,
+      appConfig: AppConfig
   ): Future[Result]
 
 }
@@ -60,7 +63,7 @@ object RequestHandler {
       auditHandler: Option[AuditHandler] = None
   ) extends RequestHandler {
 
-    def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext): Future[Result] =
+    def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: AppConfig): Future[Result] =
       Delegate.handleRequest()
 
     def withErrorHandling(errorHandling: ErrorHandling): RequestHandlerBuilder[Input, Output] =
@@ -97,7 +100,7 @@ object RequestHandler {
     // Scoped as a private delegate so as to keep the logic completely separate from the configuration
     private object Delegate extends RequestHandler with Logging with RequestContextImplicits {
 
-      implicit class Response(result: Result) {
+      implicit class Response(result: Result)(implicit appConfig: AppConfig, apiVersion: Version) {
 
         def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
 
@@ -116,7 +119,8 @@ object RequestHandler {
       def handleRequest()(implicit
           ctx: RequestContext,
           request: UserRequest[_],
-          ec: ExecutionContext
+          ec: ExecutionContext,
+          appConfig: AppConfig
       ): Future[Result] = {
 
         logger.info(
@@ -124,12 +128,15 @@ object RequestHandler {
             s"with correlationId : ${ctx.correlationId}")
 
         val result =
-          for {
-            parsedRequest   <- EitherT.fromEither[Future](validator.validateAndWrapResult())
-            serviceResponse <- EitherT(service(parsedRequest))
-          } yield doWithContext(ctx.withCorrelationId(serviceResponse.correlationId)) { implicit ctx: RequestContext =>
-            handleSuccess(parsedRequest, serviceResponse)
-          }
+          if (simulateRequestCannotBeFulfilled)
+            EitherT[Future, ErrorWrapper, Result](Future.successful(Left(ErrorWrapper(ctx.correlationId, RuleRequestCannotBeFulfilled))))
+          else
+            for {
+              parsedRequest   <- EitherT.fromEither[Future](validator.validateAndWrapResult())
+              serviceResponse <- EitherT(service(parsedRequest))
+            } yield doWithContext(ctx.withCorrelationId(serviceResponse.correlationId)) { implicit ctx: RequestContext =>
+              handleSuccess(parsedRequest, serviceResponse)
+            }
 
         result.leftMap { errorWrapper =>
           doWithContext(ctx.withCorrelationId(errorWrapper.correlationId)) { implicit ctx: RequestContext =>
@@ -138,13 +145,19 @@ object RequestHandler {
         }.merge
       }
 
+      private def simulateRequestCannotBeFulfilled(implicit request: UserRequest[_], appConfig: AppConfig): Boolean =
+        request.headers.get("Gov-Test-Scenario").contains("REQUEST_CANNOT_BE_FULFILLED") &&
+          appConfig.allowRequestCannotBeFulfilledHeader(Version(request))
+
       private def doWithContext[A](ctx: RequestContext)(f: RequestContext => A): A = f(ctx)
 
       private def handleSuccess(parsedRequest: Input, serviceResponse: ResponseWrapper[Output])(implicit
           ctx: RequestContext,
           request: UserRequest[_],
-          ec: ExecutionContext): Result = {
+          ec: ExecutionContext,
+          appConfig: AppConfig): Result = {
 
+        implicit val apiVersion: Version = Version(request)
 
         logger.info(
           s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] - " +
@@ -162,8 +175,10 @@ object RequestHandler {
           ctx: RequestContext,
           request: UserRequest[_],
           ec: ExecutionContext,
+          appConfig: AppConfig
       ): Result = {
 
+        implicit val apiVersion: Version = Version(request)
         logger.warn(
           s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] - " +
             s"Error response received with CorrelationId: ${ctx.correlationId}")
