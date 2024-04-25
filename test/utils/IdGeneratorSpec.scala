@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package api.models.audit
+package utils
 
-import GenericAuditDetailFixture._
-import play.api.libs.json.Json
 import support.UnitSpec
 
-class GenericAuditDetailSpec extends UnitSpec {
+class IdGeneratorSpec extends UnitSpec {
 
-  "GenericAuditDetail" when {
-    "written to JSON (success)" should {
-      "produce the expected JsObject" in {
-        Json.toJson(genericAuditDetailModelSuccess) shouldBe genericAuditDetailJsonSuccess
-      }
-    }
+  val generator        = new IdGenerator
+  val correlationRegex = "^[A-Za-z0-9\\-]{36}$"
 
-    "written to JSON (error)" should {
-      "produce the expected JsObject" in {
-        Json.toJson(genericAuditDetailModelError) shouldBe genericAuditDetailJsonError
+  "IdGenerator" should {
+    "generate a correlation id" when {
+      "getCorrelationId is called" in {
+        generator.generateCorrelationId.matches(correlationRegex) shouldBe true
       }
     }
   }
