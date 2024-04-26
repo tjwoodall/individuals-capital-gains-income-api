@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations._
 import api.models.errors._
 import config.AppConfig
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendCgtPpdOverridesValidator @Inject() (implicit appConfig: AppConfig)
-    extends Validator[CreateAmendCgtPpdOverridesRawData]
+    extends ValidatorOld[CreateAmendCgtPpdOverridesRawData]
     with ValueFormatErrorMessages {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation, bodyFormatValidator, bodyValueValidator, rulesValidator)

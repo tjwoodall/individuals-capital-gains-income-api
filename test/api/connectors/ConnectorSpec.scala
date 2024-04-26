@@ -108,7 +108,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
   )
 
   protected trait ConnectorTest extends MockHttpClient with MockAppConfig {
-    protected val baseUrl: String = "http://test-BaseUrl"
+    //protected val baseUrl: String = "http://test-BaseUrl"
 
     implicit protected val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders)
 

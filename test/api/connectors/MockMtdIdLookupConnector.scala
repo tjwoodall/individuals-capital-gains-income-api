@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-package api.mocks.connectors
+package api.connectors
 
-import api.connectors.NrsProxyConnector
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.JsValue
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-trait MockNrsProxyConnector extends MockFactory {
+trait MockMtdIdLookupConnector extends MockFactory {
 
-  val mockNrsProxyConnector: NrsProxyConnector = mock[NrsProxyConnector]
+  val mockMtdIdLookupConnector: MtdIdLookupConnector = mock[MtdIdLookupConnector]
 
-  object MockNrsProxyConnector {
+  object MockedMtdIdLookupConnector {
 
-    def submit(nino: String, notableEvent: String, body: JsValue): CallHandler[Future[Either[UpstreamErrorResponse, Unit]]] =
-      (mockNrsProxyConnector
-        .submit(_: String, _: String, _: JsValue)(_: HeaderCarrier))
-        .expects(nino, notableEvent, body, *)
+    def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
+      (mockMtdIdLookupConnector
+        .getMtdId(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(nino, *, *)
+    }
 
   }
 

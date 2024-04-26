@@ -23,14 +23,20 @@ val appName = "individuals-capital-gains-income-api"
 lazy val ItTest = config("it") extend Test
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(warnScalaVersionEviction = false),
-    scalaVersion                    := "2.13.8",
-    scalacOptions ++= Seq("-Xfatal-warnings", "-Wconf:src=routes/.*:silent", "-feature", "-language:higherKinds")
+    scalaVersion                    := "2.13.12",
+    scalacOptions ++= List(
+      "-language:higherKinds",
+      "-Xlint:-byname-implicit",
+      "-Xfatal-warnings",
+      "-Wconf:src=routes/.*:silent",
+      "-feature"
+    )
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
@@ -40,7 +46,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .configs(ItTest)
   .settings(
-    inConfig(ItTest)(Defaults.itSettings ++ headerSettings(ItTest) ++ automateHeaderSettings(ItTest) ++ ScalafmtPlugin.scalafmtConfigSettings),
     ItTest / fork                       := true,
     ItTest / unmanagedSourceDirectories := Seq((ItTest / baseDirectory).value / "it"),
     ItTest / unmanagedClasspath += baseDirectory.value / "resources",
@@ -54,12 +59,5 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(PlayKeys.playDefaultPort := 7764)
 
-dependencyUpdatesFilter -= moduleFilter(organization = "com.typesafe.play")
-dependencyUpdatesFilter -= moduleFilter(name = "simple-reactivemongo")
-dependencyUpdatesFilter -= moduleFilter(name = "reactivemongo-test")
-dependencyUpdatesFilter -= moduleFilter(name = "scala-library")
-dependencyUpdatesFilter -= moduleFilter(name = "flexmark-all")
-dependencyUpdatesFilter -= moduleFilter(name = "scalatestplus-play")
-dependencyUpdatesFilter -= moduleFilter(name = "scalatestplus-scalacheck")
 
 dependencyUpdatesFailBuild := true

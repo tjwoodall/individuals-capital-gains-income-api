@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-package api.mocks.services
+package api.services
 
-import api.models.audit.AuditEvent
-import api.services.AuditService
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Writes
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
-import scala.concurrent.{ExecutionContext, Future}
+trait MockNrsProxyService extends MockFactory {
 
-trait MockAuditService extends MockFactory {
+  val mockNrsProxyService: NrsProxyService = mock[NrsProxyService]
 
-  val mockAuditService: AuditService = stub[AuditService]
+  object MockNrsProxyService {
 
-  object MockedAuditService {
-
-    def verifyAuditEvent[T](event: AuditEvent[T]): CallHandler[Future[AuditResult]] = {
-      (mockAuditService
-        .auditEvent(_: AuditEvent[T])(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
-        .verify(event, *, *, *)
-        .returning(Future.successful(AuditResult.Success))
-    }
+    def submitAsync(nino: String, notableEvent: String, body: JsValue): CallHandler[Unit] =
+      (mockNrsProxyService
+        .submitAsync(_: String, _: String, _: JsValue)(_: HeaderCarrier))
+        .expects(nino, notableEvent, body, *)
 
   }
 

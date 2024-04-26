@@ -18,10 +18,10 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockAppConfig
 import play.api.mvc.Result
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._

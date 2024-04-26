@@ -17,16 +17,12 @@
 package v1.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.validations.ValueFormatErrorMessages
-import api.mocks.MockCurrentDateTime
 import api.models.errors._
 import config.AppConfig
 import mocks.MockAppConfig
-import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
-import utils.CurrentDateTime
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRawData
 
 class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatErrorMessages {
@@ -568,17 +564,17 @@ class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatE
   private val neitherGainsOrLossMultiplePropertyDisposalsRequestBody = AnyContentAsJson(neitherGainsOrLossMultiplePropertyDisposalsRequestBodyJson)
   private val neitherGainsOrLossSinglePropertyDisposalsRequestBody   = AnyContentAsJson(neitherGainsOrLossSinglePropertyDisposalsRequestBodyJson)
 
-  class Test extends MockCurrentDateTime with MockAppConfig {
+  class Test extends MockAppConfig {
 
-    implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
-    val dateTimeFormatter: DateTimeFormatter       = DateTimeFormat.forPattern("yyyy-MM-dd")
-    implicit val appConfig: AppConfig              = mockAppConfig
+    // implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
+    // val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+    implicit val appConfig: AppConfig        = mockAppConfig
 
     val validator = new CreateAmendCgtPpdOverridesValidator()
 
-    MockCurrentDateTime.getDateTime
-      .returns(DateTime.parse("2021-07-11", dateTimeFormatter))
-      .anyNumberOfTimes()
+    //MockCurrentDateTime.getDateTime
+    //  .returns(DateTime.parse("2021-07-11", dateTimeFormatter))
+    //  .anyNumberOfTimes()
 
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2020)

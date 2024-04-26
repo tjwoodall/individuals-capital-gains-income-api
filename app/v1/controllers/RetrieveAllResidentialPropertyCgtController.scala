@@ -16,7 +16,7 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -53,7 +53,7 @@ class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: En
         source = source
       )
 
-      val requestHandler = RequestHandler
+      val requestHandler = RequestHandlerOld
         .withParser(parser)
         .withService(service.retrieve)
         .withPlainJsonResult()

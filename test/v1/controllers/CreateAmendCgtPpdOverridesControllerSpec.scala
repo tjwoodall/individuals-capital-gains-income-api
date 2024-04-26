@@ -18,11 +18,11 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
+import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
 import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
@@ -180,7 +180,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
 
     val controller = new CreateAmendCgtPpdOverridesController(
       authService = mockEnrolmentsAuthService,
@@ -195,11 +195,11 @@ class CreateAmendCgtPpdOverridesControllerSpec
 
     protected def callController(): Future[Result] = controller.createAmendCgtPpdOverrides(nino, taxYear)(fakePutRequest(validRequestJson))
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
+    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
         auditType = "CreateAmendCgtPpdOverrides",
         transactionName = "Create-Amend-Cgt-Ppd-Overrides",
-        detail = GenericAuditDetail(
+        detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
           params = Map("nino" -> nino, "taxYear" -> taxYear),

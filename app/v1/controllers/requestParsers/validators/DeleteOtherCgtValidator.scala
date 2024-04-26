@@ -16,7 +16,7 @@
 
 package v1.controllers.requestParsers.validators
 
-import api.controllers.requestParsers.validators.Validator
+import api.controllers.requestParsers.validators.ValidatorOld
 import api.controllers.requestParsers.validators.validations._
 import api.models.errors.MtdError
 import config.AppConfig
@@ -25,7 +25,7 @@ import v1.models.request.deleteOtherCgt.DeleteOtherCgtRawData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteOtherCgtValidator @Inject() (implicit appConfig: AppConfig) extends Validator[DeleteOtherCgtRawData] {
+class DeleteOtherCgtValidator @Inject() (implicit appConfig: AppConfig) extends ValidatorOld[DeleteOtherCgtRawData] {
 
   private val validationSet = List(parameterFormatValidation, parameterRuleValidation)
 

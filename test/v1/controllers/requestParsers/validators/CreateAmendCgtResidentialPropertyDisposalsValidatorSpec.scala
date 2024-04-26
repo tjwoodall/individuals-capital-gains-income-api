@@ -17,17 +17,14 @@
 package v1.controllers.requestParsers.validators
 
 import api.controllers.requestParsers.validators.validations.{DisposalDateErrorMessages, ValueFormatErrorMessages}
-import api.mocks.MockCurrentDateTime
 import api.models.errors._
 import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
-import utils.CurrentDateTime
 import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRawData
 
-import java.time.LocalDate
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorSpec
     extends UnitSpec
@@ -333,14 +330,14 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorSpec
 
   import Data._
 
-  class Test extends MockAppConfig with MockCurrentDateTime {
+  class Test extends MockAppConfig {
 
     implicit val appConfig: AppConfig              = mockAppConfig
-    implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
+    //implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
 
     val validator = new CreateAmendCgtResidentialPropertyDisposalsValidator()
 
-    MockCurrentDateTime.getLocalDate.returns(LocalDate.parse("2020-04-01")).anyNumberOfTimes()
+    //MockCurrentDateTime.getLocalDate.returns(LocalDate.parse("2020-04-01")).anyNumberOfTimes()
 
     private val MINIMUM_YEAR = 2020
     MockedAppConfig.minimumPermittedTaxYear returns MINIMUM_YEAR

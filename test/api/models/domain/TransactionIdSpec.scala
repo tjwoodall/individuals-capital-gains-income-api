@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package utils
+package api.models.domain
 
-import org.joda.time.{DateTime, DateTimeZone}
+import support.UnitSpec
 
-import java.time.LocalDate
-import javax.inject.Singleton
+class TransactionIdSpec extends UnitSpec {
 
-@Singleton
-class CurrentDateTime {
-  def getDateTime: DateTime = DateTime.now(DateTimeZone.UTC)
+  "toString" should {
+    "return the TransactionId value" in {
+      val result = TransactionId("some id").toString
+      result shouldBe "some id"
+    }
+  }
 
-  def getLocalDate: LocalDate = LocalDate.now()
 }

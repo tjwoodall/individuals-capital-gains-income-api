@@ -25,18 +25,32 @@ object EmploymentIdFormatError extends MtdError("FORMAT_EMPLOYMENT_ID", "The pro
 object CountryCodeFormatError extends MtdError("FORMAT_COUNTRY_CODE", "The format of the country code is invalid", BAD_REQUEST)
 object CountryCodeRuleError   extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code", BAD_REQUEST)
 object DateFormatError        extends MtdError("FORMAT_DATE", "The field should be in the format YYYY-MM-DD", BAD_REQUEST)
-object ValueFormatError       extends MtdError("FORMAT_VALUE", "The value must be between 0.00 and 99999999999.99", BAD_REQUEST)
-object AccountNameFormatError extends MtdError("FORMAT_ACCOUNT_NAME", "The provided account name is invalid", BAD_REQUEST)
+
+object ValueFormatError extends MtdError("FORMAT_VALUE", "The value must be between 0 and 99999999999.99", BAD_REQUEST) {
+
+  def forPathAndRange(path: String, min: String, max: String): MtdError =
+    ValueFormatError.copy(paths = Some(Seq(path)), message = s"The value must be between $min and $max")
+
+}
+
+object BusinessIdFormatError extends MtdError("FORMAT_BUSINESS_ID", "The Business ID format is invalid", BAD_REQUEST)
+
+object CalculationIdFormatError extends MtdError("FORMAT_CALCULATION_ID", "The provided calculation ID is invalid", BAD_REQUEST)
+
+object AccountNameFormatError      extends MtdError("FORMAT_ACCOUNT_NAME", "The provided account name is invalid", BAD_REQUEST)
 object PpdSubmissionIdFormatError  extends MtdError("FORMAT_PPD_SUBMISSION_ID", "The provided ppdSubmissionId is invalid", BAD_REQUEST)
 object CustomerRefFormatError      extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is invalid", BAD_REQUEST)
 object AssetDescriptionFormatError extends MtdError("FORMAT_ASSET_DESCRIPTION", "The provided asset description is invalid", BAD_REQUEST)
 object AssetTypeFormatError        extends MtdError("FORMAT_ASSET_TYPE", "The format of the assetType value is invalid", BAD_REQUEST)
 object SourceFormatError           extends MtdError("FORMAT_SOURCE", "The provided source is invalid", BAD_REQUEST)
 object StartDateFormatError        extends MtdError("FORMAT_START_DATE", "The provided start date is invalid", BAD_REQUEST)
+object EndDateFormatError          extends MtdError("FORMAT_END_DATE", "The provided End date is invalid", BAD_REQUEST)
 object CessationDateFormatError    extends MtdError("FORMAT_CESSATION_DATE", "The provided cessation date is invalid", BAD_REQUEST)
 
 object ClaimOrElectionCodesFormatError
     extends MtdError("FORMAT_CLAIM_OR_ELECTION_CODES", "The format of the claimOrElectionCodes value is invalid", BAD_REQUEST)
+
+object TransactionIdFormatError extends MtdError(code = "FORMAT_TRANSACTION_ID", message = "The transaction ID format is invalid", BAD_REQUEST)
 
 object RuleDateRangeInvalidError
     extends MtdError("RULE_DATE_RANGE_INVALID", "The date specified does not lie within the supported range", BAD_REQUEST)
@@ -98,6 +112,11 @@ object RuleAmountGainLossError
 object RuleCessationDateBeforeStartDateError
     extends MtdError("RULE_CESSATION_DATE_BEFORE_START_DATE", "The cessation date cannot be earlier than the start date", BAD_REQUEST)
 
+object RuleEndBeforeStartDateError
+    extends MtdError("RULE_END_DATE_BEFORE_START_DATE", "The supplied accounting period end date is before the start date", BAD_REQUEST)
+
+object RuleCountryCodeError extends MtdError("RULE_COUNTRY_CODE", "The country code is not a valid ISO 3166-1 alpha-3 country code", BAD_REQUEST)
+
 object RuleStartDateAfterTaxYearEndError
     extends MtdError("RULE_START_DATE_AFTER_TAX_YEAR_END", "The start date cannot be later than the tax year end", BAD_REQUEST)
 
@@ -106,7 +125,9 @@ object RuleCessationDateBeforeTaxYearStartError
 
 object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "Tax year not ended", BAD_REQUEST)
 
-object RuleRequestCannotBeFulfilled extends MtdError("RULE_REQUEST_CANNOT_BE_FULFILLED", "Custom (will vary in production depending on the actual error)", 422)
+object RuleRequestCannotBeFulfilled
+    extends MtdError("RULE_REQUEST_CANNOT_BE_FULFILLED", "Custom (will vary in production depending on the actual error)", 422)
+
 //Stub errors
 object RuleIncorrectGovTestScenarioError extends MtdError("RULE_INCORRECT_GOV_TEST_SCENARIO", "The Gov-Test-Scenario was not found", BAD_REQUEST)
 
@@ -127,3 +148,6 @@ object InvalidBearerTokenError     extends MtdError("UNAUTHORIZED", "Bearer toke
 object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid", NOT_ACCEPTABLE)
 object UnsupportedVersionError  extends MtdError("NOT_FOUND", "The requested resource could not be found", NOT_FOUND)
 object InvalidBodyTypeError     extends MtdError("INVALID_BODY_TYPE", "Expecting text/json or application/json body", UNSUPPORTED_MEDIA_TYPE)
+
+object InvalidTaxYearParameterError
+    extends MtdError(code = "INVALID_TAX_YEAR_PARAMETER", message = "A tax year before 2023-24 was supplied", BAD_REQUEST)
