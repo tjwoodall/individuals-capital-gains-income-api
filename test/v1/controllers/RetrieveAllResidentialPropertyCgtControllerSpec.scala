@@ -46,13 +46,13 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
   val source: Option[String] = Some("latest")
 
   val rawData: RetrieveAllResidentialPropertyCgtRawData = RetrieveAllResidentialPropertyCgtRawData(
-    nino = nino,
+    nino = validNino,
     taxYear = taxYear,
     source = source
   )
 
   val requestData: RetrieveAllResidentialPropertyCgtRequest = RetrieveAllResidentialPropertyCgtRequest(
-    nino = Nino(nino),
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     source = MtdSourceEnum.latest
   )
@@ -109,7 +109,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.retrieveAll(nino, taxYear, source)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.retrieveAll(validNino, taxYear, source)(fakeGetRequest)
 
   }
 

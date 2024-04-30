@@ -47,12 +47,12 @@ class DeleteCgtPpdOverridesControllerSpec
   val taxYear: String = "2019-20"
 
   val rawData: DeleteCgtPpdOverridesRawData = DeleteCgtPpdOverridesRawData(
-    nino = nino,
+    nino = validNino,
     taxYear = taxYear
   )
 
   val requestData: DeleteCgtPpdOverridesRequest = DeleteCgtPpdOverridesRequest(
-    nino = Nino(nino),
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )
 
@@ -106,7 +106,7 @@ class DeleteCgtPpdOverridesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.deleteCgtPpdOverrides(nino, taxYear)(fakeDeleteRequest)
+    protected def callController(): Future[Result] = controller.deleteCgtPpdOverrides(validNino, taxYear)(fakeRequest)
 
     def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
@@ -115,7 +115,7 @@ class DeleteCgtPpdOverridesControllerSpec
         detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = maybeRequestBody,
           `X-CorrelationId` = correlationId,
           response = auditResponse

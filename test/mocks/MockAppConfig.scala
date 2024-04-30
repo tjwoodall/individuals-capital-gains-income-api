@@ -16,11 +16,12 @@
 
 package mocks
 
-import config.{AppConfig, ConfidenceLevelConfig}
+import cats.data.Validated
+import config.{AppConfig, ConfidenceLevelConfig, Deprecation}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import routing.Version
 import play.api.Configuration
+import routing.Version
 
 trait MockAppConfig extends MockFactory {
 
@@ -55,12 +56,16 @@ trait MockAppConfig extends MockFactory {
     def api1661EnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.api1661EnvironmentHeaders).expects()
 
     // MTD IF Lookup Config
-    def mtdIdBaseUrl: CallHandler[String]                             = (() => mockAppConfig.mtdIdBaseUrl).expects()
-    def featureSwitches: CallHandler[Configuration]                   = (() => mockAppConfig.featureSwitches).expects()
-    def apiGatewayContext: CallHandler[String]                        = (() => mockAppConfig.apiGatewayContext).expects()
-    def apiStatus(version: Version): CallHandler[String]              = (mockAppConfig.apiStatus(_: Version)).expects(version)
-    def endpointsEnabled(version: Version): CallHandler[Boolean]      = (mockAppConfig.endpointsEnabled(_: Version)).expects(version)
-    def minimumPermittedTaxYear: CallHandler[Int]                     = (() => mockAppConfig.minimumPermittedTaxYear).expects()
+    def mtdIdBaseUrl: CallHandler[String]                        = (() => mockAppConfig.mtdIdBaseUrl).expects()
+    def featureSwitches: CallHandler[Configuration]              = (() => mockAppConfig.featureSwitches).expects()
+    def apiGatewayContext: CallHandler[String]                   = (() => mockAppConfig.apiGatewayContext).expects()
+    def apiStatus(version: Version): CallHandler[String]         = (mockAppConfig.apiStatus(_: Version)).expects(version)
+    def endpointsEnabled(version: Version): CallHandler[Boolean] = (mockAppConfig.endpointsEnabled(_: Version)).expects(version)
+    def minimumPermittedTaxYear: CallHandler[Int]                = (() => mockAppConfig.minimumPermittedTaxYear).expects()
+
+    def deprecationFor(version: Version): CallHandler[Validated[String, Deprecation]] = (mockAppConfig.deprecationFor(_: Version)).expects(version)
+
+    def apiDocumentationUrl(): CallHandler[String] = (() => mockAppConfig.apiDocumentationUrl: String).expects()
 
     def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] =
       (() => mockAppConfig.confidenceLevelConfig).expects()

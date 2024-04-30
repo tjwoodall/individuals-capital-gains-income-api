@@ -17,30 +17,26 @@
 package api.controllers
 
 import api.controllers.validators.Validator
-import api.models.errors.{ErrorWrapper,RuleRequestCannotBeFulfilled, InternalError}
+import api.models.errors.{ErrorWrapper, InternalError, RuleRequestCannotBeFulfilledError}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import cats.data.EitherT
+import cats.data.Validated.Valid
 import cats.implicits._
 import config.AppConfig
+import config.Deprecation.Deprecated
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
 import routing.Version
+import utils.DateUtils.longDateTimestampGmt
 import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait RequestHandler {
-
-  def handleRequest()(implicit
-      ctx: RequestContext,
-      request: UserRequest[_],
-      ec: ExecutionContext,
-      appConfig: AppConfig
-  ): Future[Result]
-
+  def handleRequest()(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: AppConfig): Future[Result]
 }
 
 object RequestHandler {
@@ -91,16 +87,28 @@ object RequestHandler {
     def withResultCreator(resultCreator: ResultCreator[Input, Output]): RequestHandlerBuilder[Input, Output] =
       copy(resultCreator = resultCreator)
 
-    /** Shorthand for
-      * {{{
-      * withResultCreator(ResultCreator.hateoasWrapping(hateoasFactory, successStatus)(data))
-      * }}}
-      */
-
     // Scoped as a private delegate so as to keep the logic completely separate from the configuration
     private object Delegate extends RequestHandler with Logging with RequestContextImplicits {
 
       implicit class Response(result: Result)(implicit appConfig: AppConfig, apiVersion: Version) {
+
+        private def withDeprecationHeaders: List[(String, String)] = {
+
+          appConfig.deprecationFor(apiVersion) match {
+            case Valid(Deprecated(deprecatedOn, Some(sunsetDate))) =>
+              List(
+                "Deprecation" -> longDateTimestampGmt(deprecatedOn),
+                "Sunset"      -> longDateTimestampGmt(sunsetDate),
+                "Link"        -> appConfig.apiDocumentationUrl
+              )
+            case Valid(Deprecated(deprecatedOn, None)) =>
+              List(
+                "Deprecation" -> longDateTimestampGmt(deprecatedOn),
+                "Link"        -> appConfig.apiDocumentationUrl
+              )
+            case _ => Nil
+          }
+        }
 
         def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
 
@@ -109,7 +117,8 @@ object RequestHandler {
               List(
                 "X-CorrelationId"        -> correlationId,
                 "X-Content-Type-Options" -> "nosniff"
-              )
+              ) ++
+              withDeprecationHeaders
 
           result.copy(header = result.header.copy(headers = result.header.headers ++ headers))
         }
@@ -129,7 +138,7 @@ object RequestHandler {
 
         val result =
           if (simulateRequestCannotBeFulfilled)
-            EitherT[Future, ErrorWrapper, Result](Future.successful(Left(ErrorWrapper(ctx.correlationId, RuleRequestCannotBeFulfilled))))
+            EitherT[Future, ErrorWrapper, Result](Future.successful(Left(ErrorWrapper(ctx.correlationId, RuleRequestCannotBeFulfilledError))))
           else
             for {
               parsedRequest   <- EitherT.fromEither[Future](validator.validateAndWrapResult())
@@ -171,12 +180,8 @@ object RequestHandler {
         result
       }
 
-      private def handleFailure(errorWrapper: ErrorWrapper)(implicit
-          ctx: RequestContext,
-          request: UserRequest[_],
-          ec: ExecutionContext,
-          appConfig: AppConfig
-      ): Result = {
+      private def handleFailure(
+          errorWrapper: ErrorWrapper)(implicit ctx: RequestContext, request: UserRequest[_], ec: ExecutionContext, appConfig: AppConfig): Result = {
 
         implicit val apiVersion: Version = Version(request)
         logger.warn(

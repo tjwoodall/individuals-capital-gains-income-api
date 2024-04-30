@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.mocks.connectors.MockDeleteCgtNonPpdConnector
-import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequest
+import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 
@@ -31,7 +31,7 @@ class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  private val requestData = DeleteCgtNonPpdRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = DeleteCgtNonPpdRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteCgtNonPpdConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")

@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteOtherCgt.DeleteOtherCgtRequest
+import v1.models.request.deleteOtherCgt.DeleteOtherCgtRequestData
 
 import scala.concurrent.Future
 
@@ -59,8 +59,8 @@ class DeleteOtherCgtConnectorSpec extends ConnectorSpec {
 
     protected val nino: String = "AA111111A"
 
-    protected val request: DeleteOtherCgtRequest =
-      DeleteOtherCgtRequest(
+    protected val request: DeleteOtherCgtRequestData =
+      DeleteOtherCgtRequestData(
         nino = Nino(nino),
         taxYear = taxYear
       )

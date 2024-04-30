@@ -17,7 +17,7 @@
 package v1.controllers
 
 import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -27,8 +27,7 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
-import v1.controllers.requestParsers.DeleteOtherCgtRequestParser
-import v1.models.request.deleteOtherCgt.DeleteOtherCgtRawData
+import v1.controllers.validators.DeleteOtherCgtValidatorFactory
 import v1.services.DeleteOtherCgtService
 
 import javax.inject.{Inject, Singleton}
@@ -37,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService,
                                           val lookupService: MtdIdLookupService,
-                                          parser: DeleteOtherCgtRequestParser,
+                                          validatorFactory: DeleteOtherCgtValidatorFactory,
                                           service: DeleteOtherCgtService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
@@ -54,22 +53,19 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: DeleteOtherCgtRawData = DeleteOtherCgtRawData(
-        nino = nino,
-        taxYear = taxYear
-      )
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler =
-        RequestHandlerOld
-          .withParser(parser)
+        RequestHandler
+          .withValidator(validator)
           .withService(service.delete)
           .withAuditing(auditHandler(nino, taxYear, request))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
-  private def auditHandler(nino: String, taxYear: String, request: UserRequest[AnyContent]): AuditHandlerOld = {
-    new AuditHandlerOld() {
+  private def auditHandler(nino: String, taxYear: String, request: UserRequest[AnyContent]): AuditHandler = {
+    new AuditHandler() {
       override def performAudit(userDetails: UserDetails, httpStatus: Int, response: Either[ErrorWrapper, Option[JsValue]])(implicit
           ctx: RequestContext,
           ec: ExecutionContext): Unit = {
@@ -77,8 +73,9 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
         response match {
           case Left(err: ErrorWrapper) =>
             auditSubmission(
-              GenericAuditDetailOld(
+              GenericAuditDetail(
                 request.userDetails,
+                "1.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
@@ -87,8 +84,9 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
 
           case Right(_: Option[JsValue]) =>
             auditSubmission(
-              GenericAuditDetailOld(
+              GenericAuditDetail(
                 request.userDetails,
+                "1.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
@@ -99,7 +97,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
     }
   }
 
-  private def auditSubmission(details: GenericAuditDetailOld)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
     val event = AuditEvent("DeleteOtherCgtDisposalsAndGains", "Delete-Other-Cgt-Disposals-And-Gains", details)
     auditService.auditEvent(event)
   }

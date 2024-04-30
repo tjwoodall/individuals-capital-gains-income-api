@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteOtherCgt
+package utils
 
-import api.models.domain.{Nino, TaxYear}
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneId}
+import java.util.Locale
 
-case class DeleteOtherCgtRequest(nino: Nino, taxYear: TaxYear)
+object DateUtils {
+
+  private val longDateTimeFormatGmt: DateTimeFormatter = DateTimeFormatter
+    .ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+    .withZone(ZoneId.of("GMT"))
+
+  def longDateTimestampGmt(dateTime: LocalDateTime): String = longDateTimeFormatGmt.format(dateTime)
+}

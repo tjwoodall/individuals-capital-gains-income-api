@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers
+package v1.models.request.deleteCgtNonPpd
 
-import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
-import v1.controllers.requestParsers.validators.DeleteCgtNonPpdValidator
-import v1.models.request.deleteCgtNonPpd.{DeleteCgtNonPpdRawData, DeleteCgtNonPpdRequest}
 
-import javax.inject.{Inject, Singleton}
-
-@Singleton
-class DeleteCgtNonPpdRequestParser @Inject() (val validator: DeleteCgtNonPpdValidator)
-    extends RequestParser[DeleteCgtNonPpdRawData, DeleteCgtNonPpdRequest] {
-
-  override protected def requestFor(data: DeleteCgtNonPpdRawData): DeleteCgtNonPpdRequest =
-    DeleteCgtNonPpdRequest(Nino(data.nino), TaxYear.fromMtd(data.taxYear))
-
-}
+case class DeleteCgtNonPpdRequestData(nino: Nino, taxYear: TaxYear)

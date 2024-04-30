@@ -86,7 +86,7 @@ class CreateAmendOtherCgtControllerSpec
   )
 
   val rawData: CreateAmendOtherCgtRawData = CreateAmendOtherCgtRawData(
-    nino = nino,
+    nino = validNino,
     taxYear = taxYear,
     body = AnyContentAsJson.apply(validRequestJson)
   )
@@ -131,14 +131,14 @@ class CreateAmendOtherCgtControllerSpec
   )
 
   val requestData: CreateAmendOtherCgtRequest = CreateAmendOtherCgtRequest(
-    nino = Nino(nino),
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel
   )
 
   val auditData: JsValue = Json.parse(s"""
                                          |{
-                                         |  "nino":"$nino",
+                                         |  "nino":"$validNino",
                                          |  "taxYear": "$taxYear"
                                          |  }""".stripMargin)
 
@@ -151,7 +151,7 @@ class CreateAmendOtherCgtControllerSpec
           .returns(Right(requestData))
 
         MockNrsProxyService
-          .submitAsync(nino, "itsa-cgt-disposal-other", validRequestJson)
+          .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
           .returns(())
 
         MockCreateAmendOtherCgtService
@@ -177,7 +177,7 @@ class CreateAmendOtherCgtControllerSpec
           .returns(Right(requestData))
 
         MockNrsProxyService
-          .submitAsync(nino, "itsa-cgt-disposal-other", validRequestJson)
+          .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
           .returns(())
 
         MockCreateAmendOtherCgtService
@@ -202,7 +202,7 @@ class CreateAmendOtherCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.createAmendOtherCgt(nino, taxYear)(fakePutRequest(validRequestJson))
+    protected def callController(): Future[Result] = controller.createAmendOtherCgt(validNino, taxYear)(fakePostRequest(validRequestJson))
 
     def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
@@ -211,7 +211,7 @@ class CreateAmendOtherCgtControllerSpec
         detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = requestBody,
           `X-CorrelationId` = correlationId,
           response = auditResponse

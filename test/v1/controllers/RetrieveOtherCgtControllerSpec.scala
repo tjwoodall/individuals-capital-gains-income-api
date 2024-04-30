@@ -47,12 +47,12 @@ class RetrieveOtherCgtControllerSpec
   val taxYear: String = "2019-20"
 
   val rawData: RetrieveOtherCgtRawData = RetrieveOtherCgtRawData(
-    nino = nino,
+    nino = validNino,
     taxYear = taxYear
   )
 
   val requestData: RetrieveOtherCgtRequest = RetrieveOtherCgtRequest(
-    nino = Nino(nino),
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )
 
@@ -190,7 +190,7 @@ class RetrieveOtherCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    override protected def callController(): Future[Result] = controller.retrieveOtherCgt(nino, taxYear)(fakeGetRequest)
+    override protected def callController(): Future[Result] = controller.retrieveOtherCgt(validNino, taxYear)(fakeGetRequest)
   }
 
 }

@@ -19,7 +19,7 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequest
+import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 
@@ -61,7 +61,7 @@ class DeleteCgtNonPpdConnectorSpec extends ConnectorSpec {
 
     protected val connector: DeleteCgtNonPpdConnector = new DeleteCgtNonPpdConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-    protected val request: DeleteCgtNonPpdRequest = DeleteCgtNonPpdRequest(Nino("AA111111A"), taxYear = taxYear)
+    protected val request: DeleteCgtNonPpdRequestData = DeleteCgtNonPpdRequestData(Nino("AA111111A"), taxYear = taxYear)
 
   }
 
