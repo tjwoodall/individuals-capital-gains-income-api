@@ -16,13 +16,12 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v1.controllers.requestParsers.RetrieveAllResidentialPropertyCgtRequestParser
-import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRawData
+import v1.controllers.validators.RetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.services.RetrieveAllResidentialPropertyCgtService
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: EnrolmentsAuthService,
                                                              val lookupService: MtdIdLookupService,
-                                                             parser: RetrieveAllResidentialPropertyCgtRequestParser,
+                                                             validatorFactory: RetrieveAllResidentialPropertyCgtValidatorFactory,
                                                              service: RetrieveAllResidentialPropertyCgtService,
                                                              cc: ControllerComponents,
                                                              val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
@@ -47,18 +46,14 @@ class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: En
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: RetrieveAllResidentialPropertyCgtRawData = RetrieveAllResidentialPropertyCgtRawData(
-        nino = nino,
-        taxYear = taxYear,
-        source = source
-      )
+      val validator = validatorFactory.validator(nino, taxYear, source)
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.retrieve)
         .withPlainJsonResult()
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }
