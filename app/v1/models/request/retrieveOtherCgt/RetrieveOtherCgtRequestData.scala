@@ -18,4 +18,4 @@ package v1.models.request.retrieveOtherCgt
 
 import api.models.domain.{Nino, TaxYear}
 
-case class RetrieveOtherCgtRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveOtherCgtRequestData(nino: Nino, taxYear: TaxYear)

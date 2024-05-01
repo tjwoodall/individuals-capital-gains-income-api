@@ -20,7 +20,7 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{InternalError, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequest
+import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
@@ -38,7 +38,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    protected val request: DeleteCgtPpdOverridesRequest = DeleteCgtPpdOverridesRequest(Nino(nino), taxYear)
+    protected val request: DeleteCgtPpdOverridesRequestData = DeleteCgtPpdOverridesRequestData(Nino(nino), taxYear)
 
   }
 

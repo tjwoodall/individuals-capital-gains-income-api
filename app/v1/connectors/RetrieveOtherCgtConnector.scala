@@ -21,7 +21,7 @@ import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequest
+import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequestData
 import v1.models.response.retrieveOtherCgt.RetrieveOtherCgtResponse
 
 import javax.inject.{Inject, Singleton}
@@ -30,10 +30,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieveOtherCgt(request: RetrieveOtherCgtRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[RetrieveOtherCgtResponse]] = {
+  def retrieveOtherCgt(request: RetrieveOtherCgtRequestData)(implicit
+                                                             hc: HeaderCarrier,
+                                                             ec: ExecutionContext,
+                                                             correlationId: String): Future[DownstreamOutcome[RetrieveOtherCgtResponse]] = {
 
     import request._
 

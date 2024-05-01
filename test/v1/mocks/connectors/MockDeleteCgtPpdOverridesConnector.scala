@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.DeleteCgtPpdOverridesConnector
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequest
+import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockDeleteCgtPpdOverridesConnector extends MockFactory {
 
   object MockDeleteCgtPpdOverridesConnector {
 
-    def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockDeleteCgtPpdOverridesConnector
-        .deleteCgtPpdOverrides(_: DeleteCgtPpdOverridesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .deleteCgtPpdOverrides(_: DeleteCgtPpdOverridesRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(requestData, *, *, *)
     }
 

@@ -26,9 +26,9 @@ import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockRetrieveOtherCgtRequestParser
+import v1.controllers.validators.MockRetrieveOtherCgtValidatorFactory
 import v1.mocks.services.MockRetrieveOtherCgtService
-import v1.models.request.retrieveOtherCgt.{RetrieveOtherCgtRawData, RetrieveOtherCgtRequest}
+import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequestData
 import v1.models.response.retrieveOtherCgt._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,18 +40,13 @@ class RetrieveOtherCgtControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveOtherCgtService
-    with MockRetrieveOtherCgtRequestParser
+    with MockRetrieveOtherCgtValidatorFactory
     with MockIdGenerator
     with MockAppConfig {
 
   val taxYear: String = "2019-20"
 
-  val rawData: RetrieveOtherCgtRawData = RetrieveOtherCgtRawData(
-    nino = validNino,
-    taxYear = taxYear
-  )
-
-  val requestData: RetrieveOtherCgtRequest = RetrieveOtherCgtRequest(
+  val requestData: RetrieveOtherCgtRequestData = RetrieveOtherCgtRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )
@@ -140,10 +135,7 @@ class RetrieveOtherCgtControllerSpec
   "RetrieveOtherCgtController" should {
     "return a successful response with status 200 (OK)" when {
       "given a valid request" in new Test {
-
-        MockRetrieveOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherCgtService
           .retrieve(requestData)
@@ -158,17 +150,13 @@ class RetrieveOtherCgtControllerSpec
 
     "return the error as per spec" when {
       "parser validation fails" in new Test {
-        MockRetrieveOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherCgtService
           .retrieve(requestData)
@@ -184,7 +172,7 @@ class RetrieveOtherCgtControllerSpec
     val controller = new RetrieveOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveOtherCgtRequestParser,
+      validatorFactory = mockRetrieveOtherCgtValidatorFactory,
       service = mockRetrieveOtherCgtService,
       cc = cc,
       idGenerator = mockIdGenerator

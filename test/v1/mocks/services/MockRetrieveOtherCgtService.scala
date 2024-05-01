@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequest
+import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequestData
 import v1.models.response.retrieveOtherCgt.RetrieveOtherCgtResponse
 import v1.services.RetrieveOtherCgtService
 
@@ -33,9 +33,9 @@ trait MockRetrieveOtherCgtService extends MockFactory {
 
   object MockRetrieveOtherCgtService {
 
-    def retrieve(requestData: RetrieveOtherCgtRequest): CallHandler[Future[ServiceOutcome[RetrieveOtherCgtResponse]]] =
+    def retrieve(requestData: RetrieveOtherCgtRequestData): CallHandler[Future[ServiceOutcome[RetrieveOtherCgtResponse]]] =
       (mockRetrieveOtherCgtService
-        .retrieve(_: RetrieveOtherCgtRequest)(_: RequestContext, _: ExecutionContext))
+        .retrieve(_: RetrieveOtherCgtRequestData)(_: RequestContext, _: ExecutionContext))
         .expects(requestData, *, *)
 
   }

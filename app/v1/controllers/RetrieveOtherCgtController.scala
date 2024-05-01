@@ -16,13 +16,12 @@
 
 package v1.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandlerOld}
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.IdGenerator
-import v1.controllers.requestParsers.RetrieveOtherCgtRequestParser
-import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRawData
+import v1.controllers.validators.RetrieveOtherCgtValidatorFactory
 import v1.services.RetrieveOtherCgtService
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +30,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class RetrieveOtherCgtController @Inject() (val authService: EnrolmentsAuthService,
                                             val lookupService: MtdIdLookupService,
-                                            parser: RetrieveOtherCgtRequestParser,
+                                            validatorFactory: RetrieveOtherCgtValidatorFactory,
                                             service: RetrieveOtherCgtService,
                                             cc: ControllerComponents,
                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
@@ -44,17 +43,17 @@ class RetrieveOtherCgtController @Inject() (val authService: EnrolmentsAuthServi
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData: RetrieveOtherCgtRawData = RetrieveOtherCgtRawData(
+      val validator = validatorFactory.validator(
         nino = nino,
         taxYear = taxYear
       )
 
-      val requestHandler = RequestHandlerOld
-        .withParser(parser)
+      val requestHandler = RequestHandler
+        .withValidator(validator)
         .withService(service.retrieve)
         .withPlainJsonResult()
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v1.connectors.RetrieveOtherCgtConnector
-import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequest
+import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequestData
 import v1.models.response.retrieveOtherCgt.RetrieveOtherCgtResponse
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveOtherCgtService @Inject() (connector: RetrieveOtherCgtConnector) extends BaseService {
 
   def retrieve(
-      request: RetrieveOtherCgtRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[RetrieveOtherCgtResponse]] = {
+      request: RetrieveOtherCgtRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[RetrieveOtherCgtResponse]] = {
 
     connector.retrieveOtherCgt(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

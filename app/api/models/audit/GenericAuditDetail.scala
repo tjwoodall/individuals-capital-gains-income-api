@@ -15,6 +15,7 @@
  */
 
 package api.models.audit
+
 import api.controllers.{AuditHandler, RequestContext}
 import api.models.auth.UserDetails
 import play.api.libs.functional.syntax._

@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockDeleteCgtPpdOverridesConnector
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequest
+import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -34,7 +34,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
   private val taxYear: String        = "2019-20"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  private val requestData: DeleteCgtPpdOverridesRequest = DeleteCgtPpdOverridesRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData: DeleteCgtPpdOverridesRequestData = DeleteCgtPpdOverridesRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteCgtPpdOverridesConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()

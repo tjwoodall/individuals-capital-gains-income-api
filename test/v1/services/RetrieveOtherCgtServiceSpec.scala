@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.mocks.connectors.MockRetrieveOtherCgtConnector
-import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequest
+import v1.models.request.retrieveOtherCgt.RetrieveOtherCgtRequestData
 import v1.models.response.retrieveOtherCgt.RetrieveOtherCgtResponse
 
 import scala.concurrent.Future
@@ -77,7 +77,7 @@ class RetrieveOtherCgtServiceSpec extends ServiceSpec {
     private val nino    = Nino("AA112233A")
     private val taxYear = TaxYear.fromMtd("2019-20")
 
-    val request: RetrieveOtherCgtRequest = RetrieveOtherCgtRequest(
+    val request: RetrieveOtherCgtRequestData = RetrieveOtherCgtRequestData(
       nino = nino,
       taxYear = taxYear
     )

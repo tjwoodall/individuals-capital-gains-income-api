@@ -17,6 +17,7 @@
 package routing
 
 import play.api.http.HeaderNames.ACCEPT
+import play.api.libs.json.Writes._
 import play.api.libs.json._
 import play.api.mvc.RequestHeader
 
