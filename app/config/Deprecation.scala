@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteCgtNonPpd
+package config
 
-import api.models.request.RawData
+import java.time.LocalDateTime
 
-case class DeleteCgtNonPpdRawData(nino: String, taxYear: String) extends RawData
+sealed trait Deprecation
+
+object Deprecation {
+  case object NotDeprecated extends Deprecation
+
+  case class Deprecated(deprecatedOn: LocalDateTime, sunsetDate: Option[LocalDateTime]) extends Deprecation
+
+}

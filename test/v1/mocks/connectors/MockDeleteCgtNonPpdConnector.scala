@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.DeleteCgtNonPpdConnector
-import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequest
+import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,10 +32,10 @@ trait MockDeleteCgtNonPpdConnector extends MockFactory {
 
   object MockDeleteCgtNonPpdConnector {
 
-    def deleteCgtNonPpdConnector(requestData: DeleteCgtNonPpdRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def deleteCgtNonPpdConnector(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
         mockDeleteCgtNonPpdConnector
-          .deleteCgtNonPpd(_: DeleteCgtNonPpdRequest)(
+          .deleteCgtNonPpd(_: DeleteCgtNonPpdRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String

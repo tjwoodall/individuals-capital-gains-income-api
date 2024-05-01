@@ -20,7 +20,7 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequest
+import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
 import v1.models.response.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.Future
@@ -42,8 +42,8 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
 
     def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
-    val request: RetrieveAllResidentialPropertyCgtRequest =
-      RetrieveAllResidentialPropertyCgtRequest(Nino(nino), taxYear, source)
+    val request: RetrieveAllResidentialPropertyCgtRequestData =
+      RetrieveAllResidentialPropertyCgtRequestData(Nino(nino), taxYear, source)
 
     val connector: RetrieveAllResidentialPropertyCgtConnector =
       new RetrieveAllResidentialPropertyCgtConnector(http = mockHttpClient, appConfig = mockAppConfig)

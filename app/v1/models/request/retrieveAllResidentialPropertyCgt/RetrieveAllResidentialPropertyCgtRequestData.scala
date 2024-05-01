@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteOtherCgt
+package v1.models.request.retrieveAllResidentialPropertyCgt
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 
-case class DeleteOtherCgtRequest(nino: Nino, taxYear: TaxYear)
+case class RetrieveAllResidentialPropertyCgtRequestData(nino: Nino, taxYear: TaxYear, source: MtdSourceEnum)

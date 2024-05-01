@@ -74,7 +74,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
   )
 
   val rawData: CreateAmendCgtResidentialPropertyDisposalsRawData = CreateAmendCgtResidentialPropertyDisposalsRawData(
-    nino = nino,
+    nino = validNino,
     taxYear = taxYear,
     body = AnyContentAsJson.apply(validRequestJson)
   )
@@ -101,14 +101,14 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
   )
 
   val requestData: CreateAmendCgtResidentialPropertyDisposalsRequest = CreateAmendCgtResidentialPropertyDisposalsRequest(
-    nino = Nino(nino),
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel
   )
 
   val auditData: JsValue = Json.parse(s"""
                                          |{
-                                         |  "nino":"$nino",
+                                         |  "nino":"$validNino",
                                          |  "taxYear": "$taxYear"
                                          |  }""".stripMargin)
 
@@ -122,7 +122,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
           .returns(Right(requestData))
 
         MockNrsProxyService
-          .submitAsync(nino, "itsa-cgt-disposal", validRequestJson)
+          .submitAsync(validNino, "itsa-cgt-disposal", validRequestJson)
           .returns(())
 
         MockCreateAmendCgtResidentialPropertyDisposalsService
@@ -147,7 +147,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
           .parse(rawData)
           .returns(Right(requestData))
 
-        MockNrsProxyService.submitAsync(nino, "itsa-cgt-disposal", validRequestJson)
+        MockNrsProxyService.submitAsync(validNino, "itsa-cgt-disposal", validRequestJson)
 
         MockCreateAmendCgtResidentialPropertyDisposalsService
           .createAndAmend(requestData)
@@ -172,7 +172,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     )
 
     protected def callController(): Future[Result] =
-      controller.createAmendCgtResidentialPropertyDisposals(nino, taxYear)(fakePutRequest(validRequestJson))
+      controller.createAmendCgtResidentialPropertyDisposals(validNino, taxYear)(fakePostRequest(validRequestJson))
 
     def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
       AuditEvent(
@@ -181,7 +181,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
         detail = GenericAuditDetailOld(
           userType = "Individual",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
           request = requestBody,
           `X-CorrelationId` = correlationId,
           response = auditResponse

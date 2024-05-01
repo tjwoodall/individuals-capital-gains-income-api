@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.connectors.MockRetrieveAllResidentialPropertyCgtConnector
-import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequest
+import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
 import v1.models.response.retrieveAllResidentialPropertyCgt.{PpdService, RetrieveAllResidentialPropertyCgtResponse}
 
 import scala.concurrent.Future
@@ -33,7 +33,7 @@ class RetrieveAllResidentialPropertyCgtServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  val request: RetrieveAllResidentialPropertyCgtRequest = RetrieveAllResidentialPropertyCgtRequest(
+  val request: RetrieveAllResidentialPropertyCgtRequestData = RetrieveAllResidentialPropertyCgtRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear),
     source = MtdSourceEnum.latest

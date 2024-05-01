@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.mocks.connectors.MockDeleteOtherCgtConnector
-import v1.models.request.deleteOtherCgt.DeleteOtherCgtRequest
+import v1.models.request.deleteOtherCgt.DeleteOtherCgtRequestData
 
 import scala.concurrent.Future
 
@@ -77,7 +77,7 @@ class DeleteOtherCgtServiceSpec extends ServiceSpec {
     private val nino    = Nino("AA112233A")
     private val taxYear = TaxYear.fromMtd("2019-20")
 
-    val request: DeleteOtherCgtRequest = DeleteOtherCgtRequest(
+    val request: DeleteOtherCgtRequestData = DeleteOtherCgtRequestData(
       nino = nino,
       taxYear = taxYear
     )

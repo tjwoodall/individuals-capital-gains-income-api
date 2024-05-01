@@ -125,7 +125,7 @@ object RuleCessationDateBeforeTaxYearStartError
 
 object RuleTaxYearNotEndedError extends MtdError("RULE_TAX_YEAR_NOT_ENDED", "Tax year not ended", BAD_REQUEST)
 
-object RuleRequestCannotBeFulfilled
+object RuleRequestCannotBeFulfilledError
     extends MtdError("RULE_REQUEST_CANNOT_BE_FULFILLED", "Custom (will vary in production depending on the actual error)", 422)
 
 //Stub errors

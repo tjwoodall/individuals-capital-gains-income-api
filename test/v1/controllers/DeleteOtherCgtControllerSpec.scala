@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -26,9 +26,9 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockDeleteOtherCgtRequestParser
+import v1.controllers.validators.MockDeleteOtherCgtValidatorFactory
 import v1.mocks.services.MockDeleteOtherCgtService
-import v1.models.request.deleteOtherCgt.{DeleteOtherCgtRawData, DeleteOtherCgtRequest}
+import v1.models.request.deleteOtherCgt.DeleteOtherCgtRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -40,28 +40,21 @@ class DeleteOtherCgtControllerSpec
     with MockMtdIdLookupService
     with MockDeleteOtherCgtService
     with MockAuditService
-    with MockDeleteOtherCgtRequestParser
+    with MockDeleteOtherCgtValidatorFactory
     with MockIdGenerator
     with MockAppConfig {
 
   val taxYear: String = "2019-20"
 
-  val rawData: DeleteOtherCgtRawData = DeleteOtherCgtRawData(
-    nino = nino,
-    taxYear = taxYear
-  )
-
-  val requestData: DeleteOtherCgtRequest = DeleteOtherCgtRequest(
-    nino = Nino(nino),
+  val requestData: DeleteOtherCgtRequestData = DeleteOtherCgtRequestData(
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )
 
   "DeleteOtherCgtController" should {
     "return a successful response with status 204 (No Content)" when {
       "a valid request is supplied" in new Test {
-        MockDeleteOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteOtherCgtService
           .delete(requestData)
@@ -73,17 +66,13 @@ class DeleteOtherCgtControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockDeleteOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError)
       }
 
       "service returns an error" in new Test {
-        MockDeleteOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockDeleteOtherCgtService
           .delete(requestData)
@@ -94,31 +83,32 @@ class DeleteOtherCgtControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new DeleteOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockDeleteOtherCgtRequestParser,
+      validatorFactory = mockDeleteOtherCgtValidatorFactory,
       service = mockDeleteOtherCgtService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.deleteOtherCgt(nino, taxYear)(fakeDeleteRequest)
+    protected def callController(): Future[Result] = controller.deleteOtherCgt(validNino, taxYear)(fakeRequest)
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "DeleteOtherCgtDisposalsAndGains",
         transactionName = "Delete-Other-Cgt-Disposals-And-Gains",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           userType = "Individual",
+          versionNumber = "1.0",
           agentReferenceNumber = None,
-          params = Map("nino" -> nino, "taxYear" -> taxYear),
-          request = maybeRequestBody,
+          params = Map("nino" -> validNino, "taxYear" -> taxYear),
+          requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
-          response = auditResponse
+          auditResponse = auditResponse
         )
       )
 

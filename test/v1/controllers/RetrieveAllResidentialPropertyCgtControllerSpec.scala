@@ -24,10 +24,10 @@ import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import mocks.MockAppConfig
 import play.api.mvc.Result
+import v1.controllers.validators.MockRetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
-import v1.mocks.requestParsers.MockRetrieveAllResidentialPropertyCgtRequestParser
 import v1.mocks.services.MockRetrieveAllResidentialPropertyCgtService
-import v1.models.request.retrieveAllResidentialPropertyCgt.{RetrieveAllResidentialPropertyCgtRawData, RetrieveAllResidentialPropertyCgtRequest}
+import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,21 +38,15 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveAllResidentialPropertyCgtService
-    with MockRetrieveAllResidentialPropertyCgtRequestParser
+    with MockRetrieveAllResidentialPropertyCgtValidatorFactory
     with MockIdGenerator
     with MockAppConfig {
 
   val taxYear: String        = "2019-20"
   val source: Option[String] = Some("latest")
 
-  val rawData: RetrieveAllResidentialPropertyCgtRawData = RetrieveAllResidentialPropertyCgtRawData(
-    nino = nino,
-    taxYear = taxYear,
-    source = source
-  )
-
-  val requestData: RetrieveAllResidentialPropertyCgtRequest = RetrieveAllResidentialPropertyCgtRequest(
-    nino = Nino(nino),
+  val requestData: RetrieveAllResidentialPropertyCgtRequestData = RetrieveAllResidentialPropertyCgtRequestData(
+    nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     source = MtdSourceEnum.latest
   )
@@ -60,9 +54,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
   "retrieveAll" should {
     "return a successful response with status 200 (OK)" when {
       "given a valid request" in new Test {
-        MockRetrieveAllResidentialPropertyCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveAllResidentialPropertyCgtService
           .retrieve(requestData)
@@ -77,17 +69,13 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockRetrieveAllResidentialPropertyCgtRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
       }
 
       "the service returns an error" in new Test {
-        MockRetrieveAllResidentialPropertyCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveAllResidentialPropertyCgtService
           .retrieve(requestData)
@@ -103,13 +91,13 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     val controller = new RetrieveAllResidentialPropertyCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveAllResidentialPropertyCgtRequestParser,
+      validatorFactory = mockRetrieveAllResidentialPropertyCgtValidatorFactory,
       service = mockRetrieveAllResidentialPropertyCgtService,
       cc = cc,
       idGenerator = mockIdGenerator
     )
 
-    protected def callController(): Future[Result] = controller.retrieveAll(nino, taxYear, source)(fakeGetRequest)
+    protected def callController(): Future[Result] = controller.retrieveAll(validNino, taxYear, source)(fakeGetRequest)
 
   }
 
