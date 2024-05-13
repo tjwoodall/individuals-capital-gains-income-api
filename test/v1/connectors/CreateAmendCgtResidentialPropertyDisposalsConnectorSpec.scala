@@ -37,8 +37,8 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends ConnectorS
 
     val taxYear: TaxYear
 
-    val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequest =
-      CreateAmendCgtResidentialPropertyDisposalsRequest(
+    val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequestData =
+      CreateAmendCgtResidentialPropertyDisposalsRequestData(
         nino = Nino(nino),
         taxYear = taxYear,
         body = requestBody

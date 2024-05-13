@@ -65,7 +65,7 @@ class CreateAmendCgtResidentialPropertyDisposalsRequestParserSpec extends UnitSp
         MockCreateAmendCgtResidentialPropertyDisposalsValidator.validate(createAmendCgtPpdOverridesRawData).returns(Nil)
 
         parser.parseRequest(createAmendCgtPpdOverridesRawData) shouldBe
-          Right(CreateAmendCgtResidentialPropertyDisposalsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody))
+          Right(CreateAmendCgtResidentialPropertyDisposalsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody))
       }
     }
 

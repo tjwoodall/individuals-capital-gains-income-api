@@ -25,10 +25,10 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class CreateAmendCgtResidentialPropertyDisposalsRequestParser @Inject() (val validator: CreateAmendCgtResidentialPropertyDisposalsValidator)
-    extends RequestParser[CreateAmendCgtResidentialPropertyDisposalsRawData, CreateAmendCgtResidentialPropertyDisposalsRequest] {
+    extends RequestParser[CreateAmendCgtResidentialPropertyDisposalsRawData, CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
-  override protected def requestFor(data: CreateAmendCgtResidentialPropertyDisposalsRawData): CreateAmendCgtResidentialPropertyDisposalsRequest =
-    CreateAmendCgtResidentialPropertyDisposalsRequest(
+  override protected def requestFor(data: CreateAmendCgtResidentialPropertyDisposalsRawData): CreateAmendCgtResidentialPropertyDisposalsRequestData =
+    CreateAmendCgtResidentialPropertyDisposalsRequestData(
       Nino(data.nino),
       TaxYear.fromMtd(data.taxYear),
       data.body.json.as[CreateAmendCgtResidentialPropertyDisposalsRequestBody])

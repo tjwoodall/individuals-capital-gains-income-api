@@ -22,7 +22,7 @@ import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.CreateAmendCgtResidentialPropertyDisposalsRequestParser
 import v1.models.request.createAmendCgtResidentialPropertyDisposals.{
   CreateAmendCgtResidentialPropertyDisposalsRawData,
-  CreateAmendCgtResidentialPropertyDisposalsRequest
+  CreateAmendCgtResidentialPropertyDisposalsRequestData
 }
 
 trait MockCreateAmendCgtResidentialPropertyDisposalsRequestParser extends MockFactory {
@@ -33,7 +33,7 @@ trait MockCreateAmendCgtResidentialPropertyDisposalsRequestParser extends MockFa
   object MockCreateAmendCgtResidentialPropertyDisposalsRequestParser {
 
     def parse(data: CreateAmendCgtResidentialPropertyDisposalsRawData)
-        : CallHandler[Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequest]] = {
+        : CallHandler[Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData]] = {
       (mockCreateAmendCgtResidentialPropertyDisposalsRequestParser
         .parseRequest(_: CreateAmendCgtResidentialPropertyDisposalsRawData)(_: String))
         .expects(data, *)

@@ -100,7 +100,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     )
   )
 
-  val requestData: CreateAmendCgtResidentialPropertyDisposalsRequest = CreateAmendCgtResidentialPropertyDisposalsRequest(
+  val requestData: CreateAmendCgtResidentialPropertyDisposalsRequestData = CreateAmendCgtResidentialPropertyDisposalsRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel

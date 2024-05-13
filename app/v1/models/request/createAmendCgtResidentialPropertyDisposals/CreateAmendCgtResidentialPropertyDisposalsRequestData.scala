@@ -18,6 +18,6 @@ package v1.models.request.createAmendCgtResidentialPropertyDisposals
 
 import api.models.domain.{Nino, TaxYear}
 
-case class CreateAmendCgtResidentialPropertyDisposalsRequest(nino: Nino,
-                                                             taxYear: TaxYear,
-                                                             body: CreateAmendCgtResidentialPropertyDisposalsRequestBody)
+case class CreateAmendCgtResidentialPropertyDisposalsRequestData(nino: Nino,
+                                                                 taxYear: TaxYear,
+                                                                 body: CreateAmendCgtResidentialPropertyDisposalsRequestBody)
