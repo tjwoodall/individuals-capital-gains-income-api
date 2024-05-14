@@ -24,9 +24,12 @@ import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
+import v1.controllers.validators.CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory(appConfig: AppConfig) {
+import javax.inject.Inject
+
+class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: AppConfig) {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
@@ -40,7 +43,7 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory(appConfig: AppC
           ResolveNino(nino),
           resolveTaxYear(taxYear),
           resolveJson(body)
-        ).mapN(CreateAmendCgtResidentialPropertyDisposalsRequestData)
+        ).mapN(CreateAmendCgtResidentialPropertyDisposalsRequestData) andThen validateBusinessRules
 
     }
 

@@ -591,7 +591,7 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
           ErrorWrapper(
             correlationId,
             CustomerRefFormatError.withPath(
-              "/disposals/0"
+              "/disposals/0/customerReference"
             ))
         )
       }
@@ -617,7 +617,7 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
           ErrorWrapper(
             correlationId,
             BadRequestError,
-            Some(List(NinoFormatError, RuleTaxYearRangeInvalidError))
+            Some(List(NinoFormatError, TaxYearFormatError))
           )
         )
       }
