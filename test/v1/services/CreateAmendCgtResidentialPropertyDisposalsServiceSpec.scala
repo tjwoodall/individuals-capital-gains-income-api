@@ -23,14 +23,14 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.fixtures.residentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v1.mocks.connectors.MockCreateAmendCgtResidentialPropertyDisposalsConnector
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequest
+import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future
 
 class CreateAmendCgtResidentialPropertyDisposalsServiceSpec extends ServiceSpec {
 
-  val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequest =
-    CreateAmendCgtResidentialPropertyDisposalsRequest(
+  val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequestData =
+    CreateAmendCgtResidentialPropertyDisposalsRequestData(
       nino = Nino("AA112233A"),
       taxYear = TaxYear.fromMtd("2019-20"),
       body = requestBody

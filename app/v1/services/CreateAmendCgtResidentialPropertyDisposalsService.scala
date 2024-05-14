@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.syntax.either._
 import v1.connectors.CreateAmendCgtResidentialPropertyDisposalsConnector
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequest
+import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendCgtResidentialPropertyDisposalsService @Inject() (connector: CreateAmendCgtResidentialPropertyDisposalsConnector)
     extends BaseService {
 
-  def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequest)(implicit
-      ctx: RequestContext,
-      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
+                                                                                     ctx: RequestContext,
+                                                                                     ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

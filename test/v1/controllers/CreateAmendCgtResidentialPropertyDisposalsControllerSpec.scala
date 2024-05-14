@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -26,8 +26,8 @@ import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLooku
 import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContentAsJson, Result}
-import v1.mocks.requestParsers.MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
+import play.api.mvc.Result
+import v1.controllers.validators.MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
 
@@ -43,7 +43,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     with MockCreateAmendCgtResidentialPropertyDisposalsService
     with MockAuditService
     with MockNrsProxyService
-    with MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
+    with MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory
     with MockIdGenerator {
 
   val taxYear: String = "2020-21"
@@ -73,12 +73,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
      """.stripMargin
   )
 
-  val rawData: CreateAmendCgtResidentialPropertyDisposalsRawData = CreateAmendCgtResidentialPropertyDisposalsRawData(
-    nino = validNino,
-    taxYear = taxYear,
-    body = AnyContentAsJson.apply(validRequestJson)
-  )
-
   val requestModel: CreateAmendCgtResidentialPropertyDisposalsRequestBody = CreateAmendCgtResidentialPropertyDisposalsRequestBody(
     disposals = List(
       Disposal(
@@ -100,7 +94,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     )
   )
 
-  val requestData: CreateAmendCgtResidentialPropertyDisposalsRequest = CreateAmendCgtResidentialPropertyDisposalsRequest(
+  val requestData: CreateAmendCgtResidentialPropertyDisposalsRequestData = CreateAmendCgtResidentialPropertyDisposalsRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel
@@ -117,9 +111,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
       "happy path" in new Test {
         MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
 
-        MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal", validRequestJson)
@@ -135,17 +127,13 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, maybeAuditRequestBody = Some(validRequestJson))
       }
 
       "service returns an error" in new Test {
-        MockCreateAmendCgtResidentialPropertyDisposalsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService.submitAsync(validNino, "itsa-cgt-disposal", validRequestJson)
 
@@ -158,12 +146,12 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAmendCgtResidentialPropertyDisposalsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendCgtResidentialPropertyDisposalsRequestParser,
+      validatorFactory = mockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory,
       service = mockCreateAmendCgtResidentialPropertyDisposalsService,
       auditService = mockAuditService,
       nrsProxyService = mockNrsProxyService,
@@ -174,17 +162,18 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     protected def callController(): Future[Result] =
       controller.createAmendCgtResidentialPropertyDisposals(validNino, taxYear)(fakePostRequest(validRequestJson))
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendCgtResidentialPropertyDisposals",
         transactionName = "Create-Amend-Cgt-Residential-Property-Disposals",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           userType = "Individual",
+          versionNumber = apiVersion.name,
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = requestBody,
+          requestBody = requestBody,
           `X-CorrelationId` = correlationId,
-          response = auditResponse
+          auditResponse = auditResponse
         )
       )
 
