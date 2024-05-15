@@ -20,7 +20,7 @@ import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequest
+import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAmendOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createAndAmend(request: CreateAmendOtherCgtRequest)(implicit
+  def createAndAmend(request: CreateAmendOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {

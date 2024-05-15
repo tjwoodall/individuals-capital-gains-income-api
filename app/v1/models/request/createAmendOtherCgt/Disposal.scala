@@ -31,7 +31,11 @@ case class Disposal(assetType: String,
                     claimOrElectionCodes: Option[Seq[String]],
                     gainAfterRelief: Option[BigDecimal],
                     lossAfterRelief: Option[BigDecimal],
-                    rttTaxPaid: Option[BigDecimal])
+                    rttTaxPaid: Option[BigDecimal]) {
+  def gainAndLossBothSupplied: Boolean = gain.isDefined && loss.isDefined
+  def gainAfterReliefAndLossAfterReliefAreBothSupplied: Boolean = gainAfterRelief.isDefined && lossAfterRelief.isDefined
+}
+
 
 object Disposal {
 

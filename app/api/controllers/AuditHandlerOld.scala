@@ -16,7 +16,7 @@
 
 package api.controllers
 
-import api.models.audit.{AuditEvent, AuditResponse, FlattenedGenericAuditDetail, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
 import api.models.auth.UserDetails
 import api.models.errors.ErrorWrapper
 import api.services.AuditService
@@ -65,22 +65,6 @@ object AuditHandlerOld {
       auditType = auditType,
       transactionName = transactionName,
       auditDetailCreator = GenericAuditDetailOld.auditDetailCreator(params),
-      requestBody = requestBody,
-      includeResponse = includeResponse
-    )
-  }
-
-  def flattenedAuditing(auditService: AuditService,
-                        auditType: String,
-                        transactionName: String,
-                        params: Map[String, String],
-                        requestBody: Option[JsValue] = None,
-                        includeResponse: Boolean = false): AuditHandlerOld = {
-    custom(
-      auditService = auditService,
-      auditType = auditType,
-      transactionName = transactionName,
-      auditDetailCreator = FlattenedGenericAuditDetail.auditDetailCreator(params),
       requestBody = requestBody,
       includeResponse = includeResponse
     )

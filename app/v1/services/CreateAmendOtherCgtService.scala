@@ -21,7 +21,7 @@ import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
 import v1.connectors.CreateAmendOtherCgtConnector
-import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequest
+import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAmendOtherCgtService @Inject() (connector: CreateAmendOtherCgtConnector) extends BaseService {
 
-  def createAmend(request: CreateAmendOtherCgtRequest)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def createAmend(request: CreateAmendOtherCgtRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

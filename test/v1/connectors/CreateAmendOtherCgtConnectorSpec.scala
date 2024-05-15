@@ -43,7 +43,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec {
       "a valid request is made" in new Api1661Test with Test {
         override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        val createAmendOtherCgtRequest = CreateAmendOtherCgtRequest(
+        val createAmendOtherCgtRequestData = CreateAmendOtherCgtRequestData(
           nino = Nino(nino),
           taxYear = taxYear,
           body = mtdRequestBody
@@ -56,13 +56,13 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec {
           body = mtdRequestBody
         ).returns(Future.successful(outcome))
 
-        await(connector.createAndAmend(createAmendOtherCgtRequest)) shouldBe outcome
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
       }
 
       "a valid request is made with Tax Year Specific tax year" in new TysIfsTest with Test {
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val createAmendOtherCgtRequest = CreateAmendOtherCgtRequest(
+        val createAmendOtherCgtRequestData = CreateAmendOtherCgtRequestData(
           nino = Nino(nino),
           taxYear = taxYear,
           body = mtdRequestBody
@@ -74,7 +74,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec {
           body = mtdRequestBody
         ).returns(Future.successful(outcome))
 
-        await(connector.createAndAmend(createAmendOtherCgtRequest)) shouldBe outcome
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
       }
     }
   }

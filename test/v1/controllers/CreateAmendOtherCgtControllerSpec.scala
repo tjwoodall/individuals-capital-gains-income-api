@@ -18,15 +18,15 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{AnyContentAsJson, Result}
-import v1.mocks.requestParsers.MockCreateAmendOtherCgtRequestParser
+import play.api.mvc.Result
+import v1.controllers.validators.MockCreateAmendOtherCgtValidatorFactory
 import v1.mocks.services._
 import v1.models.request.createAmendOtherCgt._
 
@@ -42,7 +42,7 @@ class CreateAmendOtherCgtControllerSpec
     with MockCreateAmendOtherCgtService
     with MockNrsProxyService
     with MockAuditService
-    with MockCreateAmendOtherCgtRequestParser
+    with MockCreateAmendOtherCgtValidatorFactory
     with MockIdGenerator {
 
   val taxYear: String = "2019-20"
@@ -85,12 +85,6 @@ class CreateAmendOtherCgtControllerSpec
      """.stripMargin
   )
 
-  val rawData: CreateAmendOtherCgtRawData = CreateAmendOtherCgtRawData(
-    nino = validNino,
-    taxYear = taxYear,
-    body = AnyContentAsJson.apply(validRequestJson)
-  )
-
   val requestModel: CreateAmendOtherCgtRequestBody = CreateAmendOtherCgtRequestBody(
     disposals = Some(
       List(
@@ -130,7 +124,7 @@ class CreateAmendOtherCgtControllerSpec
     adjustments = Some(-39999999999.99)
   )
 
-  val requestData: CreateAmendOtherCgtRequest = CreateAmendOtherCgtRequest(
+  val requestData: CreateAmendOtherCgtRequestData = CreateAmendOtherCgtRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel
@@ -146,9 +140,7 @@ class CreateAmendOtherCgtControllerSpec
     "return OK" when {
       "happy path" in new Test {
 
-        MockCreateAmendOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
@@ -164,17 +156,13 @@ class CreateAmendOtherCgtControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, maybeAuditRequestBody = Some(validRequestJson))
       }
 
       "service returns an error" in new Test {
-        MockCreateAmendOtherCgtRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
@@ -189,12 +177,12 @@ class CreateAmendOtherCgtControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAmendOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendOtherCgtRequestParser,
+      validatorFactory = mockCreateAmendOtherCgtValidatorFactory,
       service = mockCreateAmendOtherCgtService,
       nrsProxyService = mockNrsProxyService,
       auditService = mockAuditService,
@@ -204,17 +192,18 @@ class CreateAmendOtherCgtControllerSpec
 
     protected def callController(): Future[Result] = controller.createAmendOtherCgt(validNino, taxYear)(fakePostRequest(validRequestJson))
 
-    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendOtherCgtDisposalsAndGains",
         transactionName = "Create-Amend-Other-Cgt-Disposals-And-Gains",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
+          versionNumber = "1.0",
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = requestBody,
+          requestBody = requestBody,
           `X-CorrelationId` = correlationId,
-          response = auditResponse
+          auditResponse = auditResponse
         )
       )
 

@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.fixtures.other.CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v1.mocks.connectors.MockCreateAmendOtherCgtConnector
-import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequest
+import v1.models.request.createAmendOtherCgt.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.Future
 
@@ -32,7 +32,7 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = TaxYear.fromMtd("2019-20")
 
-  val createAmendOtherCgtRequest: CreateAmendOtherCgtRequest = CreateAmendOtherCgtRequest(
+  val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData = CreateAmendOtherCgtRequestData(
     nino = Nino(nino),
     taxYear = taxYear,
     body = mtdRequestBody
@@ -52,10 +52,10 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
       "a valid request is made" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
         MockCreateAmendOtherCgtConnector
-          .createAndAmend(createAmendOtherCgtRequest)
+          .createAndAmend(createAmendOtherCgtRequestData)
           .returns(Future.successful(outcome))
 
-        await(service.createAmend(createAmendOtherCgtRequest)) shouldBe outcome
+        await(service.createAmend(createAmendOtherCgtRequestData)) shouldBe outcome
       }
     }
 
@@ -65,10 +65,10 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
         s"a $downstreamErrorCode error is returned from the connector" in new Test {
 
           MockCreateAmendOtherCgtConnector
-            .createAndAmend(createAmendOtherCgtRequest)
+            .createAndAmend(createAmendOtherCgtRequestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.createAmend(createAmendOtherCgtRequest)) shouldBe Left(ErrorWrapper(correlationId, error))
+          await(service.createAmend(createAmendOtherCgtRequestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val errors = List(

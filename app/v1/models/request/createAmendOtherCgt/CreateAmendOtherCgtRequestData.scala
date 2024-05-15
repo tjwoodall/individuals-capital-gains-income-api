@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package api.controllers.requestParsers.validators.validations
+package v1.models.request.createAmendOtherCgt
 
-import api.models.domain.MtdSourceEnum
-import api.models.errors.{MtdError, SourceFormatError}
+import api.models.domain.{Nino, TaxYear}
 
-import scala.util.{Failure, Success, Try}
-
-object EmploymentSourceValidation {
-
-  def validate(source: String): List[MtdError] = {
-    Try {
-      Option(source).map(MtdSourceEnum.parser)
-    } match {
-      case Failure(_) => List(SourceFormatError)
-      case Success(_) => NoValidationErrors
-    }
-  }
-
-}
+case class CreateAmendOtherCgtRequestData(nino: Nino, taxYear: TaxYear, body: CreateAmendOtherCgtRequestBody)
