@@ -21,7 +21,7 @@ import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import com.google.inject.Singleton
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequest
+import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,10 +29,10 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CreateAmendCgtPpdOverridesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def createAmend(request: CreateAmendCgtPpdOverridesRequest)(implicit
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+  def createAmend(request: CreateAmendCgtPpdOverridesRequestData)(implicit
+                                                                  hc: HeaderCarrier,
+                                                                  ec: ExecutionContext,
+                                                                  correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import api.connectors.httpparsers.StandardDownstreamHttpParser._
     val nino    = request.nino.nino

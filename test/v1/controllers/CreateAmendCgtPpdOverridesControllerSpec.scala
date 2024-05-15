@@ -18,7 +18,7 @@ package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.mocks.MockIdGenerator
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetailOld}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
@@ -27,8 +27,8 @@ import mocks.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
-import v1.mocks.requestParsers.MockCreateAmendCgtPpdOverridesRequestParser
-import v1.mocks.services._
+import v1.controllers.validators.MockCreateAmendCgtPpdOverridesValidatorFactory
+import v1.mocks.services.MockCreateAmendCgtPpdOverridesService
 import v1.models.request.createAmendCgtPpdOverrides._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,7 +43,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     with MockCreateAmendCgtPpdOverridesService
     with MockAuditService
     with MockNrsProxyService
-    with MockCreateAmendCgtPpdOverridesRequestParser
+    with MockCreateAmendCgtPpdOverridesValidatorFactory
     with MockIdGenerator {
 
   val taxYear: String = "2019-20"
@@ -119,7 +119,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
   )
   //@formatter:on
 
-  val requestData: CreateAmendCgtPpdOverridesRequest = CreateAmendCgtPpdOverridesRequest(
+  val requestData: CreateAmendCgtPpdOverridesRequestData = CreateAmendCgtPpdOverridesRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel
@@ -135,11 +135,9 @@ class CreateAmendCgtPpdOverridesControllerSpec
   "CreateAmendCgtPpdOverridesController" should {
     "return a successful response with status OK" when {
       "happy path" in new Test {
+        willUseValidator(returningSuccess(requestData))
         MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
 
-        MockCreateAmendCgtPpdOverridesRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
@@ -155,17 +153,14 @@ class CreateAmendCgtPpdOverridesControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-        MockCreateAmendCgtPpdOverridesRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
+
 
         runErrorTestWithAudit(NinoFormatError, maybeAuditRequestBody = Some(validRequestJson))
       }
 
       "service returns an error" in new Test {
-        MockCreateAmendCgtPpdOverridesRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
@@ -180,12 +175,12 @@ class CreateAmendCgtPpdOverridesControllerSpec
     }
   }
 
-  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetailOld] {
+  trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
     val controller = new CreateAmendCgtPpdOverridesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAmendCgtPpdOverridesRequestParser,
+      validatorFactory = mockCreateAmendCgtPpdOverridesValidatorFactory,
       service = mockCreateAmendCgtPpdOverridesService,
       auditService = mockAuditService,
       nrsProxyService = mockNrsProxyService,
@@ -195,17 +190,18 @@ class CreateAmendCgtPpdOverridesControllerSpec
 
     protected def callController(): Future[Result] = controller.createAmendCgtPpdOverrides(validNino, taxYear)(fakePostRequest(validRequestJson))
 
-    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetailOld] =
+    def event(auditResponse: AuditResponse, maybeRequestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
       AuditEvent(
         auditType = "CreateAmendCgtPpdOverrides",
         transactionName = "Create-Amend-Cgt-Ppd-Overrides",
-        detail = GenericAuditDetailOld(
+        detail = GenericAuditDetail(
           userType = "Individual",
+          versionNumber = "1.0",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
-          request = maybeRequestBody,
+          requestBody = maybeRequestBody,
           `X-CorrelationId` = correlationId,
-          response = auditResponse
+          auditResponse = auditResponse
         )
       )
 

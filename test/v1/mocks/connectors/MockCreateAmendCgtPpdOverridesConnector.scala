@@ -21,7 +21,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.connectors.CreateAmendCgtPpdOverridesConnector
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequest
+import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,9 +31,9 @@ trait MockCreateAmendCgtPpdOverridesConnector extends MockFactory {
 
   object MockCreateAmendCgtPpdOverridesConnector {
 
-    def createAmend(request: CreateAmendCgtPpdOverridesRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def createAmend(request: CreateAmendCgtPpdOverridesRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockCreateAmendCgtPpdOverridesConnector
-        .createAmend(_: CreateAmendCgtPpdOverridesRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .createAmend(_: CreateAmendCgtPpdOverridesRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(request, *, *, *)
     }
 

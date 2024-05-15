@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.mocks.connectors.MockCreateAmendCgtPpdOverridesConnector
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequest
+import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
@@ -32,7 +32,7 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  val createAmendCgtPpdOverridesRequest: CreateAmendCgtPpdOverridesRequest = CreateAmendCgtPpdOverridesRequest(
+  val createAmendCgtPpdOverridesRequest: CreateAmendCgtPpdOverridesRequestData = CreateAmendCgtPpdOverridesRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestBodyModel

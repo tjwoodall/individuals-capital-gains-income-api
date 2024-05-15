@@ -23,7 +23,7 @@ import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequest
+import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
@@ -46,7 +46,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
         val taxYear = TaxYear.fromMtd("2019-20")
 
-        val request = CreateAmendCgtPpdOverridesRequest(
+        val request = CreateAmendCgtPpdOverridesRequestData(
           nino = Nino(nino),
           taxYear,
           body = requestBodyModel
@@ -73,7 +73,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, ()))
 
-          val request = CreateAmendCgtPpdOverridesRequest(
+          val request = CreateAmendCgtPpdOverridesRequestData(
             nino = Nino(nino),
             taxYear,
             body = requestBodyModel

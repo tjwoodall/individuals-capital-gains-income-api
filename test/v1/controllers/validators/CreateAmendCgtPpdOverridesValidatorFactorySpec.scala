@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.controllers.validators
 
 import api.controllers.requestParsers.validators.validations.ValueFormatErrorMessages
+import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import config.AppConfig
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.AnyContentAsJson
 import support.UnitSpec
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRawData
+import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, CreateAmendCgtPpdOverridesRequestData}
+import play.api.libs.json.{JsValue, Json}
 
-class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatErrorMessages {
+class CreateAmendCgtPpdOverridesValidatorFactorySpec
+  extends UnitSpec
+    with ValueFormatErrorMessages
+    with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
+  private implicit val correlationId: String = "1234"
+
 
   private val validRequestJson: JsValue = Json.parse(
     """
@@ -551,193 +555,301 @@ class CreateAmendCgtPpdOverridesValidatorSpec extends UnitSpec with ValueFormatE
       |""".stripMargin
   )
 
-  private val validRequestBody                          = AnyContentAsJson(validRequestJson)
-  private val nonsenseRawRequestBody                    = AnyContentAsJson(nonsenseRequestBodyJson)
-  private val missingMandatoryFieldRequestBody          = AnyContentAsJson(missingMandatoryFieldJson)
-  private val emptyMultiplePropertyDisposalsRequestBody = AnyContentAsJson(emptyMultiplePropertyDisposalsRequestJson)
-  private val emptySinglePropertyDisposalsRequestBody   = AnyContentAsJson(emptySinglePropertyDisposalsRequestJson)
-  private val invalidSubmissionIdRequestBody            = AnyContentAsJson(invalidSubmissionIdRequestBodyJson)
-  private val invalidValueRequestBody                   = AnyContentAsJson(invalidValueRequestBodyJson)
-  // private val invalidDateRequestBody                                 = AnyContentAsJson(invalidDateRequestBodyJson)
-  private val bothGainsAndLossMultiplePropertyDisposalsRequestBody   = AnyContentAsJson(bothGainsAndLossMultiplePropertyDisposalsRequestBodyJson)
-  private val bothGainsAndLossSinglePropertyDisposalsRequestBody     = AnyContentAsJson(bothGainsAndLossSinglePropertyDisposalsRequestBodyJson)
-  private val neitherGainsOrLossMultiplePropertyDisposalsRequestBody = AnyContentAsJson(neitherGainsOrLossMultiplePropertyDisposalsRequestBodyJson)
-  private val neitherGainsOrLossSinglePropertyDisposalsRequestBody   = AnyContentAsJson(neitherGainsOrLossSinglePropertyDisposalsRequestBodyJson)
 
-  class Test extends MockAppConfig {
 
-    // implicit val dateTimeProvider: CurrentDateTime = mockCurrentDateTime
-    // val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-    implicit val appConfig: AppConfig        = mockAppConfig
 
-    val validator = new CreateAmendCgtPpdOverridesValidator()
+  private val parsedNino    = Nino(validNino)
+  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val parsedValidRequestBody = validRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidSingleOnlyBody = validOnlySinglePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
 
-    //MockCurrentDateTime.getDateTime
-    //  .returns(DateTime.parse("2021-07-11", dateTimeFormatter))
-    //  .anyNumberOfTimes()
+  private val validatorFactory                         = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
+  private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2020)
       .anyNumberOfTimes()
 
+
+
+  "validator" should {
+    "return the parsed domain object" when {
+      "a valid request is supplied" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, validRequestJson).validateAndWrapResult()
+        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidRequestBody))
+      }
+    }
+
+      "a valid request containing only multiple disposals is supplied" in  {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
+        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidMultipleOnlyBody))
+      }
+
+      "a valid request containing only single disposals is supplied" in  {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
+        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidSingleOnlyBody))
+      }
+
+  "return NinoFormatError error" when {
+    "an invalid nino is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
+      result shouldBe Left(
+        ErrorWrapper(correlationId, NinoFormatError)
+      )
+    }
   }
 
-  "running a validation" should {
-    "return no errors" when {
-      "a valid request is supplied" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, validRequestBody)) shouldBe Nil
-      }
-
-      "a valid request contains only multiple disposals is supplied" in new Test {
-        validator.validate(
-          CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, AnyContentAsJson(validOnlyMultiplePropertyDisposalsRequestJson))) shouldBe Nil
-      }
-
-      "a valid request contains only single disposals is supplied" in new Test {
-        validator.validate(
-          CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, AnyContentAsJson(validOnlySinglePropertyDisposalsRequestJson))) shouldBe Nil
-      }
+  "return TaxYearFormatError error" when {
+    "an invalid tax year is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator(validNino, "201718", validRequestJson).validateAndWrapResult()
+      result shouldBe Left(
+        ErrorWrapper(correlationId, TaxYearFormatError)
+      )
     }
+  }
 
-    "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData("A12344A", validTaxYear, validRequestBody)) shouldBe
-          List(NinoFormatError)
-      }
+  "return RuleTaxYearRangeInvalidError error" when {
+    "an invalid tax year range is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
+      result shouldBe Left(
+        ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
+      )
     }
+  }
 
-    "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, "20178", validRequestBody)) shouldBe
-          List(TaxYearFormatError)
-      }
+  "return RuleTaxYearNotSupportedError error" when {
+    "an out of range tax year is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
+      result shouldBe Left(
+        ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
+      )
     }
-
-    "return a RuleTaxYearRangeInvalidError" when {
-      "a tex year with an invalid range is provided" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, "2018-20", validRequestBody)) shouldBe
-          List(RuleTaxYearRangeInvalidError)
-      }
-    }
-
-    "return RuleTaxYearNotSupported error" when {
-      "an invalid tax year is supplied" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, "2017-18", validRequestBody)) shouldBe
-          List(RuleTaxYearNotSupportedError)
-      }
-    }
+  }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
 
-      "a non-empty JSON body is submitted without any expected fields" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, nonsenseRawRequestBody)) shouldBe
-          List(RuleIncorrectOrEmptyBodyError)
+      "a non-empty JSON body is submitted without any expected fields" in  {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, nonsenseRequestBodyJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError)
+        )
       }
 
-      "an JSON body missing a mandatory field is submitted" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, missingMandatoryFieldRequestBody)) shouldBe
-          List(
-            RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq(
+
+      "the submitted request body has missing mandatory fields" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, missingMandatoryFieldJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleIncorrectOrEmptyBodyError.withPaths(Seq(
               "/multiplePropertyDisposals/0/ppdSubmissionId",
               "/multiplePropertyDisposals/1/ppdSubmissionId",
               "/singlePropertyDisposals/0/ppdSubmissionId",
               "/singlePropertyDisposals/1/ppdSubmissionId"
-            ))))
+            ))
+          )
+        )
       }
 
-      "an JSON body with empty multiplePropertyDisposals array is submitted" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, emptyMultiplePropertyDisposalsRequestBody)) shouldBe
-          List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/multiplePropertyDisposals"))))
+      "an JSON body with empty multiplePropertyDisposals array is submitted" in {
+
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, emptyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleIncorrectOrEmptyBodyError.withPaths(Seq(
+              "/multiplePropertyDisposals"
+            ))
+          )
+        )
       }
 
-      "an JSON body with empty singlePropertyDisposals array is submitted" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, emptySinglePropertyDisposalsRequestBody)) shouldBe
-          List(RuleIncorrectOrEmptyBodyError.copy(paths = Some(Seq("/singlePropertyDisposals"))))
+      "an JSON body with empty singlePropertyDisposals array is submitted" in {
+
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, emptySinglePropertyDisposalsRequestJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleIncorrectOrEmptyBodyError.withPaths(Seq(
+              "/singlePropertyDisposals"
+            ))
+          )
+        )
       }
     }
 
     "return a PpdSubmissionIdFormatError" when {
-      "a body with incorrect ppdSubmissionIds is submitted" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, invalidSubmissionIdRequestBody)) shouldBe
-          List(PpdSubmissionIdFormatError.copy(paths = Some(Seq("/multiplePropertyDisposals/0/ppdSubmissionId"))))
+      "a body with incorrect ppdSubmissionIds is submitted" in {
+
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, invalidSubmissionIdRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            PpdSubmissionIdFormatError.withPaths(Seq(
+              "/multiplePropertyDisposals/0/ppdSubmissionId"
+            ))
+          )
+        )
       }
     }
 
     "return a valueFormatError" when {
-      "a body with incorrect values is submitted" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, invalidValueRequestBody)) shouldBe
-          List(
-            ValueFormatError.copy(
-              paths = Some(List(
-                "/multiplePropertyDisposals/0/amountOfNetGain",
-                "/multiplePropertyDisposals/1/amountOfNetLoss",
-                "/singlePropertyDisposals/0/disposalProceeds",
-                "/singlePropertyDisposals/0/acquisitionAmount",
-                "/singlePropertyDisposals/0/improvementCosts",
-                "/singlePropertyDisposals/0/additionalCosts",
-                "/singlePropertyDisposals/0/prfAmount",
-                "/singlePropertyDisposals/0/otherReliefAmount",
-                "/singlePropertyDisposals/0/lossesFromThisYear",
-                "/singlePropertyDisposals/0/lossesFromPreviousYear",
-                "/singlePropertyDisposals/0/amountOfNetGain",
-                "/singlePropertyDisposals/1/disposalProceeds",
-                "/singlePropertyDisposals/1/acquisitionAmount",
-                "/singlePropertyDisposals/1/improvementCosts",
-                "/singlePropertyDisposals/1/additionalCosts",
-                "/singlePropertyDisposals/1/prfAmount",
-                "/singlePropertyDisposals/1/otherReliefAmount",
-                "/singlePropertyDisposals/1/lossesFromThisYear",
-                "/singlePropertyDisposals/1/lossesFromPreviousYear",
-                "/singlePropertyDisposals/1/amountOfNetLoss"
-              )),
-              message = "The value must be between 0 and 99999999999.99"
+      "a body with incorrect values is submitted" in {
+
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, invalidValueRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            ValueFormatError.withPaths(Seq(
+              "/multiplePropertyDisposals/0/amountOfNetGain",
+              "/multiplePropertyDisposals/1/amountOfNetLoss",
+              "/singlePropertyDisposals/0/disposalProceeds",
+              "/singlePropertyDisposals/0/acquisitionAmount",
+              "/singlePropertyDisposals/0/improvementCosts",
+              "/singlePropertyDisposals/0/additionalCosts",
+              "/singlePropertyDisposals/0/prfAmount",
+              "/singlePropertyDisposals/0/otherReliefAmount",
+              "/singlePropertyDisposals/0/lossesFromThisYear",
+              "/singlePropertyDisposals/0/lossesFromPreviousYear",
+              "/singlePropertyDisposals/0/amountOfNetGain",
+              "/singlePropertyDisposals/1/disposalProceeds",
+              "/singlePropertyDisposals/1/acquisitionAmount",
+              "/singlePropertyDisposals/1/improvementCosts",
+              "/singlePropertyDisposals/1/additionalCosts",
+              "/singlePropertyDisposals/1/prfAmount",
+              "/singlePropertyDisposals/1/otherReliefAmount",
+              "/singlePropertyDisposals/1/lossesFromThisYear",
+              "/singlePropertyDisposals/1/lossesFromPreviousYear",
+              "/singlePropertyDisposals/1/amountOfNetLoss"
             ))
+          )
+        )
       }
     }
 
     "return a dateFormatError" when {
-      "a body with an incorrect date is provided" in new Test { // 20-02-28 //2020-03-29
+      "a body with an incorrect date is provided" in {
         val requestWithInvalidDates = invalidDateRequestBodyJson(acquisitionDate = "20-02-28", completionDate = "20-02-28")
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, AnyContentAsJson(requestWithInvalidDates))) shouldBe
-          List(
-            DateFormatError.copy(paths = Some(Seq("/singlePropertyDisposals/0/completionDate", "/singlePropertyDisposals/0/acquisitionDate")))
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, requestWithInvalidDates).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            DateFormatError.withPaths(
+              Seq(
+                "/singlePropertyDisposals/0/completionDate",
+                "/singlePropertyDisposals/0/acquisitionDate"
+              ))
           )
+        )
       }
     }
 
     "return a invalid date range error" when {
-      "a body with dates outside of acceptable range is provided" in new Test {
+      "a body with dates outside of acceptable range is provided" in {
         val requestWithInvalidDates = invalidDateRequestBodyJson(acquisitionDate = "0010-01-01", completionDate = "2101-02-28")
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, AnyContentAsJson(requestWithInvalidDates))) shouldBe
-          List(
-            RuleDateRangeInvalidError.copy(paths =
-              Some(Seq("/singlePropertyDisposals/0/completionDate", "/singlePropertyDisposals/0/acquisitionDate")))
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, requestWithInvalidDates).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleDateRangeInvalidError.withPaths(
+              Seq(
+                "/singlePropertyDisposals/0/completionDate",
+                "/singlePropertyDisposals/0/acquisitionDate"
+              ))
           )
+        )
       }
     }
 
     "return a RuleAmountGainLossError" when {
-      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, bothGainsAndLossMultiplePropertyDisposalsRequestBody)) shouldBe
-          List(RuleAmountGainLossError.copy(paths = Some(Seq("/multiplePropertyDisposals/0", "/multiplePropertyDisposals/1"))))
+      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, bothGainsAndLossMultiplePropertyDisposalsRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleAmountGainLossError.withPaths(
+              Seq(
+                "/multiplePropertyDisposals/0",
+                "/multiplePropertyDisposals/1"
+              ))
+          )
+        )
       }
 
-      "neither amountOfNetGain or amountOfNetLoss are provided for multiplePropertyDisposals" in new Test {
-        validator.validate(
-          CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, neitherGainsOrLossMultiplePropertyDisposalsRequestBody)) shouldBe
-          List(RuleAmountGainLossError.copy(paths = Some(Seq("/multiplePropertyDisposals/0", "/multiplePropertyDisposals/1"))))
+      "neither amountOfNetGain or amountOfNetLoss are provided for multiplePropertyDisposals" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, neitherGainsOrLossMultiplePropertyDisposalsRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleAmountGainLossError.withPaths(
+              Seq(
+                "/multiplePropertyDisposals/0",
+                "/multiplePropertyDisposals/1"
+              ))
+          )
+        )
       }
 
-      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, bothGainsAndLossSinglePropertyDisposalsRequestBody)) shouldBe
-          List(RuleAmountGainLossError.copy(paths = Some(Seq("/singlePropertyDisposals/0", "/singlePropertyDisposals/1"))))
+      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, bothGainsAndLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleAmountGainLossError.withPaths(
+              Seq(
+                "/singlePropertyDisposals/0",
+                "/singlePropertyDisposals/1"
+              ))
+          )
+        )
       }
 
-      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in new Test {
-        validator.validate(CreateAmendCgtPpdOverridesRawData(validNino, validTaxYear, neitherGainsOrLossSinglePropertyDisposalsRequestBody)) shouldBe
-          List(RuleAmountGainLossError.copy(paths = Some(Seq("/singlePropertyDisposals/0", "/singlePropertyDisposals/1"))))
+      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, validTaxYear, neitherGainsOrLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            RuleAmountGainLossError.withPaths(
+              Seq(
+                "/singlePropertyDisposals/0",
+                "/singlePropertyDisposals/1"
+              ))
+          )
+        )
       }
     }
   }
 
 }
+
