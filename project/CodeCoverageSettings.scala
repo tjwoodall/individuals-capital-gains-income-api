@@ -31,14 +31,13 @@ object CodeCoverageSettings {
     "testOnlyDoNotUseInAppConf.*",
   )
 
-  private val excludedOldPackages: Seq[String] = Seq(
-    "api.controllers.RequestHandlerOld",
+  private val excludedExtraPackages: Seq[String] = Seq(
     "api.models.domain.ClaimOrElectionCodes",
     "api.connectors.NrsProxyConnector"
   )
 
   val settings: Seq[Setting[_]] = Seq(
-    ScoverageKeys.coverageExcludedPackages := (excludedPackages ++ excludedOldPackages).mkString(";"),
+    ScoverageKeys.coverageExcludedPackages := (excludedPackages ++ excludedExtraPackages).mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
