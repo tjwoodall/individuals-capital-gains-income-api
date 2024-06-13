@@ -1,4 +1,4 @@
-summary: Retrieve Other Capital Gains and Disposals [Test only]
+summary: Retrieve Other Capital Gains and Disposals
 description: |
   This endpoint allows the developer to retrieve other Capital Gains and disposals
   with the exception of residential property, for a given NINO and tax year

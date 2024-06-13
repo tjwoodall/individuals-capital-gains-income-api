@@ -1,4 +1,4 @@
-summary: Retrieve All CGT Residential Property Disposals and Overrides [Test only]
+summary: Retrieve All CGT Residential Property Disposals and Overrides
 description: |
   This API provides the capability to retrieve the residential property disposals subject to capital gains tax for 
   payment for property disposal (PPD) and non payment for property disposal (non-PPD).  This includes:

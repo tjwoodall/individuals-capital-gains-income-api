@@ -86,8 +86,8 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
         val openAPI = Option(parserResult.getOpenAPI).getOrElse(fail("openAPI wasn't defined"))
 
         openAPI.getOpenapi shouldBe "3.0.3"
-        withClue(s"If v${version.name} endpoints are enabled in application.conf, remove the [test only] from this test: ") {
-          openAPI.getInfo.getTitle shouldBe "Individuals Capital Gains Income (MTD) [Test only]"
+        withClue(s"If v${version.name} endpoints are enabled in application.conf. ") {
+          openAPI.getInfo.getTitle shouldBe "Individuals Capital Gains Income (MTD)"
         }
 
         openAPI.getInfo.getVersion shouldBe version.toString
