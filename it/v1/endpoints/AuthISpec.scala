@@ -32,9 +32,9 @@ class AuthISpec extends IntegrationBaseSpec{
     val taxYear = "2019-20"
 
     def setupStubs(): StubMapping
-    def uri: String = s"/savings/$nino/$taxYear"
+    def uri: String = s"/residential-property/$nino/$taxYear"
 
-    def ifsUri: String = s"/income-tax/income/savings/$nino/$taxYear"
+    def ifsUri: String = s"/income-tax/income/disposals/residential-property/$nino/$taxYear"
     def request(): WSRequest = {
       setupStubs()
       buildRequest(uri)
