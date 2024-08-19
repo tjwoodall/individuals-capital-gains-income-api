@@ -153,7 +153,7 @@ class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSp
           ("AA123456A", "20177", "latest", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2015-17", "latest", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2015-16", "latest", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2015-16", "test", BAD_REQUEST, SourceFormatError)
+          ("AA123456A", "2019-20", "test", BAD_REQUEST, SourceFormatError)
         )
         input.foreach(args => (validationErrorTest _).tupled(args))
       }

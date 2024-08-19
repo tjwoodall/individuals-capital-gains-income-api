@@ -18,6 +18,7 @@ package v1.models.request.createAmendOtherCgt
 
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
+import utils.{EmptinessChecker, EmptyPathsResult}
 
 class NonStandardGainsSpec extends UnitSpec {
 
@@ -99,6 +100,46 @@ class NonStandardGainsSpec extends UnitSpec {
     "written from an empty object" should {
       "produce an empty JSON" in {
         Json.toJson(NonStandardGains.empty) shouldBe emptyJson
+      }
+    }
+
+    "Checking for emptiness" when {
+
+      "has no fields" should {
+        "be deemed empty" in {
+          EmptinessChecker.findEmptyPaths(NonStandardGains.empty) shouldBe EmptyPathsResult.CompletelyEmpty
+        }
+      }
+
+      "has other fields but no carriedInterestGain,attributedGains or otherGains" should {
+        "be deemed empty" in {
+          EmptinessChecker.findEmptyPaths(NonStandardGains(
+            carriedInterestGain = None,
+            carriedInterestRttTaxPaid = Some(123),
+            attributedGains = None,
+            attributedGainsRttTaxPaid = Some(123),
+            otherGains = None,
+            otherGainsRttTaxPaid = Some(123)
+          )) shouldBe EmptyPathsResult.CompletelyEmpty
+        }
+      }
+
+      "has carriedInterestGain" should {
+        "be deemed non-empty" in {
+          EmptinessChecker.findEmptyPaths(NonStandardGains.empty.copy(carriedInterestGain = Some(123))) shouldBe EmptyPathsResult.NoEmptyPaths
+        }
+      }
+
+      "has attributedGains" should {
+        "be deemed non-empty" in {
+          EmptinessChecker.findEmptyPaths(NonStandardGains.empty.copy(attributedGains = Some(123))) shouldBe EmptyPathsResult.NoEmptyPaths
+        }
+      }
+
+      "has otherGains" should {
+        "be deemed non-empty" in {
+          EmptinessChecker.findEmptyPaths(NonStandardGains.empty.copy(otherGains = Some(123))) shouldBe EmptyPathsResult.NoEmptyPaths
+        }
       }
     }
   }

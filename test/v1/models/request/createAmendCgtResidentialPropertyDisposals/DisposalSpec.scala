@@ -21,7 +21,7 @@ import support.UnitSpec
 
 class DisposalSpec extends UnitSpec {
 
-  private val validMtdJson = Json.parse(
+  private val mtdJson = Json.parse(
     """
       |{
       |  "customerReference" : "ABC-2345",
@@ -36,12 +36,13 @@ class DisposalSpec extends UnitSpec {
       |  "otherReliefAmount" : 123.89,
       |  "lossesFromThisYear" : 456.89,
       |  "lossesFromPreviousYear" : 124.87,
+      |  "amountOfNetGain" : 566.9,
       |  "amountOfNetLoss" : 567.9
       |}
       |""".stripMargin
   )
 
-  private val validDesJson = Json.parse(
+  private val downstreamJson = Json.parse(
     """
       |{
       |  "customerRef" : "ABC-2345",
@@ -56,12 +57,13 @@ class DisposalSpec extends UnitSpec {
       |  "otherReliefAmount" : 123.89,
       |  "lossesFromThisYear" : 456.89,
       |  "lossesFromPreviousYear" : 124.87,
+      |  "amountOfNetGain": 566.9,
       |  "amountOfLoss" : 567.9
       |}
       |""".stripMargin
   )
 
-  private val validModel = Disposal(
+  private val model = Disposal(
     customerReference = Some("ABC-2345"),
     disposalDate = "2021-01-29",
     completionDate = "2021-04-25",
@@ -74,14 +76,14 @@ class DisposalSpec extends UnitSpec {
     otherReliefAmount = Some(123.89),
     lossesFromThisYear = Some(456.89),
     lossesFromPreviousYear = Some(124.87),
-    amountOfNetGain = None,
+    amountOfNetGain = Some(566.9),
     amountOfNetLoss = Some(567.9)
   )
 
   "reads" should {
     "read to a case class" when {
       "provided valid JSON" in {
-        validMtdJson.as[Disposal] shouldBe validModel
+        mtdJson.as[Disposal] shouldBe model
       }
     }
   }
@@ -89,7 +91,7 @@ class DisposalSpec extends UnitSpec {
   "writes" should {
     "write to JSON" when {
       "provided a case class" in {
-        Json.toJson(validModel) shouldBe validDesJson
+        Json.toJson(model) shouldBe downstreamJson
       }
     }
   }

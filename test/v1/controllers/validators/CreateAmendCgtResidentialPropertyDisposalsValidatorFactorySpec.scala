@@ -20,7 +20,7 @@ import api.controllers.requestParsers.validators.validations.{DisposalDateErrorM
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
 
@@ -40,8 +40,10 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
   private val validAcquisitionDate   = "2020-02-01"
   private val validValue             = 1000.12
 
-  private val validRequestBodyJson: JsValue = Json.parse(
-    s"""
+  private def validRequestBodyJsonWith(losses: Boolean): JsValue = {
+    val json = Json
+      .parse(
+        s"""
          |{
          |  "disposals":[
          |    {
@@ -62,7 +64,13 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
          |  ]
          |}
 """.stripMargin
-  )
+      )
+      .as[JsObject]
+
+    json ++ (if (losses) Json.obj("amountOfNetLoss" -> validValue) else Json.obj("amountOfNetGain" -> validValue))
+  }
+
+  private val validRequestBodyJson: JsValue = validRequestBodyJsonWith(losses = true)
 
   private val emptyRequestBodyJson: JsValue = Json.parse("""{}""")
 
@@ -313,8 +321,6 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val parsedValidRequestBody = validRequestBodyJson.as[CreateAmendCgtResidentialPropertyDisposalsRequestBody]
-
   private val validatorFactory = new CreateAmendCgtResidentialPropertyDisposalsValidatorFactory(mockAppConfig)
 
   private def validator(nino: String, taxYear: String, body: JsValue) =
@@ -325,12 +331,25 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is supplied" in {
+      "a valid request with only losses supplied" in {
+        behave like validateSuccessfully(losses = false)
+      }
+
+      "a valid request with only gains supplied" in {
+        behave like validateSuccessfully(losses = false)
+      }
+
+      def validateSuccessfully(losses: Boolean) = {
+        val requestBodyJson = validRequestBodyJsonWith(losses)
         val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-          validator(validNino, validTaxYear, validRequestBodyJson).validateAndWrapResult()
+          validator(validNino, validTaxYear, requestBodyJson).validateAndWrapResult()
 
         result shouldBe Right(
-          CreateAmendCgtResidentialPropertyDisposalsRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody)
+          CreateAmendCgtResidentialPropertyDisposalsRequestData(
+            parsedNino,
+            parsedTaxYear,
+            requestBodyJson.as[CreateAmendCgtResidentialPropertyDisposalsRequestBody]
+          )
         )
       }
     }

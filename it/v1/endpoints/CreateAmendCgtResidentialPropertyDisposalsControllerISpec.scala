@@ -113,8 +113,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
       |         "otherReliefAmount": 100000000000.00,
       |         "lossesFromThisYear": 100000000000.00,
       |         "lossesFromPreviousYear": 100000000000.00,
-      |         "amountOfNetGain": 100000000000.00,
-      |         "amountOfNetLoss": 100000000000.00
+      |         "amountOfNetGain": 100000000000.00
       |      }
       |   ]
       |}
@@ -138,8 +137,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
       |         "otherReliefAmount": -0.1,
       |         "lossesFromThisYear": -0.1,
       |         "lossesFromPreviousYear": -0.1,
-      |         "amountOfNetGain": -0.1,
-      |         "amountOfNetLoss": -0.1
+      |         "amountOfNetGain": -0.1
       |      }
       |   ]
       |}
@@ -158,8 +156,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
         "/disposals/0/otherReliefAmount",
         "/disposals/0/lossesFromThisYear",
         "/disposals/0/lossesFromPreviousYear",
-        "/disposals/0/amountOfNetGain",
-        "/disposals/0/amountOfNetLoss"
+        "/disposals/0/amountOfNetGain"
       ))
   )
 
@@ -245,13 +242,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
      """.stripMargin
   )
 
-  val customerRefError: MtdError = CustomerRefFormatError.copy(
-    message = "The provided customer reference is invalid",
-    paths = Some(
-      Seq(
-        "/disposals/0"
-      ))
-  )
+  val customerRefError: MtdError = CustomerRefFormatError.withPath("/disposals/0/customerReference")
 
   val gainLossJson: JsValue = Json.parse(
     s"""

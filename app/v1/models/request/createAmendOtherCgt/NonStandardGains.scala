@@ -17,19 +17,24 @@
 package v1.models.request.createAmendOtherCgt
 
 import play.api.libs.json.{Json, OFormat}
+import shapeless.HNil
+import utils.EmptinessChecker
 
 case class NonStandardGains(carriedInterestGain: Option[BigDecimal],
                             carriedInterestRttTaxPaid: Option[BigDecimal],
                             attributedGains: Option[BigDecimal],
                             attributedGainsRttTaxPaid: Option[BigDecimal],
                             otherGains: Option[BigDecimal],
-                            otherGainsRttTaxPaid: Option[BigDecimal]) {
-
-  def isThreeFieldsEmpty: Boolean = carriedInterestGain.isEmpty && attributedGains.isEmpty && otherGains.isEmpty
-}
+                            otherGainsRttTaxPaid: Option[BigDecimal])
 
 object NonStandardGains {
   val empty: NonStandardGains = NonStandardGains(None, None, None, None, None, None)
+
+  implicit val emptinessChecker: EmptinessChecker[NonStandardGains] = EmptinessChecker.use { body =>
+    "carriedInterestGain" -> body.carriedInterestGain ::
+      "attributedGains"   -> body.attributedGains ::
+      "otherGains"        -> body.otherGains :: HNil
+  }
 
   implicit val format: OFormat[NonStandardGains] = Json.format[NonStandardGains]
 }

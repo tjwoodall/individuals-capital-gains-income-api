@@ -36,11 +36,12 @@ import api.models.errors.{
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import v1.models.request.createAmendOtherCgt.{CreateAmendOtherCgtRequestBody, CreateAmendOtherCgtRequestData, Disposal}
+import v1.models.request.createAmendOtherCgt.{CreateAmendOtherCgtRequestBody, CreateAmendOtherCgtRequestData, Disposal, Losses, NonStandardGains}
 
-object CreateAmendeOtherCgtRulesValidator extends RulesValidator[CreateAmendOtherCgtRequestData] {
+object CreateAmendOtherCgtRulesValidator extends RulesValidator[CreateAmendOtherCgtRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
+  private val resolveParsedNumber            = ResolveParsedNumber(min = -99999999999.99)
   private val regex                          = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
 
   def validateBusinessRules(parsed: CreateAmendOtherCgtRequestData): Validated[Seq[MtdError], CreateAmendOtherCgtRequestData] = {
@@ -48,7 +49,10 @@ object CreateAmendeOtherCgtRulesValidator extends RulesValidator[CreateAmendOthe
     import parsed._
 
     combine(
-      validateDisposalSequence(body)
+      validateDisposalSequence(body),
+      validateNonStandardGains(body),
+      validateLosses(body),
+      validateAdjustments(body)
     ).onSuccess(parsed)
   }
 
@@ -72,7 +76,7 @@ object CreateAmendeOtherCgtRulesValidator extends RulesValidator[CreateAmendOthe
 
     val validatedOptionalDecimalNumbers = List(
       (gain, s"/disposals/$index/gain"),
-      (loss, s"/disposals/$index/Loss"),
+      (loss, s"/disposals/$index/loss"),
       (gainAfterRelief, s"/disposals/$index/gainAfterRelief"),
       (lossAfterRelief, s"/disposals/$index/lossAfterRelief"),
       (rttTaxPaid, s"/disposals/$index/rttTaxPaid")
@@ -132,6 +136,52 @@ object CreateAmendeOtherCgtRulesValidator extends RulesValidator[CreateAmendOthe
       validatedAssetType,
       validatedClaimOrElectionCodes
     )
+  }
+
+  private def validateNonStandardGains(requestBody: CreateAmendOtherCgtRequestBody): Validated[Seq[MtdError], Unit] = {
+    requestBody.nonStandardGains.map(validateNonStandardGains).getOrElse(valid)
+  }
+
+  private def validateNonStandardGains(nonStandardGains: NonStandardGains): Validated[Seq[MtdError], Unit] = {
+    import nonStandardGains._
+
+    List(
+      (carriedInterestGain, "/nonStandardGains/carriedInterestGain"),
+      (carriedInterestRttTaxPaid, "/nonStandardGains/carriedInterestRttTaxPaid"),
+      (attributedGains, "/nonStandardGains/attributedGains"),
+      (attributedGainsRttTaxPaid, "/nonStandardGains/attributedGainsRttTaxPaid"),
+      (otherGains, "/nonStandardGains/otherGains"),
+      (otherGainsRttTaxPaid, "/nonStandardGains/otherGainsRttTaxPaid")
+    ).traverse_ { case (value, path) =>
+      resolveNonNegativeParsedNumber(value, path)
+    }
+  }
+
+  private def validateLosses(requestBody: CreateAmendOtherCgtRequestBody): Validated[Seq[MtdError], Unit] = {
+    requestBody.losses.map(validateLosses).getOrElse(valid)
+  }
+
+  private def validateLosses(losses: Losses): Validated[Seq[MtdError], Unit] = {
+    import losses._
+
+    List(
+      (broughtForwardLossesUsedInCurrentYear, "/losses/broughtForwardLossesUsedInCurrentYear"),
+      (setAgainstInYearGains, "/losses/setAgainstInYearGains"),
+      (setAgainstInYearGeneralIncome, "/losses/setAgainstInYearGeneralIncome"),
+      (setAgainstEarlierYear, "/losses/setAgainstEarlierYear")
+    ).traverse_ { case (value, path) =>
+      resolveNonNegativeParsedNumber(value, path)
+    }
+  }
+
+  private def validateAdjustments(requestBody: CreateAmendOtherCgtRequestBody): Validated[Seq[MtdError], Unit] = {
+    import requestBody._
+
+    List(
+      (adjustments, "/adjustments")
+    ).traverse_ { case (value, path) =>
+      resolveParsedNumber(value, path)
+    }
   }
 
 }

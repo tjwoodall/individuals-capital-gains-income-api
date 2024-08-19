@@ -318,8 +318,8 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with Dispos
         DateFormatError.copy(
           paths = Some(
             Seq(
-              "/disposals/0/acquisitionDate",
-              "/disposals/0/disposalDate"
+              "/disposals/0/disposalDate",
+              "/disposals/0/acquisitionDate"
             ))
         )
       ))
