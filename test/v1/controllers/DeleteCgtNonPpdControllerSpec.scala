@@ -95,7 +95,6 @@ class DeleteCgtNonPpdControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    
     protected def callController(): Future[Result] = controller.deleteCgtNonPpd(validNino, taxYear)(fakeRequest)
 
     def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =

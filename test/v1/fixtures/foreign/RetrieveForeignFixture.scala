@@ -20,8 +20,9 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 
 object RetrieveForeignFixture {
 
-  val fullRetrieveForeignResponseJson: JsValue = Json.parse(
-    """
+  val fullRetrieveForeignResponseJson: JsValue = Json
+    .parse(
+      """
       |{
       |   "submittedOn": "2019-04-04T01:01:01.000Z",
       |   "foreignEarnings": {
@@ -42,6 +43,7 @@ object RetrieveForeignFixture {
       |   ]
       |}
     """.stripMargin
-  ).as[JsObject]
+    )
+    .as[JsObject]
 
 }

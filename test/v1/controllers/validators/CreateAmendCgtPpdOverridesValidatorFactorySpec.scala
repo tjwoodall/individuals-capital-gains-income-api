@@ -20,19 +20,15 @@ import api.controllers.requestParsers.validators.validations.ValueFormatErrorMes
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import mocks.MockAppConfig
+import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, CreateAmendCgtPpdOverridesRequestData}
-import play.api.libs.json.{JsValue, Json}
 
-class CreateAmendCgtPpdOverridesValidatorFactorySpec
-  extends UnitSpec
-    with ValueFormatErrorMessages
-    with MockAppConfig {
+class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
 
-  private val validNino    = "AA123456A"
-  private val validTaxYear = "2019-20"
+  private val validNino                      = "AA123456A"
+  private val validTaxYear                   = "2019-20"
   private implicit val correlationId: String = "1234"
-
 
   private val validRequestJson: JsValue = Json.parse(
     """
@@ -555,95 +551,89 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec
       |""".stripMargin
   )
 
-
-
-
-  private val parsedNino    = Nino(validNino)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
-  private val parsedValidRequestBody = validRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedNino                  = Nino(validNino)
+  private val parsedTaxYear               = TaxYear.fromMtd(validTaxYear)
+  private val parsedValidRequestBody      = validRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
   private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
-  private val parsedValidSingleOnlyBody = validOnlySinglePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidSingleOnlyBody   = validOnlySinglePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
 
-  private val validatorFactory                         = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
+  private val validatorFactory                                        = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
-    MockedAppConfig.minimumPermittedTaxYear
-      .returns(2020)
-      .anyNumberOfTimes()
-
-
+  MockedAppConfig.minimumPermittedTaxYear
+    .returns(2020)
+    .anyNumberOfTimes()
 
   "validator" should {
     "return the parsed domain object" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, validRequestJson).validateAndWrapResult()
-        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidRequestBody))
+        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody))
       }
     }
 
-      "a valid request containing only multiple disposals is supplied" in  {
+    "a valid request containing only multiple disposals is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
+      result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidMultipleOnlyBody))
+    }
+
+    "a valid request containing only single disposals is supplied" in {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+        validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
+      result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidSingleOnlyBody))
+    }
+
+    "return NinoFormatError error" when {
+      "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
-        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidMultipleOnlyBody))
+          validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, NinoFormatError)
+        )
       }
+    }
 
-      "a valid request containing only single disposals is supplied" in  {
+    "return TaxYearFormatError error" when {
+      "an invalid tax year is supplied" in {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
-        result shouldBe Right(CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear,parsedValidSingleOnlyBody))
+          validator(validNino, "201718", validRequestJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, TaxYearFormatError)
+        )
       }
-
-  "return NinoFormatError error" when {
-    "an invalid nino is supplied" in {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
-      result shouldBe Left(
-        ErrorWrapper(correlationId, NinoFormatError)
-      )
     }
-  }
 
-  "return TaxYearFormatError error" when {
-    "an invalid tax year is supplied" in {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator(validNino, "201718", validRequestJson).validateAndWrapResult()
-      result shouldBe Left(
-        ErrorWrapper(correlationId, TaxYearFormatError)
-      )
+    "return RuleTaxYearRangeInvalidError error" when {
+      "an invalid tax year range is supplied" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
+        )
+      }
     }
-  }
 
-  "return RuleTaxYearRangeInvalidError error" when {
-    "an invalid tax year range is supplied" in {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
-      result shouldBe Left(
-        ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
-      )
+    "return RuleTaxYearNotSupportedError error" when {
+      "an out of range tax year is supplied" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
+        )
+      }
     }
-  }
-
-  "return RuleTaxYearNotSupportedError error" when {
-    "an out of range tax year is supplied" in {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
-      result shouldBe Left(
-        ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
-      )
-    }
-  }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
 
-      "a non-empty JSON body is submitted without any expected fields" in  {
+      "a non-empty JSON body is submitted without any expected fields" in {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, nonsenseRequestBodyJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError)
         )
       }
-
 
       "the submitted request body has missing mandatory fields" in {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
@@ -670,9 +660,10 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            RuleIncorrectOrEmptyBodyError.withPaths(Seq(
-              "/multiplePropertyDisposals"
-            ))
+            RuleIncorrectOrEmptyBodyError.withPaths(
+              Seq(
+                "/multiplePropertyDisposals"
+              ))
           )
         )
       }
@@ -685,9 +676,10 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            RuleIncorrectOrEmptyBodyError.withPaths(Seq(
-              "/singlePropertyDisposals"
-            ))
+            RuleIncorrectOrEmptyBodyError.withPaths(
+              Seq(
+                "/singlePropertyDisposals"
+              ))
           )
         )
       }
@@ -702,9 +694,10 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec
         result shouldBe Left(
           ErrorWrapper(
             correlationId,
-            PpdSubmissionIdFormatError.withPaths(Seq(
-              "/multiplePropertyDisposals/0/ppdSubmissionId"
-            ))
+            PpdSubmissionIdFormatError.withPaths(
+              Seq(
+                "/multiplePropertyDisposals/0/ppdSubmissionId"
+              ))
           )
         )
       }
@@ -852,4 +845,3 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec
   }
 
 }
-

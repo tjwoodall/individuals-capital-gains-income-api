@@ -24,31 +24,31 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
 
   val multiplePropertyDisposals: MultiplePropertyDisposals =
     MultiplePropertyDisposals(
-    MtdSourceEnum.`hmrc-held`,
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    "Da2467289108",
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    Some(3),
-    Some(2022),
-    Some("2022-03-08"),
-    Some(1999.99),
-    None
-  )
+      MtdSourceEnum.`hmrc-held`,
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      "Da2467289108",
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      Some(3),
+      Some(2022),
+      Some("2022-03-08"),
+      Some(1999.99),
+      None
+    )
 
   val singlePropertyDisposals: SinglePropertyDisposals =
     SinglePropertyDisposals(
       MtdSourceEnum.`hmrc-held`,
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    "Da2467289108",
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    Some("2022-02-04"),
-    "2022-03-08",
-    1999.99,
-    Some("2018-04-06"),
-    1999.99,
-    Some(1999.99),
-    Some(5000.99),
-    Some(1999.99),
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      "Da2467289108",
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      Some("2022-02-04"),
+      "2022-03-08",
+      1999.99,
+      Some("2018-04-06"),
+      1999.99,
+      Some(1999.99),
+      Some(5000.99),
+      Some(1999.99),
       Some(1999.99),
       Some(1999.99),
       Some(1999.99),
@@ -92,8 +92,9 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       Some(customerAddedDisposals)
     )
 
-  val mtdJson: JsValue = Json.parse(
-    """
+  val mtdJson: JsValue = Json
+    .parse(
+      """
       |{
       |  "ppdService": {
       |    "ppdYearToDate": 143.22,
@@ -152,10 +153,12 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       |  }
       |}
       |""".stripMargin
-  ).as[JsObject]
+    )
+    .as[JsObject]
 
-  val ifsJson: JsValue = Json.parse(
-    """
+  val ifsJson: JsValue = Json
+    .parse(
+      """
       |{
       |  "ppdService": {
       |    "ppdYearToDate": 143.22,
@@ -214,5 +217,7 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       |  }
       |}
       |""".stripMargin
-  ).as[JsObject]
+    )
+    .as[JsObject]
+
 }

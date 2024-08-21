@@ -16,7 +16,7 @@
 
 package api.connectors
 
-sealed trait DownstreamUri[Resp] {
+sealed trait DownstreamUri[+Resp] {
   val value: String
 }
 
@@ -24,5 +24,5 @@ object DownstreamUri {
   final case class DesUri[Resp](value: String)                extends DownstreamUri[Resp]
   final case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
   final case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
-  final case class Api1661Uri[Resp](value: String) extends DownstreamUri[Resp]
+  final case class Api1661Uri[Resp](value: String)            extends DownstreamUri[Resp]
 }

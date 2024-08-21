@@ -32,8 +32,8 @@ trait MockRetrieveAllResidentialPropertyCgtConnector extends MockFactory {
 
   object MockRetrieveAllResidentialPropertyCgtConnector {
 
-    def retrieve(
-        requestData: RetrieveAllResidentialPropertyCgtRequestData): CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]] =
+    def retrieve(requestData: RetrieveAllResidentialPropertyCgtRequestData)
+        : CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]] =
       (mockRetrieveAllResidentialPropertyCgtConnector
         .retrieve(_: RetrieveAllResidentialPropertyCgtRequestData)(
           _: HeaderCarrier,

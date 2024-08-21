@@ -104,31 +104,31 @@ class PpdServiceSpec extends UnitSpec {
 
   val multiplePropertyDisposals: MultiplePropertyDisposals =
     MultiplePropertyDisposals(
-    MtdSourceEnum.`hmrc-held`,
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    "Da2467289108",
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    Some(3),
-    Some(2022),
-    Some("2022-03-08"),
-    None,
-    Some(1999.99)
-  )
+      MtdSourceEnum.`hmrc-held`,
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      "Da2467289108",
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      Some(3),
+      Some(2022),
+      Some("2022-03-08"),
+      None,
+      Some(1999.99)
+    )
 
   val singlePropertyDisposals: SinglePropertyDisposals =
     SinglePropertyDisposals(
       MtdSourceEnum.`hmrc-held`,
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    "Da2467289108",
-    Some(Timestamp("2020-07-06T09:37:17.000Z")),
-    Some("2022-02-04"),
-    "2022-03-08",
-    1999.99,
-    Some("2018-04-06"),
-    1999.99,
-    Some(1999.99),
-    Some(5000.99),
-    Some(1999.99),
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      "Da2467289108",
+      Some(Timestamp("2020-07-06T09:37:17.000Z")),
+      Some("2022-02-04"),
+      "2022-03-08",
+      1999.99,
+      Some("2018-04-06"),
+      1999.99,
+      Some(1999.99),
+      Some(5000.99),
+      Some(1999.99),
       Some(1999.99),
       Some(1999.99),
       Some(1999.99),
