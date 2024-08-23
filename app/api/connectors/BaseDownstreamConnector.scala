@@ -34,10 +34,10 @@ trait BaseDownstreamConnector {
   private val jsonContentTypeHeader = HeaderNames.CONTENT_TYPE -> MimeTypes.JSON
 
   def post[Body: Writes, Resp](body: Body, uri: DownstreamUri[Resp])(implicit
-                                                                     ec: ExecutionContext,
-                                                                     hc: HeaderCarrier,
-                                                                     httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                                                     correlationId: String): Future[DownstreamOutcome[Resp]] = {
+      ec: ExecutionContext,
+      hc: HeaderCarrier,
+      httpReads: HttpReads[DownstreamOutcome[Resp]],
+      correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPost(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
       http.POST(getBackendUri(uri), body)
@@ -47,10 +47,10 @@ trait BaseDownstreamConnector {
   }
 
   def get[Resp](uri: DownstreamUri[Resp], queryParams: Seq[(String, String)] = Nil)(implicit
-                                                                                    ec: ExecutionContext,
-                                                                                    hc: HeaderCarrier,
-                                                                                    httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                                                                    correlationId: String): Future[DownstreamOutcome[Resp]] = {
+      ec: ExecutionContext,
+      hc: HeaderCarrier,
+      httpReads: HttpReads[DownstreamOutcome[Resp]],
+      correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.GET(getBackendUri(uri), queryParams = queryParams)
@@ -59,10 +59,10 @@ trait BaseDownstreamConnector {
   }
 
   def delete[Resp](uri: DownstreamUri[Resp], intent: Option[String] = None)(implicit
-                                                                            ec: ExecutionContext,
-                                                                            hc: HeaderCarrier,
-                                                                            httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                                                            correlationId: String): Future[DownstreamOutcome[Resp]] = {
+      ec: ExecutionContext,
+      hc: HeaderCarrier,
+      httpReads: HttpReads[DownstreamOutcome[Resp]],
+      correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
       http.DELETE(getBackendUri(uri))
@@ -72,10 +72,10 @@ trait BaseDownstreamConnector {
   }
 
   def put[Body: Writes, Resp](uri: DownstreamUri[Resp], body: Body = "")(implicit
-                                                                         ec: ExecutionContext,
-                                                                         hc: HeaderCarrier,
-                                                                         httpReads: HttpReads[DownstreamOutcome[Resp]],
-                                                                         correlationId: String): Future[DownstreamOutcome[Resp]] = {
+      ec: ExecutionContext,
+      hc: HeaderCarrier,
+      httpReads: HttpReads[DownstreamOutcome[Resp]],
+      correlationId: String): Future[DownstreamOutcome[Resp]] = {
 
     def doPut(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] = {
       http.PUT(getBackendUri(uri), body)
@@ -115,7 +115,7 @@ trait BaseDownstreamConnector {
       case DesUri(_)                => appConfig.desDownstreamConfig
       case IfsUri(_)                => appConfig.ifsDownstreamConfig
       case TaxYearSpecificIfsUri(_) => appConfig.taxYearSpecificIfsDownstreamConfig
-      case Api1661Uri(_) => appConfig.api1661DownstreamConfig
+      case Api1661Uri(_)            => appConfig.api1661DownstreamConfig
     }
 
 }

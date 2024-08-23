@@ -17,13 +17,13 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
+import utils.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendCgtPpdOverridesControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -125,8 +125,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(
-    s"""
+  val auditData: JsValue = Json.parse(s"""
        |{
        |  "nino":"$validNino",
        |  "taxYear": "$taxYear"
@@ -137,7 +136,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
       "happy path" in new Test {
         willUseValidator(returningSuccess(requestData))
         MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
-
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
@@ -154,7 +152,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
-
 
         runErrorTestWithAudit(NinoFormatError, maybeAuditRequestBody = Some(validRequestJson))
       }
@@ -187,6 +184,12 @@ class CreateAmendCgtPpdOverridesControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.createAmendCgtPpdOverrides(validNino, taxYear)(fakePostRequest(validRequestJson))
 

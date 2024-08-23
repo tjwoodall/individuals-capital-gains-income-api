@@ -46,6 +46,8 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
     val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "create-amend-cgt-residential-property-disposals"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendCgtResidentialPropertyDisposalsController",

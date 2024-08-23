@@ -18,7 +18,7 @@ package routing
 
 import org.apache.pekko.actor.ActorSystem
 import api.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
-import mocks.MockAppConfig
+import config.MockAppConfig
 import org.scalamock.handlers.CallHandler1
 import org.scalatest.Inside
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite

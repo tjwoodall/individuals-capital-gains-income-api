@@ -17,15 +17,16 @@
 package v1.otherCgt.retrieve
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
+import utils.MockIdGenerator
 import api.models.domain.{Nino, TaxYear, Timestamp}
 import api.models.downstream.DownstreamAssetType.`otherProperty`
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.Result
+import play.api.Configuration
 import v1.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.def1.model.response.{Def1_RetrieveOtherCgtResponse, Disposal, Losses, NonStandardGains}
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
@@ -177,6 +178,12 @@ class RetrieveOtherCgtControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     override protected def callController(): Future[Result] = controller.retrieveOtherCgt(validNino, taxYear)(fakeGetRequest)
   }

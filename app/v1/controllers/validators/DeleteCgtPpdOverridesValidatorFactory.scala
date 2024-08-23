@@ -28,7 +28,7 @@ import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig){
+class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))

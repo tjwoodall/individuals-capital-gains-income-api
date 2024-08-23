@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveAllResidentialPropertyCgtConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveAllResidentialPropertyCgtRequestData)(implicit
-                                                                      hc: HeaderCarrier,
-                                                                      ec: ExecutionContext,
-                                                                      correlationId: String): Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]] = {
 
     import api.connectors.httpparsers.StandardDownstreamHttpParser._
     import request._

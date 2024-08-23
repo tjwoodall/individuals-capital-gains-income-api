@@ -43,6 +43,8 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
                                                val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "create-amend-other-cgt"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "CreateAmendOtherCgtController",

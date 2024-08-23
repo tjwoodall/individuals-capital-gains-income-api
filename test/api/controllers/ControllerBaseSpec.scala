@@ -16,30 +16,31 @@
 
 package api.controllers
 
-import api.mocks.MockIdGenerator
 import api.models.audit.{AuditError, AuditEvent, AuditResponse}
+import api.models.errors.MtdError
 import api.models.domain.Nino
-import api.models.errors.{BadRequestError, ErrorWrapper, MtdError}
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import cats.implicits.catsSyntaxValidatedId
+import config.RealAppConfig
+import config.MockAppConfig
 import config.Deprecation.NotDeprecated
-import mocks.MockAppConfig
 import play.api.http.{HeaderNames, MimeTypes, Status}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, ControllerComponents, Result}
 import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{FakeRequest, ResultExtractors}
-import routing.{Version, Version1}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.MockIdGenerator
+import routing.{Version, Version1}
+import cats.implicits.catsSyntaxValidatedId
 
 import scala.concurrent.Future
 
-class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with HeaderNames with ResultExtractors with MockAuditService with MockAppConfig {
+abstract class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with HeaderNames with ResultExtractors with MockAuditService {
 
   val apiVersion: Version = Version1
 
-  lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withHeaders(HeaderNames.ACCEPT -> s"application/vnd.hmrc.${apiVersion.name}+json")
 
   lazy val cc: ControllerComponents = stubControllerComponents()
@@ -50,20 +51,26 @@ class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with Header
 
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 
+  def fakePutRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator {
+trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator with RealAppConfig with MockAppConfig {
   _: ControllerBaseSpec =>
 
   protected val validNino        = "AA123456A"
   protected val parsedNino: Nino = Nino(validNino)
-
-  protected val correlationId = "X-123"
+  protected val nino: String     = validNino
+  protected val correlationId    = "X-123"
 
   trait ControllerTest {
     protected val hc: HeaderCarrier = HeaderCarrier()
 
+    protected val controller: AuthorisedController
+
+    protected def callController(): Future[Result]
+
     MockedMtdIdLookupService.lookup(validNino).returns(Future.successful(Right("test-mtd-id")))
+    // MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
     MockIdGenerator.generateCorrelationId.returns(correlationId)
     MockedAppConfig.deprecationFor(apiVersion).returns(NotDeprecated.valid).anyNumberOfTimes()
@@ -78,6 +85,8 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
         case Some(jsBody) => contentAsJson(result) shouldBe jsBody
         case None         => contentType(result) shouldBe empty
       }
+
+      checkEmaConfig()
     }
 
     protected def runErrorTest(expectedError: MtdError): Unit = {
@@ -89,17 +98,19 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       contentAsJson(result) shouldBe Json.toJson(expectedError)
     }
 
-    protected def runMultipleErrorsTest(expectedErrors: Seq[MtdError]): Unit = {
-      val expectedError = ErrorWrapper(correlationId, BadRequestError, Some(expectedErrors))
+    private def checkEmaConfig(): Unit = {
+      val endpoints: Map[String, Boolean] = emaEndpoints
 
-      val result: Future[Result] = callController()
+      val endpointSupportingAgentsAllowed: Boolean =
+        endpoints
+          .getOrElse(
+            controller.endpointName,
+            fail(s"Controller endpoint name \"${controller.endpointName}\" not found in application.conf.")
+          )
 
-      status(result) shouldBe BAD_REQUEST
-      header("X-CorrelationId", result) shouldBe Some(correlationId)
-      contentAsJson(result) shouldBe Json.toJson(expectedError)
+      realAppConfig.endpointAllowsSupportingAgents(controller.endpointName) shouldBe endpointSupportingAgentsAllowed
     }
 
-    protected def callController(): Future[Result]
   }
 
   trait AuditEventChecking[DETAIL] {
@@ -115,38 +126,25 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       checkAuditOkEvent(expectedStatus, maybeAuditRequestBody, maybeAuditResponseBody)
     }
 
-    protected def checkAuditOkEvent(expectedStatus: Int, maybeRequestBody: Option[JsValue], maybeAuditResponseBody: Option[JsValue]): Unit = {
-      val auditResponse: AuditResponse = AuditResponse(expectedStatus, None, maybeAuditResponseBody)
-      MockedAuditService.verifyAuditEvent(event(auditResponse, maybeRequestBody)).once()
-    }
-
     protected def runErrorTestWithAudit(expectedError: MtdError, maybeAuditRequestBody: Option[JsValue] = None): Unit = {
       runErrorTest(expectedError)
       checkAuditErrorEvent(expectedError, maybeAuditRequestBody)
     }
 
-    protected def checkAuditErrorEvent(expectedError: MtdError, maybeRequestBody: Option[JsValue]): Unit = {
-      val auditResponse: AuditResponse = AuditResponse(expectedError.httpStatus, Some(List(AuditError(expectedError.code))), None)
+    protected def checkAuditOkEvent(expectedStatus: Int, maybeRequestBody: Option[JsValue], maybeAuditResponseBody: Option[JsValue]): Unit = {
+      val auditResponse: AuditResponse = AuditResponse(expectedStatus, None, maybeAuditResponseBody)
       MockedAuditService.verifyAuditEvent(event(auditResponse, maybeRequestBody)).once()
     }
 
-    protected def runMultipleErrorsTestWithAudit(expectedErrors: Seq[MtdError], maybeAuditRequestBody: Option[JsValue] = None): Unit = {
-      runMultipleErrorsTest(expectedErrors)
-      checkAuditMultipleErrorsEvent(expectedErrors, maybeAuditRequestBody)
-    }
-
-    protected def checkAuditMultipleErrorsEvent(errors: Seq[MtdError], maybeRequestBody: Option[JsValue]): Unit = {
-      val auditErrors = errors.map(err => AuditError(err.code))
-
-      val auditResponse: AuditResponse =
-        AuditResponse(
-          httpStatus = BAD_REQUEST,
-          errors = Some(auditErrors),
-          body = None
-        )
+    protected def checkAuditErrorEvent(expectedError: MtdError, maybeRequestBody: Option[JsValue]): Unit = {
+      val auditResponse: AuditResponse = AuditResponse(expectedError.httpStatus, Some(Seq(AuditError(expectedError.code))), None)
       MockedAuditService.verifyAuditEvent(event(auditResponse, maybeRequestBody)).once()
     }
 
   }
 
+}
+
+object ControllerTestRunner {
+  val validNino: String = "AA123456A"
 }

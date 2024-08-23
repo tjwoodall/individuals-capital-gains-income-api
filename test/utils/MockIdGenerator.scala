@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package api.stubs
+package utils
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status._
-import support.WireMockMethods
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import utils.IdGenerator
 
-object AuditStub extends WireMockMethods {
+trait MockIdGenerator extends MockFactory {
 
-  private val auditUri: String = s"/write/audit.*"
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
 
-  def audit(): StubMapping = {
-    when(method = POST, uri = auditUri)
-      .thenReturn(status = NO_CONTENT)
+  object MockIdGenerator {
+    def generateCorrelationId: CallHandler[String] = (() => mockIdGenerator.generateCorrelationId).expects()
   }
 
 }

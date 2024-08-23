@@ -17,15 +17,16 @@
 package v1.otherCgt.delete
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.mocks.MockIdGenerator
+import utils.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import mocks.MockAppConfig
+import config.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
+import play.api.Configuration
 import v1.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
@@ -93,6 +94,12 @@ class DeleteOtherCgtControllerSpec
       cc = cc,
       idGenerator = mockIdGenerator
     )
+
+    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+      "supporting-agents-access-control.enabled" -> true
+    )
+
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.deleteOtherCgt(validNino, taxYear)(fakeRequest)
 

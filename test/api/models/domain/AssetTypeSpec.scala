@@ -23,10 +23,10 @@ import utils.enums.EnumJsonSpecSupport
 class AssetTypeSpec extends UnitSpec with EnumJsonSpecSupport {
 
   testSerialization[AssetType](
-    `other-property`   -> "other-property",
-    `unlisted-shares`  -> "unlisted-shares",
-    `listed-shares`  -> "listed-shares",
-    `other-asset` -> "other-asset"
+    `other-property`  -> "other-property",
+    `unlisted-shares` -> "unlisted-shares",
+    `listed-shares`   -> "listed-shares",
+    `other-asset`     -> "other-asset"
   )
 
   "AssetType" must {

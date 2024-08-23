@@ -43,6 +43,8 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
                                            val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "delete-cgt-non-ppd"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
       controllerName = "DeleteCgtNonPpdController",

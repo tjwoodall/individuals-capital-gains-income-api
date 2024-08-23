@@ -30,6 +30,8 @@ trait FeatureSwitches {
   def isPassDeleteIntentEnabled: Boolean
   def isTemporalValidationEnabled(implicit request: Request[_]): Boolean
   def isOpwEnabled: Boolean
+  def isReleasedInProduction(feature: String): Boolean
+  def supportingAgentsAccessControlEnabled: Boolean
 }
 
 @Singleton
@@ -50,7 +52,13 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
     }
   }
 
+  def isReleasedInProduction(feature: String): Boolean = isConfigTrue(feature + ".released-in-production")
+
+  val supportingAgentsAccessControlEnabled: Boolean = isConfigTrue("supporting-agents-access-control.enabled")
+
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
+
+  private def isConfigTrue(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
 }
 
 object FeatureSwitches {

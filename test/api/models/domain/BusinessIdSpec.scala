@@ -15,6 +15,7 @@
  */
 
 package api.models.domain
+
 import support.UnitSpec
 
 class BusinessIdSpec extends UnitSpec {

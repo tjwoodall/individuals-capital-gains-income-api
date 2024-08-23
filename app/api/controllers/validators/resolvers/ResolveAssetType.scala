@@ -19,6 +19,7 @@ package api.controllers.validators.resolvers
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
+
 case class ResolveAssetType(error: MtdError) extends ResolverSupport {
 
   val resolver: Resolver[String, String] = value =>
@@ -30,12 +31,13 @@ case class ResolveAssetType(error: MtdError) extends ResolverSupport {
   def apply(value: String): Validated[Seq[MtdError], String] = resolver(value)
 
   def isValid(assetType: String): Boolean = assetType match {
-    case "other-property" => true
+    case "other-property"  => true
     case "unlisted-shares" => true
-    case "listed-shares" => true
-    case "other-asset" => true
-    case _ => false
+    case "listed-shares"   => true
+    case "other-asset"     => true
+    case _                 => false
   }
+
 }
 
 object ResolveAssetType {

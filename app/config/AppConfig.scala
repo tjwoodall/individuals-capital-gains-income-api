@@ -88,6 +88,7 @@ trait AppConfig {
   // API Config
   def apiStatus(version: Version): String
   def endpointsEnabled(version: Version): Boolean
+  def safeEndpointsEnabled(version: String): Boolean
 
   def allowRequestCannotBeFulfilledHeader(version: Version): Boolean
 
@@ -100,10 +101,22 @@ trait AppConfig {
   def apiDocumentationUrl: String
 
   def deprecationFor(version: Version): Validated[String, Deprecation]
+
+  /** Currently only for OAS documentation.
+    */
+  def apiVersionReleasedInProduction(version: String): Boolean
+
+  /** Currently only for OAS documentation.
+    */
+  def endpointReleasedInProduction(version: String, name: String): Boolean
+
+  /** Defaults to false
+    */
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean
 }
 
 @Singleton
-class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configuration) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig, protected[config] val configuration: Configuration) extends AppConfig {
 
   def appName: String = config.getString("appName")
 
@@ -190,7 +203,41 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
   def apiStatus(version: Version): String = config.getString(s"api.${version.name}.status")
 
   def endpointsEnabled(version: Version): Boolean = config.getBoolean(s"api.${version.name}.endpoints.enabled")
-  def featureSwitches: Configuration              = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
+
+  /** Like endpointsEnabled, but will return false if version doesn't exist.
+    */
+  def safeEndpointsEnabled(version: String): Boolean =
+    configuration
+      .getOptional[Boolean](s"api.$version.endpoints.enabled")
+      .getOrElse(false)
+
+  def apiVersionReleasedInProduction(version: String): Boolean =
+    confBoolean(
+      path = s"api.$version.endpoints.api-released-in-production",
+      defaultValue = false
+    )
+
+  def endpointReleasedInProduction(version: String, name: String): Boolean =
+    apiVersionReleasedInProduction(version) &&
+      confBoolean(
+        path = s"api.$version.endpoints.released-in-production.$name",
+        defaultValue = true
+      )
+
+  def featureSwitches: Configuration = configuration.getOptional[Configuration](s"feature-switch").getOrElse(Configuration.empty)
+
+  def endpointAllowsSupportingAgents(endpointName: String): Boolean =
+    supportingAgentEndpoints.getOrElse(endpointName, false)
+
+  /** Can't use config.getConfBool as it's typesafe, and the app-config files use strings.
+    */
+  private def confBoolean(path: String, defaultValue: Boolean): Boolean =
+    if (configuration.underlying.hasPath(path)) config.getBoolean(path) else defaultValue
+
+  private val supportingAgentEndpoints: Map[String, Boolean] =
+    configuration
+      .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
+      .getOrElse(Map.empty)
 
 }
 

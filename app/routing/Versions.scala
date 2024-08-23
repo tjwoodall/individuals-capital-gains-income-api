@@ -22,6 +22,7 @@ import play.api.libs.json._
 import play.api.mvc.RequestHeader
 
 object Version {
+
   def apply(request: RequestHeader): Version =
     Versions.getFromRequest(request).getOrElse(throw new Exception("Missing or unsupported version found in request accept header"))
 

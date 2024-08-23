@@ -33,7 +33,7 @@ class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private val resolveJson = new ResolveNonEmptyJsonObject[CreateAmendCgtPpdOverridesRequestBody]()
+  private val resolveJson         = new ResolveNonEmptyJsonObject[CreateAmendCgtPpdOverridesRequestBody]()
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] =
     new Validator[CreateAmendCgtPpdOverridesRequestData] {

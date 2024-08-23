@@ -43,6 +43,8 @@ class DeleteCgtPpdOverridesController @Inject() (val authService: EnrolmentsAuth
                                                  val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "delete-cgt-ppd-overrides"
+
   implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(
     controllerName = "DeleteCgtPpdOverridesController",
     endpointName = "Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)"

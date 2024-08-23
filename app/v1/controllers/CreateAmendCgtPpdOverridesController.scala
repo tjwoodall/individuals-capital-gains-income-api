@@ -44,6 +44,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
                                                       cc: ControllerComponents,
                                                       val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
+  val endpointName = "create-amend-cgt-ppd-overrides"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
@@ -95,8 +96,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response =
-                  Right(Some(Json.toJson(CreateAmendCgtPpdOverridesAuditData(nino, taxYear)))))
+                AuditResponse(httpStatus = httpStatus, response = Right(Some(Json.toJson(CreateAmendCgtPpdOverridesAuditData(nino, taxYear)))))
               ))
         }
       }

@@ -19,13 +19,13 @@ package api.models.domain
 import play.api.libs.json.Writes
 import utils.enums.Enums
 
-sealed trait AssetType{
+sealed trait AssetType {
   def toDownstreamString: String
 }
 
 object AssetType {
 
-  case object `other-property` extends AssetType{
+  case object `other-property` extends AssetType {
     override def toDownstreamString: String = "otherProperty"
   }
 

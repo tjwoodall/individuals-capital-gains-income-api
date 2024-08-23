@@ -30,9 +30,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendCgtPpdOverridesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createAmend(request: CreateAmendCgtPpdOverridesRequestData)(implicit
-                                                                  hc: HeaderCarrier,
-                                                                  ec: ExecutionContext,
-                                                                  correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     import api.connectors.httpparsers.StandardDownstreamHttpParser._
     val nino    = request.nino.nino

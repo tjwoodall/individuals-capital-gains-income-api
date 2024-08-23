@@ -34,6 +34,8 @@ class RetrieveOtherCgtController @Inject() (val authService: EnrolmentsAuthServi
                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
+  val endpointName = "retrieve-other-cgt"
+
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "RetrieveOtherCgtController", endpointName = "retrieveOtherCgt")
 

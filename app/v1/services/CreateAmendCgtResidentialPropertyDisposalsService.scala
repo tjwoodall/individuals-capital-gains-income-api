@@ -31,8 +31,8 @@ class CreateAmendCgtResidentialPropertyDisposalsService @Inject() (connector: Cr
     extends BaseService {
 
   def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
-                                                                                     ctx: RequestContext,
-                                                                                     ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

@@ -141,10 +141,11 @@ object BadRequestError extends MtdError("INVALID_REQUEST", "Invalid request", BA
 object BVRError        extends MtdError("BUSINESS_ERROR", "Business validation error", BAD_REQUEST)
 
 // Authentication OK but not allowed access to the requested resource
-object ClientOrAgentNotAuthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The client and/or agent is not authorised", FORBIDDEN){
+object ClientOrAgentNotAuthorisedError extends MtdError("CLIENT_OR_AGENT_NOT_AUTHORISED", "The client and/or agent is not authorised", FORBIDDEN) {
   def withStatus401: MtdError = copy(httpStatus = UNAUTHORIZED)
 }
-object InvalidBearerTokenError     extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized", UNAUTHORIZED)
+
+object InvalidBearerTokenError extends MtdError("UNAUTHORIZED", "Bearer token is missing or not authorized", UNAUTHORIZED)
 
 // Accept header Errors
 object InvalidAcceptHeaderError extends MtdError("ACCEPT_HEADER_INVALID", "The accept header is missing or invalid", NOT_ACCEPTABLE)

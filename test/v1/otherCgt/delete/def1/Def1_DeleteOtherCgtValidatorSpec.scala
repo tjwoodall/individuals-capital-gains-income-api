@@ -18,7 +18,7 @@ package v1.otherCgt.delete.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import mocks.MockAppConfig
+import config.MockAppConfig
 import support.UnitSpec
 import v1.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData

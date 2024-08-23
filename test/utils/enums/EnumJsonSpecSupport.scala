@@ -43,12 +43,12 @@ trait EnumJsonSpecSupport {
     }
 
   /** Tests serialization to JSON
-   *
-   * @param namesAndValues
-   * Pairs (object, name) for all the objects in the enumeration under test
-   * @tparam A
-   * the type of enumeration (sealed trait of objects) being tested
-   */
+    *
+    * @param namesAndValues
+    *   Pairs (object, name) for all the objects in the enumeration under test
+    * @tparam A
+    *   the type of enumeration (sealed trait of objects) being tested
+    */
   def testSerialization[A: Writes](namesAndValues: (A, String)*): Unit =
     "JSON writes" must {
       "serialize correctly" in {
@@ -59,12 +59,12 @@ trait EnumJsonSpecSupport {
     }
 
   /** Tests deserialization from JSON
-   *
-   * @param namesAndValues
-   * Pairs (name, object) for all the objects in the enumeration under test
-   * @tparam A
-   * the type of enumeration (sealed trait of objects) being tested
-   */
+    *
+    * @param namesAndValues
+    *   Pairs (name, object) for all the objects in the enumeration under test
+    * @tparam A
+    *   the type of enumeration (sealed trait of objects) being tested
+    */
   def testDeserialization[A: Reads](namesAndValues: (String, A)*): Unit =
     "JSON reads" must {
       "serialize correctly" in {

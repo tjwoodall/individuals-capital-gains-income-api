@@ -17,7 +17,7 @@
 package api.controllers
 
 import api.controllers.validators.Validator
-import api.mocks.MockIdGenerator
+import utils.MockIdGenerator
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.auth.UserDetails
 import api.models.errors.{ErrorWrapper, MtdError, NinoFormatError}
@@ -28,7 +28,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
 import config.Deprecation.{Deprecated, NotDeprecated}
 import config.{AppConfig, Deprecation}
-import mocks.MockAppConfig
+import config.MockAppConfig
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
@@ -43,7 +43,7 @@ import java.time.LocalDateTime
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 
 class RequestHandlerSpec
-  extends UnitSpec
+    extends UnitSpec
     with MockAuditService
     with MockIdGenerator
     with Status

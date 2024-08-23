@@ -31,8 +31,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveAllResidentialPropertyCgtService @Inject() (connector: RetrieveAllResidentialPropertyCgtConnector) extends BaseService {
 
   def retrieve(request: RetrieveAllResidentialPropertyCgtRequestData)(implicit
-                                                                      ctx: RequestContext,
-                                                                      ec: ExecutionContext): Future[ServiceOutcome[RetrieveAllResidentialPropertyCgtResponse]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveAllResidentialPropertyCgtResponse]] = {
 
     connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
 

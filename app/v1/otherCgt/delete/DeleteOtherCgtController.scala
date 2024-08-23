@@ -40,6 +40,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
                                           cc: ControllerComponents,
                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
+  val endpointName = "delete-other-cgt"
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
