@@ -20,8 +20,8 @@ import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
-import v1.ResidentialPropertyDisposals.delete.DeleteCgtNonPpdConnector
-import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdConnector
+import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

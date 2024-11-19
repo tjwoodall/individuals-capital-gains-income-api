@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.ResidentialPropertyDisposals.delete
+package v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.controllers._
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
@@ -27,38 +27,40 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
-import v1.services.DeleteCgtNonPpdService
+import v1.services.DeleteCgtPpdOverridesService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthService,
-                                           val lookupService: MtdIdLookupService,
-                                           validatorFactory: DeleteCgtNonPpdValidatorFactory,
-                                           service: DeleteCgtNonPpdService,
-                                           auditService: AuditService,
-                                           cc: ControllerComponents,
-                                           val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+class DeleteCgtPpdOverridesController @Inject() (val authService: EnrolmentsAuthService,
+                                                 val lookupService: MtdIdLookupService,
+                                                 validatorFactory: DeleteCgtPpdOverridesValidatorFactory,
+                                                 service: DeleteCgtPpdOverridesService,
+                                                 auditService: AuditService,
+                                                 cc: ControllerComponents,
+                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
-  val endpointName = "delete-cgt-non-ppd"
+  val endpointName = "delete-cgt-ppd-overrides"
 
-  implicit val endpointLogContext: EndpointLogContext =
-    EndpointLogContext(
-      controllerName = "DeleteCgtNonPpdController",
-      endpointName = "deleteCgtResidentialPropertyDisposals"
-    )
+  implicit val endpointLogContext: EndpointLogContext = EndpointLogContext(
+    controllerName = "DeleteCgtPpdOverridesController",
+    endpointName = "Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)"
+  )
 
-  def deleteCgtNonPpd(nino: String, taxYear: String): Action[AnyContent] =
+  def deleteCgtPpdOverrides(nino: String, taxYear: String): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, taxYear)
+      val validator = validatorFactory.validator(
+        nino = nino,
+        taxYear = taxYear
+      )
 
       val requestHandler = RequestHandler
         .withValidator(validator)
-        .withService(service.deleteCgtNonPpd)
+        .withService(service.deleteCgtPpdOverrides)
         .withAuditing(auditHandler(nino, taxYear, request))
 
       requestHandler.handleRequest()
@@ -74,9 +76,9 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
           case Left(err: ErrorWrapper) =>
             auditSubmission(
               GenericAuditDetail(
-                request.userDetails,
-                "1.0",
-                Map("nino" -> nino, "taxYear" -> taxYear),
+                userDetails = request.userDetails,
+                apiVersion = "1.0",
+                params = Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
                 AuditResponse(httpStatus = httpStatus, response = Left(err.auditErrors))
@@ -85,9 +87,9 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
           case Right(_: Option[JsValue]) =>
             auditSubmission(
               GenericAuditDetail(
-                request.userDetails,
-                "1.0",
-                Map("nino" -> nino, "taxYear" -> taxYear),
+                userDetails = request.userDetails,
+                apiVersion = "1.0",
+                params = Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
                 AuditResponse(httpStatus = httpStatus, response = Right(None))
@@ -98,7 +100,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
   }
 
   private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
-    val event = AuditEvent("DeleteCgtNonPpd", "Delete-Cgt-Non-Ppd", details)
+    val event = AuditEvent("DeleteCgtPpdOverrides", "Delete-Cgt-Ppd-Overrides", details)
     auditService.auditEvent(event)
   }
 

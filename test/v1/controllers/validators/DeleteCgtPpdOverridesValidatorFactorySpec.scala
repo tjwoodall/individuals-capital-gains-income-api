@@ -20,7 +20,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesValidatorFactory
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 class DeleteCgtPpdOverridesValidatorFactorySpec extends UnitSpec with MockAppConfig {
 

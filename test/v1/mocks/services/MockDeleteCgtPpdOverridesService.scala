@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 import v1.services.DeleteCgtPpdOverridesService
 
 import scala.concurrent.{ExecutionContext, Future}

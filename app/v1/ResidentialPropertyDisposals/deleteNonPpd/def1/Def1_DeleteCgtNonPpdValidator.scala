@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.ResidentialPropertyDisposals.delete.def1
+package v1.ResidentialPropertyDisposals.deleteNonPpd.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
@@ -23,8 +23,8 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v1.ResidentialPropertyDisposals.delete.def1.model.request.Def1_DeleteCgtNonPpdRequestData
-import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.Inject
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
@@ -23,25 +23,20 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
-@Singleton
-class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
+class Def1_DeleteCgtPpdOverridesValidator @Inject()(nino: String, taxYear: String)(appConfig: AppConfig) extends Validator[DeleteCgtPpdOverridesRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
 
-  def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] =
-    new Validator[DeleteCgtPpdOverridesRequestData] {
-
-      def validate: Validated[Seq[MtdError], DeleteCgtPpdOverridesRequestData] =
-        (
-          ResolveNino(nino),
-          resolveTaxYear(taxYear)
-        ).mapN(DeleteCgtPpdOverridesRequestData)
-
-    }
+  def validate: Validated[Seq[MtdError], DeleteCgtPpdOverridesRequestData] =
+    (
+      ResolveNino(nino),
+      resolveTaxYear(taxYear)
+    ).mapN(Def1_DeleteCgtPpdOverridesRequestData)
 
 }

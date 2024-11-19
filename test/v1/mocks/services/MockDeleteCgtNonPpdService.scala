@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 import v1.services.DeleteCgtNonPpdService
 
 import scala.concurrent.{ExecutionContext, Future}

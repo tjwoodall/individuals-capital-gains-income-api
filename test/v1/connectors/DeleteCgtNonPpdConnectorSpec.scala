@@ -19,8 +19,8 @@ package v1.connectors
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.ResidentialPropertyDisposals.delete.DeleteCgtNonPpdConnector
-import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdConnector
+import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 

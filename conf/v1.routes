@@ -1,6 +1,6 @@
 # Capital Gains Tax endpoints
 PUT        /residential-property/:nino/:taxYear/ppd               v1.controllers.CreateAmendCgtPpdOverridesController.createAmendCgtPpdOverrides(nino: String, taxYear: String)
-DELETE     /residential-property/:nino/:taxYear/ppd               v1.controllers.DeleteCgtPpdOverridesController.deleteCgtPpdOverrides(nino: String, taxYear: String)
+DELETE     /residential-property/:nino/:taxYear/ppd               v1.ResidentialPropertyDisposals.DeleteCgtPpdOverrides.DeleteCgtPpdOverridesController.deleteCgtPpdOverrides(nino: String, taxYear: String)
 GET        /residential-property/:nino/:taxYear                   v1.controllers.RetrieveAllResidentialPropertyCgtController.retrieveAll(nino: String, taxYear: String, source: Option[String])
 
 PUT        /residential-property/:nino/:taxYear                   v1.controllers.CreateAmendCgtResidentialPropertyDisposalsController.createAmendCgtResidentialPropertyDisposals(nino: String, taxYear: String)

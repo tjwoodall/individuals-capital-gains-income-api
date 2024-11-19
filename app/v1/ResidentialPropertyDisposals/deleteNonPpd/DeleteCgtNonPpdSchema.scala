@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package v1.ResidentialPropertyDisposals.delete.model.request
+package v1.ResidentialPropertyDisposals.deleteNonPpd
 
-import api.models.domain.{Nino, TaxYear}
+sealed trait DeleteCgtNonPpdSchema
 
-trait DeleteCgtNonPpdRequestData{
-  def nino: Nino
-  def taxYear: TaxYear
+object DeleteCgtNonPpdSchema {
+
+  case object Def1 extends DeleteCgtNonPpdSchema
+
+  val schema: DeleteCgtNonPpdSchema = Def1
+
 }

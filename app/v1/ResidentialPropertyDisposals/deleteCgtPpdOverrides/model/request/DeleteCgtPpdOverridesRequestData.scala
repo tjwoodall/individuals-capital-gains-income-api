@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteCgtPpdOverrides
+package v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteCgtPpdOverridesRequestData(nino: Nino, taxYear: TaxYear)
+trait DeleteCgtPpdOverridesRequestData{
+  def nino: Nino
+  def taxYear: TaxYear
+}

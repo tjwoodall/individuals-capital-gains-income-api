@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.ResidentialPropertyDisposals.deleteNonPpd
 
-import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtPpdOverridesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def deleteCgtPpdOverrides(request: DeleteCgtPpdOverridesRequestData)(implicit
+  def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
@@ -37,12 +37,14 @@ class DeleteCgtPpdOverridesConnector @Inject() (val http: HttpClient, val appCon
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.nino}")
+      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
     } else {
-      DesUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${nino.nino}/${taxYear.asMtd}")
+      // Note: tax year is in MTD format
+      Api1661Uri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }
 
     delete(downstreamUri)
+
   }
 
 }

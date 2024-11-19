@@ -20,7 +20,8 @@ import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{InternalError, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesConnector
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 

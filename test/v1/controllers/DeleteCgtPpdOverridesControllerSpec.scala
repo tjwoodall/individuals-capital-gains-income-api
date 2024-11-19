@@ -27,9 +27,10 @@ import config.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import play.api.Configuration
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesController
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 import v1.controllers.validators.MockDeleteCgtPpdOverridesValidatorFactory
 import v1.mocks.services.MockDeleteCgtPpdOverridesService
-import v1.models.request.deleteCgtPpdOverrides.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

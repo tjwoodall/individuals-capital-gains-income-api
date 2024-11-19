@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package v1.ResidentialPropertyDisposals.delete
+package v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
+import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCgtPpdOverridesConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit
+  def deleteCgtPpdOverrides(request: DeleteCgtPpdOverridesRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
@@ -37,14 +37,12 @@ class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: A
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
+      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.nino}")
     } else {
-      // Note: tax year is in MTD format
-      Api1661Uri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
+      DesUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${nino.nino}/${taxYear.asMtd}")
     }
 
     delete(downstreamUri)
-
   }
 
 }
