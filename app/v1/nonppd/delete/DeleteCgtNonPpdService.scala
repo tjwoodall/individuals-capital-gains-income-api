@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.nonppd.delete
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
-import cats.implicits._
-import v1.nonppd.delete.DeleteCgtNonPpdConnector
+import cats.implicits.toBifunctorOps
 import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) extends BaseService {
+class DeleteCgtNonPpdService @Inject()(connector: DeleteCgtNonPpdConnector) extends BaseService {
 
-  def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def delete(request: DeleteCgtNonPpdRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deleteCgtNonPpd(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }
 
-  val downstreamErrorMap: Map[String, MtdError] = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
@@ -44,14 +43,13 @@ class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) ext
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
 
-    val extraTysErrors: Map[String, MtdError] = Map(
+    val extraTysErrors = Map(
       "INVALID_CORRELATION_ID" -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "NOT_FOUND"              -> NotFoundError
+      "NOT_FOUND"              -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 
     errors ++ extraTysErrors
-
   }
 
 }

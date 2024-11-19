@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.nonppd.delete
 
 import api.controllers._
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
@@ -27,7 +27,6 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
-import v1.controllers.validators.DeleteCgtNonPpdValidatorFactory
 import v1.services.DeleteCgtNonPpdService
 
 import javax.inject.{Inject, Singleton}

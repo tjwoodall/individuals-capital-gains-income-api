@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package v1.models.request.deleteCgtNonPpd
+package v1.nonppd.delete.model.request
 
 import api.models.domain.{Nino, TaxYear}
 
-case class DeleteCgtNonPpdRequestData(nino: Nino, taxYear: TaxYear)
+trait DeleteCgtNonPpdRequestData{
+  def nino: Nino
+  def taxYear: TaxYear
+}

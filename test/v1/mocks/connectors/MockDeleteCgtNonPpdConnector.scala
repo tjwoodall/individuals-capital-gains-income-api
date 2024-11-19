@@ -20,8 +20,8 @@ import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.connectors.DeleteCgtNonPpdConnector
-import v1.models.request.deleteCgtNonPpd.DeleteCgtNonPpdRequestData
+import v1.nonppd.delete.DeleteCgtNonPpdConnector
+import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
