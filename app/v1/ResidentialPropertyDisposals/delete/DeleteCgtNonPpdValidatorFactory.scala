@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.nonppd.delete
+package v1.ResidentialPropertyDisposals.delete
 
 import api.controllers.validators.Validator
 import config.AppConfig
-import v1.nonppd.delete.def1.Def1_DeleteCgtNonPpdValidator
-import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
-import v1.nonppd.delete.DeleteCgtNonPpdSchema.Def1
+import v1.ResidentialPropertyDisposals.delete.def1.Def1_DeleteCgtNonPpdValidator
+import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.delete.DeleteCgtNonPpdSchema.Def1
 
 import javax.inject.Inject
 

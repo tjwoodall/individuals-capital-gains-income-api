@@ -22,8 +22,8 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.nonppd.delete.DeleteCgtNonPpdValidatorFactory
-import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.delete.DeleteCgtNonPpdValidatorFactory
+import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
 
 trait MockDeleteCgtNonPpdValidatorFactory extends MockFactory {
 

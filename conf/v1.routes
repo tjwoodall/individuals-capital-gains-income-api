@@ -9,4 +9,4 @@ PUT        /other-gains/:nino/:taxYear                            v1.otherCgt.cr
 GET        /other-gains/:nino/:taxYear                            v1.otherCgt.retrieve.RetrieveOtherCgtController.retrieveOtherCgt(nino: String, taxYear: String)
 DELETE     /other-gains/:nino/:taxYear                            v1.otherCgt.delete.DeleteOtherCgtController.deleteOtherCgt(nino: String, taxYear: String)
 
-DELETE     /residential-property/:nino/:taxYear                   v1.nonpdp.delete.DeleteCgtNonPpdController.deleteCgtNonPpd(nino: String, taxYear: String)
+DELETE     /residential-property/:nino/:taxYear                   v1.ResidentialPropertyDisposals.delete.DeleteCgtNonPpdController.deleteCgtNonPpd(nino: String, taxYear: String)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.nonppd.delete
+package v1.ResidentialPropertyDisposals.delete
 
 import api.controllers._
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}

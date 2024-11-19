@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.nonppd.delete.def1.model.request
+package v1.ResidentialPropertyDisposals.delete.model.request
 
 import api.models.domain.{Nino, TaxYear}
-import v1.nonppd.delete.DeleteCgtNonPpdSchema
-import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
 
-case class Def1_DeleteCgtNonPpdRequestData(nino: Nino, taxYear: TaxYear) extends DeleteCgtNonPpdRequestData {
-  val schema: DeleteCgtNonPpdSchema = DeleteCgtNonPpdSchema.Def1
+trait DeleteCgtNonPpdRequestData{
+  def nino: Nino
+  def taxYear: TaxYear
 }

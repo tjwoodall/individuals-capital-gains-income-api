@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.nonppd.delete
+package v1.ResidentialPropertyDisposals.delete
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

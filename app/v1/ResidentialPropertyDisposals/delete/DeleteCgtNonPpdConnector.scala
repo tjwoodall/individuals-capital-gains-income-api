@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.nonppd.delete
+package v1.ResidentialPropertyDisposals.delete
 
 import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
 import api.connectors.httpparsers.StandardDownstreamHttpParser._
 import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.nonppd.delete.model.request.DeleteCgtNonPpdRequestData
+import v1.ResidentialPropertyDisposals.delete.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
