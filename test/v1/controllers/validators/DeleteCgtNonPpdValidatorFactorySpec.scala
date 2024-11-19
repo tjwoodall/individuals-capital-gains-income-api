@@ -20,8 +20,8 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.ResidentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdValidatorFactory
-import v1.ResidentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdValidatorFactory
+import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 class DeleteCgtNonPpdValidatorFactorySpec extends UnitSpec with MockAppConfig {
   private implicit val correlationId: String = "1234"

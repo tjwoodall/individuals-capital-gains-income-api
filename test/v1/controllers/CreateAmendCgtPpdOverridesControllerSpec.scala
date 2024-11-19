@@ -30,6 +30,7 @@ import play.api.mvc.{AnyContentAsJson, Result}
 import v1.controllers.validators.MockCreateAmendCgtPpdOverridesValidatorFactory
 import v1.mocks.services.MockCreateAmendCgtPpdOverridesService
 import v1.models.request.createAmendCgtPpdOverrides._
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

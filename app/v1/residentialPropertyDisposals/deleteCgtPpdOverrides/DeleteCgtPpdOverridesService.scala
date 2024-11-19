@@ -14,39 +14,38 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesConnector
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtPpdOverridesService @Inject() (connector: DeleteCgtPpdOverridesConnector) extends BaseService {
+class DeleteCgtPpdOverridesService @Inject()(connector: DeleteCgtPpdOverridesConnector) extends BaseService {
 
-  def deleteCgtPpdOverrides(
-      request: DeleteCgtPpdOverridesRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def delete(request: DeleteCgtPpdOverridesRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.deleteCgtPpdOverrides(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
-      "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"     -> InternalError,
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
-      "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "INVALID_TAX_YEAR" -> TaxYearFormatError,
+      "INVALID_CORRELATIONID" -> InternalError,
+      "NO_DATA_FOUND" -> NotFoundError,
+      "SERVER_ERROR" -> InternalError,
+      "SERVICE_UNAVAILABLE" -> InternalError
     )
 
     val extraTysErrors = Map(
+      "INVALID_CORRELATION_ID" -> InternalError,
+      "NOT_FOUND" -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

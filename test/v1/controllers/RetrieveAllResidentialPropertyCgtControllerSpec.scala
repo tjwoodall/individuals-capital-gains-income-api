@@ -29,6 +29,7 @@ import v1.controllers.validators.MockRetrieveAllResidentialPropertyCgtValidatorF
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
 import v1.mocks.services.MockRetrieveAllResidentialPropertyCgtService
 import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retreiveAll.RetrieveAllResidentialPropertyCgtController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

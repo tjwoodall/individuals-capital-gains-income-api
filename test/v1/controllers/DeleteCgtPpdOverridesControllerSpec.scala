@@ -27,8 +27,8 @@ import config.MockAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import play.api.Configuration
-import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesController
-import v1.ResidentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesController
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 import v1.controllers.validators.MockDeleteCgtPpdOverridesValidatorFactory
 import v1.mocks.services.MockDeleteCgtPpdOverridesService
 
