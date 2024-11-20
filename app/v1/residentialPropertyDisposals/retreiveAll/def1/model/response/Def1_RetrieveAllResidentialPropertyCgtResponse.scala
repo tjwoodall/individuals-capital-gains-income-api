@@ -21,11 +21,14 @@ import play.api.libs.json.{Json, OWrites, Reads}
 import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 case class Def1_RetrieveAllResidentialPropertyCgtResponse(submittedOn: Timestamp,
-                                         disposals: Option[Seq[Disposal]],
-                                         nonStandardGains: Option[NonStandardGains],
-                                         losses: Option[Losses],
-                                         adjustments: Option[BigDecimal])
-    extends RetrieveOtherCgtResponse
+                                                          disposals: Option[Seq[Disposals]],
+                                                          customerAddedDisposals: Option[CustomerAddedDisposals],
+                                                          downstreamSourceEnum: Option[DownstreamSourceEnum],
+                                                          multiplePropertyDisposals: Option[MultiplePropertyDisposals],
+                                                          ppdService: Option[PpdService],
+                                                          singlePropertyDisposals: Option[SinglePropertyDisposals],
+                                                          adjustments: Option[BigDecimal])
+    extends RetrieveAllResidentialPropertyCgtResponse
 
 object Def1_RetrieveOtherCgtResponse {
   implicit val reads: Reads[Def1_RetrieveOtherCgtResponse] = Json.reads[Def1_RetrieveOtherCgtResponse]

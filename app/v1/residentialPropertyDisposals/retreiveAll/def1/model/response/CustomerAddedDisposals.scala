@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retreiveAll.def1.model.response
 
+import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OFormat}
 
-case class PpdService(ppdYearToDate: Option[BigDecimal],
-                      multiplePropertyDisposals: Option[Seq[MultiplePropertyDisposals]],
-                      singlePropertyDisposals: Option[Seq[SinglePropertyDisposals]])
+case class CustomerAddedDisposals(submittedOn: Timestamp, disposals: Seq[Disposals])
 
-object PpdService {
-  implicit val format: OFormat[PpdService] = Json.format[PpdService]
+object CustomerAddedDisposals {
+  implicit val format: OFormat[CustomerAddedDisposals] = Json.format[CustomerAddedDisposals]
 }
