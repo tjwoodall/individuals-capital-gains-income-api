@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retreiveAll.model.request
 
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 
-case class RetrieveAllResidentialPropertyCgtRequestData(nino: Nino, taxYear: TaxYear, source: MtdSourceEnum)
+trait RetrieveAllResidentialPropertyCgtRequestData{
+  def nino: Nino
+  def taxYear: TaxYear
+  def source: MtdSourceEnum
+}

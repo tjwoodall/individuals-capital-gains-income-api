@@ -20,7 +20,8 @@ import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retreiveAll.RetrieveAllResidentialPropertyCgtValidatorFactory
+import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 class RetrieveAllResidentialPropertyCgtValidatorFactorySpec extends UnitSpec with MockAppConfig {
   private implicit val correlationId: String = "1234"

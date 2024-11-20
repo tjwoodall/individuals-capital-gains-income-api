@@ -20,8 +20,9 @@ import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v1.models.request.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtRequestData
-import v1.models.response.retrieveAllResidentialPropertyCgt.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retreiveAll.RetrieveAllResidentialPropertyCgtConnector
+import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.Future
 

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retreiveAll.model.response
 
 import play.api.libs.json.{Json, OFormat}
+import v1.models.response.retrieveAllResidentialPropertyCgt.{CustomerAddedDisposals, PpdService}
 
 case class RetrieveAllResidentialPropertyCgtResponse(ppdService: Option[PpdService], customerAddedDisposals: Option[CustomerAddedDisposals])
 
