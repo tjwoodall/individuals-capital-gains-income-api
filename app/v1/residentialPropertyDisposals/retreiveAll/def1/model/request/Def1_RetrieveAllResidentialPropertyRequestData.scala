@@ -17,9 +17,9 @@
 package v1.residentialPropertyDisposals.retreiveAll.def1.model.request
 
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
-import v1.residentialPropertyDisposals.retreiveAll.RetrieveAllResidentaialPropertySchema
+import v1.residentialPropertyDisposals.retreiveAll.RetrieveAllResidentialPropertyCgtSchema
 import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 case class Def1_RetrieveAllResidentialPropertyRequestData(nino: Nino, taxYear: TaxYear, source: MtdSourceEnum) extends RetrieveAllResidentialPropertyCgtRequestData {
-  val schema: RetrieveAllResidentaialPropertySchema = RetrieveAllResidentaialPropertySchema.Def1
+  val schema: RetrieveAllResidentialPropertyCgtSchema = RetrieveAllResidentialPropertyCgtSchema.Def1
 }

@@ -31,7 +31,7 @@ case class Def1_RetrieveAllResidentialPropertyCgtResponse(submittedOn: Timestamp
     extends RetrieveAllResidentialPropertyCgtResponse
 
 object Def1_RetrieveOtherCgtResponse {
-  implicit val reads: Reads[Def1_RetrieveOtherCgtResponse] = Json.reads[Def1_RetrieveOtherCgtResponse]
+  implicit val reads: Reads[Def1_RetrieveAllResidentialPropertyCgtResponse] = Json.reads[Def1_RetrieveAllResidentialPropertyCgtResponse]
 
-  implicit val writes: OWrites[Def1_RetrieveOtherCgtResponse] = Json.writes[Def1_RetrieveOtherCgtResponse]
+  implicit val writes: OWrites[Def1_RetrieveAllResidentialPropertyCgtResponse] = Json.writes[Def1_RetrieveAllResidentialPropertyCgtResponse]
 }

@@ -34,7 +34,5 @@ class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
     schema match {
       case Def1 => new Def1_RetrieveOtherCgtValidator(nino, taxYear)(appConfig)
     }
-
   }
-
 }
