@@ -9,10 +9,10 @@
       "description": "The date the disposals were submitted to the Report and pay Capital Gains Tax on UK property service. It is in the format YYYY-MM-DDThh:mm:ssZ.",
       "example": "2020-07-06T09:37:17Z"
     },
-    "disposals": {"$ref": "capital_gains_other_definitions.json#/definitions/disposals"},
-    "nonStandardGains": {"$ref": "capital_gains_other_definitions.json#/definitions/nonStandardGains"},
-    "losses": {"$ref": "capital_gains_other_definitions.json#/definitions/losses"},
-    "adjustments": {"$ref": "capital_gains_other_definitions.json#/definitions/adjustments"}
+    "disposals": {"$ref": "../../capital_gains_other_definitions.json#/definitions/disposals"},
+    "nonStandardGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/nonStandardGains"},
+    "losses": {"$ref": "../../capital_gains_other_definitions.json#/definitions/losses"},
+    "adjustments": {"$ref": "../../capital_gains_other_definitions.json#/definitions/adjustments"}
   },
   "required": [
     "submittedOn"
