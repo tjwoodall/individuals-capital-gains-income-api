@@ -23,6 +23,7 @@ import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, CreateAmendCgtPpdOverridesRequestData}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
 
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
 

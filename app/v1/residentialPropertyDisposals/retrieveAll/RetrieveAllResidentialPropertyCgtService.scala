@@ -14,44 +14,46 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
-import cats.implicits._
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdConnector
-import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
+import cats.implicits.toBifunctorOps
+import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) extends BaseService {
+class RetrieveAllResidentialPropertyCgtService @Inject() (connector: RetrieveAllResidentialPropertyCgtConnector) extends BaseService {
 
-  def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+  def retrieve(request: RetrieveAllResidentialPropertyCgtRequestData)(implicit
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[RetrieveAllResidentialPropertyCgtResponse]] = {
 
-    connector.deleteCgtNonPpd(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+    connector.retrieve(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
+
   }
 
-  val downstreamErrorMap: Map[String, MtdError] = {
+  private val downstreamErrorMap: Map[String, MtdError] = {
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+      "INVALID_VIEW"              -> SourceFormatError,
+      "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "NO_DATA_FOUND"             -> NotFoundError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
-
-    val extraTysErrors: Map[String, MtdError] = Map(
+    val extraTysErrors = Map(
       "INVALID_CORRELATION_ID" -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-      "NOT_FOUND"              -> NotFoundError
+      "NOT_FOUND" -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
-
     errors ++ extraTysErrors
-
   }
 
 }

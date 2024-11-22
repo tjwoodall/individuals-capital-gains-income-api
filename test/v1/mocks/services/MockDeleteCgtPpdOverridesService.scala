@@ -20,8 +20,8 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesService
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
-import v1.services.DeleteCgtPpdOverridesService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +34,7 @@ trait MockDeleteCgtPpdOverridesService extends MockFactory {
     def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockDeleteCgtPpdOverridesService
-          .deleteCgtPpdOverrides(_: DeleteCgtPpdOverridesRequestData)(
+          .delete(_: DeleteCgtPpdOverridesRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.syntax.either._
-import v1.connectors.CreateAmendCgtResidentialPropertyDisposalsConnector
 import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import javax.inject.{Inject, Singleton}

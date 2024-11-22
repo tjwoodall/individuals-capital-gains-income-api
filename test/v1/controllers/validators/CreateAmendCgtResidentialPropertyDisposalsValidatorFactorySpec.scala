@@ -23,6 +23,7 @@ import config.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
+import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     extends UnitSpec

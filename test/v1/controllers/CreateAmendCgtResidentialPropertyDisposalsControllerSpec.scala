@@ -30,6 +30,7 @@ import play.api.mvc.Result
 import v1.controllers.validators.MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
+import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -27,7 +27,6 @@ import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
-import v1.services.DeleteCgtNonPpdService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -58,7 +57,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
 
       val requestHandler = RequestHandler
         .withValidator(validator)
-        .withService(service.deleteCgtNonPpd)
+        .withService(service.delete)
         .withAuditing(auditHandler(nino, taxYear, request))
 
       requestHandler.handleRequest()

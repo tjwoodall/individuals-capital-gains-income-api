@@ -24,6 +24,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
 
 trait MockCreateAmendCgtPpdOverridesValidatorFactory extends MockFactory {
 

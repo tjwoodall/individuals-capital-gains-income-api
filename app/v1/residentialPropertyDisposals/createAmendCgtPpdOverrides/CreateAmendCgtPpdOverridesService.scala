@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.controllers.RequestContext
 import api.models.errors._
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import v1.connectors.CreateAmendCgtPpdOverridesConnector
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 
 import javax.inject.{Inject, Singleton}

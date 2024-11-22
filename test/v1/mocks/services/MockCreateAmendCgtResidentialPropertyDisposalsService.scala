@@ -21,7 +21,7 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequestData
-import v1.services.CreateAmendCgtResidentialPropertyDisposalsService
+import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsService
 
 import scala.concurrent.{ExecutionContext, Future}
 

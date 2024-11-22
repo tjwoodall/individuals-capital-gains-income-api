@@ -24,6 +24,7 @@ import config.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesConnector
 
 import scala.concurrent.Future
 

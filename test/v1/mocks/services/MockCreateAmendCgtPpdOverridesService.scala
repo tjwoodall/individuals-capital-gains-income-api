@@ -21,7 +21,7 @@ import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
-import v1.services.CreateAmendCgtPpdOverridesService
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesService
 
 import scala.concurrent.{ExecutionContext, Future}
 

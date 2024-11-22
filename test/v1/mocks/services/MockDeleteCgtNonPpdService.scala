@@ -20,8 +20,8 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdService
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
-import v1.services.DeleteCgtNonPpdService
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +34,7 @@ trait MockDeleteCgtNonPpdService extends MockFactory {
     def deleteCgtNonPpdService(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockDeleteCgtNonPpdService
-          .deleteCgtNonPpd(_: DeleteCgtNonPpdRequestData)(
+          .delete(_: DeleteCgtNonPpdRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

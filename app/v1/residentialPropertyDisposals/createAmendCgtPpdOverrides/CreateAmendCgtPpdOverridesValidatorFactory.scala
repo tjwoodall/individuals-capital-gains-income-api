@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
@@ -24,26 +24,26 @@ import cats.data.Validated
 import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v1.controllers.validators.CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
-import v1.models.request.createAmendCgtResidentialPropertyDisposals._
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
+import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, CreateAmendCgtPpdOverridesRequestData}
 
 import javax.inject.Inject
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private val resolveJson         = new ResolveNonEmptyJsonObject[CreateAmendCgtResidentialPropertyDisposalsRequestBody]()
+  private val resolveJson         = new ResolveNonEmptyJsonObject[CreateAmendCgtPpdOverridesRequestBody]()
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-    new Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] =
+    new Validator[CreateAmendCgtPpdOverridesRequestData] {
 
-      def validate: Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] =
         (
           ResolveNino(nino),
           resolveTaxYear(taxYear),
           resolveJson(body)
-        ).mapN(CreateAmendCgtResidentialPropertyDisposalsRequestData) andThen validateBusinessRules
+        ).mapN(CreateAmendCgtPpdOverridesRequestData) andThen validateBusinessRules
 
     }
 

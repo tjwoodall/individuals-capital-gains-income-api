@@ -24,6 +24,7 @@ import api.services.ServiceSpec
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.mocks.connectors.MockCreateAmendCgtPpdOverridesConnector
 import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesService
 
 import scala.concurrent.Future
 
