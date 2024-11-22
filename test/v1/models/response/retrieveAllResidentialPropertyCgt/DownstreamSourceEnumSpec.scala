@@ -19,7 +19,7 @@ package v1.models.response.retrieveAllResidentialPropertyCgt
 import api.models.domain.MtdSourceEnum
 import support.UnitSpec
 import utils.enums.EnumJsonSpecSupport
-import v1.residentialPropertyDisposals.retreiveAll.def1.model.response.DownstreamSourceEnum
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.DownstreamSourceEnum
 
 class DownstreamSourceEnumSpec extends UnitSpec with EnumJsonSpecSupport {
 

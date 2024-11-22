@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll.def1.model.response
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}

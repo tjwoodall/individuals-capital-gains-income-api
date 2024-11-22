@@ -19,8 +19,8 @@ package v1.models.response.retrieveAllResidentialPropertyCgt
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retreiveAll.def1.model.response.{CustomerAddedDisposals, Disposals, MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
-import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{CustomerAddedDisposals, Disposals, MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
 

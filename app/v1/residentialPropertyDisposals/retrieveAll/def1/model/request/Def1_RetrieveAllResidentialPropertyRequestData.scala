@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll.model.request
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.request
 
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
+import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtSchema
+import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
-trait RetrieveAllResidentialPropertyCgtRequestData{
-  def nino: Nino
-  def taxYear: TaxYear
-  def source: MtdSourceEnum
+case class Def1_RetrieveAllResidentialPropertyRequestData(nino: Nino,
+                                                          taxYear: TaxYear,
+                                                          source: MtdSourceEnum) extends RetrieveAllResidentialPropertyCgtRequestData {
+
+  val schema: RetrieveAllResidentialPropertyCgtSchema = RetrieveAllResidentialPropertyCgtSchema.Def1
 }

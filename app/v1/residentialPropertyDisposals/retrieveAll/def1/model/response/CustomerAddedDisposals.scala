@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll.def1.model.response
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OFormat}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}

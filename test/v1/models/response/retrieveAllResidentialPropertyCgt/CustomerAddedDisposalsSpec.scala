@@ -19,7 +19,7 @@ package v1.models.response.retrieveAllResidentialPropertyCgt
 import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retreiveAll.def1.model.response.{CustomerAddedDisposals, Disposals}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{CustomerAddedDisposals, Disposals}
 
 class CustomerAddedDisposalsSpec extends UnitSpec {
 

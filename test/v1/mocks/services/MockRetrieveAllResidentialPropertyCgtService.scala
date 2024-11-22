@@ -20,8 +20,8 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
-import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 import v1.services.RetrieveAllResidentialPropertyCgtService
 
 import scala.concurrent.{ExecutionContext, Future}

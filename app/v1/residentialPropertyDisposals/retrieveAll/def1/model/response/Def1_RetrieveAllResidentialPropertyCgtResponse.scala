@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll.def1.model.response
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
 import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OWrites, Reads}
-import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 case class Def1_RetrieveAllResidentialPropertyCgtResponse(submittedOn: Timestamp,
                                                           disposals: Option[Seq[Disposals]],
@@ -30,7 +30,7 @@ case class Def1_RetrieveAllResidentialPropertyCgtResponse(submittedOn: Timestamp
                                                           adjustments: Option[BigDecimal])
     extends RetrieveAllResidentialPropertyCgtResponse
 
-object Def1_RetrieveOtherCgtResponse {
+object Def1_RetrieveAllResidentialPropertyCgtResponse {
   implicit val reads: Reads[Def1_RetrieveAllResidentialPropertyCgtResponse] = Json.reads[Def1_RetrieveAllResidentialPropertyCgtResponse]
 
   implicit val writes: OWrites[Def1_RetrieveAllResidentialPropertyCgtResponse] = Json.writes[Def1_RetrieveAllResidentialPropertyCgtResponse]

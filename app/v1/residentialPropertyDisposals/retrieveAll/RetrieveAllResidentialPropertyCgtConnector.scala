@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
-import v1.residentialPropertyDisposals.retreiveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,18 +36,19 @@ class RetrieveAllResidentialPropertyCgtConnector @Inject() (val http: HttpClient
 
     import api.connectors.httpparsers.StandardDownstreamHttpParser._
     import request._
+    import schema._
 
     val view        = source.toDesViewString
     val queryParams = Seq(("view", view))
 
-    val downstreamUri =
-      if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[RetrieveAllResidentialPropertyCgtResponse](
-          s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
-      } else {
-        DesUri[RetrieveAllResidentialPropertyCgtResponse](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
-      }
 
+
+    val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
+      case ty if ty.useTaxYearSpecificApi =>
+        TaxYearSpecificIfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
+      case _ =>
+        DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
+    }
     get(downstreamUri, queryParams)
   }
 

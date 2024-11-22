@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll
+package v1.residentialPropertyDisposals.retrieveAll.def1
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
@@ -22,29 +22,27 @@ import api.models.domain.{MtdSourceEnum, TaxYear}
 import api.models.errors.{MtdError, SourceFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits.catsSyntaxTuple3Semigroupal
+import cats.implicits._
 import config.AppConfig
-import v1.residentialPropertyDisposals.retreiveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
+import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.util.{Failure, Success, Try}
 
-class RetrieveAllResidentialPropertyCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+@Singleton
+class Def1_RetrieveAllResidentialPropertyCgtValidator @Inject()(nino: String, taxYear: String, source: Option[String])(appConfig: AppConfig)
+  extends Validator[RetrieveAllResidentialPropertyCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
 
-  def validator(nino: String, taxYear: String, source: Option[String]): Validator[RetrieveAllResidentialPropertyCgtRequestData] =
-    new Validator[RetrieveAllResidentialPropertyCgtRequestData] {
-
-      def validate: Validated[Seq[MtdError], RetrieveAllResidentialPropertyCgtRequestData] =
-        (
-          ResolveNino(nino),
-          resolveTaxYear(taxYear),
-          resolveMtdSource(source)
-        ).mapN(RetrieveAllResidentialPropertyCgtRequestData)
-
-    }
+  def validate: Validated[Seq[MtdError], RetrieveAllResidentialPropertyCgtRequestData] =
+          (
+            ResolveNino(nino),
+            resolveTaxYear(taxYear),
+            resolveMtdSource(source)
+          ).mapN(Def1_RetrieveAllResidentialPropertyRequestData)
 
   private def resolveMtdSource(maybeSource: Option[String]): Validated[Seq[MtdError], MtdSourceEnum] = {
     maybeSource
@@ -58,5 +56,4 @@ class RetrieveAllResidentialPropertyCgtValidatorFactory @Inject() (appConfig: Ap
       }
       .getOrElse(Valid(MtdSourceEnum.latest))
   }
-
 }

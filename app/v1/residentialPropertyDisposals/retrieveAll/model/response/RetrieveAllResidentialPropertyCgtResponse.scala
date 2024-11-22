@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retreiveAll.model.response
+package v1.residentialPropertyDisposals.retrieveAll.model.response
 
-import play.api.libs.json.{Json, OFormat}
-import v1.residentialPropertyDisposals.retreiveAll.def1.model.response.{CustomerAddedDisposals, PpdService}
+import play.api.libs.json.OWrites
+import utils.JsonWritesUtil.writesFrom
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Def1_RetrieveAllResidentialPropertyCgtResponse
 
 trait RetrieveAllResidentialPropertyCgtResponse
 
 object RetrieveAllResidentialPropertyCgtResponse {
 
-  implicit val format: OFormat[RetrieveAllResidentialPropertyCgtResponse] = Json.format[RetrieveAllResidentialPropertyCgtResponse]
+  //implicit val format: OFormat[RetrieveAllResidentialPropertyCgtResponse] = Json.format[RetrieveAllResidentialPropertyCgtResponse]
 
+  implicit val writes: OWrites[RetrieveAllResidentialPropertyCgtResponse] = writesFrom { case def1: Def1_RetrieveAllResidentialPropertyCgtResponse =>
+    implicitly[OWrites[Def1_RetrieveAllResidentialPropertyCgtResponse]].writes(def1)
+  }
 }
