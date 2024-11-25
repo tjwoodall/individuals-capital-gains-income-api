@@ -22,14 +22,20 @@ import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated._
 import cats.implicits._
-import v1.models.request.createAmendCgtPpdOverrides._
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  Def1_CreateAmendCgtPpdOverridesRequestData,
+  MultiplePropertyDisposals,
+  SinglePropertyDisposals
+}
 
-object CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[CreateAmendCgtPpdOverridesRequestData] {
+object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1_CreateAmendCgtPpdOverridesRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
   private val ppdSubmissionIdRegex           = "^[A-Za-z0-9]{12}$"
 
-  def validateBusinessRules(parsed: CreateAmendCgtPpdOverridesRequestData): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = {
+  def validateBusinessRules(
+      parsed: Def1_CreateAmendCgtPpdOverridesRequestData): Validated[Seq[MtdError], Def1_CreateAmendCgtPpdOverridesRequestData] = {
     import parsed._
     combine(
       validateBothSuppliedDisposals(body),
@@ -37,7 +43,7 @@ object CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[CreateAme
     ).onSuccess(parsed)
   }
 
-  private def validateBothSuppliedDisposals(requestBody: CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
+  private def validateBothSuppliedDisposals(requestBody: Def1_CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
     val BothSuppliedMultiplePropertyValidation = requestBody.multiplePropertyDisposals.fold[Validated[Seq[MtdError], Unit]](Valid(())) { disposals =>
       disposals.zipWithIndex.traverse_ { case (multiplePropertyDisposals, index) =>
         validateBothSuppliedMultipleDisposals(multiplePropertyDisposals, index)
@@ -82,7 +88,7 @@ object CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[CreateAme
     }
   }
 
-  private def validateSuppliedDisposals(requestBody: CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
+  private def validateSuppliedDisposals(requestBody: Def1_CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
     val multiplePropertyPpdValidation = requestBody.multiplePropertyDisposals.fold[Validated[Seq[MtdError], Unit]](Valid(())) { disposals =>
       disposals.zipWithIndex.traverse_ { case (multiplePropertyDisposals, index) =>
         validateMultiplePropertyDisposalsPpdId(multiplePropertyDisposals, index)

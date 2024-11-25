@@ -18,6 +18,7 @@ package v1.models.request.createAmendCgtResidentialPropertyDisposals
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Disposal
 
 class DisposalSpec extends UnitSpec {
 

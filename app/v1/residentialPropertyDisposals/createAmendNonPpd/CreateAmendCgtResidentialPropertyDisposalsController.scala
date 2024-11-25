@@ -27,7 +27,7 @@ import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.IdGenerator
-import v1.models.response.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsAuditData
+import v1.residentialPropertyDisposals.createAmendNonPpd.model.response.CreateAmendCgtResidentialPropertyDisposalsAuditData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

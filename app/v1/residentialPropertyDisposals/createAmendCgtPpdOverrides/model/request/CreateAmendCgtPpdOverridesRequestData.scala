@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request
 
-import play.api.libs.json.{Json, Writes}
+import api.models.domain.{Nino, TaxYear}
 
-case class CreateAmendCgtPpdOverridesAuditData(nino: String, taxYear: String)
-
-object CreateAmendCgtPpdOverridesAuditData {
-  implicit val writes: Writes[CreateAmendCgtPpdOverridesAuditData] = Json.writes[CreateAmendCgtPpdOverridesAuditData]
+trait CreateAmendCgtPpdOverridesRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+  def body: CreateAmendCgtPpdOverridesRequestBody
 
 }

@@ -16,7 +16,9 @@
 
 package v1.fixtures.residentialPropertyDisposals
 
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Disposal}
+import v1.models.request.createAmendCgtResidentialPropertyDisposals.Disposal
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Disposal}
 
 object CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture {
 
@@ -57,7 +59,7 @@ object CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture {
     )
 
   val requestBody: CreateAmendCgtResidentialPropertyDisposalsRequestBody =
-    CreateAmendCgtResidentialPropertyDisposalsRequestBody(
+    request.CreateAmendCgtResidentialPropertyDisposalsRequestBody(
       disposalsModels
     )
 

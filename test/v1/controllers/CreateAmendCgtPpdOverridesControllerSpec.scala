@@ -31,6 +31,7 @@ import v1.controllers.validators.MockCreateAmendCgtPpdOverridesValidatorFactory
 import v1.mocks.services.MockCreateAmendCgtPpdOverridesService
 import v1.models.request.createAmendCgtPpdOverrides._
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesController
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -120,7 +121,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
   )
   //@formatter:on
 
-  val requestData: CreateAmendCgtPpdOverridesRequestData = CreateAmendCgtPpdOverridesRequestData(
+  val requestData: Def1_CreateAmendCgtPpdOverridesRequestData = Def1_CreateAmendCgtPpdOverridesRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel

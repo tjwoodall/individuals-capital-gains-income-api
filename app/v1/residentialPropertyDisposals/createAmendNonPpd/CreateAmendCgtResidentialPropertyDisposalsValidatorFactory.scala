@@ -17,34 +17,23 @@
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
-import v1.models.request.createAmendCgtResidentialPropertyDisposals._
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
+import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
+import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
 
 import javax.inject.Inject
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private val resolveJson         = new ResolveNonEmptyJsonObject[CreateAmendCgtResidentialPropertyDisposalsRequestBody]()
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-    new Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
-
-      def validate: Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-        (
-          ResolveNino(nino),
-          resolveTaxYear(taxYear),
-          resolveJson(body)
-        ).mapN(CreateAmendCgtResidentialPropertyDisposalsRequestData) andThen validateBusinessRules
-
+    val schema = CreateAmendCgtResidentialPropertyDisposalsSchema.schema
+    schema match{
+      case Def1 => new Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)(appConfig)
     }
+  }
 
-}
+
+  }

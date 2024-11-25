@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.request.createAmendCgtResidentialPropertyDisposals
+package v1.residentialPropertyDisposals.createAmendNonPpd.model.response
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Json, Writes}
 
-case class CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals: Seq[Disposal]) {
-  def isEmpty: Boolean = disposals.isEmpty
-}
+case class CreateAmendCgtResidentialPropertyDisposalsAuditData(nino: String, taxYear: String)
 
-object CreateAmendCgtResidentialPropertyDisposalsRequestBody {
+object CreateAmendCgtResidentialPropertyDisposalsAuditData {
 
-  implicit val format: OFormat[CreateAmendCgtResidentialPropertyDisposalsRequestBody] =
-    Json.format[CreateAmendCgtResidentialPropertyDisposalsRequestBody]
+  implicit val writes: Writes[CreateAmendCgtResidentialPropertyDisposalsAuditData] =
+    Json.writes[CreateAmendCgtResidentialPropertyDisposalsAuditData]
 
 }

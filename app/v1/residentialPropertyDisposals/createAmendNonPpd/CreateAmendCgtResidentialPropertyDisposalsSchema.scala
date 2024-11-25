@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.request.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.models.request.RawData
-import play.api.mvc.AnyContentAsJson
 
-case class CreateAmendCgtPpdOverridesRawData(nino: String, taxYear: String, body: AnyContentAsJson, temporalValidationEnabled: Boolean = true)
-    extends RawData
+
+sealed trait CreateAmendCgtResidentialPropertyDisposalsSchema
+
+object CreateAmendCgtResidentialPropertyDisposalsSchema {
+
+  case object Def1 extends CreateAmendCgtResidentialPropertyDisposalsSchema
+
+  val schema: CreateAmendCgtResidentialPropertyDisposalsSchema = Def1
+
+}

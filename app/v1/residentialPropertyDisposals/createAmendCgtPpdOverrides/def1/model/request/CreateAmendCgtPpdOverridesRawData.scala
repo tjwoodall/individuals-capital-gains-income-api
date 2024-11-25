@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v1.models.request.createAmendCgtResidentialPropertyDisposals
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import api.models.request.RawData
+import play.api.mvc.AnyContentAsJson
 
-case class CreateAmendCgtResidentialPropertyDisposalsRequestData(nino: Nino,
-                                                                 taxYear: TaxYear,
-                                                                 body: CreateAmendCgtResidentialPropertyDisposalsRequestBody)
+case class CreateAmendCgtPpdOverridesRawData(nino: String, taxYear: String, body: AnyContentAsJson, temporalValidationEnabled: Boolean = true)
+    extends RawData

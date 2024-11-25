@@ -31,6 +31,7 @@ import v1.controllers.validators.MockCreateAmendCgtResidentialPropertyDisposalsV
 import v1.mocks.services._
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
 import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsController
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -95,7 +96,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     )
   )
 
-  val requestData: CreateAmendCgtResidentialPropertyDisposalsRequestData = CreateAmendCgtResidentialPropertyDisposalsRequestData(
+  val requestData: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData = Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel

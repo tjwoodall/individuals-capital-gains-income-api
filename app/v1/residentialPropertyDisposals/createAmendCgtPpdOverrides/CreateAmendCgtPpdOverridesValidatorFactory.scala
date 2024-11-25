@@ -17,34 +17,22 @@
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
-import cats.data.Validated
-import cats.implicits._
 import config.AppConfig
 import play.api.libs.json.JsValue
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
-import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, CreateAmendCgtPpdOverridesRequestData}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesSchema.Def1
 
 import javax.inject.Inject
 
 class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private val resolveJson         = new ResolveNonEmptyJsonObject[CreateAmendCgtPpdOverridesRequestBody]()
+  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] = {
 
-  def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] =
-    new Validator[CreateAmendCgtPpdOverridesRequestData] {
-
-      def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] =
-        (
-          ResolveNino(nino),
-          resolveTaxYear(taxYear),
-          resolveJson(body)
-        ).mapN(CreateAmendCgtPpdOverridesRequestData) andThen validateBusinessRules
-
+    val schema = CreateAmendCgtPpdOverridesSchema.schema
+    schema match {
+      case Def1 => new Def1_CreateAmendCgtPpdOverridesValidator(nino, taxYear, body)(appConfig)
     }
+  }
 
 }

@@ -23,8 +23,8 @@ import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.mocks.connectors.MockCreateAmendCgtPpdOverridesConnector
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesService
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
@@ -33,7 +33,7 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  val createAmendCgtPpdOverridesRequest: CreateAmendCgtPpdOverridesRequestData = CreateAmendCgtPpdOverridesRequestData(
+  val createAmendCgtPpdOverridesRequest: Def1_CreateAmendCgtPpdOverridesRequestData = Def1_CreateAmendCgtPpdOverridesRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestBodyModel

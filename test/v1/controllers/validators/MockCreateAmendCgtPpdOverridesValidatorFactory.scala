@@ -23,8 +23,8 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
-import v1.models.request.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 trait MockCreateAmendCgtPpdOverridesValidatorFactory extends MockFactory {
 
@@ -33,28 +33,28 @@ trait MockCreateAmendCgtPpdOverridesValidatorFactory extends MockFactory {
 
   object MockedCreateAmendCgtPpdOverridesValidatorFactory {
 
-    def validator(): CallHandler[Validator[CreateAmendCgtPpdOverridesRequestData]] =
+    def validator(): CallHandler[Validator[Def1_CreateAmendCgtPpdOverridesRequestData]] =
       (mockCreateAmendCgtPpdOverridesValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
 
   }
 
-  def willUseValidator(use: Validator[CreateAmendCgtPpdOverridesRequestData]): CallHandler[Validator[CreateAmendCgtPpdOverridesRequestData]] = {
+  def willUseValidator(use: Validator[Def1_CreateAmendCgtPpdOverridesRequestData]): CallHandler[Validator[Def1_CreateAmendCgtPpdOverridesRequestData]] = {
     MockedCreateAmendCgtPpdOverridesValidatorFactory
       .validator()
       .anyNumberOfTimes()
       .returns(use)
   }
 
-  def returningSuccess(result: CreateAmendCgtPpdOverridesRequestData): Validator[CreateAmendCgtPpdOverridesRequestData] =
-    new Validator[CreateAmendCgtPpdOverridesRequestData] {
-      def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = Valid(result)
+  def returningSuccess(result: Def1_CreateAmendCgtPpdOverridesRequestData): Validator[Def1_CreateAmendCgtPpdOverridesRequestData] =
+    new Validator[Def1_CreateAmendCgtPpdOverridesRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_CreateAmendCgtPpdOverridesRequestData] = Valid(result)
     }
 
-  def returning(result: MtdError*): Validator[CreateAmendCgtPpdOverridesRequestData] = returningErrors(result)
+  def returning(result: MtdError*): Validator[Def1_CreateAmendCgtPpdOverridesRequestData] = returningErrors(result)
 
-  def returningErrors(result: Seq[MtdError]): Validator[CreateAmendCgtPpdOverridesRequestData] =
-    new Validator[CreateAmendCgtPpdOverridesRequestData] {
-      def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = Invalid(result)
+  def returningErrors(result: Seq[MtdError]): Validator[Def1_CreateAmendCgtPpdOverridesRequestData] =
+    new Validator[Def1_CreateAmendCgtPpdOverridesRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_CreateAmendCgtPpdOverridesRequestData] = Invalid(result)
     }
 
 }

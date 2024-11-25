@@ -18,6 +18,7 @@ package v1.models.request.createAmendCgtPpdOverrides
 
 import play.api.libs.json.{JsError, JsValue, Json}
 import support.UnitSpec
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{MultiplePropertyDisposals, SinglePropertyDisposals}
 
 class SinglePropertyDisposalsSpec extends UnitSpec {
 

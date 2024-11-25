@@ -22,6 +22,7 @@ import api.models.outcomes.ResponseWrapper
 import v1.fixtures.residentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture._
 import v1.models.request.createAmendCgtResidentialPropertyDisposals._
 import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsConnector
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future
 
@@ -38,8 +39,8 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends ConnectorS
 
     val taxYear: TaxYear
 
-    val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequestData =
-      CreateAmendCgtResidentialPropertyDisposalsRequestData(
+    val createAmendCgtResidentialPropertyDisposalsRequest: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData =
+      Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
         nino = Nino(nino),
         taxYear = taxYear,
         body = requestBody

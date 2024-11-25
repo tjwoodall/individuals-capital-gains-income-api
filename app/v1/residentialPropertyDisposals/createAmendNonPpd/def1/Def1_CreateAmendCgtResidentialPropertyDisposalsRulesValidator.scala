@@ -22,15 +22,15 @@ import api.models.errors.{CustomerRefFormatError, DateFormatError, MtdError, Rul
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits._
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.{CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
-object CreateAmendCgtResidentialPropertyDisposalsRulesValidator extends RulesValidator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
+object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator extends RulesValidator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
   private val regex                          = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
 
-  def validateBusinessRules(parsed: CreateAmendCgtResidentialPropertyDisposalsRequestData)
-      : Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
+  def validateBusinessRules(parsed: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData)
+      : Validated[Seq[MtdError], Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
     import parsed.body._
 

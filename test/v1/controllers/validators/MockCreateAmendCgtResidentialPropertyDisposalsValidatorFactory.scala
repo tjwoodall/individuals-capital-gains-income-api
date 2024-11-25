@@ -23,8 +23,8 @@ import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsRequestData
 import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 trait MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory extends MockFactory {
 
@@ -33,13 +33,13 @@ trait MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory extends Moc
 
   object MockCreateAmendCgtResidentialPropertyDisposalsFactory {
 
-    def validator(): CallHandler[Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData]] =
+    def validator(): CallHandler[Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData]] =
       (mockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
 
   }
 
-  def willUseValidator(use: Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData])
-      : CallHandler[Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData]] = {
+  def willUseValidator(use: Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData])
+      : CallHandler[Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData]] = {
     MockCreateAmendCgtResidentialPropertyDisposalsFactory
       .validator()
       .anyNumberOfTimes()
@@ -47,16 +47,16 @@ trait MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory extends Moc
   }
 
   def returningSuccess(
-      result: CreateAmendCgtResidentialPropertyDisposalsRequestData): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-    new Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
-      def validate: Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsRequestData] = Valid(result)
+      result: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData): Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+    new Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = Valid(result)
     }
 
-  def returning(result: MtdError*): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = returningErrors(result)
+  def returning(result: MtdError*): Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = returningErrors(result)
 
-  def returningErrors(result: Seq[MtdError]): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-    new Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
-      def validate: Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsRequestData] = Invalid(result)
+  def returningErrors(result: Seq[MtdError]): Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+    new Validator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
+      def validate: Validated[Seq[MtdError], Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = Invalid(result)
     }
 
 }

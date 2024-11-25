@@ -18,6 +18,8 @@ package v1.models.request.createAmendCgtPpdOverrides
 
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
 
@@ -117,7 +119,7 @@ class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
     )
 
   val mtdRequestBody: CreateAmendCgtPpdOverridesRequestBody =
-    CreateAmendCgtPpdOverridesRequestBody(
+    request.CreateAmendCgtPpdOverridesRequestBody(
       Some(multiplePropertyDisposalsModels),
       Some(singlePropertyDisposalsModels)
     )

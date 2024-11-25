@@ -16,7 +16,8 @@
 
 package v1.fixtures.overrides
 
-import v1.models.request.createAmendCgtPpdOverrides.{CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 object CreateAmendCgtPpdOverridesServiceConnectorFixture {
 
@@ -69,7 +70,7 @@ object CreateAmendCgtPpdOverridesServiceConnectorFixture {
     )
 
   val requestBodyModel: CreateAmendCgtPpdOverridesRequestBody =
-    CreateAmendCgtPpdOverridesRequestBody(
+    request.CreateAmendCgtPpdOverridesRequestBody(
       Some(multiplePropertyDisposalsModels),
       Some(singlePropertyDisposalsModels)
     )

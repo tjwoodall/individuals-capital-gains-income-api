@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response.createAmendCgtResidentialPropertyDisposals
+package v1.residentialPropertyDisposals.createAmendNonPpd.model.request
 
-import play.api.libs.json.{Json, Writes}
+import api.models.domain.{Nino, TaxYear}
 
-case class CreateAmendCgtResidentialPropertyDisposalsAuditData(nino: String, taxYear: String)
-
-object CreateAmendCgtResidentialPropertyDisposalsAuditData {
-
-  implicit val writes: Writes[CreateAmendCgtResidentialPropertyDisposalsAuditData] =
-    Json.writes[CreateAmendCgtResidentialPropertyDisposalsAuditData]
+trait CreateAmendCgtResidentialPropertyDisposalsRequestData {
+  def nino: Nino
+  def taxYear: TaxYear
+  def body: CreateAmendCgtResidentialPropertyDisposalsRequestBody
 
 }
