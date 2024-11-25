@@ -33,12 +33,12 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: './schemas/capital_gains_other_amend_request.json'
+        $ref: './schemas/capital_gains_other_create_amend/def1/request.json'
       examples:
         example-1:
           description: Other Capital Gains and Disposals with Gains
           value:
-            $ref: './examples/cgt/other/amend_request.json'
+            $ref: './examples/capital_gains_other_create_amend/def1/request.json'
 
 responses:
   "200":

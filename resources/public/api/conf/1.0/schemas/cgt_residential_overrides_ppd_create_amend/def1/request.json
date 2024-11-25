@@ -7,12 +7,12 @@
     "multiplePropertyDisposals": {
       "type": "array",
       "description": "Details about the property disposals.",
-      "items": {"$ref": "cgt_overrides_definitions.json#/definitions/multiplePropertyDisposals"}
+      "items": {"$ref": "../../cgt_overrides_definitions.json#/definitions/multiplePropertyDisposals"}
     },
     "singlePropertyDisposals": {
       "type": "array",
       "description": "Details about the single property disposals.",
-      "items": {"$ref": "cgt_overrides_definitions.json#/definitions/singlePropertyDisposals"}
+      "items": {"$ref": "../../cgt_overrides_definitions.json#/definitions/singlePropertyDisposals"}
     }
   }
 }

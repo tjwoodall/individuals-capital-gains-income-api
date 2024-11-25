@@ -67,4 +67,4 @@ paths:
   /individuals/disposals-income/residential-property/{nino}/{taxYear}/ppd:
     $ref: "./cgt_residential_ppd.yaml"
   /individuals/disposals-income/other-gains/{nino}/{taxYear}:
-    $ref: "./cgt_other.yaml"
+    $ref: "./capital_gains_other.yaml"
