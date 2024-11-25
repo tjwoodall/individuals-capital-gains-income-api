@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.residentialPropertyDisposals.retrieveAll
 
-import api.connectors.DownstreamOutcome
+import api.controllers.RequestContext
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import uk.gov.hmrc.http.HeaderCarrier
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtConnector
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveAllResidentialPropertyCgtConnector extends MockFactory {
+trait MockRetrieveAllResidentialPropertyCgtService extends MockFactory {
 
-  val mockRetrieveAllResidentialPropertyCgtConnector: RetrieveAllResidentialPropertyCgtConnector = mock[RetrieveAllResidentialPropertyCgtConnector]
+  val mockRetrieveAllResidentialPropertyCgtService: RetrieveAllResidentialPropertyCgtService = mock[RetrieveAllResidentialPropertyCgtService]
 
-  object MockRetrieveAllResidentialPropertyCgtConnector {
+  object MockRetrieveAllResidentialPropertyCgtService {
 
-    def retrieve(requestData: RetrieveAllResidentialPropertyCgtRequestData)
-        : CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]] =
-      (mockRetrieveAllResidentialPropertyCgtConnector
-        .retrieve(_: RetrieveAllResidentialPropertyCgtRequestData)(
-          _: HeaderCarrier,
-          _: ExecutionContext,
-          _: String
-        ))
-        .expects(requestData, *, *, *)
+    def retrieve(
+        requestData: RetrieveAllResidentialPropertyCgtRequestData): CallHandler[Future[ServiceOutcome[RetrieveAllResidentialPropertyCgtResponse]]] = {
+      (
+        mockRetrieveAllResidentialPropertyCgtService
+          .retrieve(_: RetrieveAllResidentialPropertyCgtRequestData)(
+            _: RequestContext,
+            _: ExecutionContext
+          )
+        )
+        .expects(requestData, *, *)
+    }
 
   }
 

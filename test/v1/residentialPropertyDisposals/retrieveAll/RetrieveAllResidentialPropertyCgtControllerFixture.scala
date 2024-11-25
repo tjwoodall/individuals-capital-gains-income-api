@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.fixtures
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsObject, JsValue, Json}
-import v1.models.response.retrieveAllResidentialPropertyCgt._
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{CustomerAddedDisposals, Disposals, MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 object RetrieveAllResidentialPropertyCgtControllerFixture {
@@ -88,10 +87,12 @@ object RetrieveAllResidentialPropertyCgtControllerFixture {
       Seq(disposals)
     )
 
-  val responseModel: RetrieveAllResidentialPropertyCgtResponse =
-    RetrieveAllResidentialPropertyCgtResponse(
+  val responseModel: Def1_RetrieveAllResidentialPropertyCgtResponse =
+    Def1_RetrieveAllResidentialPropertyCgtResponse(
       Some(ppdService),
-      Some(customerAddedDisposals)
+      Some(customerAddedDisposals),
+      Some(disposals),
+
     )
 
   val mtdJson: JsValue = Json

@@ -14,29 +14,27 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtService
-import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
-import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveAllResidentialPropertyCgtService extends MockFactory {
+trait MockCreateAmendCgtResidentialPropertyDisposalsService extends MockFactory {
 
-  val mockRetrieveAllResidentialPropertyCgtService: RetrieveAllResidentialPropertyCgtService = mock[RetrieveAllResidentialPropertyCgtService]
+  val mockCreateAmendCgtResidentialPropertyDisposalsService: CreateAmendCgtResidentialPropertyDisposalsService =
+    mock[CreateAmendCgtResidentialPropertyDisposalsService]
 
-  object MockRetrieveAllResidentialPropertyCgtService {
+  object MockCreateAmendCgtResidentialPropertyDisposalsService {
 
-    def retrieve(
-        requestData: RetrieveAllResidentialPropertyCgtRequestData): CallHandler[Future[ServiceOutcome[RetrieveAllResidentialPropertyCgtResponse]]] = {
+    def createAndAmend(requestData: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
-        mockRetrieveAllResidentialPropertyCgtService
-          .retrieve(_: RetrieveAllResidentialPropertyCgtRequestData)(
+        mockCreateAmendCgtResidentialPropertyDisposalsService
+          .createAndAmend(_: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

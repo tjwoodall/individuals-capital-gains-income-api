@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsService
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtResidentialPropertyDisposalsService extends MockFactory {
+trait MockDeleteCgtPpdOverridesService extends MockFactory {
 
-  val mockCreateAmendCgtResidentialPropertyDisposalsService: CreateAmendCgtResidentialPropertyDisposalsService =
-    mock[CreateAmendCgtResidentialPropertyDisposalsService]
+  val mockDeleteCgtPpdOverridesService: DeleteCgtPpdOverridesService = mock[DeleteCgtPpdOverridesService]
 
-  object MockCreateAmendCgtResidentialPropertyDisposalsService {
+  object MockDeleteCgtPpdOverridesService {
 
-    def createAndAmend(requestData: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
-        mockCreateAmendCgtResidentialPropertyDisposalsService
-          .createAndAmend(_: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData)(
+        mockDeleteCgtPpdOverridesService
+          .delete(_: DeleteCgtPpdOverridesRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

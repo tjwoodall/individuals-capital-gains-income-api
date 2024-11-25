@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesConnector
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtPpdOverridesConnector extends MockFactory {
+trait MockDeleteCgtPpdOverridesConnector extends MockFactory {
 
-  val mockCreateAmendCgtPpdOverridesConnector: CreateAmendCgtPpdOverridesConnector = mock[CreateAmendCgtPpdOverridesConnector]
+  val mockDeleteCgtPpdOverridesConnector: DeleteCgtPpdOverridesConnector = mock[DeleteCgtPpdOverridesConnector]
 
-  object MockCreateAmendCgtPpdOverridesConnector {
+  object MockDeleteCgtPpdOverridesConnector {
 
-    def createAmend(request: Def1_CreateAmendCgtPpdOverridesRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
-      (mockCreateAmendCgtPpdOverridesConnector
-        .createAmend(_: Def1_CreateAmendCgtPpdOverridesRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(request, *, *, *)
+    def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+      (mockDeleteCgtPpdOverridesConnector
+        .deleteCgtPpdOverrides(_: DeleteCgtPpdOverridesRequestData)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
 
   }

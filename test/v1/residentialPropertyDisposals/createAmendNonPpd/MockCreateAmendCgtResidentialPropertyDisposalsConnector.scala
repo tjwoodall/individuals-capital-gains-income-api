@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-package v1.mocks.connectors
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdConnector
-import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtNonPpdConnector extends MockFactory {
+trait MockCreateAmendCgtResidentialPropertyDisposalsConnector extends MockFactory {
 
-  val mockDeleteCgtNonPpdConnector: DeleteCgtNonPpdConnector =
-    mock[DeleteCgtNonPpdConnector]
+  val mockCreateAmendCgtResidentialPropertyDisposalsConnector: CreateAmendCgtResidentialPropertyDisposalsConnector =
+    mock[CreateAmendCgtResidentialPropertyDisposalsConnector]
 
-  object MockDeleteCgtNonPpdConnector {
+  object MockCreateAmendCgtResidentialPropertyDisposalsConnector {
 
-    def deleteCgtNonPpdConnector(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
+    def createAndAmend(request: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
-        mockDeleteCgtNonPpdConnector
-          .deleteCgtNonPpd(_: DeleteCgtNonPpdRequestData)(
+        mockCreateAmendCgtResidentialPropertyDisposalsConnector
+          .createAndAmend(_: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData)(
             _: HeaderCarrier,
             _: ExecutionContext,
             _: String
           )
         )
-        .expects(requestData, *, *, *)
+        .expects(request, *, *, *)
     }
 
   }

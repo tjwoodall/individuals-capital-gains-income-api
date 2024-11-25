@@ -27,7 +27,6 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import utils.MockIdGenerator
-import v1.controllers.validators.MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v1.mocks.services._
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 

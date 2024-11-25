@@ -22,8 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.connectors.MockRetrieveAllResidentialPropertyCgtConnector
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtService
+import v1.residentialPropertyDisposals.retrieveAll.{MockRetrieveAllResidentialPropertyCgtConnector, RetrieveAllResidentialPropertyCgtService}
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.PpdService
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse

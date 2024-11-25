@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.controllers.validators.Validator
 import api.models.errors.MtdError
@@ -22,7 +22,6 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 trait MockRetrieveAllResidentialPropertyCgtValidatorFactory extends MockFactory {

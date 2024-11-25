@@ -22,8 +22,8 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.MockDeleteCgtPpdOverridesConnector
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
-import v1.mocks.connectors.MockDeleteCgtPpdOverridesConnector
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

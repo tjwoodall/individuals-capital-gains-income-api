@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.controllers.requestParsers.validators.validations.ValueFormatErrorMessages
 import api.models.domain.{Nino, TaxYear}
@@ -22,8 +22,7 @@ import api.models.errors._
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
 

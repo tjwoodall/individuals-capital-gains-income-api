@@ -14,32 +14,33 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.residentialPropertyDisposals.deleteNonPpd
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
+import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdService
+import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtNonPpdService extends MockFactory {
+trait MockDeleteCgtNonPpdConnector extends MockFactory {
 
-  val mockDeleteCgtNonPpdService: DeleteCgtNonPpdService = mock[DeleteCgtNonPpdService]
+  val mockDeleteCgtNonPpdConnector: DeleteCgtNonPpdConnector =
+    mock[DeleteCgtNonPpdConnector]
 
-  object MockDeleteCgtNonPpdService {
+  object MockDeleteCgtNonPpdConnector {
 
-    def deleteCgtNonPpdService(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def deleteCgtNonPpdConnector(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (
-        mockDeleteCgtNonPpdService
-          .delete(_: DeleteCgtNonPpdRequestData)(
-            _: RequestContext,
-            _: ExecutionContext
+        mockDeleteCgtNonPpdConnector
+          .deleteCgtNonPpd(_: DeleteCgtNonPpdRequestData)(
+            _: HeaderCarrier,
+            _: ExecutionContext,
+            _: String
           )
         )
-        .expects(requestData, *, *)
+        .expects(requestData, *, *, *)
     }
 
   }

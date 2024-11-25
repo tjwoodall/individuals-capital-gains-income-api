@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.validators.Validator
 import api.models.errors.MtdError
@@ -22,7 +22,6 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdValidatorFactory
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 trait MockDeleteCgtNonPpdValidatorFactory extends MockFactory {

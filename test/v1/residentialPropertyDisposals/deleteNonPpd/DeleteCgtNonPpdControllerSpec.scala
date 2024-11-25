@@ -27,8 +27,6 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import utils.MockIdGenerator
-import v1.controllers.validators.MockDeleteCgtNonPpdValidatorFactory
-import v1.mocks.services.MockDeleteCgtNonPpdService
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

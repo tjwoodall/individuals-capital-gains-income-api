@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdValidatorFactory
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 class DeleteCgtNonPpdValidatorFactorySpec extends UnitSpec with MockAppConfig {

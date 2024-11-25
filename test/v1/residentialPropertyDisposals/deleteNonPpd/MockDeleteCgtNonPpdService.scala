@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package v1.mocks.services
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesService
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtPpdOverridesService extends MockFactory {
+trait MockDeleteCgtNonPpdService extends MockFactory {
 
-  val mockDeleteCgtPpdOverridesService: DeleteCgtPpdOverridesService = mock[DeleteCgtPpdOverridesService]
+  val mockDeleteCgtNonPpdService: DeleteCgtNonPpdService = mock[DeleteCgtNonPpdService]
 
-  object MockDeleteCgtPpdOverridesService {
+  object MockDeleteCgtNonPpdService {
 
-    def deleteCgtPpdOverrides(requestData: DeleteCgtPpdOverridesRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def deleteCgtNonPpdService(requestData: DeleteCgtNonPpdRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
-        mockDeleteCgtPpdOverridesService
-          .delete(_: DeleteCgtPpdOverridesRequestData)(
+        mockDeleteCgtNonPpdService
+          .delete(_: DeleteCgtNonPpdRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

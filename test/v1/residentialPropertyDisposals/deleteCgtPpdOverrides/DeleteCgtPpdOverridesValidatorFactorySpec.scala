@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesValidatorFactory
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 class DeleteCgtPpdOverridesValidatorFactorySpec extends UnitSpec with MockAppConfig {
 

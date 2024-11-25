@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.requestParsers.validators.validations.{DisposalDateErrorMessages, ValueFormatErrorMessages}
 import api.models.domain.{Nino, TaxYear}
@@ -22,9 +22,7 @@ import api.models.errors._
 import config.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
-import v1.models.request.createAmendCgtResidentialPropertyDisposals._
-import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     extends UnitSpec

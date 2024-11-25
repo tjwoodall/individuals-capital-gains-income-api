@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.controllers.validators
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
 import config.MockAppConfig
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 class RetrieveAllResidentialPropertyCgtValidatorFactorySpec extends UnitSpec with MockAppConfig {

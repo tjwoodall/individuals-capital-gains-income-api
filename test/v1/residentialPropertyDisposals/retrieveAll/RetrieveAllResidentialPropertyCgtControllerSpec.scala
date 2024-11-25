@@ -25,9 +25,7 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.mvc.Result
 import utils.MockIdGenerator
-import v1.controllers.validators.MockRetrieveAllResidentialPropertyCgtValidatorFactory
-import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
-import v1.mocks.services.MockRetrieveAllResidentialPropertyCgtService
+import RetrieveAllResidentialPropertyCgtControllerFixture._
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
