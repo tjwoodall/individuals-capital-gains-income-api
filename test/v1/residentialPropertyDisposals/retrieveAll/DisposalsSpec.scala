@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retrieveAll
 
-import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{CustomerAddedDisposals, Disposals}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Disposals
 
-class CustomerAddedDisposalsSpec extends UnitSpec {
+class DisposalsSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "submittedOn": "2020-07-06T09:37:17.000Z",
-      |    "disposals": [
-      |      {
       |        "customerReference": "CGTDISPOSAL01",
       |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
@@ -42,18 +38,13 @@ class CustomerAddedDisposalsSpec extends UnitSpec {
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfNetLoss": 1999.99
-      |      }
-      |    ]
-      |  }
+      |}
       |""".stripMargin
   )
 
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "submittedOn": "2020-07-06T09:37:17Z",
-      |    "disposals": [
-      |      {
       |        "customerReference": "CGTDISPOSAL01",
       |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
@@ -67,13 +58,11 @@ class CustomerAddedDisposalsSpec extends UnitSpec {
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfLoss": 1999.99
-      |      }
-      |    ]
-      |  }
+      |}
       |""".stripMargin
   )
 
-  val disposals: Disposals = Disposals(
+  val model: Disposals = Disposals(
     Some("CGTDISPOSAL01"),
     "2022-02-04",
     "2022-03-08",
@@ -90,17 +79,11 @@ class CustomerAddedDisposalsSpec extends UnitSpec {
     Some(1999.99)
   )
 
-  val model: CustomerAddedDisposals =
-    CustomerAddedDisposals(
-      Timestamp("2020-07-06T09:37:17.000Z"),
-      Seq(disposals)
-    )
-
-  "CustomerAddedDisposals" when {
+  "Disposals" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[CustomerAddedDisposals] shouldBe model
+          desJson.as[Disposals] shouldBe model
         }
       }
     }

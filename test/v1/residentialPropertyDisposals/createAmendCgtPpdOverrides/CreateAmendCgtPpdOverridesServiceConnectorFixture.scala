@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package v1.fixtures.overrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 object CreateAmendCgtPpdOverridesServiceConnectorFixture {
 
@@ -69,8 +69,8 @@ object CreateAmendCgtPpdOverridesServiceConnectorFixture {
       )
     )
 
-  val requestBodyModel: CreateAmendCgtPpdOverridesRequestBody =
-    request.CreateAmendCgtPpdOverridesRequestBody(
+  val requestBodyModel: Def1_CreateAmendCgtPpdOverridesRequestBody =
+    request.Def1_CreateAmendCgtPpdOverridesRequestBody(
       Some(multiplePropertyDisposalsModels),
       Some(singlePropertyDisposalsModels)
     )

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.models.request.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
 
@@ -118,8 +118,8 @@ class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
       )
     )
 
-  val mtdRequestBody: CreateAmendCgtPpdOverridesRequestBody =
-    request.CreateAmendCgtPpdOverridesRequestBody(
+  val mtdRequestBody: Def1_CreateAmendCgtPpdOverridesRequestBody =
+    request.Def1_CreateAmendCgtPpdOverridesRequestBody(
       Some(multiplePropertyDisposalsModels),
       Some(singlePropertyDisposalsModels)
     )
@@ -223,19 +223,19 @@ class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
   "CreateAmendPpdOverridesRequestBody" when {
     "read from a valid JSON" should {
       "produce the expected object" in {
-        mtdJson.as[CreateAmendCgtPpdOverridesRequestBody] shouldBe mtdRequestBody
+        mtdJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody] shouldBe mtdRequestBody
       }
     }
 
     "read from invalid Json" should {
       "provide a JsError" in {
-        invalidJson.validate[CreateAmendCgtPpdOverridesRequestBody] shouldBe a[JsError]
+        invalidJson.validate[Def1_CreateAmendCgtPpdOverridesRequestBody] shouldBe a[JsError]
       }
     }
 
     "read from an empty JSON" should {
       "produce an empty object" in {
-        emptyJson.as[CreateAmendCgtPpdOverridesRequestBody] shouldBe CreateAmendCgtPpdOverridesRequestBody.empty
+        emptyJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody] shouldBe Def1_CreateAmendCgtPpdOverridesRequestBody.empty
       }
     }
 
@@ -247,7 +247,7 @@ class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
 
     "written from an empty object" should {
       "produce an empty JSON" in {
-        Json.toJson(CreateAmendCgtPpdOverridesRequestBody.empty) shouldBe emptyJson
+        Json.toJson(Def1_CreateAmendCgtPpdOverridesRequestBody.empty) shouldBe emptyJson
       }
     }
   }

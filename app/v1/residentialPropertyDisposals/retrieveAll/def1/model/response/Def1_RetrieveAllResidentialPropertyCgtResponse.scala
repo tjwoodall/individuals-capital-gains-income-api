@@ -16,18 +16,13 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OWrites, Reads}
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
-case class Def1_RetrieveAllResidentialPropertyCgtResponse(submittedOn: Timestamp,
-                                                          disposals: Option[Seq[Disposals]],
+case class Def1_RetrieveAllResidentialPropertyCgtResponse(
                                                           customerAddedDisposals: Option[CustomerAddedDisposals],
-                                                          downstreamSourceEnum: Option[DownstreamSourceEnum],
-                                                          multiplePropertyDisposals: Option[MultiplePropertyDisposals],
-                                                          ppdService: Option[PpdService],
-                                                          singlePropertyDisposals: Option[SinglePropertyDisposals],
-                                                          adjustments: Option[BigDecimal])
+                                                          ppdService: Option[PpdService])
+
     extends RetrieveAllResidentialPropertyCgtResponse
 
 object Def1_RetrieveAllResidentialPropertyCgtResponse {

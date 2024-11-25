@@ -22,7 +22,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
+import CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future

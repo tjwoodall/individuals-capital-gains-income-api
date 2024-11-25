@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.request.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import play.api.libs.json.{JsError, JsValue, Json}
 import support.UnitSpec

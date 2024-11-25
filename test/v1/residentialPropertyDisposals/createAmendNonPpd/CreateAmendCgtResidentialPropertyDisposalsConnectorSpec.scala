@@ -19,7 +19,7 @@ package v1.residentialPropertyDisposals.createAmendNonPpd
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.fixtures.residentialPropertyDisposals.CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture._
+import CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture._
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future

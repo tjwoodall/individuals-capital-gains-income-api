@@ -22,7 +22,11 @@ import api.models.errors._
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  Def1_CreateAmendCgtPpdOverridesRequestData
+}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
 
@@ -553,9 +557,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
 
   private val parsedNino                  = Nino(validNino)
   private val parsedTaxYear               = TaxYear.fromMtd(validTaxYear)
-  private val parsedValidRequestBody      = validRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
-  private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
-  private val parsedValidSingleOnlyBody   = validOnlySinglePropertyDisposalsRequestJson.as[CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidRequestBody      = validRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidSingleOnlyBody   = validOnlySinglePropertyDisposalsRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
 
   private val validatorFactory                                        = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)

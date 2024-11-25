@@ -14,33 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.SinglePropertyDisposals
 
-class PpdServiceSpec extends UnitSpec {
+class SinglePropertyDisposalsSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |    "ppdYearToDate": 143.22,
-      |    "multiplePropertyDisposals": [
-      |      {
-      |        "source": "hmrc-held",
-      |        "submittedOn": "2020-07-06T09:37:17.000Z",
-      |        "ppdSubmissionId": "Da2467289108",
-      |        "ppdSubmissionDate": "2020-07-06T09:37:17.000Z",
-      |        "numberOfDisposals": 3,
-      |        "disposalTaxYear": 2022,
-      |        "completionDate": "2022-03-08",
-      |        "amountOfNetLoss": 1999.99
-      |      }
-      |    ],
-      |    "singlePropertyDisposals": [
-      |      {
       |        "source": "hmrc-held",
       |        "submittedOn": "2020-07-06T09:37:17.000Z",
       |        "ppdSubmissionId": "Da2467289108",
@@ -56,31 +41,14 @@ class PpdServiceSpec extends UnitSpec {
       |        "otherReliefAmount": 1999.99,
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
-      |        "amountOfNetGain": 1999.99
+      |        "amountOfNetLoss": 1999.99
       |      }
-      |    ]
-      |  }
       |""".stripMargin
   )
 
   val desJson: JsValue = Json.parse(
     """
       |{
-      |    "ppdYearToDate": 143.22,
-      |    "multiplePropertyDisposals": [
-      |      {
-      |        "source": "HMRC HELD",
-      |        "submittedOn": "2020-07-06T09:37:17Z",
-      |        "ppdSubmissionId": "Da2467289108",
-      |        "ppdSubmissionDate": "2020-07-06T09:37:17Z",
-      |        "numberOfDisposals": 3,
-      |        "disposalTaxYear": "2022",
-      |        "completionDate": "2022-03-08",
-      |        "amountOfLoss": 1999.99
-      |      }
-      |    ],
-      |    "singlePropertyDisposals": [
-      |      {
       |        "source": "HMRC HELD",
       |        "submittedOn": "2020-07-06T09:37:17Z",
       |        "ppdSubmissionId": "Da2467289108",
@@ -96,27 +64,12 @@ class PpdServiceSpec extends UnitSpec {
       |        "otherReliefAmount": 1999.99,
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
-      |        "amountOfNetGain": 1999.99
+      |        "amountOfLoss": 1999.99
       |      }
-      |    ]
-      |  }
       |""".stripMargin
   )
 
-  val multiplePropertyDisposals: MultiplePropertyDisposals =
-    MultiplePropertyDisposals(
-      MtdSourceEnum.`hmrc-held`,
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      "Da2467289108",
-      Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      Some(3),
-      Some(2022),
-      Some("2022-03-08"),
-      None,
-      Some(1999.99)
-    )
-
-  val singlePropertyDisposals: SinglePropertyDisposals =
+  val model: SinglePropertyDisposals =
     SinglePropertyDisposals(
       MtdSourceEnum.`hmrc-held`,
       Some(Timestamp("2020-07-06T09:37:17.000Z")),
@@ -133,22 +86,15 @@ class PpdServiceSpec extends UnitSpec {
       Some(1999.99),
       Some(1999.99),
       Some(1999.99),
-      Some(1999.99),
-      None
+      None,
+      Some(1999.99)
     )
 
-  val model: PpdService =
-    PpdService(
-      Some(143.22),
-      Some(Seq(multiplePropertyDisposals)),
-      Some(Seq(singlePropertyDisposals))
-    )
-
-  "PpdService" when {
+  "SinglePropertyDisposals" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[PpdService] shouldBe model
+          desJson.as[SinglePropertyDisposals] shouldBe model
         }
       }
     }

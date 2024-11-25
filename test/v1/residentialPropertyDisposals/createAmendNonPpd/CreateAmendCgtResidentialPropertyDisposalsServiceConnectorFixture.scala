@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v1.fixtures.residentialPropertyDisposals
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import v1.models.request.createAmendCgtResidentialPropertyDisposals.Disposal
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Disposal}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Disposal
 
 object CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture {
 

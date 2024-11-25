@@ -27,7 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
 import utils.MockIdGenerator
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -100,7 +100,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
   )
 
   //@formatter:off
-  val requestModel: CreateAmendCgtPpdOverridesRequestBody = CreateAmendCgtPpdOverridesRequestBody(
+  val requestModel: Def1_CreateAmendCgtPpdOverridesRequestBody = Def1_CreateAmendCgtPpdOverridesRequestBody(
     multiplePropertyDisposals = Some(
       List(
         MultiplePropertyDisposals("AB0000000092", Some(1234.78), None),

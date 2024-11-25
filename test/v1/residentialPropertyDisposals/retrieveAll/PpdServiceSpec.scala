@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{CustomerAddedDisposals, Disposals, MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
-import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{MultiplePropertyDisposals, PpdService, SinglePropertyDisposals}
 
-class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
+class PpdServiceSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
-      |  "ppdService": {
       |    "ppdYearToDate": 143.22,
       |    "multiplePropertyDisposals": [
       |      {
@@ -38,7 +36,7 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       |        "numberOfDisposals": 3,
       |        "disposalTaxYear": 2022,
       |        "completionDate": "2022-03-08",
-      |        "amountOfNetGain": 1999.99
+      |        "amountOfNetLoss": 1999.99
       |      }
       |    ],
       |    "singlePropertyDisposals": [
@@ -61,35 +59,13 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       |        "amountOfNetGain": 1999.99
       |      }
       |    ]
-      |  },
-      |  "customerAddedDisposals": {
-      |    "submittedOn": "2020-07-06T09:37:17.000Z",
-      |    "disposals": [
-      |      {
-      |        "customerReference": "CGTDISPOSAL01",
-      |        "disposalDate": "2022-02-04",
-      |        "completionDate": "2022-03-08",
-      |        "disposalProceeds": 1999.99,
-      |        "acquisitionDate": "2018-04-06",
-      |        "acquisitionAmount": 1999.99,
-      |        "improvementCosts": 1999.99,
-      |        "additionalCosts": 5000.99,
-      |        "prfAmount": 1999.99,
-      |        "otherReliefAmount": 1999.99,
-      |        "lossesFromThisYear": 1999.99,
-      |        "lossesFromPreviousYear": 1999.99,
-      |        "amountOfNetLoss": 1999.99
-      |      }
-      |    ]
       |  }
-      |}
       |""".stripMargin
   )
 
   val desJson: JsValue = Json.parse(
     """
       |{
-      |  "ppdService": {
       |    "ppdYearToDate": 143.22,
       |    "multiplePropertyDisposals": [
       |      {
@@ -100,7 +76,7 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       |        "numberOfDisposals": 3,
       |        "disposalTaxYear": "2022",
       |        "completionDate": "2022-03-08",
-      |        "amountOfNetGain": 1999.99
+      |        "amountOfLoss": 1999.99
       |      }
       |    ],
       |    "singlePropertyDisposals": [
@@ -123,28 +99,7 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       |        "amountOfNetGain": 1999.99
       |      }
       |    ]
-      |  },
-      |  "customerAddedDisposals": {
-      |    "submittedOn": "2020-07-06T09:37:17Z",
-      |    "disposals": [
-      |      {
-      |        "customerReference": "CGTDISPOSAL01",
-      |        "disposalDate": "2022-02-04",
-      |        "completionDate": "2022-03-08",
-      |        "disposalProceeds": 1999.99,
-      |        "acquisitionDate": "2018-04-06",
-      |        "acquisitionAmount": 1999.99,
-      |        "improvementCosts": 1999.99,
-      |        "additionalCosts": 5000.99,
-      |        "prfAmount": 1999.99,
-      |        "otherReliefAmount": 1999.99,
-      |        "lossesFromThisYear": 1999.99,
-      |        "lossesFromPreviousYear": 1999.99,
-      |        "amountOfLoss": 1999.99
-      |      }
-      |    ]
       |  }
-      |}
       |""".stripMargin
   )
 
@@ -157,8 +112,8 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       Some(3),
       Some(2022),
       Some("2022-03-08"),
-      Some(1999.99),
-      None
+      None,
+      Some(1999.99)
     )
 
   val singlePropertyDisposals: SinglePropertyDisposals =
@@ -182,47 +137,18 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       None
     )
 
-  val ppdService: PpdService =
+  val model: PpdService =
     PpdService(
       Some(143.22),
       Some(Seq(multiplePropertyDisposals)),
       Some(Seq(singlePropertyDisposals))
     )
 
-  val disposals: Disposals = Disposals(
-    Some("CGTDISPOSAL01"),
-    "2022-02-04",
-    "2022-03-08",
-    1999.99,
-    "2018-04-06",
-    1999.99,
-    Some(1999.99),
-    Some(5000.99),
-    Some(1999.99),
-    Some(1999.99),
-    Some(1999.99),
-    Some(1999.99),
-    None,
-    Some(1999.99)
-  )
-
-  val customerAddedDisposals: CustomerAddedDisposals =
-    CustomerAddedDisposals(
-      Timestamp("2020-07-06T09:37:17.000Z"),
-      Seq(disposals)
-    )
-
-  val model: RetrieveAllResidentialPropertyCgtResponse =
-    RetrieveAllResidentialPropertyCgtResponse(
-      Some(ppdService),
-      Some(customerAddedDisposals)
-    )
-
-  "RetrieveAllResidentialPropertyCgtResponse" when {
+  "PpdService" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[RetrieveAllResidentialPropertyCgtResponse] shouldBe model
+          desJson.as[PpdService] shouldBe model
         }
       }
     }

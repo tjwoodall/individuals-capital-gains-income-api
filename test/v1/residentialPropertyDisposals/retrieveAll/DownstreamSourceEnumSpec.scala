@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.models.response.retrieveAllResidentialPropertyCgt
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.models.domain.MtdSourceEnum
 import support.UnitSpec
