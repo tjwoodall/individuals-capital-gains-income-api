@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import utils.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -27,11 +26,10 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
+import utils.MockIdGenerator
 import v1.controllers.validators.MockCreateAmendCgtPpdOverridesValidatorFactory
 import v1.mocks.services.MockCreateAmendCgtPpdOverridesService
-import v1.models.request.createAmendCgtPpdOverrides._
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesController
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

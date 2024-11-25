@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.connectors.ConnectorSpec
 import api.mocks.MockHttpClient
@@ -23,7 +23,6 @@ import api.models.outcomes.ResponseWrapper
 import config.MockAppConfig
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.overrides.CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesConnector
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{InternalError, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesConnector
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.Future

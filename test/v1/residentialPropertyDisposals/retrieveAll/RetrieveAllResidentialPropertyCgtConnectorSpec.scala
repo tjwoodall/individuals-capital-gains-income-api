@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtConnector
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 

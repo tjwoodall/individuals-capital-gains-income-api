@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import utils.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
@@ -27,11 +26,10 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import utils.MockIdGenerator
 import v1.controllers.validators.MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v1.mocks.services._
-import v1.models.request.createAmendCgtResidentialPropertyDisposals._
-import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsController
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

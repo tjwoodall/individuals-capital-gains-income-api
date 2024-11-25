@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdConnector
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future

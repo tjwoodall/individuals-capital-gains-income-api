@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import utils.MockIdGenerator
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
+import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import play.api.Configuration
+import utils.MockIdGenerator
 import v1.controllers.validators.MockDeleteCgtNonPpdValidatorFactory
 import v1.mocks.services.MockDeleteCgtNonPpdService
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdController
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global

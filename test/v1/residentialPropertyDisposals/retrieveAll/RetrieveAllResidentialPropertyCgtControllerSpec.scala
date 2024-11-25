@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import utils.MockIdGenerator
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
 import config.MockAppConfig
-import play.api.mvc.Result
 import play.api.Configuration
+import play.api.mvc.Result
+import utils.MockIdGenerator
 import v1.controllers.validators.MockRetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.fixtures.RetrieveAllResidentialPropertyCgtControllerFixture._
 import v1.mocks.services.MockRetrieveAllResidentialPropertyCgtService
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtController
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
