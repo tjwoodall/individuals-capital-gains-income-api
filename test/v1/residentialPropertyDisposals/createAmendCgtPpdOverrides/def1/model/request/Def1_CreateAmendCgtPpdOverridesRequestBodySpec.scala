@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
 
-class CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
+class Def1_CreateAmendCgtPpdOverridesRequestBodySpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """

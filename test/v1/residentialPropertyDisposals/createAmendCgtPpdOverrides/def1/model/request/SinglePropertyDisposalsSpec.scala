@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
+package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
 import play.api.libs.json.{JsError, JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{MultiplePropertyDisposals, SinglePropertyDisposals}
 
 class SinglePropertyDisposalsSpec extends UnitSpec {
 

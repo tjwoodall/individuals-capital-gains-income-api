@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.createAmendNonPpd
+package v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Disposal
 
 class DisposalSpec extends UnitSpec {
 

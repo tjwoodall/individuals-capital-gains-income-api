@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.createAmendNonPpd
+package v1.residentialPropertyDisposals.createAmendNonPpd.def1.fixture
 
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Disposal}
 
-object CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture {
+object Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture {
 
   val disposalsModels: Seq[Disposal] =
     Seq(

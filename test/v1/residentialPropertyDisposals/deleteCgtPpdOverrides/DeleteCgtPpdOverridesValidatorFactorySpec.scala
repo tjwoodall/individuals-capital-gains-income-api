@@ -16,89 +16,28 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import api.controllers.validators.Validator
 import config.MockAppConfig
 import support.UnitSpec
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.Def1_DeleteCgtPpdOverridesValidator
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 class DeleteCgtPpdOverridesValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
-  private implicit val correlationId: String = "1234"
-
   private val validNino    = "AA123456A"
-  private val validTaxYear = "2020-21"
+  private val validTaxYear = "2021-22"
 
-  private val parsedNino    = Nino(validNino)
-  private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
+  private val validatorFactory = new DeleteCgtPpdOverridesValidatorFactory(mockAppConfig)
 
-  val validatorFactory = new DeleteCgtPpdOverridesValidatorFactory(mockAppConfig)
-
-  private def validator(nino: String, taxYear: String) =
-    validatorFactory.validator(nino, taxYear)
-
-  class Test {
-    MockedAppConfig.minimumPermittedTaxYear
-      .returns(2021)
-      .anyNumberOfTimes()
-  }
   "validator" should {
-    "return the parsed domain object" when {
-      "a valid request is supplied" in new Test  {
-        val result = validator(validNino, validTaxYear).validateAndWrapResult()
-        result shouldBe Right(Def1_DeleteCgtPpdOverridesRequestData(parsedNino, parsedTaxYear))
+    "return the Def1 validator" when {
+      "given a request handled by a Def1 schema" in {
+        val result: Validator[DeleteCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, validTaxYear)
+        result shouldBe a[Def1_DeleteCgtPpdOverridesValidator]
+
       }
     }
 
-    "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test  {
-        val result = validator("A12344A", validTaxYear).validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, NinoFormatError)
-        )
-      }
-    }
-
-    "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new Test  {
-        val result = validator(validNino, "201718").validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, TaxYearFormatError)
-        )
-      }
-    }
-
-    "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test  {
-        val result = validator(validNino, "2016-17").validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
-        )
-      }
-    }
-
-    "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year range is supplied" in new Test  {
-        val result = validator(validNino, "2017-19").validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
-        )
-      }
-    }
-
-    "return multiple errors" when {
-      "multiple invalid parameters are provided" in new Test  {
-        val result = validator("not-a-nino", "2017-19").validateAndWrapResult()
-
-        result shouldBe Left(
-          ErrorWrapper(
-            correlationId,
-            BadRequestError,
-            Some(List(NinoFormatError, RuleTaxYearRangeInvalidError))
-          )
-        )
-      }
-    }
   }
 
 }

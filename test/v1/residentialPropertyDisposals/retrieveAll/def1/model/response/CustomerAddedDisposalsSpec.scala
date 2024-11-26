@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retrieveAll
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
+import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Disposals
 
-class DisposalsSpec extends UnitSpec {
+class CustomerAddedDisposalsSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
       |{
+      |    "submittedOn": "2020-07-06T09:37:17.000Z",
+      |    "disposals": [
+      |      {
       |        "customerReference": "CGTDISPOSAL01",
       |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
@@ -38,13 +41,18 @@ class DisposalsSpec extends UnitSpec {
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfNetLoss": 1999.99
-      |}
+      |      }
+      |    ]
+      |  }
       |""".stripMargin
   )
 
   val desJson: JsValue = Json.parse(
     """
       |{
+      |    "submittedOn": "2020-07-06T09:37:17Z",
+      |    "disposals": [
+      |      {
       |        "customerReference": "CGTDISPOSAL01",
       |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
@@ -58,11 +66,13 @@ class DisposalsSpec extends UnitSpec {
       |        "lossesFromThisYear": 1999.99,
       |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfLoss": 1999.99
-      |}
+      |      }
+      |    ]
+      |  }
       |""".stripMargin
   )
 
-  val model: Disposals = Disposals(
+  val disposals: Disposals = Disposals(
     Some("CGTDISPOSAL01"),
     "2022-02-04",
     "2022-03-08",
@@ -79,11 +89,17 @@ class DisposalsSpec extends UnitSpec {
     Some(1999.99)
   )
 
-  "Disposals" when {
+  val model: CustomerAddedDisposals =
+    CustomerAddedDisposals(
+      Timestamp("2020-07-06T09:37:17.000Z"),
+      Seq(disposals)
+    )
+
+  "CustomerAddedDisposals" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[Disposals] shouldBe model
+          desJson.as[CustomerAddedDisposals] shouldBe model
         }
       }
     }

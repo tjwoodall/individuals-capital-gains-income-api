@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retrieveAll
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
 import api.models.domain.MtdSourceEnum
 import support.UnitSpec
 import utils.enums.EnumJsonSpecSupport
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.DownstreamSourceEnum
 
 class DownstreamSourceEnumSpec extends UnitSpec with EnumJsonSpecSupport {
 

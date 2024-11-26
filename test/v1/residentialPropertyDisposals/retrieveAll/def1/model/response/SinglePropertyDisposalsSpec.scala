@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retrieveAll
+package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.MultiplePropertyDisposals
 
-class MultiplePropertyDisposalsSpec extends UnitSpec {
+class SinglePropertyDisposalsSpec extends UnitSpec {
 
   val mtdJson: JsValue = Json.parse(
     """
@@ -30,11 +29,19 @@ class MultiplePropertyDisposalsSpec extends UnitSpec {
       |        "submittedOn": "2020-07-06T09:37:17.000Z",
       |        "ppdSubmissionId": "Da2467289108",
       |        "ppdSubmissionDate": "2020-07-06T09:37:17.000Z",
-      |        "numberOfDisposals": 3,
-      |        "disposalTaxYear": 2022,
+      |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
+      |        "disposalProceeds": 1999.99,
+      |        "acquisitionDate": "2018-04-06",
+      |        "acquisitionAmount": 1999.99,
+      |        "improvementCosts": 1999.99,
+      |        "additionalCosts": 5000.99,
+      |        "prfAmount": 1999.99,
+      |        "otherReliefAmount": 1999.99,
+      |        "lossesFromThisYear": 1999.99,
+      |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfNetLoss": 1999.99
-      |}
+      |      }
       |""".stripMargin
   )
 
@@ -45,32 +52,48 @@ class MultiplePropertyDisposalsSpec extends UnitSpec {
       |        "submittedOn": "2020-07-06T09:37:17Z",
       |        "ppdSubmissionId": "Da2467289108",
       |        "ppdSubmissionDate": "2020-07-06T09:37:17Z",
-      |        "numberOfDisposals": 3,
-      |        "disposalTaxYear": "2022",
+      |        "disposalDate": "2022-02-04",
       |        "completionDate": "2022-03-08",
+      |        "disposalProceeds": 1999.99,
+      |        "acquisitionDate": "2018-04-06",
+      |        "acquisitionAmount": 1999.99,
+      |        "improvementCosts": 1999.99,
+      |        "additionalCosts": 5000.99,
+      |        "prfAmount": 1999.99,
+      |        "otherReliefAmount": 1999.99,
+      |        "lossesFromThisYear": 1999.99,
+      |        "lossesFromPreviousYear": 1999.99,
       |        "amountOfLoss": 1999.99
-      |}
+      |      }
       |""".stripMargin
   )
 
-  val model: MultiplePropertyDisposals =
-    MultiplePropertyDisposals(
+  val model: SinglePropertyDisposals =
+    SinglePropertyDisposals(
       MtdSourceEnum.`hmrc-held`,
       Some(Timestamp("2020-07-06T09:37:17.000Z")),
       "Da2467289108",
       Some(Timestamp("2020-07-06T09:37:17.000Z")),
-      Some(3),
-      Some(2022),
-      Some("2022-03-08"),
+      Some("2022-02-04"),
+      "2022-03-08",
+      1999.99,
+      Some("2018-04-06"),
+      1999.99,
+      Some(1999.99),
+      Some(5000.99),
+      Some(1999.99),
+      Some(1999.99),
+      Some(1999.99),
+      Some(1999.99),
       None,
       Some(1999.99)
     )
 
-  "MultiplePropertyDisposals" when {
+  "SinglePropertyDisposals" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[MultiplePropertyDisposals] shouldBe model
+          desJson.as[SinglePropertyDisposals] shouldBe model
         }
       }
     }
