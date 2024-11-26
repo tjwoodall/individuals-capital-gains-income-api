@@ -25,7 +25,7 @@ import config.MockAppConfig
 import play.api.Configuration
 import play.api.mvc.Result
 import utils.MockIdGenerator
-import RetrieveAllResidentialPropertyCgtControllerFixture._
+import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture.{mtdJson, responseModel}
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 

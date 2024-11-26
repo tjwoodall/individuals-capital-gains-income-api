@@ -19,8 +19,6 @@ package v1.residentialPropertyDisposals.deleteNonPpd
 import api.controllers.validators.Validator
 import config.MockAppConfig
 import support.UnitSpec
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.Def1_DeleteCgtPpdOverridesValidator
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.deleteNonPpd.def1.Def1_DeleteCgtNonPpdValidator
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 

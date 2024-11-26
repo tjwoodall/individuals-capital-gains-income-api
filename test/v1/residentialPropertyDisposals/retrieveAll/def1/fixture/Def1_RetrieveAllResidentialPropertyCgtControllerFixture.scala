@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package v1.residentialPropertyDisposals.retrieveAll
+package v1.residentialPropertyDisposals.retrieveAll.def1.fixture
 
 import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
 
-object RetrieveAllResidentialPropertyCgtControllerFixture {
+object Def1_RetrieveAllResidentialPropertyCgtControllerFixture {
 
   val multiplePropertyDisposals: MultiplePropertyDisposals =
     MultiplePropertyDisposals(

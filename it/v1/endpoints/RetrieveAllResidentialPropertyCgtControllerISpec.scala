@@ -25,7 +25,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
-import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtControllerFixture
+import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
 
 class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSpec {
 
@@ -37,10 +37,10 @@ class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSp
     def taxYear: String
 
     def downstreamUri: String
-    val downstreamResponse: JsValue = RetrieveAllResidentialPropertyCgtControllerFixture.ifsJson
+    val downstreamResponse: JsValue = Def1_RetrieveAllResidentialPropertyCgtControllerFixture.ifsJson
 
     def mtdUri: String       = s"/residential-property/$nino/$taxYear"
-    val mtdResponse: JsValue = RetrieveAllResidentialPropertyCgtControllerFixture.mtdJson
+    val mtdResponse: JsValue = Def1_RetrieveAllResidentialPropertyCgtControllerFixture.mtdJson
 
     def mtdQueryParams: Seq[(String, String)] =
       Seq("source" -> source)
