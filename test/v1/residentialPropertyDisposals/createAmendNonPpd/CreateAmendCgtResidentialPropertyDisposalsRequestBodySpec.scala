@@ -18,7 +18,7 @@ package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Disposal
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Disposal}
 
 class CreateAmendCgtResidentialPropertyDisposalsRequestBodySpec extends UnitSpec {
 
@@ -100,7 +100,7 @@ class CreateAmendCgtResidentialPropertyDisposalsRequestBodySpec extends UnitSpec
       |""".stripMargin
   )
 
-  private val validModel = CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals = Seq(
+  private val validModel = Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals = Seq(
     Disposal(
       customerReference = Some("ABC-2345"),
       disposalDate = "2021-01-29",
@@ -135,12 +135,12 @@ class CreateAmendCgtResidentialPropertyDisposalsRequestBodySpec extends UnitSpec
     )
   ))
 
-  private val emptyModel = CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals = Seq.empty)
+  private val emptyModel = Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals = Seq.empty)
 
   "reads" should {
     "read to a case class" when {
       "provided valid JSON" in {
-        validMtdJson.as[CreateAmendCgtResidentialPropertyDisposalsRequestBody] shouldBe validModel
+        validMtdJson.as[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody] shouldBe validModel
       }
     }
   }

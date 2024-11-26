@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,10 +30,10 @@ trait MockCreateAmendCgtPpdOverridesService extends MockFactory {
 
   object MockCreateAmendCgtPpdOverridesService {
 
-    def createAmend(requestData: Def1_CreateAmendCgtPpdOverridesRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
+    def createAmend(requestData: CreateAmendCgtPpdOverridesRequestData): CallHandler[Future[ServiceOutcome[Unit]]] = {
       (
         mockCreateAmendCgtPpdOverridesService
-          .createAmend(_: Def1_CreateAmendCgtPpdOverridesRequestData)(
+          .createAmend(_: CreateAmendCgtPpdOverridesRequestData)(
             _: RequestContext,
             _: ExecutionContext
           )

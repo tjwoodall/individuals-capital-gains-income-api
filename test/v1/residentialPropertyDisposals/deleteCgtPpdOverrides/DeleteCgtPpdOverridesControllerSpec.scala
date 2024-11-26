@@ -27,6 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import utils.MockIdGenerator
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +46,7 @@ class DeleteCgtPpdOverridesControllerSpec
 
   val taxYear: String = "2019-20"
 
-  val requestData: DeleteCgtPpdOverridesRequestData = DeleteCgtPpdOverridesRequestData(
+  val requestData: DeleteCgtPpdOverridesRequestData = Def1_DeleteCgtPpdOverridesRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )

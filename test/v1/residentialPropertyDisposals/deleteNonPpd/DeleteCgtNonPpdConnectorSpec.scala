@@ -19,6 +19,7 @@ package v1.residentialPropertyDisposals.deleteNonPpd
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
+import v1.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
@@ -61,7 +62,7 @@ class DeleteCgtNonPpdConnectorSpec extends ConnectorSpec {
 
     protected val connector: DeleteCgtNonPpdConnector = new DeleteCgtNonPpdConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-    protected val request: DeleteCgtNonPpdRequestData = DeleteCgtNonPpdRequestData(Nino("AA111111A"), taxYear = taxYear)
+    protected val request: DeleteCgtNonPpdRequestData = Def1_DeleteCgtNonPpdRequestData(Nino("AA111111A"), taxYear = taxYear)
 
   }
 

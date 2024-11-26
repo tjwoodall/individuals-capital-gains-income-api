@@ -28,6 +28,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
 import utils.MockIdGenerator
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{CreateAmendCgtPpdOverridesRawData, Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -117,7 +118,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
   )
   //@formatter:on
 
-  val requestData: Def1_CreateAmendCgtPpdOverridesRequestData = Def1_CreateAmendCgtPpdOverridesRequestData(
+  val requestData: CreateAmendCgtPpdOverridesRequestData = Def1_CreateAmendCgtPpdOverridesRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     body = requestModel

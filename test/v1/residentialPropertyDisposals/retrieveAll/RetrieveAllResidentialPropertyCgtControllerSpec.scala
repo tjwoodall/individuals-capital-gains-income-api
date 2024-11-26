@@ -26,6 +26,7 @@ import play.api.Configuration
 import play.api.mvc.Result
 import utils.MockIdGenerator
 import RetrieveAllResidentialPropertyCgtControllerFixture._
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +45,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
   val taxYear: String        = "2019-20"
   val source: Option[String] = Some("latest")
 
-  val requestData: RetrieveAllResidentialPropertyCgtRequestData = RetrieveAllResidentialPropertyCgtRequestData(
+  val requestData: RetrieveAllResidentialPropertyCgtRequestData = Def1_RetrieveAllResidentialPropertyRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear),
     source = MtdSourceEnum.latest

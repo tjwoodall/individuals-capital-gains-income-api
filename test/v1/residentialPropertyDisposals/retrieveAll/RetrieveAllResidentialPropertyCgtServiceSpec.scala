@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.retrieveAll
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
@@ -22,10 +22,9 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.residentialPropertyDisposals.retrieveAll.{MockRetrieveAllResidentialPropertyCgtConnector, RetrieveAllResidentialPropertyCgtService}
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.PpdService
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{Def1_RetrieveAllResidentialPropertyCgtResponse, PpdService}
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
-import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.Future
 
@@ -34,13 +33,13 @@ class RetrieveAllResidentialPropertyCgtServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  val request: RetrieveAllResidentialPropertyCgtRequestData = RetrieveAllResidentialPropertyCgtRequestData(
+  val request: RetrieveAllResidentialPropertyCgtRequestData = Def1_RetrieveAllResidentialPropertyRequestData(
     nino = Nino(nino),
     taxYear = TaxYear.fromMtd(taxYear),
     source = MtdSourceEnum.latest
   )
 
-  val response: RetrieveAllResidentialPropertyCgtResponse = RetrieveAllResidentialPropertyCgtResponse(
+  val response: Def1_RetrieveAllResidentialPropertyCgtResponse = Def1_RetrieveAllResidentialPropertyCgtResponse(
     ppdService = Some(
       PpdService(
         ppdYearToDate = Some(2000.99),

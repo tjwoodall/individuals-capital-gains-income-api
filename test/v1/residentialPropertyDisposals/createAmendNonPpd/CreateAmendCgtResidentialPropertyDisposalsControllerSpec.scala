@@ -27,8 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import utils.MockIdGenerator
-import v1.mocks.services._
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -72,7 +71,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
      """.stripMargin
   )
 
-  val requestModel: CreateAmendCgtResidentialPropertyDisposalsRequestBody = CreateAmendCgtResidentialPropertyDisposalsRequestBody(
+  val requestModel: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody = Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody(
     disposals = List(
       Disposal(
         customerReference = Some("CGTDISPOSAL01"),

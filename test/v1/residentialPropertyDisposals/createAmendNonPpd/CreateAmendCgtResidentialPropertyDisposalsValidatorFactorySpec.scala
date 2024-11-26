@@ -22,7 +22,8 @@ import api.models.errors._
 import config.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData}
+import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     extends UnitSpec
@@ -326,37 +327,45 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
   private def validator(nino: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, taxYear, body)
 
-  private val MINIMUM_YEAR = 2020
-  MockedAppConfig.minimumPermittedTaxYear returns MINIMUM_YEAR
+//  private val MINIMUM_YEAR = 2020
+//  MockedAppConfig.minimumPermittedTaxYear returns MINIMUM_YEAR
+  class Test {
+
+    MockedAppConfig.minimumPermittedTaxYear
+      .returns(2020)
+      .anyNumberOfTimes()
+
+  }
+
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request with only losses supplied" in {
+      "a valid request with only losses supplied" in new Test {
         behave like validateSuccessfully(losses = false)
       }
 
-      "a valid request with only gains supplied" in {
+      "a valid request with only gains supplied" in new Test  {
         behave like validateSuccessfully(losses = false)
       }
 
       def validateSuccessfully(losses: Boolean) = {
         val requestBodyJson = validRequestBodyJsonWith(losses)
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, requestBodyJson).validateAndWrapResult()
 
         result shouldBe Right(
           Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
             parsedNino,
             parsedTaxYear,
-            requestBodyJson.as[CreateAmendCgtResidentialPropertyDisposalsRequestBody]
+            requestBodyJson.as[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody]
           )
         )
       }
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "an invalid nino is supplied" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator("A12344A", validTaxYear, validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -366,8 +375,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "an invalid tax year is supplied" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, "20178", validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -377,8 +386,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "an invalid tax year is supplied" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, "2017-18", validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -388,8 +397,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "an invalid tax year is supplied" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, "2019-23", validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -399,8 +408,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return RuleIncorrectOrEmptyBodyError error" when {
-      "an empty JSON body is submitted" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "an empty JSON body is submitted" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, emptyRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -408,8 +417,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
         )
       }
 
-      "a non-empty JSON body is submitted without any expected fields" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "a non-empty JSON body is submitted without any expected fields" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, nonsenseRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -417,8 +426,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
         )
       }
 
-      "the submitted request body is not in the correct format" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "the submitted request body is not in the correct format" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, nonValidRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -435,8 +444,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
         )
       }
 
-      "the submitted request body has missing mandatory fields" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "the submitted request body has missing mandatory fields" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, missingMandatoryFieldsJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -453,8 +462,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
         )
       }
 
-      "the submitted request body contains empty objects" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "the submitted request body contains empty objects" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, emptyArrayJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -468,8 +477,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return ValueFormatError error" when {
-      "one field fails value validation" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "one field fails value validation" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, oneBadValueFieldJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -482,8 +491,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
           ))
       }
 
-      "all fields fail value validation (gains)" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "all fields fail value validation (gains)" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, allBadValueFieldsWithGainsJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -506,8 +515,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
           ))
       }
 
-      "all fields fail value validation (losses)" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "all fields fail value validation (losses)" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, allBadValueFieldsWithLossesJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -530,8 +539,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
           ))
       }
 
-      "all fields fail value validation (multiple disposals)" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "all fields fail value validation (multiple disposals)" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, allBadValueFieldsMultipleDisposalsJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -583,8 +592,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return DateFormatError error" when {
-      "supplied dates are invalid" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "supplied dates are invalid" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, badDateJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -602,8 +611,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return CustomerRefFormatError error" when {
-      "supplied asset description is invalid" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "supplied asset description is invalid" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, badCustomerReferenceJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -617,8 +626,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return RuleGainLossError error" when {
-      "gain and loss fields are both supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "gain and loss fields are both supplied" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, gainAndLossJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -628,8 +637,8 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec
     }
 
     "return multiple errors" when {
-      "request supplied has multiple errors" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+      "request supplied has multiple errors" in new Test  {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator("A12344A", "20178", validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(

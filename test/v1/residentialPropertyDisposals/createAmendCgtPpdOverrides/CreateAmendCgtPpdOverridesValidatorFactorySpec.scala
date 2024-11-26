@@ -22,10 +22,7 @@ import api.models.errors._
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  Def1_CreateAmendCgtPpdOverridesRequestData
-}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
@@ -564,34 +561,39 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
   private val validatorFactory                                        = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
-  MockedAppConfig.minimumPermittedTaxYear
-    .returns(2020)
-    .anyNumberOfTimes()
 
+
+  class Test {
+
+    MockedAppConfig.minimumPermittedTaxYear
+      .returns(2020)
+      .anyNumberOfTimes()
+
+  }
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "a valid request is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, validRequestJson).validateAndWrapResult()
         result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody))
       }
     }
 
-    "a valid request containing only multiple disposals is supplied" in {
-      val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+    "a valid request containing only multiple disposals is supplied" in new Test {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
         validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
       result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidMultipleOnlyBody))
     }
 
-    "a valid request containing only single disposals is supplied" in {
-      val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+    "a valid request containing only single disposals is supplied" in new Test {
+      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
         validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
       result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidSingleOnlyBody))
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "an invalid nino is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, NinoFormatError)
@@ -600,8 +602,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "an invalid tax year is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, "201718", validRequestJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, TaxYearFormatError)
@@ -610,8 +612,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year range is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "an invalid tax year range is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
@@ -620,8 +622,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "an out of range tax year is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
@@ -631,16 +633,16 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
 
     "return RuleIncorrectOrEmptyBodyError error" when {
 
-      "a non-empty JSON body is submitted without any expected fields" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "a non-empty JSON body is submitted without any expected fields" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, nonsenseRequestBodyJson).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleIncorrectOrEmptyBodyError)
         )
       }
 
-      "the submitted request body has missing mandatory fields" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "the submitted request body has missing mandatory fields" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, missingMandatoryFieldJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -656,9 +658,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
         )
       }
 
-      "an JSON body with empty multiplePropertyDisposals array is submitted" in {
+      "an JSON body with empty multiplePropertyDisposals array is submitted" in new Test {
 
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, emptyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -672,9 +674,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
         )
       }
 
-      "an JSON body with empty singlePropertyDisposals array is submitted" in {
+      "an JSON body with empty singlePropertyDisposals array is submitted" in new Test {
 
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, emptySinglePropertyDisposalsRequestJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -690,9 +692,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return a PpdSubmissionIdFormatError" when {
-      "a body with incorrect ppdSubmissionIds is submitted" in {
+      "a body with incorrect ppdSubmissionIds is submitted" in new Test {
 
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, invalidSubmissionIdRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -708,9 +710,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return a valueFormatError" when {
-      "a body with incorrect values is submitted" in {
+      "a body with incorrect values is submitted" in new Test {
 
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, invalidValueRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -744,9 +746,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return a dateFormatError" when {
-      "a body with an incorrect date is provided" in {
-        val requestWithInvalidDates = invalidDateRequestBodyJson(acquisitionDate = "20-02-28", completionDate = "20-02-28")
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "a body with an incorrect date is provided" in new Test {
+        val requestWithInvalidDates: JsValue = invalidDateRequestBodyJson(acquisitionDate = "20-02-28", completionDate = "20-02-28")
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, requestWithInvalidDates).validateAndWrapResult()
 
         result shouldBe Left(
@@ -763,9 +765,9 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return a invalid date range error" when {
-      "a body with dates outside of acceptable range is provided" in {
-        val requestWithInvalidDates = invalidDateRequestBodyJson(acquisitionDate = "0010-01-01", completionDate = "2101-02-28")
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "a body with dates outside of acceptable range is provided" in new Test {
+        val requestWithInvalidDates: JsValue = invalidDateRequestBodyJson(acquisitionDate = "0010-01-01", completionDate = "2101-02-28")
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, requestWithInvalidDates).validateAndWrapResult()
 
         result shouldBe Left(
@@ -782,8 +784,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
     }
 
     "return a RuleAmountGainLossError" when {
-      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in new Test{
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, bothGainsAndLossMultiplePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -798,8 +800,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
         )
       }
 
-      "neither amountOfNetGain or amountOfNetLoss are provided for multiplePropertyDisposals" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "neither amountOfNetGain or amountOfNetLoss are provided for multiplePropertyDisposals" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, neitherGainsOrLossMultiplePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -814,8 +816,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
         )
       }
 
-      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in new Test{
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, bothGainsAndLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
@@ -830,8 +832,8 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with Value
         )
       }
 
-      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in {
-        val result: Either[ErrorWrapper, Def1_CreateAmendCgtPpdOverridesRequestData] =
+      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in new Test{
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, neitherGainsOrLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(

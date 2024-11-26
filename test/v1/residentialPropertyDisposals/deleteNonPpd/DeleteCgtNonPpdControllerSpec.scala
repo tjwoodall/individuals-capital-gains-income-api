@@ -27,6 +27,7 @@ import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import utils.MockIdGenerator
+import v1.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -45,7 +46,7 @@ class DeleteCgtNonPpdControllerSpec
 
   val taxYear: String = "2019-20"
 
-  val requestData: DeleteCgtNonPpdRequestData = DeleteCgtNonPpdRequestData(
+  val requestData: DeleteCgtNonPpdRequestData = Def1_DeleteCgtNonPpdRequestData(
     nino = Nino(validNino),
     taxYear = TaxYear.fromMtd(taxYear)
   )

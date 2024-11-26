@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v1.residentialPropertyDisposals.deleteNonPpd.MockDeleteCgtNonPpdConnector
-import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 
@@ -31,7 +30,7 @@ class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
   private val nino    = "AA112233A"
   private val taxYear = "2019-20"
 
-  private val requestData = DeleteCgtNonPpdRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = Def1_DeleteCgtNonPpdRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteCgtNonPpdConnector {
     implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
@@ -50,7 +49,7 @@ class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
           .deleteCgtNonPpdConnector(requestData)
           .returns(Future.successful(outcome))
 
-        await(service.deleteCgtNonPpd(requestData)) shouldBe outcome
+        await(service.delete(requestData)) shouldBe outcome
       }
 
       "map errors according to spec" when {
@@ -62,7 +61,7 @@ class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
               .deleteCgtNonPpdConnector(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.deleteCgtNonPpd(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.delete(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val errors = List(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
@@ -22,7 +22,7 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.MockDeleteCgtPpdOverridesConnector
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +34,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
   private val taxYear: String        = "2019-20"
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
-  private val requestData: DeleteCgtPpdOverridesRequestData = DeleteCgtPpdOverridesRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData: DeleteCgtPpdOverridesRequestData = Def1_DeleteCgtPpdOverridesRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   trait Test extends MockDeleteCgtPpdOverridesConnector {
     implicit val hc: HeaderCarrier              = HeaderCarrier()
@@ -54,7 +54,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
           .deleteCgtPpdOverrides(requestData)
           .returns(Future.successful(outcome))
 
-        await(service.deleteCgtPpdOverrides(requestData)) shouldBe outcome
+        await(service.delete(requestData)) shouldBe outcome
       }
     }
     "a service call is unsuccessful" should {
@@ -65,7 +65,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
             .deleteCgtPpdOverrides(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.deleteCgtPpdOverrides(requestData)) shouldBe outcome
+          await(service.delete(requestData)) shouldBe outcome
         }
 
       val errors = List(

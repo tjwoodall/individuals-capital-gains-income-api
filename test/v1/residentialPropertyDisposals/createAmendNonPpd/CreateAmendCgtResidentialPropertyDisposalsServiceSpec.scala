@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.services
+package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
@@ -22,7 +22,6 @@ import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
-import v1.residentialPropertyDisposals.createAmendNonPpd.{CreateAmendCgtResidentialPropertyDisposalsService, MockCreateAmendCgtResidentialPropertyDisposalsConnector}
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future

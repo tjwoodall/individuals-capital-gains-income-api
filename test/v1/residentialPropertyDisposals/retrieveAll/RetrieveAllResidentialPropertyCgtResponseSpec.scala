@@ -20,7 +20,6 @@ import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
-import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
 
@@ -212,17 +211,17 @@ class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
       Seq(disposals)
     )
 
-  val model: RetrieveAllResidentialPropertyCgtResponse =
-    RetrieveAllResidentialPropertyCgtResponse(
-      Some(ppdService),
-      Some(customerAddedDisposals)
+  val model: Def1_RetrieveAllResidentialPropertyCgtResponse =
+    Def1_RetrieveAllResidentialPropertyCgtResponse(
+      Some(customerAddedDisposals),
+      Some(ppdService)
     )
 
   "RetrieveAllResidentialPropertyCgtResponse" when {
     "Reads" should {
       "return a valid object" when {
         "a valid json is supplied" in {
-          desJson.as[RetrieveAllResidentialPropertyCgtResponse] shouldBe model
+          desJson.as[Def1_RetrieveAllResidentialPropertyCgtResponse] shouldBe model
         }
       }
     }
