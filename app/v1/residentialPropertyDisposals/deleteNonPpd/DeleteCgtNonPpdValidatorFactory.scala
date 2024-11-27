@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package v1.otherCgt.retrieve
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.validators.Validator
 import config.AppConfig
-import v1.otherCgt.retrieve.RetrieveOtherCgtSchema.Def1
-import v1.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
-import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.def1.Def1_DeleteCgtNonPpdValidator
+import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdSchema.Def1
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
-@Singleton
-class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteCgtNonPpdValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveOtherCgtRequestData] = {
+  def validator(nino: String, taxYear: String): Validator[DeleteCgtNonPpdRequestData] = {
 
-    val schema = RetrieveOtherCgtSchema.schema
+    val schema = DeleteCgtNonPpdSchema.schema
 
     schema match {
-      case Def1 => new Def1_RetrieveOtherCgtValidator(nino, taxYear)(appConfig)
+      case Def1 => new Def1_DeleteCgtNonPpdValidator(nino, taxYear)(appConfig)
     }
-  }
+    }
+
 }

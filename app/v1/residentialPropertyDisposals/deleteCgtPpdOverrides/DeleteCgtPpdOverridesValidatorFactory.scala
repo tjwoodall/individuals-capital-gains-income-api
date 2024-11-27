@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package v1.otherCgt.retrieve
+package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import api.controllers.validators.Validator
 import config.AppConfig
-import v1.otherCgt.retrieve.RetrieveOtherCgtSchema.Def1
-import v1.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
-import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesSchema.Def1
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.Def1_DeleteCgtPpdOverridesValidator
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
 
-  def validator(nino: String, taxYear: String): Validator[RetrieveOtherCgtRequestData] = {
 
-    val schema = RetrieveOtherCgtSchema.schema
+  def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] ={
 
-    schema match {
-      case Def1 => new Def1_RetrieveOtherCgtValidator(nino, taxYear)(appConfig)
-    }
+
+  val schema = DeleteCgtPpdOverridesSchema.schema
+
+  schema match {
+    case Def1 => new Def1_DeleteCgtPpdOverridesValidator(nino, taxYear)(appConfig)
   }
+}
+
 }

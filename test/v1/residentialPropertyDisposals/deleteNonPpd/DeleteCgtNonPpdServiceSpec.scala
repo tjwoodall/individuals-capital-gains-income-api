@@ -14,80 +14,74 @@
  * limitations under the License.
  */
 
-package v1.otherCgt.delete
-
-
+package v1.residentialPropertyDisposals.deleteNonPpd
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import v1.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
-import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
+import v1.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 
-class DeleteOtherCgtServiceSpec extends ServiceSpec {
+class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
 
-  "DeleteOtherCgtServiceSpec" should {
-    "deleteOtherCgt" must {
+  private val nino    = "AA112233A"
+  private val taxYear = "2019-20"
+
+  private val requestData = Def1_DeleteCgtNonPpdRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
+
+  trait Test extends MockDeleteCgtNonPpdConnector {
+    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
+
+    val service: DeleteCgtNonPpdService =
+      new DeleteCgtNonPpdService(connector = mockDeleteCgtNonPpdConnector)
+
+  }
+
+  "DeleteCgtNonPpdService" when {
+    "deleteCgtNonPpd" must {
       "return correct result for a success" in new Test {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockDeleteOtherCgtConnector
-          .delete(request)
+        MockDeleteCgtNonPpdConnector
+          .deleteCgtNonPpdConnector(requestData)
           .returns(Future.successful(outcome))
 
-        await(service.delete(request)) shouldBe outcome
+        await(service.delete(requestData)) shouldBe outcome
       }
 
       "map errors according to spec" when {
+
         def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
           s"a $downstreamErrorCode error is returned from the service" in new Test {
 
-            MockDeleteOtherCgtConnector
-              .delete(request)
+            MockDeleteCgtNonPpdConnector
+              .deleteCgtNonPpdConnector(requestData)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-            await(service.delete(request)) shouldBe Left(ErrorWrapper(correlationId, error))
+            await(service.delete(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val errors = List(
-          ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
-          ("INVALID_TAX_YEAR", TaxYearFormatError),
-          ("INVALID_CORRELATIONID", InternalError),
-          ("NO_DATA_FOUND", NotFoundError),
-          ("SERVER_ERROR", InternalError),
-          ("SERVICE_UNAVAILABLE", InternalError)
+          "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
+          "INVALID_TAX_YEAR"          -> TaxYearFormatError,
+          "INVALID_CORRELATIONID"     -> InternalError,
+          "NO_DATA_FOUND"             -> NotFoundError,
+          "SERVER_ERROR"              -> InternalError,
+          "SERVICE_UNAVAILABLE"       -> InternalError
         )
 
         val extraTysErrors = List(
-          ("INVALID_CORRELATION_ID", InternalError),
-          ("NOT_FOUND", NotFoundError),
-          ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
+          "INVALID_CORRELATION_ID" -> InternalError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+          "NOT_FOUND"              -> NotFoundError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
       }
     }
-  }
-
-  trait Test extends MockDeleteOtherCgtConnector {
-    implicit val logContext: EndpointLogContext = EndpointLogContext("c", "ep")
-
-    private val nino    = Nino("AA112233A")
-    private val taxYear = TaxYear.fromMtd("2019-20")
-
-    val request: DeleteOtherCgtRequestData = Def1_DeleteOtherCgtRequestData(
-      nino = nino,
-      taxYear = taxYear
-    )
-
-    val service: DeleteOtherCgtService = new DeleteOtherCgtService(
-      connector = mockDeleteOtherCgtConnector
-    )
-
   }
 
 }
