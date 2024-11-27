@@ -26,17 +26,7 @@ import javax.inject.Inject
 
 class DeleteCgtNonPpdValidatorFactory @Inject() (appConfig: AppConfig) {
 
-//  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-//  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-
   def validator(nino: String, taxYear: String): Validator[DeleteCgtNonPpdRequestData] = {
-//    new Validator[DeleteCgtNonPpdRequestData] {
-//
-//      def validate: Validated[Seq[MtdError], DeleteCgtNonPpdRequestData] =
-//        (
-//          ResolveNino(nino),
-//          resolveTaxYear(taxYear)
-//        ).mapN(DeleteCgtNonPpdRequestData)
 
     val schema = DeleteCgtNonPpdSchema.schema
 

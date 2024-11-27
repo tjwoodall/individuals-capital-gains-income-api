@@ -27,19 +27,9 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
 
-//  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-//  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
 
   def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] ={
-//    new Validator[DeleteCgtPpdOverridesRequestData] {
-//
-//      def validate: Validated[Seq[MtdError], DeleteCgtPpdOverridesRequestData] =
-//        (
-//          ResolveNino(nino),
-//          resolveTaxYear(taxYear)
-//        ).mapN(DeleteCgtPpdOverridesRequestData)
-//
-//    }
+
 
   val schema = DeleteCgtPpdOverridesSchema.schema
 

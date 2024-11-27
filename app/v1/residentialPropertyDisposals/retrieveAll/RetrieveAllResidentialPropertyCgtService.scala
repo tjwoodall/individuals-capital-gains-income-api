@@ -38,7 +38,7 @@ class RetrieveAllResidentialPropertyCgtService @Inject() (connector: RetrieveAll
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
-    val errors = Map(
+    Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_VIEW"              -> SourceFormatError,
@@ -48,12 +48,6 @@ class RetrieveAllResidentialPropertyCgtService @Inject() (connector: RetrieveAll
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )
-    val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "NOT_FOUND" -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
-    )
-    errors ++ extraTysErrors
   }
 
 }
