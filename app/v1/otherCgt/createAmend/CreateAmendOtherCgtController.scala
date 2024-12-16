@@ -16,17 +16,18 @@
 
 package v1.otherCgt.createAmend
 
-import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.errors._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService, NrsProxyService}
-import config.AppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.auth.UserDetails
+import shared.models.errors.ErrorWrapper
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.IdGenerator
+import v1.NrsProxyService
 import v1.otherCgt.createAmend.model.response.CreateAmendOtherCgtAuditData
 
 import javax.inject.{Inject, Singleton}
@@ -40,7 +41,7 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
                                                nrsProxyService: NrsProxyService,
                                                auditService: AuditService,
                                                cc: ControllerComponents,
-                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                               val idGenerator: IdGenerator)(implicit ec: ExecutionContext, sharedAppConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   val endpointName = "create-amend-other-cgt"

@@ -16,11 +16,12 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import api.services.{EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
+import shared.controllers.{AuthorisedController, EndpointLogContext}
+import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.IdGenerator
+import shared.config.SharedAppConfig
+import shared.controllers.{RequestContext, RequestHandler}
+import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +32,8 @@ class RetrieveAllResidentialPropertyCgtController @Inject() (val authService: En
                                                              validatorFactory: RetrieveAllResidentialPropertyCgtValidatorFactory,
                                                              service: RetrieveAllResidentialPropertyCgtService,
                                                              cc: ControllerComponents,
-                                                             val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                                             val idGenerator: IdGenerator)
+                                                            (implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-all-residential-property-cgt"

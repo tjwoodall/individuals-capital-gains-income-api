@@ -16,16 +16,16 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.controllers.validators.Validator
-import config.AppConfig
-import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesSchema.Def1
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.Def1_DeleteCgtPpdOverridesValidator
+import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
 
   def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] ={

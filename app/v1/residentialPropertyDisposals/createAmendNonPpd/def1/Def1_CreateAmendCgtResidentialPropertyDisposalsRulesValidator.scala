@@ -16,14 +16,15 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
-import api.models.errors.{CustomerRefFormatError, DateFormatError, MtdError, RuleGainLossError}
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.ResolveStringPattern
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits._
+import common.errors.{CustomerRefFormatError, RuleGainLossError}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.{DateFormatError, MtdError}
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
-
 object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator extends RulesValidator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()

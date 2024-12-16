@@ -16,16 +16,16 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import config.CgtAppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
-import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
 
 import javax.inject.Inject
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 

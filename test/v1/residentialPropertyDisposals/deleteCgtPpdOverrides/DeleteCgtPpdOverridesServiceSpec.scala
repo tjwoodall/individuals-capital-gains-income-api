@@ -16,10 +16,10 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.outcomes.ResponseWrapper
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
@@ -27,7 +27,6 @@ import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.Delet
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
 
   private val nino: String           = "AA123456A"

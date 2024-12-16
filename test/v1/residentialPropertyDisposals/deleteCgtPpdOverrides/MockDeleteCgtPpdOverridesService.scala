@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtPpdOverridesService extends MockFactory {
+trait MockDeleteCgtPpdOverridesService extends MockFactory with TestSuite {
 
   val mockDeleteCgtPpdOverridesService: DeleteCgtPpdOverridesService = mock[DeleteCgtPpdOverridesService]
 

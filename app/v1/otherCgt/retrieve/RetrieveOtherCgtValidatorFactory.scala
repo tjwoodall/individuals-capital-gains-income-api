@@ -16,8 +16,8 @@
 
 package v1.otherCgt.retrieve
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
 import v1.otherCgt.retrieve.RetrieveOtherCgtSchema.Def1
 import v1.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
@@ -25,7 +25,7 @@ import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveOtherCgtRequestData] = {
 

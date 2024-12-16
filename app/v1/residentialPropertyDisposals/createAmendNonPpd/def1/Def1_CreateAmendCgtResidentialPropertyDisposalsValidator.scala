@@ -16,22 +16,18 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors._
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
+import config.CgtAppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
-import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{
-  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
-  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
-}
+import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData}
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
-
-class Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
+class Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
     extends Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear

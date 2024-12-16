@@ -16,15 +16,15 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import shared.controllers.validators.Validator
+import config.CgtAppConfig
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtSchema.Def1
 import v1.residentialPropertyDisposals.retrieveAll.def1.Def1_RetrieveAllResidentialPropertyCgtValidator
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import javax.inject.Inject
 
-class RetrieveAllResidentialPropertyCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class RetrieveAllResidentialPropertyCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, source: Option[String]): Validator[RetrieveAllResidentialPropertyCgtRequestData] = {
     val schema = RetrieveAllResidentialPropertyCgtSchema.schema

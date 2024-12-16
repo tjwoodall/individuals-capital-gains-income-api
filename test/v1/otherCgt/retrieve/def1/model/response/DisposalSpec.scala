@@ -16,8 +16,8 @@
 
 package v1.otherCgt.retrieve.def1.model.response
 
-import api.models.domain.AssetType.`other-property`
-import api.models.downstream.DownstreamAssetType.`otherProperty`
+import AssetType.`other-property`
+import DownstreamAssetType.`otherProperty`
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
 

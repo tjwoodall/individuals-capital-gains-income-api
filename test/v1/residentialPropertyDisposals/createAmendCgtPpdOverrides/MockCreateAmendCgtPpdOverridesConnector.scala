@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtPpdOverridesConnector extends MockFactory {
+trait MockCreateAmendCgtPpdOverridesConnector extends MockFactory with TestSuite{
 
   val mockCreateAmendCgtPpdOverridesConnector: CreateAmendCgtPpdOverridesConnector = mock[CreateAmendCgtPpdOverridesConnector]
 

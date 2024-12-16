@@ -16,11 +16,13 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1
 
-import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
-import api.models.errors._
+import common.errors.SourceFormatError
 import config.MockAppConfig
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import support.UnitSpec
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtValidatorFactory
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 

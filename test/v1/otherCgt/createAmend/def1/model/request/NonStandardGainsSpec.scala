@@ -18,7 +18,7 @@ package v1.otherCgt.createAmend.def1.model.request
 
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import support.UnitSpec
-import utils.{EmptinessChecker, EmptyPathsResult}
+import shared.utils.{EmptinessChecker, EmptyPathsResult}
 
 class NonStandardGainsSpec extends UnitSpec {
 

@@ -16,16 +16,17 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import config.MockAppConfig
 import play.api.Configuration
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture.{mtdJson, responseModel}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
@@ -40,7 +41,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
     with MockRetrieveAllResidentialPropertyCgtService
     with MockRetrieveAllResidentialPropertyCgtValidatorFactory
     with MockIdGenerator
-    with MockAppConfig {
+    with MockSharedAppConfig {
 
   val taxYear: String        = "2019-20"
   val source: Option[String] = Some("latest")
@@ -97,11 +98,11 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.retrieveAll(validNino, taxYear, source)(fakeGetRequest)
 

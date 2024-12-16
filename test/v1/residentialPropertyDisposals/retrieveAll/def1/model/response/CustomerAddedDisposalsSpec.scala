@@ -16,8 +16,8 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
+import shared.models.domain.Timestamp
 import support.UnitSpec
 
 class CustomerAddedDisposalsSpec extends UnitSpec {

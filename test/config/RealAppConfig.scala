@@ -18,6 +18,7 @@ package config
 
 import com.typesafe.config.ConfigFactory
 import play.api.Configuration
+import shared.config.SharedAppConfig
 import support.UnitSpec
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -26,12 +27,12 @@ trait RealAppConfig {
 
   protected lazy val latestEnabledApiVersion: Int =
     (99 to 1 by -1)
-      .find(num => realAppConfig.safeEndpointsEnabled(s"$num.0"))
+      .find(num => sharedRealAppConfig.safeEndpointsEnabled(s"$num.0"))
       .getOrElse(fail("Couldn't find an enabled API version in the config"))
 
   protected lazy val emaEndpoints: Map[String, Boolean] =
     realAppConfig match {
-      case impl: AppConfigImpl =>
+      case impl: CgtAppConfig =>
         impl.configuration
           .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
           .getOrElse(Map.empty)
@@ -40,11 +41,19 @@ trait RealAppConfig {
         Map.empty
     }
 
-  protected lazy val realAppConfig: AppConfig = {
+  protected lazy val realAppConfig: CgtAppConfig = {
     val conf           = ConfigFactory.load()
     val configuration  = Configuration(conf)
     val servicesConfig = new ServicesConfig(configuration)
-    new AppConfigImpl(servicesConfig, configuration)
+    new CgtAppConfig(servicesConfig, configuration)
+  }
+
+  protected lazy val sharedRealAppConfig: SharedAppConfig = {
+    val conf = ConfigFactory.load()
+    val configuration = Configuration(conf)
+    val servicesConfig = new ServicesConfig(configuration)
+    new SharedAppConfig(servicesConfig, configuration)
+
   }
 
 }

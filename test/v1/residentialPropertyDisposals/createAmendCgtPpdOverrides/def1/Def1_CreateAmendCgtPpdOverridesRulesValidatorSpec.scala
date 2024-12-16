@@ -16,17 +16,17 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
 
-import api.controllers.requestParsers.validators.validations.ValueFormatErrorMessages
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{RuleDateRangeInvalidError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, ValueFormatError, _}
 import support.UnitSpec
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with ValueFormatErrorMessages with MockAppConfig {
+class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with MockAppConfig {
 
   private val validNino                      = "AA123456A"
   private val validTaxYear                   = "2019-20"

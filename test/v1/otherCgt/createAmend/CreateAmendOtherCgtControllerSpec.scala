@@ -16,17 +16,18 @@
 
 package v1.otherCgt.createAmend
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import utils.MockIdGenerator
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
-import config.MockAppConfig
+import common.services.MockNrsProxyService
+import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import play.api.Configuration
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v1.otherCgt.createAmend.def1.model.request._
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
@@ -34,11 +35,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendOtherCgtControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockAppConfig
+    with MockSharedAppConfig
     with MockCreateAmendOtherCgtService
     with MockNrsProxyService
     with MockAuditService
@@ -130,11 +131,12 @@ class CreateAmendOtherCgtControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(s"""
-                                         |{
-                                         |  "nino":"$validNino",
-                                         |  "taxYear": "$taxYear"
-                                         |  }""".stripMargin)
+  val auditData: JsValue = Json.parse(
+    s"""
+       |{
+       |  "nino":"$validNino",
+       |  "taxYear": "$taxYear"
+       |  }""".stripMargin)
 
   "CreateAmendOtherCgtController" should {
     "return OK" when {
@@ -190,11 +192,11 @@ class CreateAmendOtherCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.createAmendOtherCgt(validNino, taxYear)(fakePostRequest(validRequestJson))
 

@@ -16,8 +16,6 @@
 
 package v1.otherCgt.retrieve.def1.model.response
 
-import api.models.domain.AssetType
-import api.models.downstream.DownstreamAssetType
 import play.api.libs.json.{Json, OFormat, Reads}
 
 case class Disposal(assetType: AssetType,

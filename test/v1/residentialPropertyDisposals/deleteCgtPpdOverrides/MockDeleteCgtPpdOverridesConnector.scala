@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtPpdOverridesConnector extends MockFactory {
+trait MockDeleteCgtPpdOverridesConnector extends MockFactory with TestSuite {
 
   val mockDeleteCgtPpdOverridesConnector: DeleteCgtPpdOverridesConnector = mock[DeleteCgtPpdOverridesConnector]
 

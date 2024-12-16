@@ -16,18 +16,18 @@
 
 package v1.endpoints
 
-import api.controllers.requestParsers.validators.validations.DisposalDateErrorMessages
-import api.models.errors._
-import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import common.errors.{AssetDescriptionFormatError, AssetTypeFormatError, ClaimOrElectionCodesFormatError, RuleAcquisitionDateError, RuleDisposalDateNotFutureError, RuleGainAfterReliefLossAfterReliefError, RuleGainLossError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.{BadRequestError, DateFormatError, ErrorWrapper, InternalError, MtdError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with DisposalDateErrorMessages with WireMockMethods {
+class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestJson: JsValue = Json.parse(
     """

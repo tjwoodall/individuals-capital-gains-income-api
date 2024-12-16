@@ -16,15 +16,16 @@
 
 package v2.endpoints
 
-import api.controllers.requestParsers.validators.validations.DisposalDateErrorMessages
-import api.models.errors._
-import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.client.WireMock._
+import common.errors._
+import common.validations.DisposalDateErrorMessages
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors._
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.{IntegrationBaseSpec, WireMockMethods}
 
 class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with DisposalDateErrorMessages with WireMockMethods {

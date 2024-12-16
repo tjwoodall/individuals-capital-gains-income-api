@@ -16,15 +16,16 @@
 
 package v1.otherCgt.createAmend
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendOtherCgtService extends MockFactory {
+trait MockCreateAmendOtherCgtService extends MockFactory with TestSuite {
 
   val mockCreateAmendOtherCgtService: CreateAmendOtherCgtService = mock[CreateAmendOtherCgtService]
 

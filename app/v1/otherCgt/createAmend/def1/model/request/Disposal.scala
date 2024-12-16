@@ -16,7 +16,6 @@
 
 package v1.otherCgt.createAmend.def1.model.request
 
-import api.models.domain.AssetType
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 

@@ -16,17 +16,17 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future
-
 class CreateAmendCgtResidentialPropertyDisposalsServiceSpec extends ServiceSpec {
 
   val createAmendCgtResidentialPropertyDisposalsRequest: CreateAmendCgtResidentialPropertyDisposalsRequestData =

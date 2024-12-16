@@ -16,10 +16,11 @@
 
 package v1.otherCgt.createAmend
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
+import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError}
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}

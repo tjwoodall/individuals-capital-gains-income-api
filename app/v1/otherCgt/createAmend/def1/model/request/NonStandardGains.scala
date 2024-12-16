@@ -18,7 +18,7 @@ package v1.otherCgt.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
 import shapeless.HNil
-import utils.EmptinessChecker
+import shared.utils.EmptinessChecker
 
 case class NonStandardGains(carriedInterestGain: Option[BigDecimal],
                             carriedInterestRttTaxPaid: Option[BigDecimal],

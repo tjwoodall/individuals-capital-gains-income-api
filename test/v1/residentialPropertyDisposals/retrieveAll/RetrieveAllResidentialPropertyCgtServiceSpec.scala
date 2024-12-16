@@ -16,18 +16,19 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.controllers.EndpointLogContext
-import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.errors.SourceFormatError
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{Def1_RetrieveAllResidentialPropertyCgtResponse, PpdService}
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.Future
-
 class RetrieveAllResidentialPropertyCgtServiceSpec extends ServiceSpec {
 
   private val nino    = "AA112233A"

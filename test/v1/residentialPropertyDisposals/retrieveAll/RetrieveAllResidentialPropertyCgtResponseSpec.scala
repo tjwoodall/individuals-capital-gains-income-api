@@ -15,9 +15,9 @@
  */
 
 package v1.residentialPropertyDisposals.retrieveAll
-
-import api.models.domain.{MtdSourceEnum, Timestamp}
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import play.api.libs.json.{JsValue, Json}
+import shared.models.domain.Timestamp
 import support.UnitSpec
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
 

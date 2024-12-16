@@ -16,10 +16,9 @@
 
 package v1.otherCgt.retrieve
 
-import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
@@ -28,7 +27,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class RetrieveOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+
+  import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 
   def retrieveOtherCgt(request: RetrieveOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
@@ -42,7 +43,7 @@ class RetrieveOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: 
       case ty if ty.useTaxYearSpecificApi =>
         TaxYearSpecificIfsUri(s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
       case _ =>
-        Api1661Uri(s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}")
+        IfsUri(s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}")
     }
 
     get(uri = downstreamUri)

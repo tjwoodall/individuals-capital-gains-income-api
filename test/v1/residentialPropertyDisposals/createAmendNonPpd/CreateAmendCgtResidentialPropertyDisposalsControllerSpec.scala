@@ -16,28 +16,29 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService, MockNrsProxyService}
-import config.MockAppConfig
+import common.services.MockNrsProxyService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import utils.MockIdGenerator
+import shared.config.MockSharedAppConfig
+import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import shared.utils.MockIdGenerator
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockAppConfig
+    with MockSharedAppConfig
     with MockCreateAmendCgtResidentialPropertyDisposalsService
     with MockAuditService
     with MockNrsProxyService
@@ -98,17 +99,16 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(s"""
-                                         |{
-                                         |  "nino":"$validNino",
-                                         |  "taxYear": "$taxYear"
-                                         |  }""".stripMargin)
+  val auditData: JsValue = Json.parse(
+    s"""
+       |{
+       |  "nino":"$validNino",
+       |  "taxYear": "$taxYear"
+       |  }""".stripMargin)
 
   "CreateAmendCgtResidentialPropertyDisposalsController" should {
     "return a successful response with status OK" when {
       "happy path" in new Test {
-        MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
-
         willUseValidator(returningSuccess(requestData))
 
         MockNrsProxyService
@@ -157,11 +157,11 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedAppConfig.featureSwitches.anyNumberOfTimes() returns Configuration(
+    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] =
       controller.createAmendCgtResidentialPropertyDisposals(validNino, taxYear)(fakePostRequest(validRequestJson))
@@ -181,7 +181,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
         )
       )
 
-    MockedAppConfig.featureSwitches.returns(Configuration("allowTemporalValidationSuspension.enabled" -> true)).anyNumberOfTimes()
+    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("allowTemporalValidationSuspension.enabled" -> true)).anyNumberOfTimes()
   }
 
 }

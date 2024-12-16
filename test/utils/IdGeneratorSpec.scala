@@ -16,6 +16,7 @@
 
 package utils
 
+import shared.utils.IdGenerator
 import support.UnitSpec
 
 class IdGeneratorSpec extends UnitSpec {

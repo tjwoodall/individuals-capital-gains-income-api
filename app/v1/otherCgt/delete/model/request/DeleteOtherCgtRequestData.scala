@@ -16,7 +16,7 @@
 
 package v1.otherCgt.delete.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 trait DeleteOtherCgtRequestData {
   def nino: Nino

@@ -16,15 +16,14 @@
 
 package v1.otherCgt.delete
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import common.connectors.CgtConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import scala.concurrent.Future
-
-class DeleteOtherCgtConnectorSpec extends ConnectorSpec {
+class DeleteOtherCgtConnectorSpec extends CgtConnectorSpec {
 
   "DeleteOtherCgtConnector" should {
     "return the expected response for a non-TYS request" when {
@@ -68,7 +67,7 @@ class DeleteOtherCgtConnectorSpec extends ConnectorSpec {
 
     val connector: DeleteOtherCgtConnector = new DeleteOtherCgtConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

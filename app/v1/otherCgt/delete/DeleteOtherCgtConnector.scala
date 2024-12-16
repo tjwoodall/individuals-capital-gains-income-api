@@ -16,10 +16,9 @@
 
 package v1.otherCgt.delete
 
-import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
@@ -27,7 +26,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+
+  import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 
   def deleteOtherCgt(request: DeleteOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
@@ -41,7 +42,7 @@ class DeleteOtherCgtConnector @Inject() (val http: HttpClient, val appConfig: Ap
         s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}"
       )
     } else {
-      Api1661Uri[Unit](
+      IfsUri[Unit](
         s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}"
       )
     }

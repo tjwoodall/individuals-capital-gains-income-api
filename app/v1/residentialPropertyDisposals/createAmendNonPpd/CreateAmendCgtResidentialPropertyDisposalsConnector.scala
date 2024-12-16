@@ -16,9 +16,9 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
@@ -26,24 +26,25 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+
 
   def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
                                                                                           hc: HeaderCarrier,
                                                                                           ec: ExecutionContext,
                                                                                           correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import api.connectors.httpparsers.StandardDownstreamHttpParser._
     import request._
+    import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 
     val uri = if (taxYear.useTaxYearSpecificApi) {
       TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
     } else {
       // Pre-tys uses MTD tax year format
-      Api1661Uri[Unit](s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")
     }
 
-    put(uri, body)
+    put(body, uri)
   }
 
 }

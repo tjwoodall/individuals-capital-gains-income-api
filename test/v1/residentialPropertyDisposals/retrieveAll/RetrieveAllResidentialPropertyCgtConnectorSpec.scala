@@ -16,10 +16,11 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.connectors.{ConnectorSpec, DownstreamOutcome}
-import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
+import shared.connectors.{ConnectorSpec, DownstreamOutcome}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Def1_RetrieveAllResidentialPropertyCgtResponse
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
@@ -47,7 +48,7 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
       Def1_RetrieveAllResidentialPropertyRequestData(Nino(nino), taxYear, source)
 
     val connector: RetrieveAllResidentialPropertyCgtConnector =
-      new RetrieveAllResidentialPropertyCgtConnector(http = mockHttpClient, appConfig = mockAppConfig)
+      new RetrieveAllResidentialPropertyCgtConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]]#Derived = {

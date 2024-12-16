@@ -16,9 +16,10 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import api.models.domain.{MtdSourceEnum, Timestamp}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import shared.models.domain.Timestamp
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 
 case class MultiplePropertyDisposals(source: MtdSourceEnum,
                                      submittedOn: Option[Timestamp],

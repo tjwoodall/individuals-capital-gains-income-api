@@ -16,16 +16,17 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.controllers.validators.Validator
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-trait MockCreateAmendCgtPpdOverridesValidatorFactory extends MockFactory {
+trait MockCreateAmendCgtPpdOverridesValidatorFactory extends MockFactory with TestSuite {
 
   val mockCreateAmendCgtPpdOverridesValidatorFactory: CreateAmendCgtPpdOverridesValidatorFactory =
     mock[CreateAmendCgtPpdOverridesValidatorFactory]

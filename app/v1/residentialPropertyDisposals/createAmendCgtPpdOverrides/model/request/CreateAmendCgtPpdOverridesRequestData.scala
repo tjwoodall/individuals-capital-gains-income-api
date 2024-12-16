@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 trait CreateAmendCgtPpdOverridesRequestData {
   def nino: Nino

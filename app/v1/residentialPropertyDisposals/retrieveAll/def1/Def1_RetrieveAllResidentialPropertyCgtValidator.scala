@@ -16,14 +16,16 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
-import api.models.domain.{MtdSourceEnum, TaxYear}
-import api.models.errors.{MtdError, SourceFormatError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import config.AppConfig
+import common.errors.SourceFormatError
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
@@ -31,7 +33,7 @@ import javax.inject.{Inject, Singleton}
 import scala.util.{Failure, Success, Try}
 
 @Singleton
-class Def1_RetrieveAllResidentialPropertyCgtValidator @Inject()(nino: String, taxYear: String, source: Option[String])(appConfig: AppConfig)
+class Def1_RetrieveAllResidentialPropertyCgtValidator @Inject()(nino: String, taxYear: String, source: Option[String])(appConfig: CgtAppConfig)
   extends Validator[RetrieveAllResidentialPropertyCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
