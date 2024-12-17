@@ -4,6 +4,12 @@ info:
   version: "1.0"
   title: Individuals Capital Gains Income (MTD)
   description: |
+    
+    The following groups of endpoints are stateful in the Sandbox:
+  
+      - [Capital Gains on Residential Property Disposals](#tag/Capital-Gains-on-Residential-Property-Disposals)
+      - [Other Capital Gains and Disposals](#tag/Other-Capital-Gains-and-Disposals)
+    
     # Send fraud prevention data
     HMRC monitors transactions to help protect your customers' confidential data from criminals and fraudsters. 
     
