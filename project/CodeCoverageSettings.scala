@@ -29,6 +29,7 @@ object CodeCoverageSettings {
     "config.*",
     "testOnly.*",
     "testOnlyDoNotUseInAppConf.*",
+    "shared.*"
   )
 
   private val excludedExtraPackages: Seq[String] = Seq(

@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators
 
-import api.models.domain.TaxYear
+import shared.models.domain.TaxYear
 
 import java.time.LocalDate
 import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
@@ -31,15 +31,16 @@ package object validations {
 
   def getToDateAndFromDate(taxYear: String): (LocalDate, LocalDate) = {
     val APRIL = 4
-    val SIX   = 6
-    val FIVE  = 5
+    val SIX = 6
+    val FIVE = 5
 
-    val year     = LocalDate.parse(TaxYear.fromMtd(taxYear).asDownstream, yearFormat)
+    val year = LocalDate.parse(TaxYear.fromMtd(taxYear).asDownstream, yearFormat)
     val fromDate = year.minusYears(1).withMonth(APRIL).withDayOfMonth(SIX)
-    val toDate   = year.withMonth(APRIL).withDayOfMonth(FIVE)
+    val toDate = year.withMonth(APRIL).withDayOfMonth(FIVE)
 
     (fromDate, toDate)
   }
+
 
   def checkAmountScale(amount: BigDecimal, maxScale: Int): Boolean                              = !(amount.scale > maxScale)
   def checkAmountRange(amount: BigDecimal, minValue: BigDecimal, maxValue: BigDecimal): Boolean = !(amount > maxValue || amount < minValue)
