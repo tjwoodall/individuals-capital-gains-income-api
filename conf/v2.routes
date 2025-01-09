@@ -1,0 +1,12 @@
+# Capital Gains Tax endpoints
+PUT        /residential-property/:nino/:taxYear/ppd               v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesController.createAmendCgtPpdOverrides(nino: String, taxYear: String)
+DELETE     /residential-property/:nino/:taxYear/ppd               v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesController.deleteCgtPpdOverrides(nino: String, taxYear: String)
+GET        /residential-property/:nino/:taxYear                   v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtController.retrieveAll(nino: String, taxYear: String, source: Option[String])
+
+PUT        /residential-property/:nino/:taxYear                   v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsController.createAmendCgtResidentialPropertyDisposals(nino: String, taxYear: String)
+
+PUT        /other-gains/:nino/:taxYear                            v1.otherCgt.createAmend.CreateAmendOtherCgtController.createAmendOtherCgt(nino: String, taxYear: String)
+GET        /other-gains/:nino/:taxYear                            v1.otherCgt.retrieve.RetrieveOtherCgtController.retrieveOtherCgt(nino: String, taxYear: String)
+DELETE     /other-gains/:nino/:taxYear                            v1.otherCgt.delete.DeleteOtherCgtController.deleteOtherCgt(nino: String, taxYear: String)
+
+DELETE     /residential-property/:nino/:taxYear                   v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdController.deleteCgtNonPpd(nino: String, taxYear: String)
