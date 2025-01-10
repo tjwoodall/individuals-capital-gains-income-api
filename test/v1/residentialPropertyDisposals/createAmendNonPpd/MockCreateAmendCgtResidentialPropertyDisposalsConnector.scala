@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtResidentialPropertyDisposalsConnector extends MockFactory {
+trait MockCreateAmendCgtResidentialPropertyDisposalsConnector extends MockFactory with TestSuite {
 
   val mockCreateAmendCgtResidentialPropertyDisposalsConnector: CreateAmendCgtResidentialPropertyDisposalsConnector =
     mock[CreateAmendCgtResidentialPropertyDisposalsConnector]

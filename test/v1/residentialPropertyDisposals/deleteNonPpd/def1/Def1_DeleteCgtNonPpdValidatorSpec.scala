@@ -16,9 +16,9 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
 import config.MockAppConfig
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import support.UnitSpec
 import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdValidatorFactory
 import v1.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData

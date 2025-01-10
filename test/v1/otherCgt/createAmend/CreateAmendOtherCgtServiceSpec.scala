@@ -15,18 +15,17 @@
  */
 
 package v1.otherCgt.createAmend
-
-import api.controllers.EndpointLogContext
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.outcomes.ResponseWrapper
-import api.services.ServiceSpec
+import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError}
+import shared.controllers.EndpointLogContext
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.outcomes.ResponseWrapper
+import shared.services.ServiceSpec
 import v1.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v1.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.Future
-
 class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
 
   private val nino    = "AA112233A"

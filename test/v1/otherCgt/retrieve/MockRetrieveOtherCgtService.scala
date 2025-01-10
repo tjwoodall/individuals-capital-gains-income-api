@@ -16,16 +16,17 @@
 
 package v1.otherCgt.retrieve
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveOtherCgtService extends MockFactory {
+trait MockRetrieveOtherCgtService extends MockFactory with TestSuite {
 
   val mockRetrieveOtherCgtService: RetrieveOtherCgtService =
     mock[RetrieveOtherCgtService]

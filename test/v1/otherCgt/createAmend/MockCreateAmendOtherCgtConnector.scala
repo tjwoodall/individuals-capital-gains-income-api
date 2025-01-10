@@ -16,15 +16,16 @@
 
 package v1.otherCgt.createAmend
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendOtherCgtConnector extends MockFactory {
+trait MockCreateAmendOtherCgtConnector extends MockFactory with TestSuite {
 
   val mockCreateAmendOtherCgtDisposalsAndGainsConnector: CreateAmendOtherCgtConnector = mock[CreateAmendOtherCgtConnector]
 

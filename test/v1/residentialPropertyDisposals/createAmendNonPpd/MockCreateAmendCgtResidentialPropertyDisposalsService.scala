@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtResidentialPropertyDisposalsService extends MockFactory {
+trait MockCreateAmendCgtResidentialPropertyDisposalsService extends MockFactory with TestSuite {
 
   val mockCreateAmendCgtResidentialPropertyDisposalsService: CreateAmendCgtResidentialPropertyDisposalsService =
     mock[CreateAmendCgtResidentialPropertyDisposalsService]

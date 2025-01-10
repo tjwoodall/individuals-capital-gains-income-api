@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 
 trait CreateAmendCgtResidentialPropertyDisposalsRequestData {
   def nino: Nino

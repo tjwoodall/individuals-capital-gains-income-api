@@ -17,7 +17,7 @@
 package v1.otherCgt.createAmend.model.request
 
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil
+import shared.utils.JsonWritesUtil
 import v1.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestBody
 
 trait CreateAmendOtherCgtRequestBody

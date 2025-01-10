@@ -16,7 +16,7 @@
 
 package v1.otherCgt.delete.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.otherCgt.delete.DeleteOtherCgtSchema
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 

@@ -17,7 +17,7 @@
 package v1.residentialPropertyDisposals.createAmendNonPpd.model.request
 
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil
+import shared.utils.JsonWritesUtil
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody
 
 trait CreateAmendCgtResidentialPropertyDisposalsRequestBody

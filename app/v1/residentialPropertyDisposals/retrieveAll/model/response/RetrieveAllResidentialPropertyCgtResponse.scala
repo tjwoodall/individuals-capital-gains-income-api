@@ -17,7 +17,7 @@
 package v1.residentialPropertyDisposals.retrieveAll.model.response
 
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil.writesFrom
+import shared.utils.JsonWritesUtil.writesFrom
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Def1_RetrieveAllResidentialPropertyCgtResponse
 
 trait RetrieveAllResidentialPropertyCgtResponse

@@ -16,11 +16,11 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd.def1
 
-import api.controllers.requestParsers.validators.validations.{DisposalDateErrorMessages, ValueFormatErrorMessages}
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
+import common.errors.{CustomerRefFormatError, RuleGainLossError}
 import config.MockAppConfig
 import play.api.libs.json.{JsObject, JsValue, Json}
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import support.UnitSpec
 import v1.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData}
@@ -28,8 +28,6 @@ import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAme
 
 class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec
     extends UnitSpec
-    with ValueFormatErrorMessages
-    with DisposalDateErrorMessages
     with MockAppConfig {
   private implicit val correlationId: String = "1234"
 
@@ -41,6 +39,7 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec
   private val validCompletionDate    = "2020-03-29"
   private val validAcquisitionDate   = "2020-02-01"
   private val validValue             = 1000.12
+  private val ZERO_MINIMUM_INCLUSIVE = "The value must be between 0 and 99999999999.99"
 
   private def validRequestBodyJsonWith(losses: Boolean): JsValue = {
     val json = Json

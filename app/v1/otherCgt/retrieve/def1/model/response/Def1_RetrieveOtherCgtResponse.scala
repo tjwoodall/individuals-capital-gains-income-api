@@ -16,8 +16,8 @@
 
 package v1.otherCgt.retrieve.def1.model.response
 
-import api.models.domain.Timestamp
 import play.api.libs.json.{Json, OWrites, Reads}
+import shared.models.domain.Timestamp
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 case class Def1_RetrieveOtherCgtResponse(submittedOn: Timestamp,

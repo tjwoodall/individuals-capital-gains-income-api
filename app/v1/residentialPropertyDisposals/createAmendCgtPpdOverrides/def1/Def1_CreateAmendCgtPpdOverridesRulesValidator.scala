@@ -16,18 +16,14 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
-import api.models.errors._
+import shared.controllers.validators.RulesValidator
 import cats.data.Validated
 import cats.data.Validated._
 import cats.implicits._
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  Def1_CreateAmendCgtPpdOverridesRequestData,
-  MultiplePropertyDisposals,
-  SinglePropertyDisposals
-}
+import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.{DateFormatError, MtdError, RuleDateRangeInvalidError}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
 
 object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1_CreateAmendCgtPpdOverridesRequestData] {
 

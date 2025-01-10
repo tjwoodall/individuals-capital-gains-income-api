@@ -16,15 +16,16 @@
 
 package v1.otherCgt.delete
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteOtherCgtService extends MockFactory {
+trait MockDeleteOtherCgtService extends MockFactory with TestSuite {
 
   val mockDeleteOtherCgtService: DeleteOtherCgtService =
     mock[DeleteOtherCgtService]

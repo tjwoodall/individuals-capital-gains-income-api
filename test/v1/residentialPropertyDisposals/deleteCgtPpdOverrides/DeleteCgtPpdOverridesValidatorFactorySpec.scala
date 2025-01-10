@@ -16,8 +16,8 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import api.controllers.validators.Validator
 import config.MockAppConfig
+import shared.controllers.validators.Validator
 import support.UnitSpec
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.Def1_DeleteCgtPpdOverridesValidator
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData

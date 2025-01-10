@@ -16,7 +16,7 @@
 
 package v1.otherCgt.retrieve
 
-import api.schema.DownstreamReadable
+import shared.schema.DownstreamReadable
 import play.api.libs.json.Reads
 import v1.otherCgt.retrieve.def1.model.response.Def1_RetrieveOtherCgtResponse
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse

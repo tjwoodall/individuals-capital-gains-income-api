@@ -16,16 +16,15 @@
 
 package v1.otherCgt.retrieve
 
-import api.controllers.RequestContext
-import api.models.errors._
-import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
 @Singleton
 class RetrieveOtherCgtService @Inject() (connector: RetrieveOtherCgtConnector) extends BaseService {
 

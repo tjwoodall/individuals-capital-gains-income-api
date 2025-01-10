@@ -16,15 +16,15 @@
 
 package v1.otherCgt.delete
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
 import v1.otherCgt.delete.DeleteOtherCgtSchema.Def1
 import v1.otherCgt.delete.def1.Def1_DeleteOtherCgtValidator
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import javax.inject.Inject
 
-class DeleteOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[DeleteOtherCgtRequestData] = {
 

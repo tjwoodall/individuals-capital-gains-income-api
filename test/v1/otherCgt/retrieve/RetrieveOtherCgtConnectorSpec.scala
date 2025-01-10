@@ -16,9 +16,9 @@
 
 package v1.otherCgt.retrieve
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear, Timestamp}
-import api.models.outcomes.ResponseWrapper
+import common.connectors.CgtConnectorSpec
+import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.def1.model.response.Def1_RetrieveOtherCgtResponse
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
@@ -26,7 +26,7 @@ import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import scala.concurrent.Future
 
-class RetrieveOtherCgtConnectorSpec extends ConnectorSpec {
+class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
 
   "RetrieveOtherCgtConnector" should {
     "return the expected response for a non-TYS request" when {
@@ -78,7 +78,7 @@ class RetrieveOtherCgtConnectorSpec extends ConnectorSpec {
 
     val connector: RetrieveOtherCgtConnector = new RetrieveOtherCgtConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }

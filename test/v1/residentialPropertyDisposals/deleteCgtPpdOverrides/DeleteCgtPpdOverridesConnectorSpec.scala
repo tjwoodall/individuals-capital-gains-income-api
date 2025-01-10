@@ -15,11 +15,10 @@
  */
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides
-
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors.{InternalError, NinoFormatError}
-import api.models.outcomes.ResponseWrapper
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors.{InternalError, NinoFormatError}
+import shared.models.outcomes.ResponseWrapper
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
@@ -36,7 +35,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
     protected val connector: DeleteCgtPpdOverridesConnector = new DeleteCgtPpdOverridesConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     protected val request: DeleteCgtPpdOverridesRequestData = Def1_DeleteCgtPpdOverridesRequestData(Nino(nino), taxYear)

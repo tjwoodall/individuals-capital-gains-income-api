@@ -18,7 +18,7 @@ package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request
 
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil
+import shared.utils.JsonWritesUtil
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestBody
 
 trait CreateAmendCgtPpdOverridesRequestBody

@@ -17,7 +17,7 @@
 package v1.otherCgt.retrieve.model.response
 
 import play.api.libs.json.OWrites
-import utils.JsonWritesUtil.writesFrom
+import shared.utils.JsonWritesUtil.writesFrom
 import v1.otherCgt.retrieve.def1.model.response.Def1_RetrieveOtherCgtResponse
 
 trait RetrieveOtherCgtResponse

@@ -16,15 +16,15 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
+import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdSchema.Def1
 import v1.residentialPropertyDisposals.deleteNonPpd.def1.Def1_DeleteCgtNonPpdValidator
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
-import v1.residentialPropertyDisposals.deleteNonPpd.DeleteCgtNonPpdSchema.Def1
 
 import javax.inject.Inject
 
-class DeleteCgtNonPpdValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteCgtNonPpdValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[DeleteCgtNonPpdRequestData] = {
 

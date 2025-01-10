@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesSchema
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 

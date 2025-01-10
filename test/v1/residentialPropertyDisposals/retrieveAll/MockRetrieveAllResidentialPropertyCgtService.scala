@@ -16,16 +16,17 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.controllers.RequestContext
-import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.controllers.RequestContext
+import shared.services.ServiceOutcome
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveAllResidentialPropertyCgtService extends MockFactory {
+trait MockRetrieveAllResidentialPropertyCgtService extends MockFactory with TestSuite {
 
   val mockRetrieveAllResidentialPropertyCgtService: RetrieveAllResidentialPropertyCgtService = mock[RetrieveAllResidentialPropertyCgtService]
 

@@ -16,8 +16,9 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.model.request
 
-import api.models.domain.{MtdSourceEnum, Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtSchema
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 
 trait RetrieveAllResidentialPropertyCgtRequestData{
   def nino: Nino

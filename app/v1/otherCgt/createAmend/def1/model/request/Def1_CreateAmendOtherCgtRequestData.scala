@@ -16,7 +16,7 @@
 
 package v1.otherCgt.createAmend.def1.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.otherCgt.createAmend.CreateAmendOtherCgtSchema
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 

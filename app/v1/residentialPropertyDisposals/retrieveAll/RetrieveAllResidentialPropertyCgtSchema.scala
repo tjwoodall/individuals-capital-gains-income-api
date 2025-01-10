@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.schema.DownstreamReadable
+import shared.schema.DownstreamReadable
 import play.api.libs.json.Reads
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.Def1_RetrieveAllResidentialPropertyCgtResponse
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse

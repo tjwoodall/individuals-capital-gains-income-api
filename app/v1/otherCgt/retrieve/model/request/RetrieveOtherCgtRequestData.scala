@@ -16,7 +16,7 @@
 
 package v1.otherCgt.retrieve.model.request
 
-import api.models.domain.{Nino, TaxYear}
+import shared.models.domain.{Nino, TaxYear}
 import v1.otherCgt.retrieve.RetrieveOtherCgtSchema
 
 trait RetrieveOtherCgtRequestData {

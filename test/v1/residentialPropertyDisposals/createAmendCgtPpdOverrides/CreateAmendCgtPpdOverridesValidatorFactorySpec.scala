@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.models.utils.JsonErrorValidators
+import common.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec

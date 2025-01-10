@@ -16,7 +16,6 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
-import api.models.request.RawData
 import play.api.mvc.AnyContentAsJson
 
 case class CreateAmendCgtPpdOverridesRawData(nino: String, taxYear: String, body: AnyContentAsJson, temporalValidationEnabled: Boolean = true)

@@ -16,16 +16,17 @@
 
 package v1.otherCgt.retrieve
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveOtherCgtConnector extends MockFactory {
+trait MockRetrieveOtherCgtConnector extends MockFactory with TestSuite {
 
   val mockRetrieveOtherCgtConnector: RetrieveOtherCgtConnector = mock[RetrieveOtherCgtConnector]
 

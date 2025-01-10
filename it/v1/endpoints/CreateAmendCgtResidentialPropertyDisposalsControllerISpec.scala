@@ -16,17 +16,17 @@
 
 package v1.endpoints
 
-import api.models.errors._
-import api.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.errors.{CustomerRefFormatError, RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1, RuleGainLossError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors.{DateFormatError, ErrorWrapper, InternalError, MtdError, NinoFormatError, RuleIncorrectOrEmptyBodyError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.{IntegrationBaseSpec, WireMockMethods}
-
 class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validDisposalDate: String    = "2020-03-27"
@@ -185,7 +185,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
   )
 
   val datesNotFormattedError: MtdError = DateFormatError.copy(
-    message = "The field should be in the format YYYY-MM-DD",
+    message = "The supplied date format is not valid",
     paths = Some(
       Seq(
         "/disposals/0/disposalDate",

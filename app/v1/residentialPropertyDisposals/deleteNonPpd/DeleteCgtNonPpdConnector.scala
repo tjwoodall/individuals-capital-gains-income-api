@@ -16,10 +16,10 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd
 
-import api.connectors.DownstreamUri.{Api1661Uri, TaxYearSpecificIfsUri}
-import api.connectors.httpparsers.StandardDownstreamHttpParser._
-import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
-import config.AppConfig
+import shared.config.SharedAppConfig
+import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
+class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit
       hc: HeaderCarrier,
@@ -40,7 +40,7 @@ class DeleteCgtNonPpdConnector @Inject() (val http: HttpClient, val appConfig: A
       TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
     } else {
       // Note: tax year is in MTD format
-      Api1661Uri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }
 
     delete(downstreamUri)

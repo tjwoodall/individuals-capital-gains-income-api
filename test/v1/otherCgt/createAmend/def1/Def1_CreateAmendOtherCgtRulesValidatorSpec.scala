@@ -16,11 +16,12 @@
 
 package v1.otherCgt.createAmend.def1
 
-import api.models.domain.{Nino, TaxYear}
-import api.models.errors._
-import api.models.utils.JsonErrorValidators
+import common.errors.{AssetDescriptionFormatError, AssetTypeFormatError, ClaimOrElectionCodesFormatError, RuleGainAfterReliefLossAfterReliefError, RuleGainLossError}
+import common.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json._
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.errors._
 import support.UnitSpec
 import v1.otherCgt.createAmend.def1.model.request.{Def1_CreateAmendOtherCgtRequestBody, Def1_CreateAmendOtherCgtRequestData}
 

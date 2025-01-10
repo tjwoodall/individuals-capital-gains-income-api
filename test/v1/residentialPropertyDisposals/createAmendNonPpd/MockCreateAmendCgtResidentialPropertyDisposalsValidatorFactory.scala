@@ -16,16 +16,17 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.controllers.validators.Validator
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.models.errors.MtdError
 import v1.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
-trait MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory extends MockFactory {
+trait MockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory extends MockFactory with TestSuite {
 
   val mockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory: CreateAmendCgtResidentialPropertyDisposalsValidatorFactory =
     mock[CreateAmendCgtResidentialPropertyDisposalsValidatorFactory]

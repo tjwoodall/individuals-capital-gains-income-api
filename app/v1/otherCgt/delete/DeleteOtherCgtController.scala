@@ -16,17 +16,17 @@
 
 package v1.otherCgt.delete
 
-import api.controllers._
-import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.auth.UserDetails
-import api.models.errors._
-import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
-import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import shared.config.SharedAppConfig
+import shared.controllers._
+import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import shared.models.auth.UserDetails
+import shared.models.errors.ErrorWrapper
+import shared.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import shared.utils.IdGenerator
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +38,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
                                           service: DeleteOtherCgtService,
                                           auditService: AuditService,
                                           cc: ControllerComponents,
-                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
     extends AuthorisedController(cc) {
   val endpointName = "delete-other-cgt"
 

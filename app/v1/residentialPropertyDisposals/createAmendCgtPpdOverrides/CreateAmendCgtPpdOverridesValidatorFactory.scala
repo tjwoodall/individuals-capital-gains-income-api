@@ -16,16 +16,16 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import config.CgtAppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesSchema.Def1
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesSchema.Def1
 
 import javax.inject.Inject
 
-class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] = {
 

@@ -16,15 +16,16 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockDeleteCgtNonPpdConnector extends MockFactory {
+trait MockDeleteCgtNonPpdConnector extends MockFactory with TestSuite {
 
   val mockDeleteCgtNonPpdConnector: DeleteCgtNonPpdConnector =
     mock[DeleteCgtNonPpdConnector]

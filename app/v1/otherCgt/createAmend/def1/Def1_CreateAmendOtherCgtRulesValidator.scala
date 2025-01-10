@@ -16,12 +16,13 @@
 
 package v1.otherCgt.createAmend.def1
 
-import api.controllers.validators.RulesValidator
-import api.controllers.validators.resolvers._
-import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
+import common.errors._
+import shared.controllers.validators.RulesValidator
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.errors.{DateFormatError, MtdError}
 import v1.otherCgt.createAmend.def1.model.request._
 
 object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_CreateAmendOtherCgtRequestData] {

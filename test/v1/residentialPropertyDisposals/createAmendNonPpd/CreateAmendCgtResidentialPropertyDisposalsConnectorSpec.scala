@@ -16,15 +16,15 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import common.connectors.CgtConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends ConnectorSpec {
+class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnectorSpec {
 
   private val nino: String = "AA111111A"
 
@@ -32,7 +32,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends ConnectorS
 
     val connector: CreateAmendCgtResidentialPropertyDisposalsConnector = new CreateAmendCgtResidentialPropertyDisposalsConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
     val taxYear: TaxYear

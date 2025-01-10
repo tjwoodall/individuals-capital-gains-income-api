@@ -16,8 +16,8 @@
 
 package v1.otherCgt.createAmend
 
-import api.controllers.validators.Validator
-import config.AppConfig
+import shared.controllers.validators.Validator
+import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import v1.otherCgt.createAmend.CreateAmendOtherCgtSchema.Def1
 import v1.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtValidator
@@ -26,7 +26,7 @@ import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAmendOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendOtherCgtRequestData] = {
     val schema = CreateAmendOtherCgtSchema.schema

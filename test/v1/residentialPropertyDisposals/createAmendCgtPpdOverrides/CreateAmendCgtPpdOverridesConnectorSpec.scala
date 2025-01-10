@@ -16,26 +16,26 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.connectors.ConnectorSpec
-import api.mocks.MockHttpClient
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
-import config.MockAppConfig
+import common.connectors.CgtConnectorSpec
+import shared.mocks.MockHttpClient
+import shared.config.MockSharedAppConfig
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture.Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendCgtPpdOverridesConnectorSpec extends ConnectorSpec {
+class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
 
-  private val nino: String = "AA111111A"
+  trait Test extends MockHttpClient with MockSharedAppConfig {
 
-  trait Test extends MockHttpClient with MockAppConfig {
+    val nino: String = "AA111111A"
 
     val connector: CreateAmendCgtPpdOverridesConnector = new CreateAmendCgtPpdOverridesConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }
@@ -69,7 +69,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends ConnectorSpec {
         new TysIfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-          override implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
+          implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
           val outcome = Right(ResponseWrapper(correlationId, ()))
 

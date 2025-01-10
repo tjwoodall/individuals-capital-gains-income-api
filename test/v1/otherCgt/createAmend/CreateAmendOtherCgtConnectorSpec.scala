@@ -16,32 +16,41 @@
 
 package v1.otherCgt.createAmend
 
-import api.connectors.ConnectorSpec
-import api.models.domain.{Nino, TaxYear}
-import api.models.outcomes.ResponseWrapper
+import config.MockAppConfig
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
 import v1.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v1.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec {
+class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig {
 
   private val nino: String = "AA111111A"
-
+  val allowedIfsHeaders: Seq[String] = List(
+    "Accept",
+    "Gov-Test-Scenario",
+    "Content-Type",
+    "Location",
+    "X-Request-Timestamp",
+    "X-Session-Id"
+  )
   trait Test { _: ConnectorTest =>
     def taxYear: TaxYear
 
     val connector: CreateAmendOtherCgtConnector = new CreateAmendOtherCgtConnector(
       http = mockHttpClient,
-      appConfig = mockAppConfig
+      appConfig = mockSharedAppConfig
     )
 
   }
 
   "createAndAmend" should {
     "return a 204 status" when {
-      "a valid request is made" in new Api1661Test with Test {
+      "a valid request is made" in new IfsTest  with Test {
+
         override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData = Def1_CreateAmendOtherCgtRequestData(

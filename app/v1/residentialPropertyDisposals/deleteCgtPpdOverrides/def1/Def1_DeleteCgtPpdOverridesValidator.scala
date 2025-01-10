@@ -16,19 +16,18 @@
 
 package v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
-import api.models.domain.TaxYear
-import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
+import config.CgtAppConfig
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
 import javax.inject.Inject
-
-class Def1_DeleteCgtPpdOverridesValidator @Inject()(nino: String, taxYear: String)(appConfig: AppConfig) extends Validator[DeleteCgtPpdOverridesRequestData] {
+class Def1_DeleteCgtPpdOverridesValidator @Inject()(nino: String, taxYear: String)(appConfig: CgtAppConfig) extends Validator[DeleteCgtPpdOverridesRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))

@@ -28,8 +28,7 @@ object CodeCoverageSettings {
     ".*Routes.*",
     "config.*",
     "testOnly.*",
-    "testOnlyDoNotUseInAppConf.*",
-    "shared.*"
+    "testOnlyDoNotUseInAppConf.*"
   )
 
   private val excludedExtraPackages: Seq[String] = Seq(

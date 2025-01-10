@@ -16,16 +16,17 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import api.connectors.DownstreamOutcome
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import shared.connectors.DownstreamOutcome
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveAllResidentialPropertyCgtConnector extends MockFactory {
+trait MockRetrieveAllResidentialPropertyCgtConnector extends MockFactory with TestSuite {
 
   val mockRetrieveAllResidentialPropertyCgtConnector: RetrieveAllResidentialPropertyCgtConnector = mock[RetrieveAllResidentialPropertyCgtConnector]
 
