@@ -20,7 +20,7 @@ import shared.config.{ConfidenceLevelConfig, MockSharedAppConfig}
 import shared.definition.APIStatus.{ALPHA, BETA}
 import shared.definition.{APIDefinition, APIVersion, Definition}
 import shared.mocks.MockHttpClient
-import shared.routing.Version1
+import shared.routing.{Version1, Version2}
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -36,11 +36,13 @@ class CgtApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version1) returns true
-        MockedSharedAppConfig.confidenceLevelConfig
-          .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
-          .anyNumberOfTimes()
+        List(Version1, Version2).foreach { version =>
+          MockedSharedAppConfig.apiStatus(version) returns "BETA"
+          MockedSharedAppConfig.endpointsEnabled(version) returns true
+          MockedSharedAppConfig.confidenceLevelConfig.returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel,
+            definitionEnabled = true,
+            authValidationEnabled = true)).anyNumberOfTimes()
+        }
 
         apiDefinitionFactory.definition shouldBe
           Definition(
@@ -52,6 +54,11 @@ class CgtApiDefinitionFactorySpec extends UnitSpec {
               versions = Seq(
                 APIVersion(
                   version = Version1,
+                  status = BETA,
+                  endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = Version2,
                   status = BETA,
                   endpointsEnabled = true
                 )
