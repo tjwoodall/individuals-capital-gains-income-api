@@ -18,7 +18,6 @@ package v2.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import common.errors._
-import common.validations.DisposalDateErrorMessages
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -28,7 +27,7 @@ import shared.models.errors._
 import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with DisposalDateErrorMessages with WireMockMethods {
+class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestJson: JsValue = Json.parse(
     """

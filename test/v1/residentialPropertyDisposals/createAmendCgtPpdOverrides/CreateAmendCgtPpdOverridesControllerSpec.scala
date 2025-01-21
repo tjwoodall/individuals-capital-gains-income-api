@@ -16,7 +16,6 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import common.services.MockNrsProxyService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
@@ -28,6 +27,7 @@ import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSuppor
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
+import v1.residentialPropertyDisposals.MockNrsProxyService
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request._
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 

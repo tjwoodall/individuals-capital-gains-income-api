@@ -16,7 +16,6 @@
 
 package v1.otherCgt.createAmend
 
-import common.services.MockNrsProxyService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -30,6 +29,7 @@ import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLo
 import shared.utils.MockIdGenerator
 import v1.otherCgt.createAmend.def1.model.request._
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
+import v1.residentialPropertyDisposals.MockNrsProxyService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

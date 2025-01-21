@@ -16,7 +16,6 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import common.services.MockNrsProxyService
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -28,6 +27,7 @@ import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSuppor
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
+import v1.residentialPropertyDisposals.MockNrsProxyService
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 import scala.concurrent.ExecutionContext.Implicits.global
