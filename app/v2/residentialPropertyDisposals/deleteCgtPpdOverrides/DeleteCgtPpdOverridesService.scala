@@ -17,6 +17,7 @@
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
 import cats.implicits.toBifunctorOps
+import common.errors.RuleOutsideAmendmentWindow
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -24,8 +25,9 @@ import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.Delet
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
-class DeleteCgtPpdOverridesService @Inject()(connector: DeleteCgtPpdOverridesConnector) extends BaseService {
+class DeleteCgtPpdOverridesService @Inject() (connector: DeleteCgtPpdOverridesConnector) extends BaseService {
 
   def delete(request: DeleteCgtPpdOverridesRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
@@ -43,7 +45,8 @@ class DeleteCgtPpdOverridesService @Inject()(connector: DeleteCgtPpdOverridesCon
     )
 
     val extraTysErrors = Map(
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindow
     )
 
     errors ++ extraTysErrors

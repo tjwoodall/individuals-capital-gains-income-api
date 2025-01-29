@@ -17,6 +17,7 @@
 package v2.otherCgt.delete
 
 import cats.implicits._
+import common.errors.RuleOutsideAmendmentWindow
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -44,9 +45,10 @@ class DeleteOtherCgtService @Inject() (connector: DeleteOtherCgtConnector) exten
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "NOT_FOUND"              -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "INVALID_CORRELATION_ID"   -> InternalError,
+      "NOT_FOUND"                -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindow
     )
 
     errors ++ extraTysErrors

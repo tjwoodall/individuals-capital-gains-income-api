@@ -27,6 +27,11 @@ components:
         code: RULE_INCORRECT_GOV_TEST_SCENARIO
         message: The Gov-Test-Scenario was not found
 
+    outsideAmendmentWindow:
+      description: The request cannot be completed as you are outside the amendment window.
+      code: RULE_OUTSIDE_AMENDMENT_WINDOW
+      message: You are outside the amendment window
+
     # 403
 
     clientOrAgentNotAuthorised:
@@ -71,3 +76,4 @@ components:
       value:
         code: RULE_REQUEST_CANNOT_BE_FULFILLED
         message: Custom (will vary in production depending on the actual error)
+

@@ -16,17 +16,18 @@
 
 package v2.residentialPropertyDisposals.deleteNonPpd
 
-import shared.controllers.RequestContext
-import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import shared.models.errors.{MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import common.errors.RuleOutsideAmendmentWindow
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v2.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
-import shared.models.errors.InternalError
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdService @Inject()(connector: DeleteCgtNonPpdConnector) extends BaseService {
+class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) extends BaseService {
 
   def delete(request: DeleteCgtNonPpdRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
@@ -44,9 +45,10 @@ class DeleteCgtNonPpdService @Inject()(connector: DeleteCgtNonPpdConnector) exte
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "NOT_FOUND"              -> NotFoundError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "INVALID_CORRELATION_ID"   -> InternalError,
+      "NOT_FOUND"                -> NotFoundError,
+      "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindow
     )
 
     errors ++ extraTysErrors

@@ -16,13 +16,14 @@
 
 package v2.endpoints
 
-import shared.models.errors._
-import shared.services.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import common.errors.RuleOutsideAmendmentWindow
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
+import shared.models.errors._
+import shared.services.{AuthStub, DownstreamStub, MtdIdLookupStub}
 import support.IntegrationBaseSpec
 
 class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
@@ -118,7 +119,8 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
         val extraTysErrors = List(
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindow)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest _).tupled(args))
