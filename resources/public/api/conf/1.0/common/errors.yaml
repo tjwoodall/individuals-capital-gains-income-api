@@ -15,6 +15,18 @@ components:
         code: FORMAT_TAX_YEAR
         message: The provided tax year is invalid
 
+    ruleTaxYearRangeInvalid:
+      description: Tax year range invalid. A tax year range of one year is required
+      value:
+        code: RULE_TAX_YEAR_RANGE_INVALID
+        message: Tax year range invalid. A tax year range of one year is required
+
+    ruleTaxYearNotSupported:
+      description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+      value:
+        code: RULE_TAX_YEAR_NOT_SUPPORTED
+        message: The tax year specified does not lie within the supported range
+
     ruleIncorrectOrEmptyBody:
       description: An empty or non-matching body was submitted.
       value:

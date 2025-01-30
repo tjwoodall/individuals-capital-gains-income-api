@@ -12,7 +12,7 @@ components:
     formatTaxYear:
       description: The format of the supplied tax year field is not valid.
       value:
-        code: FORMAT_TAX_YEARv
+        code: FORMAT_TAX_YEAR
         message: The provided tax year is invalid
 
     ruleIncorrectOrEmptyBody:
@@ -27,10 +27,23 @@ components:
         code: RULE_INCORRECT_GOV_TEST_SCENARIO
         message: The Gov-Test-Scenario was not found
 
-    outsideAmendmentWindow:
+    ruleOutsideAmendmentWindow:
       description: The request cannot be completed as you are outside the amendment window.
-      code: RULE_OUTSIDE_AMENDMENT_WINDOW
-      message: You are outside the amendment window
+      value:
+        code: RULE_OUTSIDE_AMENDMENT_WINDOW
+        message: You are outside the amendment window
+
+    ruleTaxYearNotSupported:
+      description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+      value:
+        code: RULE_TAX_YEAR_NOT_SUPPORTED
+        message: The tax year specified does not lie within the supported range
+
+    ruleTaxYearRangeInvalid:
+      description: Tax year range invalid. A tax year range of one year is required
+      value:
+        code: RULE_TAX_YEAR_RANGE_INVALID
+        message: Tax year range invalid. A tax year range of one year is required
 
     # 403
 
