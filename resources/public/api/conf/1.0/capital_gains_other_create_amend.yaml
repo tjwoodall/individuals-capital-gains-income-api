@@ -74,16 +74,14 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
-          RULE_DISPOSAL_DATE:
-            $ref: './common/errors.yaml#/components/examples/cgtOtherRuleDisposalDate'
           RULE_DISPOSAL_DATE_NOT_FUTURE:
-            $ref: './common/errors.yaml#/components/examples/cgtOtherRuleDisposalDateNotFuture'
+            $ref: './common/errors.yaml#/components/examples/ruleDisposalDateNotFuture'
           RULE_ACQUISITION_DATE:
-            $ref: './common/errors.yaml#/components/examples/cgtOtherRuleAcquisitionDate'
+            $ref: './common/errors.yaml#/components/examples/ruleAcquisitionDate'
           RULE_GAIN_LOSS:
             $ref: './common/errors.yaml#/components/examples/ruleGainLoss'
           RULE_GAIN_AFTER_RELIEF_LOSS_AFTER_RELIEF:
-            $ref: './common/errors.yaml#/components/examples/cgtOtherRuleGainAfterReliefLossAfterRelief'
+            $ref: './common/errors.yaml#/components/examples/ruleGainAfterReliefLossAfterRelief'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 

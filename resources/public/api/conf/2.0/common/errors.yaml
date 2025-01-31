@@ -15,6 +15,84 @@ components:
         code: FORMAT_TAX_YEAR
         message: The provided tax year is invalid
 
+    ruleTaxYearRangeInvalid:
+      description: Tax year range invalid. A tax year range of one year is required
+      value:
+        code: RULE_TAX_YEAR_RANGE_INVALID
+        message: Tax year range invalid. A tax year range of one year is required
+
+    ruleTaxYearNotSupported:
+      description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+      value:
+        code: RULE_TAX_YEAR_NOT_SUPPORTED
+        message: The tax year specified does not lie within the supported range
+
+    formatValue:
+      description: One or more values have been added with the incorrect format.
+      value:
+        code: FORMAT_VALUE
+        message: The value must be between 0 and 99999999999.99
+
+    formatDate:
+      description: The supplied date format is invalid.
+      value:
+        code: FORMAT_DATE
+        message: The value must be in the format YYYY-MM-DD
+
+    cgtOtherFormatAssetDescription:
+      description: The format of the supplied asset description is not valid.
+      value:
+        code: FORMAT_ASSET_DESCRIPTION
+        message: The provided asset description is invalid
+
+    cgtOtherFormatAssetType:
+      description: The format of the supplied assetType value is invalid.
+      value:
+        code: FORMAT_ASSET_TYPE
+        message: The format of the assetType value is invalid
+
+    cgtOtherFormatClaimOrElectionCodes:
+      description: The format of the supplied claimOrElectionCodes value is invalid.
+      value:
+        code: FORMAT_CLAIM_OR_ELECTION_CODES
+        message: The format of the claimOrElectionCodes value is invalid
+
+    ruleDisposalDateNotFuture:
+      description: The disposalDate must be in the specified tax year and no later than today's date.
+      value:
+        code: RULE_DISPOSAL_DATE_FUTURE
+        message: The disposalDate must be in the specified tax year and no later than today's date
+
+    ruleDisposalDate:
+      description: The disposalDate must be in the specified tax year.
+      value:
+        code: RULE_DISPOSAL_DATE
+        message: The disposalDate must be in the specified tax year
+
+    ruleAcquisitionDate:
+      description: The acquisitionDate must not be later than disposalDate.
+      value:
+        code: RULE_ACQUISITION_DATE
+        message: The acquisitionDate must not be later than disposalDate
+
+    ruleGainLoss:
+      description: Only one of gain or loss values can be provided.
+      value:
+        code: RULE_GAIN_LOSS
+        message: Only one of gain or loss values can be provided
+
+    ruleGainAfterReliefLossAfterRelief:
+      description: Only one of gainAfterRelief or lossAfterRelief values can be provided.
+      value:
+        code: RULE_GAIN_AFTER_RELIEF_LOSS_AFTER_RELIEF
+        message: Only one of gainAfterRelief or lossAfterRelief values can be provided
+
+    formatSource:
+      description: The format of the supplied source is not valid.
+      value:
+        code: FORMAT_SOURCE
+        message: The format of the supplied source is not valid
+
     ruleIncorrectOrEmptyBody:
       description: An empty or non-matching body was submitted.
       value:
@@ -33,17 +111,47 @@ components:
         code: RULE_OUTSIDE_AMENDMENT_WINDOW
         message: You are outside the amendment window
 
-    ruleTaxYearNotSupported:
-      description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
+    ruleCompletionDate:
+      description: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
       value:
-        code: RULE_TAX_YEAR_NOT_SUPPORTED
-        message: The tax year specified does not lie within the supported range
+        code: RULE_COMPLETION_DATE
+        message: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
 
-    ruleTaxYearRangeInvalid:
-      description: Tax year range invalid. A tax year range of one year is required
+    formatPpdSubmissionId:
+      description: The format of the supplied PPD submission ID is invalid.
       value:
-        code: RULE_TAX_YEAR_RANGE_INVALID
-        message: Tax year range invalid. A tax year range of one year is required
+        code: FORMAT_PPD_SUBMISSION_ID
+        message: The provided ppdSubmissionId is invalid
+
+    ruleAmountGainLoss:
+      description: Either amountOfGain or amountOfLoss, must be provided but not both.
+      value:
+        code: RULE_AMOUNT_GAIN_LOSS
+        message: Either amountOfGain or amountOfLoss, must be provided but not both
+
+    ruleTaxYearNotEnded:
+      description: The submission has been made before the taxYear it relates to has ended.
+      value:
+        code: RULE_TAX_YEAR_NOT_ENDED
+        message: Tax year not ended
+
+    ruleDuplicatedPpdSubmissionId:
+      description: A PPD submission ID must only be used once.
+      value:
+        code: RULE_DUPLICATED_PPD_SUBMISSION_ID
+        message: A provided ppdSubmissionId is duplicated
+
+    ruleIncorrectDisposalType:
+      description: A PPD submission ID in the request is being used for the incorrect disposal type.
+      value:
+        code: RULE_INCORRECT_DISPOSAL_TYPE
+        message: A provided ppdSubmissionId is being used for the incorrect disposal type
+
+    ruleDateRangeInvalid:
+      description: The date provide is outside of the range 1900-01-01 to 2100-01-01
+      value:
+        code: RULE_DATE_RANGE_INVALID
+        message: The date specified does not lie within the supported range
 
     # 403
 
@@ -54,6 +162,60 @@ components:
       value:
         code: CLIENT_OR_AGENT_NOT_AUTHORISED
         message: The client and/or agent is not authorised
+
+      formatCustomerRef:
+        description: The format of the supplied customer reference is not valid
+        value:
+          code: FORMAT_CUSTOMER_REF
+          message: The provided customer reference is invalid
+
+      ruleAcquisitionDateAfterDisposalDate:
+        description: The acquisitionDate must not be later than disposalDate.
+        value:
+          code: RULE_ACQUISITION_DATE_AFTER_DISPOSAL_DATE
+          message: The acquisitionDate must not be later than disposalDate.
+
+      ruleCompletionDate:
+        description: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
+        value:
+          code: RULE_COMPLETION_DATE
+          message: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
+
+      formatPpdSubmissionId:
+        description: The format of the supplied PPD submission ID is invalid.
+        value:
+          code: FORMAT_PPD_SUBMISSION_ID
+          message: The provided  ppdSubmissionId  is invalid
+
+      ruleAmountGainLoss:
+        description: Either amountOfGain or amountOfLoss, must be provided but not both.
+        value:
+          code: RULE_AMOUNT_GAIN_LOSS
+          message: Either amountOfGain or amountOfLoss, must be provided but not both
+
+      ruleTaxYearNotEnded:
+        description: The submission has been made before the taxYear it relates to has ended.
+        value:
+          code: RULE_TAX_YEAR_NOT_ENDED
+          message: Tax year not ended
+
+      ruleDuplicatedPpdSubmissionId:
+        description: A PPD submission ID must only be used once.
+        value:
+          code: RULE_DUPLICATED_PPD_SUBMISSION_ID
+          message: A provided ppdSubmissionId is duplicated
+
+      ruleIncorrectDisposalType:
+        description: A PPD submission ID in the request is being used for the incorrect disposal type.
+        value:
+          code: RULE_INCORRECT_DISPOSAL_TYPE
+          message: A provided ppdSubmissionId is being used for the incorrect disposal type
+
+      ruleDateRangeInvalid:
+        description: The date provide is outside of the range 1900-01-01 to 2100-01-01
+        value:
+          code: RULE_DATE_RANGE_INVALID
+          message: The date specified does not lie within the supported range
 
     # 404
 
