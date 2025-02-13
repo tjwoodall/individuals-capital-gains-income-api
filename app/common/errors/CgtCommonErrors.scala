@@ -61,7 +61,7 @@ object RuleDisposalDateNotFutureError
 object RuleAmountGainLossError
     extends MtdError("RULE_AMOUNT_GAIN_LOSS", "Either amountOfGain or amountOfLoss, must be provided but not both", BAD_REQUEST)
 
-object RuleOutsideAmendmentWindow
+object RuleOutsideAmendmentWindowError
   extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
 
 // Not found errors

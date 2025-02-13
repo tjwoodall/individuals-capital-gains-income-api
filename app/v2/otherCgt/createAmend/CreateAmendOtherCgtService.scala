@@ -17,7 +17,7 @@
 package v2.otherCgt.createAmend
 
 import cats.implicits.toBifunctorOps
-import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError}
+import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError, RuleOutsideAmendmentWindowError}
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -43,6 +43,7 @@ class CreateAmendOtherCgtService @Inject() (connector: CreateAmendOtherCgtConnec
       "INVALID_PAYLOAD"           -> InternalError,
       "INVALID_DISPOSAL_DATE"     -> RuleDisposalDateNotFutureError,
       "INVALID_ACQUISITION_DATE"  -> RuleAcquisitionDateError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )

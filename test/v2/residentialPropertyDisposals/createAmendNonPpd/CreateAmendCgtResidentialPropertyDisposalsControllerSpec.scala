@@ -172,7 +172,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
         transactionName = "Create-Amend-Cgt-Residential-Property-Disposals",
         detail = GenericAuditDetail(
           userType = "Individual",
-          versionNumber = apiVersion.name,
+          versionNumber = "2.0",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = requestBody,

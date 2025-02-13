@@ -74,7 +74,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
@@ -85,7 +85,7 @@ class DeleteOtherCgtController @Inject() (val authService: EnrolmentsAuthService
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,

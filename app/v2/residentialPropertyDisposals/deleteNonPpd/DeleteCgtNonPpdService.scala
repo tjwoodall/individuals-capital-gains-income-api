@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.deleteNonPpd
 
 import cats.implicits.toBifunctorOps
-import common.errors.RuleOutsideAmendmentWindow
+import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -48,7 +48,7 @@ class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) ext
       "INVALID_CORRELATION_ID"   -> InternalError,
       "NOT_FOUND"                -> NotFoundError,
       "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
-      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindow
+      "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
     )
 
     errors ++ extraTysErrors

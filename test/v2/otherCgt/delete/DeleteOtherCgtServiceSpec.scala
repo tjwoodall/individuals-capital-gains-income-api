@@ -16,7 +16,7 @@
 
 package v2.otherCgt.delete
 
-import common.errors.RuleOutsideAmendmentWindow
+import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{
@@ -75,7 +75,7 @@ class DeleteOtherCgtServiceSpec extends ServiceSpec {
           ("INVALID_CORRELATION_ID", InternalError),
           ("NOT_FOUND", NotFoundError),
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError),
-          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindow)
+          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError)
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

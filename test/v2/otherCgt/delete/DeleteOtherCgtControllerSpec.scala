@@ -109,7 +109,7 @@ class DeleteOtherCgtControllerSpec
         transactionName = "Delete-Other-Cgt-Disposals-And-Gains",
         detail = GenericAuditDetail(
           userType = "Individual",
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,

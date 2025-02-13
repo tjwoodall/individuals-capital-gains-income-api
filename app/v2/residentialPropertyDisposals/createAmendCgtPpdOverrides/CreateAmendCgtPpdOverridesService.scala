@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import cats.implicits.toBifunctorOps
-import common.errors.{PpdSubmissionIdNotFoundError, RuleDuplicatedPpdSubmissionIdError, RuleIncorrectDisposalTypeError}
+import common.errors.{PpdSubmissionIdNotFoundError, RuleDuplicatedPpdSubmissionIdError, RuleIncorrectDisposalTypeError, RuleOutsideAmendmentWindowError}
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotEndedError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -46,6 +46,7 @@ class CreateAmendCgtPpdOverridesService @Inject() (connector: CreateAmendCgtPpdO
       "NO_PPD_SUBMISSIONS_FOUND"        -> NotFoundError,
       "INVALID_REQUEST_BEFORE_TAX_YEAR" -> RuleTaxYearNotEndedError,
       "INVALID_DISPOSAL_TYPE"           -> RuleIncorrectDisposalTypeError,
+      "OUTSIDE_AMENDMENT_WINDOW"        -> RuleOutsideAmendmentWindowError,
       "SERVER_ERROR"                    -> InternalError,
       "SERVICE_UNAVAILABLE"             -> InternalError
     )

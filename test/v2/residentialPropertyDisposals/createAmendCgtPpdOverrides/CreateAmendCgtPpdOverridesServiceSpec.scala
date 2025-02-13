@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import common.errors.{PpdSubmissionIdNotFoundError, RuleDuplicatedPpdSubmissionIdError, RuleIncorrectDisposalTypeError}
+import common.errors.{PpdSubmissionIdNotFoundError, RuleDuplicatedPpdSubmissionIdError, RuleIncorrectDisposalTypeError, RuleOutsideAmendmentWindowError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotEndedError, RuleTaxYearNotSupportedError, TaxYearFormatError}
@@ -91,6 +91,7 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
           ("DUPLICATE_SUBMISSION", RuleDuplicatedPpdSubmissionIdError),
           ("INVALID_REQUEST_BEFORE_TAX_YEAR", RuleTaxYearNotEndedError),
           ("INVALID_DISPOSAL_TYPE", RuleIncorrectDisposalTypeError),
+          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("SERVER_ERROR", InternalError),
           ("SERVICE_UNAVAILABLE", InternalError)
         )

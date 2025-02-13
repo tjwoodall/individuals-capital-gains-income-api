@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import common.errors.RuleOutsideAmendmentWindow
+import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
@@ -79,7 +79,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
 
       val extraTysErrors = List(
         "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
-        "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindow
+        "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

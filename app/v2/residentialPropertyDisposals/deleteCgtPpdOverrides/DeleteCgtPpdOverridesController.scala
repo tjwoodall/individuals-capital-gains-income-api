@@ -76,7 +76,7 @@ class DeleteCgtPpdOverridesController @Inject() (val authService: EnrolmentsAuth
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                apiVersion = "1.0",
+                apiVersion = "2.0",
                 params = Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
@@ -87,7 +87,7 @@ class DeleteCgtPpdOverridesController @Inject() (val authService: EnrolmentsAuth
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                apiVersion = "1.0",
+                apiVersion = "2.0",
                 params = Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,

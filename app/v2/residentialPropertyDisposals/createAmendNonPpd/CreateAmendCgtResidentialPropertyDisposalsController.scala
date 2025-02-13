@@ -82,7 +82,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
@@ -93,7 +93,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,

@@ -85,7 +85,7 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                apiVersion = "1.0",
+                apiVersion = "2.0",
                 params = Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
@@ -96,7 +96,7 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
             auditSubmission(
               GenericAuditDetail(
                 userDetails = request.userDetails,
-                apiVersion = "1.0",
+                apiVersion = "2.0",
                 params = Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,

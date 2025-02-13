@@ -73,7 +73,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,
@@ -84,7 +84,7 @@ class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthServic
             auditSubmission(
               GenericAuditDetail(
                 request.userDetails,
-                "1.0",
+                "2.0",
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 None,
                 ctx.correlationId,

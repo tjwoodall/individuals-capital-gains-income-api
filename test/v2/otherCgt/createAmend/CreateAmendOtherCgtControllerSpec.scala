@@ -207,7 +207,7 @@ class CreateAmendOtherCgtControllerSpec
         detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,

@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
 import cats.syntax.either._
-import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1}
+import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1, RuleOutsideAmendmentWindowError}
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -46,6 +46,7 @@ class CreateAmendCgtResidentialPropertyDisposalsService @Inject() (connector: Cr
       "INVALID_DISPOSAL_DATE"     -> RuleDisposalDateErrorV1,
       "INVALID_COMPLETION_DATE"   -> RuleCompletionDateError,
       "INVALID_ACQUISITION_DATE"  -> RuleAcquisitionDateAfterDisposalDateError,
+      "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,
       "SERVER_ERROR"              -> InternalError,
       "SERVICE_UNAVAILABLE"       -> InternalError
     )

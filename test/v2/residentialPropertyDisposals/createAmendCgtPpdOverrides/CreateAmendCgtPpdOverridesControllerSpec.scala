@@ -200,7 +200,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
         transactionName = "Create-Amend-Cgt-Ppd-Overrides",
         detail = GenericAuditDetail(
           userType = "Individual",
-          versionNumber = "1.0",
+          versionNumber = "2.0",
           agentReferenceNumber = None,
           params = Map("nino" -> validNino, "taxYear" -> taxYear),
           requestBody = maybeRequestBody,
