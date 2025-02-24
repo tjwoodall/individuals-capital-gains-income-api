@@ -153,6 +153,18 @@ components:
         code: RULE_DATE_RANGE_INVALID
         message: The date specified does not lie within the supported range
 
+    formatCustomerRef:
+      description: The format of the supplied customer reference is not valid
+      value:
+        code: FORMAT_CUSTOMER_REF
+        message: The provided customer reference is invalid
+
+    ruleAcquisitionDateAfterDisposalDate:
+      description: The acquisitionDate must not be later than disposalDate.
+      value:
+        code: RULE_ACQUISITION_DATE_AFTER_DISPOSAL_DATE
+        message: The acquisitionDate must not be later than disposalDate.
+
     # 403
 
     clientOrAgentNotAuthorised:
@@ -162,60 +174,6 @@ components:
       value:
         code: CLIENT_OR_AGENT_NOT_AUTHORISED
         message: The client and/or agent is not authorised
-
-      formatCustomerRef:
-        description: The format of the supplied customer reference is not valid
-        value:
-          code: FORMAT_CUSTOMER_REF
-          message: The provided customer reference is invalid
-
-      ruleAcquisitionDateAfterDisposalDate:
-        description: The acquisitionDate must not be later than disposalDate.
-        value:
-          code: RULE_ACQUISITION_DATE_AFTER_DISPOSAL_DATE
-          message: The acquisitionDate must not be later than disposalDate.
-
-      ruleCompletionDate:
-        description: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
-        value:
-          code: RULE_COMPLETION_DATE
-          message: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
-
-      formatPpdSubmissionId:
-        description: The format of the supplied PPD submission ID is invalid.
-        value:
-          code: FORMAT_PPD_SUBMISSION_ID
-          message: The provided  ppdSubmissionId  is invalid
-
-      ruleAmountGainLoss:
-        description: Either amountOfGain or amountOfLoss, must be provided but not both.
-        value:
-          code: RULE_AMOUNT_GAIN_LOSS
-          message: Either amountOfGain or amountOfLoss, must be provided but not both
-
-      ruleTaxYearNotEnded:
-        description: The submission has been made before the taxYear it relates to has ended.
-        value:
-          code: RULE_TAX_YEAR_NOT_ENDED
-          message: Tax year not ended
-
-      ruleDuplicatedPpdSubmissionId:
-        description: A PPD submission ID must only be used once.
-        value:
-          code: RULE_DUPLICATED_PPD_SUBMISSION_ID
-          message: A provided ppdSubmissionId is duplicated
-
-      ruleIncorrectDisposalType:
-        description: A PPD submission ID in the request is being used for the incorrect disposal type.
-        value:
-          code: RULE_INCORRECT_DISPOSAL_TYPE
-          message: A provided ppdSubmissionId is being used for the incorrect disposal type
-
-      ruleDateRangeInvalid:
-        description: The date provide is outside of the range 1900-01-01 to 2100-01-01
-        value:
-          code: RULE_DATE_RANGE_INVALID
-          message: The date specified does not lie within the supported range
 
     # 404
 
