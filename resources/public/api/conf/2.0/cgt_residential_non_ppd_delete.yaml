@@ -1,4 +1,4 @@
-summary: Delete CGT Residential Property Disposals (non-PPD)
+summary: Delete CGT Residential Property Disposals (non-PPD) [test only]
 description: |
   This endpoint enables you to delete a Capital Gains Tax (CGT) residential property disposal for a non payment for 
   property disposal (non-PPD) data submission for a specified taxable entity ID and tax year.

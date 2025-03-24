@@ -1,4 +1,4 @@
-summary: Create and Amend CGT Residential Property Disposals (non-PPD)
+summary: Create and Amend CGT Residential Property Disposals (non-PPD) [test only]
 description: |
   This endpoint enables you to submit residential property disposals that are not payment for property disposal 
   (not reported via the 'Report and pay Capital Gains Tax on UK property' service) 

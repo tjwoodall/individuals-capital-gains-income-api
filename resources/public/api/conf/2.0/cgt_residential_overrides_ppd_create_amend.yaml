@@ -1,4 +1,4 @@
-summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
+summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]
 description: |
   This endpoint enables you to override residential property disposals submissions previously submitted via the HMRC 
   'Report and pay Capital Gains Tax on UK property' service (payment for property disposal or PPD) for a given National 

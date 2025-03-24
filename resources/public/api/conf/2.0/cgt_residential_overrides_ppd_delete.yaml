@@ -1,4 +1,4 @@
-summary: Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
+summary: Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]
 description: |
   This endpoint enables you to delete user submitted overrides for previously submitted disposals for payment for 
   property disposal (PPD) reported via the HMRC 'Report and pay Capital Gains Tax on UK property' service.
