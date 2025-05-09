@@ -131,13 +131,6 @@ class CreateAmendOtherCgtControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(
-    s"""
-       |{
-       |  "nino":"$validNino",
-       |  "taxYear": "$taxYear"
-       |  }""".stripMargin)
-
   "CreateAmendOtherCgtController" should {
     "return OK" when {
       "happy path" in new Test {
@@ -152,7 +145,7 @@ class CreateAmendOtherCgtControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson), Some(auditData))
+        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson))
       }
     }
 

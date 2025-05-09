@@ -125,13 +125,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
     body = requestModel
   )
 
-  val auditData: JsValue = Json.parse(
-    s"""
-       |{
-       |  "nino":"$validNino",
-       |  "taxYear": "$taxYear"
-       |  }""".stripMargin)
-
   "CreateAmendCgtPpdOverridesController" should {
     "return a successful response with status OK" when {
       "happy path" in new Test {
@@ -146,7 +139,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson), Some(auditData))
+        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson))
       }
     }
 

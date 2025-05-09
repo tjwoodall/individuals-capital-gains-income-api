@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
@@ -28,7 +28,6 @@ import shared.utils.IdGenerator
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import v1.NrsProxyService
-import v1.residentialPropertyDisposals.createAmendNonPpd.model.response.CreateAmendCgtResidentialPropertyDisposalsAuditData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -97,7 +96,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(OK, Right(Some(Json.toJson(CreateAmendCgtResidentialPropertyDisposalsAuditData(nino, taxYear)))))
+                AuditResponse(httpStatus = httpStatus, Right(None))
               ))
         }
       }

@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
 import shared.controllers._
@@ -28,7 +28,6 @@ import shared.utils.IdGenerator
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import v2.NrsProxyService
-import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.response.CreateAmendCgtPpdOverridesAuditData
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -95,7 +94,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
                 Map("nino" -> nino, "taxYear" -> taxYear),
                 Some(request.body),
                 ctx.correlationId,
-                AuditResponse(httpStatus = httpStatus, response = Right(Some(Json.toJson(CreateAmendCgtPpdOverridesAuditData(nino, taxYear)))))
+                AuditResponse(httpStatus = httpStatus, Right(None))
               ))
         }
       }
