@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import v1.otherCgt.createAmend.def1.model.request._
 object Def1_CreateAmendOtherCgtConnectorServiceFixture {
 
   val disposal: Disposal = Disposal(
-    AssetType.`other-property`.toDownstreamString,
+    AssetType.`other-property`.toString,
     "Property Sale",
     "2021-01-01",
     "2021-02-01",

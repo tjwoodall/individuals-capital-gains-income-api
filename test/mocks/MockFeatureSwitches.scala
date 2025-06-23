@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import play.api.mvc.Request
 
-trait MockFeatureSwitches extends MockFactory with TestSuite {
+trait MockFeatureSwitches extends TestSuite with MockFactory {
 
   implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
 

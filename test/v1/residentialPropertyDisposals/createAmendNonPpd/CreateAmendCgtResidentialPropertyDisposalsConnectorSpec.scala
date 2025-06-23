@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package v1.residentialPropertyDisposals.createAmendNonPpd
 import common.connectors.CgtConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v1.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
@@ -54,7 +55,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/residential-property/$nino/2019-20",
+          url = url"$baseUrl/income-tax/income/disposals/residential-property/$nino/2019-20",
           body = requestBody
         )
           .returns(Future.successful(outcome))
@@ -68,7 +69,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino",
+          url = url"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino",
           body = requestBody
         )
           .returns(Future.successful(outcome))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import config.MockAppConfig
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v1.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v1.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
@@ -62,7 +63,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20",
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20",
           body = mtdRequestBody
         ).returns(Future.successful(outcome))
 
@@ -80,7 +81,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino",
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino",
           body = mtdRequestBody
         ).returns(Future.successful(outcome))
 

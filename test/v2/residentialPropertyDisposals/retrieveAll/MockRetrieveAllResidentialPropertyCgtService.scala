@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import v2.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllRes
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockRetrieveAllResidentialPropertyCgtService extends MockFactory with TestSuite {
+trait MockRetrieveAllResidentialPropertyCgtService extends TestSuite with MockFactory {
 
   val mockRetrieveAllResidentialPropertyCgtService: RetrieveAllResidentialPropertyCgtService = mock[RetrieveAllResidentialPropertyCgtService]
 

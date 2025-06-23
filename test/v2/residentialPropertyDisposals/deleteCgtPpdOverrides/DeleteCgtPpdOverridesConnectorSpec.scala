@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{InternalError, NinoFormatError}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
@@ -51,7 +52,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          s"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
+          url"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
         ).returns(Future.successful(outcome))
 
         await(connector.deleteCgtPpdOverrides(request)) shouldBe outcome
@@ -63,7 +64,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
         val outcome = Left(ResponseWrapper(correlationId, NinoFormatError))
 
         willDelete(
-          s"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
+          url"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
         ).returns(Future.successful(outcome))
 
         await(connector.deleteCgtPpdOverrides(request)) shouldBe outcome
@@ -76,7 +77,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
         val outcome = Left(ResponseWrapper(correlationId, Seq(NinoFormatError, InternalError)))
 
         willDelete(
-          s"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
+          url"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}"
         ).returns(Future.successful(outcome))
 
         await(connector.deleteCgtPpdOverrides(request)) shouldBe outcome
@@ -90,7 +91,7 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
-          s"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino"
+          url"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino"
         ).returns(Future.successful(outcome))
 
         await(connector.deleteCgtPpdOverrides(request)) shouldBe outcome

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package v1.residentialPropertyDisposals.retrieveAll
 import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
@@ -27,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveAllResidentialPropertyCgtConnector @Inject() (val http: HttpClient, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveAllResidentialPropertyCgtConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
   import shared.connectors.httpparsers.StandardDownstreamHttpParser._
   def retrieve(request: RetrieveAllResidentialPropertyCgtRequestData)(implicit

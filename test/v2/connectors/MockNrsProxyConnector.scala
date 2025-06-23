@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import v2.NrsProxyConnector
 
 import scala.concurrent.Future
 
-trait MockNrsProxyConnector extends MockFactory with TestSuite {
+trait MockNrsProxyConnector extends TestSuite with MockFactory {
 
   val mockNrsProxyConnector: NrsProxyConnector = mock[NrsProxyConnector]
 

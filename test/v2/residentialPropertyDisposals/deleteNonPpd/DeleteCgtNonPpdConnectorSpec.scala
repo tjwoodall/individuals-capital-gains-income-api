@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package v2.residentialPropertyDisposals.deleteNonPpd
 import common.connectors.CgtConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 import v2.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
@@ -35,7 +36,7 @@ class DeleteCgtNonPpdConnectorSpec extends CgtConnectorSpec {
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        willDelete(s"$baseUrl/income-tax/income/disposals/residential-property/$nino/2018-19")
+        willDelete(url"$baseUrl/income-tax/income/disposals/residential-property/$nino/2018-19")
           .returns(Future.successful(outcome))
 
         await(connector.deleteCgtNonPpd(request)) shouldBe outcome
@@ -49,7 +50,7 @@ class DeleteCgtNonPpdConnectorSpec extends CgtConnectorSpec {
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        willDelete(s"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino")
+        willDelete(url"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino")
           .returns(Future.successful(outcome))
 
         await(connector.deleteCgtNonPpd(request)) shouldBe outcome

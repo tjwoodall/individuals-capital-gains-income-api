@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 
-trait MockAppConfig extends MockFactory with TestSuite {
+trait MockAppConfig extends TestSuite with MockFactory {
 
   implicit val mockAppConfig: CgtAppConfig = mock[CgtAppConfig]
 

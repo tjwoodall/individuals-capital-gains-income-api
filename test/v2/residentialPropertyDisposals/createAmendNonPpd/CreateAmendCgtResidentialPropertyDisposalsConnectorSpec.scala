@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
+import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -49,12 +50,12 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
   "createAndAmend" should {
     "return a 204 status" when {
       "a valid request is made" in new Api1661Test with Test {
-        lazy val taxYear = TaxYear.fromMtd("2019-20")
+        lazy val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/residential-property/$nino/2019-20",
+          url = url"$baseUrl/income-tax/income/disposals/residential-property/$nino/2019-20",
           body = requestBody
         )
           .returns(Future.successful(outcome))
@@ -63,12 +64,12 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
       }
 
       "a valid request is made for a TYS tax year" in new TysIfsTest with Test {
-        lazy val taxYear = TaxYear.fromMtd("2023-24")
+        lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino",
+          url = url"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino",
           body = requestBody
         )
           .returns(Future.successful(outcome))

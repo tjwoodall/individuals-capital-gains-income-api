@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import shared.controllers.validators.Validator
 import shared.models.errors.MtdError
 import v2.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
-trait MockDeleteOtherCgtValidatorFactory extends MockFactory with TestSuite {
+trait MockDeleteOtherCgtValidatorFactory extends TestSuite with MockFactory {
 
   val mockDeleteOtherCgtValidatorFactory: DeleteOtherCgtValidatorFactory =
     mock[DeleteOtherCgtValidatorFactory]

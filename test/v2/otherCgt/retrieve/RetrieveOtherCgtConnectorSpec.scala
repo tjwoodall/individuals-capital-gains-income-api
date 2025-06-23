@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package v2.otherCgt.retrieve
 import common.connectors.CgtConnectorSpec
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v2.otherCgt.retrieve.def1.model.response.Def1_RetrieveOtherCgtResponse
 import v2.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
@@ -35,7 +36,7 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
         val outcome          = Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20"
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20"
         ).returns(Future.successful(outcome))
 
         await(connector.retrieveOtherCgt(request)) shouldBe outcome
@@ -47,7 +48,7 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
         val outcome          = Right(ResponseWrapper(correlationId, response))
 
         willGet(
-          url = s"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino"
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino"
         ).returns(Future.successful(outcome))
 
         await(connector.retrieveOtherCgt(request)) shouldBe outcome

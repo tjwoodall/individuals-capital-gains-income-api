@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,23 @@
 package v2
 
 import config.CgtAppConfig
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsProxyConnector @Inject()(http: HttpClient, appConfig: CgtAppConfig)(implicit ec: ExecutionContext) {
+class NrsProxyConnector @Inject()(http: HttpClientV2, appConfig: CgtAppConfig)(implicit ec: ExecutionContext) {
 
-  def submit(nino: String, notableEvent: String, body: JsValue)(implicit hc: HeaderCarrier): Future[Either[UpstreamErrorResponse, Unit]] =
-    http.POST[JsValue, Either[UpstreamErrorResponse, Unit]](s"${appConfig.mtdNrsProxyBaseUrl}/mtd-api-nrs-proxy/$nino/$notableEvent", body)
+  def submit(nino: String, notableEvent: String, body: JsValue)
+            (implicit hc: HeaderCarrier): Future[Either[UpstreamErrorResponse, Unit]] = {
+
+    val url = s"${appConfig.mtdNrsProxyBaseUrl}/mtd-api-nrs-proxy/$nino/$notableEvent"
+
+    http.post(url"$url").withBody(Json.toJson(body)).execute[Either[UpstreamErrorResponse, Unit]]
+  }
 
 }

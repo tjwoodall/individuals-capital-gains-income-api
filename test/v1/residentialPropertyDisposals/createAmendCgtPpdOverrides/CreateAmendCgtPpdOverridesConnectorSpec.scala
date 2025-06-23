@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import common.connectors.CgtConnectorSpec
-import shared.mocks.MockHttpClient
 import shared.config.MockSharedAppConfig
+import shared.mocks.MockHttpClient
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture.Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
@@ -55,7 +55,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
-          url = s"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}",
+          url = url"$baseUrl/income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}",
           body = requestBodyModel
         )
           .returns(Future.successful(outcome))
@@ -80,7 +80,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
           )
 
           willPut(
-            s"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino}",
+            url"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino}",
             requestBodyModel) returns Future
             .successful(outcome)
 
