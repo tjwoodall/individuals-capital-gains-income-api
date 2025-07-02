@@ -17,7 +17,7 @@
 package v1.residentialPropertyDisposals.retrieveAll
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{DesUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.{DesUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -46,7 +46,7 @@ class RetrieveAllResidentialPropertyCgtConnector @Inject() (val http: HttpClient
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>
-        TaxYearSpecificIfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
+        IfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
       case _ =>
         DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }

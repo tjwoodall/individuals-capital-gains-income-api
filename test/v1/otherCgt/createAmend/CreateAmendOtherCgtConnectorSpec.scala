@@ -70,7 +70,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
         await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
       }
 
-      "a valid request is made with Tax Year Specific tax year" in new TysIfsTest with Test {
+      "a valid request is made with Tax Year Specific tax year" in new IfsTest with Test {
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
         val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData = Def1_CreateAmendOtherCgtRequestData(

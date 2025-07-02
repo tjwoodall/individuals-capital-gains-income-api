@@ -66,7 +66,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
 
     "createAndAmend called for a Tax Year Specific tax year" must {
       "return a 200 status for a success scenario" in
-        new TysIfsTest with Test {
+        new IfsTest with Test {
           def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
           implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))

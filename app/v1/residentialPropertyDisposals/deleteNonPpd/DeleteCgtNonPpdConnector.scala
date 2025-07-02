@@ -17,7 +17,7 @@
 package v1.residentialPropertyDisposals.deleteNonPpd
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,7 +38,7 @@ class DeleteCgtNonPpdConnector @Inject() (val http: HttpClientV2, val appConfig:
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
     } else {
       // Note: tax year is in MTD format
       IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")

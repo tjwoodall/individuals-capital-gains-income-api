@@ -84,7 +84,7 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
     }
 
     "retrieveAllResidentialPropertyCgt for Tax Year Specific (TYS)" must {
-      "return a 200 status for a success scenario" in new TysIfsTest with Test {
+      "return a 200 status for a success scenario" in new IfsTest with Test {
         override def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, response))

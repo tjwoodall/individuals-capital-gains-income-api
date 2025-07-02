@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -39,7 +39,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: H
     import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 
     val uri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
     } else {
       // Pre-tys uses MTD tax year format
       IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")

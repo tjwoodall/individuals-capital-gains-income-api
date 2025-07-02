@@ -17,7 +17,7 @@
 package v2.otherCgt.delete
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -39,7 +39,7 @@ class DeleteOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: 
     import request._
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      TaxYearSpecificIfsUri[Unit](
+      IfsUri[Unit](
         s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}"
       )
     } else {

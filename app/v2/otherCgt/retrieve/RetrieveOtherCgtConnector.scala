@@ -17,7 +17,7 @@
 package v2.otherCgt.retrieve
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -42,7 +42,7 @@ class RetrieveOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>
-        TaxYearSpecificIfsUri(s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
+        IfsUri(s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
       case _ =>
         IfsUri(s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}")
     }

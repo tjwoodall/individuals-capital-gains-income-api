@@ -63,7 +63,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
         await(connector.createAndAmend(createAmendCgtResidentialPropertyDisposalsRequest)) shouldBe outcome
       }
 
-      "a valid request is made for a TYS tax year" in new TysIfsTest with Test {
+      "a valid request is made for a TYS tax year" in new IfsTest with Test {
         lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))

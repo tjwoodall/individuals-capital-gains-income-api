@@ -18,7 +18,7 @@ package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import com.google.inject.Singleton
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -40,7 +40,7 @@ class CreateAmendCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val
 
     val downstreamUri =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino")
+        IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino")
       } else {
         IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}")
       }

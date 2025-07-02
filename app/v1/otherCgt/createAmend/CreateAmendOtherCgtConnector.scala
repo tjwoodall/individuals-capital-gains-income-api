@@ -17,7 +17,7 @@
 package v1.otherCgt.createAmend
 
 import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
+import shared.connectors.DownstreamUri.IfsUri
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -39,7 +39,7 @@ class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appCon
 
     val downstreamUri: DownstreamUri[Unit] =
       if (taxYear.useTaxYearSpecificApi) {
-        TaxYearSpecificIfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.nino}")
+        IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.nino}")
       } else {
         IfsUri[Unit](s"income-tax/income/disposals/other-gains/${nino.nino}/${taxYear.asMtd}")
       }
