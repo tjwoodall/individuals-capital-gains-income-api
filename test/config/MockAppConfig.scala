@@ -35,7 +35,7 @@ trait MockAppConfig extends TestSuite with MockFactory {
     def api1661EnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.api1661EnvironmentHeaders).expects()
 
     // MTD IF Lookup Config
-    def minimumPermittedTaxYear: CallHandler[Int]                = (() => mockAppConfig.minimumPermittedTaxYear).expects()
+    def minimumPermittedTaxYear: CallHandler[Int] = (() => mockAppConfig.minimumPermittedTaxYear).expects()
 
   }
 

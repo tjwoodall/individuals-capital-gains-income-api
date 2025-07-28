@@ -36,7 +36,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveOtherCgtControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -170,7 +170,7 @@ class RetrieveOtherCgtControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveOtherCgtController(
+    val controller: RetrieveOtherCgtController = new RetrieveOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveOtherCgtValidatorFactory,

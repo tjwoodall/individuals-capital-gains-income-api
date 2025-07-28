@@ -19,7 +19,7 @@ package v1.residentialPropertyDisposals.retrieveAll.def1.fixture
 import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.models.domain.Timestamp
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.*
 
 object Def1_RetrieveAllResidentialPropertyCgtControllerFixture {
 

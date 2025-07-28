@@ -16,14 +16,19 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
 
-import shared.controllers.validators.RulesValidator
 import cats.data.Validated
-import cats.data.Validated._
-import cats.implicits._
+import cats.data.Validated.*
+import cats.implicits.*
 import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
+import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import shared.models.errors.{DateFormatError, MtdError, RuleDateRangeInvalidError}
-import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  Def1_CreateAmendCgtPpdOverridesRequestData,
+  MultiplePropertyDisposals,
+  SinglePropertyDisposals
+}
 
 object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1_CreateAmendCgtPpdOverridesRequestData] {
 
@@ -32,7 +37,7 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
 
   def validateBusinessRules(
       parsed: Def1_CreateAmendCgtPpdOverridesRequestData): Validated[Seq[MtdError], Def1_CreateAmendCgtPpdOverridesRequestData] = {
-    import parsed._
+    import parsed.*
     combine(
       validateBothSuppliedDisposals(body),
       validateSuppliedDisposals(body)
@@ -119,7 +124,7 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
 
   private def validateMultiplePropertyDisposalsValues(multiplePropertyDisposals: MultiplePropertyDisposals,
                                                       arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    import multiplePropertyDisposals._
+    import multiplePropertyDisposals.*
     val validatedNonNegatives = List(
       (amountOfNetGain, s"/multiplePropertyDisposals/$arrayIndex/amountOfNetGain"),
       (amountOfNetLoss, s"/multiplePropertyDisposals/$arrayIndex/amountOfNetLoss")
@@ -138,7 +143,7 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
 
   private def validateSinglePropertyDisposalsValues(singlePropertyDisposals: SinglePropertyDisposals,
                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    import singlePropertyDisposals._
+    import singlePropertyDisposals.*
     val validatedNonNegatives = List(
       (disposalProceeds, s"/singlePropertyDisposals/$arrayIndex/disposalProceeds"),
       (acquisitionAmount, s"/singlePropertyDisposals/$arrayIndex/acquisitionAmount"),

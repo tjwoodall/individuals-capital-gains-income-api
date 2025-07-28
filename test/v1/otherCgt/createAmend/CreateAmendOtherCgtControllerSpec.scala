@@ -27,7 +27,7 @@ import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSuppor
 import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
-import v1.otherCgt.createAmend.def1.model.request._
+import v1.otherCgt.createAmend.def1.model.request.*
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 import v1.residentialPropertyDisposals.MockNrsProxyService
 
@@ -35,7 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendOtherCgtControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -174,7 +174,7 @@ class CreateAmendOtherCgtControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAmendOtherCgtController(
+    val controller: CreateAmendOtherCgtController = new CreateAmendOtherCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendOtherCgtValidatorFactory,

@@ -16,17 +16,17 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd
 
-import shared.controllers.RequestContext
-import shared.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import shared.models.errors.{MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.controllers.RequestContext
+import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.services.{BaseService, ServiceOutcome}
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
-import shared.models.errors.InternalError
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdService @Inject()(connector: DeleteCgtNonPpdConnector) extends BaseService {
+class DeleteCgtNonPpdService @Inject() (connector: DeleteCgtNonPpdConnector) extends BaseService {
 
   def delete(request: DeleteCgtNonPpdRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 

@@ -18,12 +18,12 @@ package v1.otherCgt.createAmend.def1
 
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
-import cats.implicits._
-import common.errors._
+import cats.implicits.*
+import common.errors.*
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
 import shared.models.errors.{DateFormatError, MtdError}
-import v1.otherCgt.createAmend.def1.model.request._
+import v1.otherCgt.createAmend.def1.model.request.*
 
 object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_CreateAmendOtherCgtRequestData] {
 
@@ -33,7 +33,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
 
   def validateBusinessRules(parsed: Def1_CreateAmendOtherCgtRequestData): Validated[Seq[MtdError], Def1_CreateAmendOtherCgtRequestData] = {
 
-    import parsed._
+    import parsed.*
 
     combine(
       validateDisposalSequence(body),
@@ -52,7 +52,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
   }
 
   private def validateDisposal(disposal: Disposal, index: Int): Validated[Seq[MtdError], Unit] = {
-    import disposal._
+    import disposal.*
 
     val validatedMandatoryDecimalNumbers = List(
       (disposalProceeds, s"/disposals/$index/disposalProceeds"),
@@ -79,17 +79,10 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
       resolveDate(value)
     }
 
-    val validatedAssetDescription: Validated[Seq[MtdError], String] = assetDescription match {
-      case value: String =>
-        ResolveAssetDescription(value, regex, AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription"))
-      case _ => Invalid(List(AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription")))
-    }
+    val validatedAssetDescription: Validated[Seq[MtdError], String] =
+      ResolveAssetDescription(assetDescription, regex, AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription"))
 
-    val validatedAssetType = assetType match {
-      case value: String =>
-        ResolveAssetType(value, AssetTypeFormatError.withPath(s"/disposals/$index/assetType"))
-      case _ => Invalid(List(AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription")))
-    }
+    val validatedAssetType = ResolveAssetType(assetType, AssetTypeFormatError.withPath(s"/disposals/$index/assetType"))
 
     val validatedClaimOrElectionCodes = claimOrElectionCodes match {
       case Some(values: Seq[String]) =>
@@ -130,7 +123,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
   }
 
   private def validateNonStandardGains(nonStandardGains: NonStandardGains): Validated[Seq[MtdError], Unit] = {
-    import nonStandardGains._
+    import nonStandardGains.*
 
     List(
       (carriedInterestGain, "/nonStandardGains/carriedInterestGain"),
@@ -149,7 +142,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
   }
 
   private def validateLosses(losses: Losses): Validated[Seq[MtdError], Unit] = {
-    import losses._
+    import losses.*
 
     List(
       (broughtForwardLossesUsedInCurrentYear, "/losses/broughtForwardLossesUsedInCurrentYear"),
@@ -162,7 +155,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
   }
 
   private def validateAdjustments(requestBody: Def1_CreateAmendOtherCgtRequestBody): Validated[Seq[MtdError], Unit] = {
-    import requestBody._
+    import requestBody.*
 
     List(
       (adjustments, "/adjustments")

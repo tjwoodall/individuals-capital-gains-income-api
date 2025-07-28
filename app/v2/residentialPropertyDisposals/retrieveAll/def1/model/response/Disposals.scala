@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Disposals(customerReference: Option[String],
@@ -51,7 +51,7 @@ object Disposals {
       (JsPath \ "lossesFromPreviousYear").readNullable[BigDecimal] and
       (JsPath \ "amountOfNetGain").readNullable[BigDecimal] and
       (JsPath \ "amountOfLoss").readNullable[BigDecimal]
-  )(Disposals.apply _)
+  )(Disposals.apply)
 
   implicit val writes: OWrites[Disposals] = Json.writes[Disposals]
 }

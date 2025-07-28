@@ -89,7 +89,7 @@ class RetrieveAllResidentialPropertyCgtControllerSpec
 
   trait Test extends ControllerTest {
 
-    val controller = new RetrieveAllResidentialPropertyCgtController(
+    val controller: RetrieveAllResidentialPropertyCgtController = new RetrieveAllResidentialPropertyCgtController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockRetrieveAllResidentialPropertyCgtValidatorFactory,

@@ -19,7 +19,17 @@ package v1.residentialPropertyDisposals.retrieveAll
 import common.errors.SourceFormatError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.errors.{
+  DownstreamErrorCode,
+  DownstreamErrors,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotSupportedError,
+  TaxYearFormatError
+}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,6 +39,7 @@ import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.{Def1_Ret
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
 import scala.concurrent.Future
+
 class RetrieveAllResidentialPropertyCgtServiceSpec extends ServiceSpec {
 
   private val nino    = "AA112233A"
@@ -98,7 +109,7 @@ class RetrieveAllResidentialPropertyCgtServiceSpec extends ServiceSpec {
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        errors.foreach(args => (serviceError _).tupled(args))
+        errors.foreach(args => (serviceError).tupled(args))
       }
     }
   }

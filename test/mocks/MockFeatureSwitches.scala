@@ -34,8 +34,8 @@ trait MockFeatureSwitches extends TestSuite with MockFactory {
     def isOpwEnabled: CallHandler[Boolean] =
       (() => mockFeatureSwitches.isOpwEnabled).expects()
 
-    def isTemporalValidationEnabled(implicit request: Request[_]): CallHandler[Boolean] =
-      (mockFeatureSwitches.isTemporalValidationEnabled(_: Request[_])).expects(request)
+    def isTemporalValidationEnabled(implicit request: Request[?]): CallHandler[Boolean] =
+      (mockFeatureSwitches.isTemporalValidationEnabled(_: Request[?])).expects(request)
 
   }
 

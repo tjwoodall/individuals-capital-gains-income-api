@@ -18,7 +18,7 @@ package v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request
 
 import shared.models.domain.{Nino, TaxYear}
 
-trait DeleteCgtPpdOverridesRequestData{
+trait DeleteCgtPpdOverridesRequestData {
   def nino: Nino
   def taxYear: TaxYear
 }

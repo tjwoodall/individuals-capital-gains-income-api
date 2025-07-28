@@ -16,12 +16,12 @@
 
 package v1.otherCgt.createAmend.def1
 
-import common.errors.{AssetDescriptionFormatError, AssetTypeFormatError, ClaimOrElectionCodesFormatError, RuleGainAfterReliefLossAfterReliefError, RuleGainLossError}
+import common.errors.*
 import common.utils.JsonErrorValidators
 import config.MockAppConfig
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import support.UnitSpec
 import v1.otherCgt.createAmend.def1.model.request.{Def1_CreateAmendOtherCgtRequestBody, Def1_CreateAmendOtherCgtRequestData}
 
@@ -264,7 +264,7 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with MockAppCo
 
       def allowsNegatives(bodyFrom: JsNumber => JsValue): Unit =
         "allows negatives" in new Test {
-          validate(body = bodyFrom(JsNumber(-0.01))) shouldBe a[Right[_, _]]
+          validate(body = bodyFrom(JsNumber(-0.01))) shouldBe a[Right[?, ?]]
         }
 
       "a disposal field is invalid" when {

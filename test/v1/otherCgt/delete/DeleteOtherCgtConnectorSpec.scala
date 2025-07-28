@@ -55,7 +55,7 @@ class DeleteOtherCgtConnectorSpec extends CgtConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

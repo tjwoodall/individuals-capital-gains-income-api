@@ -24,8 +24,9 @@ import v1.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.Delet
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
-class DeleteCgtPpdOverridesService @Inject()(connector: DeleteCgtPpdOverridesConnector) extends BaseService {
+class DeleteCgtPpdOverridesService @Inject() (connector: DeleteCgtPpdOverridesConnector) extends BaseService {
 
   def delete(request: DeleteCgtPpdOverridesRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 

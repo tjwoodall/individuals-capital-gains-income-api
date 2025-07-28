@@ -16,8 +16,8 @@
 
 package v2.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import shared.models.domain.Timestamp
 import play.api.libs.json.{Json, OFormat}
+import shared.models.domain.Timestamp
 
 case class CustomerAddedDisposals(submittedOn: Timestamp, disposals: Seq[Disposals])
 

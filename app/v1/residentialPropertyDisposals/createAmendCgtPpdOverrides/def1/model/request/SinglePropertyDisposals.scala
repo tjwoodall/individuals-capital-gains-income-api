@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class SinglePropertyDisposals(ppdSubmissionId: String,
@@ -56,6 +56,6 @@ object SinglePropertyDisposals {
       (JsPath \ "lossesFromPreviousYear").writeNullable[BigDecimal] and
       (JsPath \ "amountOfNetGain").writeNullable[BigDecimal] and
       (JsPath \ "amountOfLoss").writeNullable[BigDecimal]
-  )(unlift(SinglePropertyDisposals.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

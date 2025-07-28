@@ -17,7 +17,7 @@
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
@@ -25,8 +25,12 @@ import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJson
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  Def1_CreateAmendCgtPpdOverridesRequestData
+}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
+
 class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
     extends Validator[CreateAmendCgtPpdOverridesRequestData] {
 
@@ -35,9 +39,9 @@ class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, bo
   private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtPpdOverridesRequestBody]()
 
   def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = (
-      ResolveNino(nino),
-      resolveTaxYear(taxYear),
-      resolveJson(body)
-    ).mapN(Def1_CreateAmendCgtPpdOverridesRequestData) andThen validateBusinessRules
+    ResolveNino(nino),
+    resolveTaxYear(taxYear),
+    resolveJson(body)
+  ).mapN(Def1_CreateAmendCgtPpdOverridesRequestData.apply) andThen validateBusinessRules
 
 }

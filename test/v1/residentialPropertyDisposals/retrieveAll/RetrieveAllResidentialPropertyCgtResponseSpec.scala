@@ -15,11 +15,12 @@
  */
 
 package v1.residentialPropertyDisposals.retrieveAll
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
+
 import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.Timestamp
 import support.UnitSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.model.response._
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
+import v1.residentialPropertyDisposals.retrieveAll.def1.model.response.*
 
 class RetrieveAllResidentialPropertyCgtResponseSpec extends UnitSpec {
 

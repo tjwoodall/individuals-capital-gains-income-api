@@ -23,7 +23,7 @@ import support.UnitSpec
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait RealAppConfig {
-  _: UnitSpec =>
+  self: UnitSpec =>
 
   protected lazy val latestEnabledApiVersion: Int =
     (99 to 1 by -1)
@@ -31,15 +31,9 @@ trait RealAppConfig {
       .getOrElse(fail("Couldn't find an enabled API version in the config"))
 
   protected lazy val emaEndpoints: Map[String, Boolean] =
-    realAppConfig match {
-      case impl: CgtAppConfig =>
-        impl.configuration
-          .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
-          .getOrElse(Map.empty)
-
-      case _ =>
-        Map.empty
-    }
+    realAppConfig.configuration
+      .getOptional[Map[String, Boolean]]("api.supporting-agent-endpoints")
+      .getOrElse(Map.empty)
 
   protected lazy val realAppConfig: CgtAppConfig = {
     val conf           = ConfigFactory.load()
@@ -49,8 +43,8 @@ trait RealAppConfig {
   }
 
   protected lazy val sharedRealAppConfig: SharedAppConfig = {
-    val conf = ConfigFactory.load()
-    val configuration = Configuration(conf)
+    val conf           = ConfigFactory.load()
+    val configuration  = Configuration(conf)
     val servicesConfig = new ServicesConfig(configuration)
     new SharedAppConfig(servicesConfig, configuration)
 

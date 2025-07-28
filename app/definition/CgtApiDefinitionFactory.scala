@@ -17,14 +17,16 @@
 package definition
 
 import shared.config.SharedAppConfig
-import shared.definition.{APIDefinition, APIStatus, APIVersion, ApiDefinitionFactory, Definition}
+import shared.definition.*
 import shared.routing.{Version, Version1, Version2}
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CgtApiDefinitionFactory @Inject()(sharedAppConfig: SharedAppConfig) extends ApiDefinitionFactory {
+class CgtApiDefinitionFactory @Inject() (sharedAppConfig: SharedAppConfig) extends ApiDefinitionFactory {
+
+  override protected val appConfig: SharedAppConfig = sharedAppConfig
 
   lazy val confidenceLevel: ConfidenceLevel = {
     val clConfig = appConfig.confidenceLevelConfig
@@ -32,7 +34,7 @@ class CgtApiDefinitionFactory @Inject()(sharedAppConfig: SharedAppConfig) extend
     if (clConfig.definitionEnabled) clConfig.confidenceLevel else ConfidenceLevel.L50
   }
 
-  lazy val definition: Definition =
+  val definition: Definition =
     Definition(
       api = APIDefinition(
         name = "Individuals Capital Gains Income (MTD)",
@@ -64,5 +66,4 @@ class CgtApiDefinitionFactory @Inject()(sharedAppConfig: SharedAppConfig) extend
       }
   }
 
-  override protected val appConfig: SharedAppConfig = sharedAppConfig
 }

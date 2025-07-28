@@ -18,7 +18,7 @@ package v2.residentialPropertyDisposals.deleteNonPpd.model.request
 
 import shared.models.domain.{Nino, TaxYear}
 
-trait DeleteCgtNonPpdRequestData{
+trait DeleteCgtNonPpdRequestData {
   def nino: Nino
   def taxYear: TaxYear
 }

@@ -16,7 +16,7 @@
 
 package v1.otherCgt.delete
 
-import cats.implicits._
+import cats.implicits.*
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}

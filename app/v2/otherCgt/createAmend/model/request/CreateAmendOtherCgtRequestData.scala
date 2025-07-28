@@ -16,8 +16,7 @@
 
 package v2.otherCgt.createAmend.model.request
 
-import shared.models.domain.Nino
-import shared.models.domain.TaxYear
+import shared.models.domain.{Nino, TaxYear}
 
 trait CreateAmendOtherCgtRequestData {
   def nino: Nino

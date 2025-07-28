@@ -57,7 +57,7 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
   }
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear
 

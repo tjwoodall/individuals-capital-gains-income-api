@@ -19,7 +19,7 @@ package v1
 import common.fixtures.nrs.NrsFixture
 import org.scalatest.Inside
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.test.Injecting
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 import uk.gov.hmrc.http.{Authorization, HeaderCarrier, UpstreamErrorResponse}

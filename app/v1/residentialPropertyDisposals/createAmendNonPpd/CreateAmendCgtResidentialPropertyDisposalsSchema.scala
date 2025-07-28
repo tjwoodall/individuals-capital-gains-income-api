@@ -16,8 +16,6 @@
 
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
-
-
 sealed trait CreateAmendCgtResidentialPropertyDisposalsSchema
 
 object CreateAmendCgtResidentialPropertyDisposalsSchema {

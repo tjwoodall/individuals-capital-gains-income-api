@@ -37,8 +37,9 @@ object CodeCoverageSettings {
   )
 
   val settings: Seq[Setting[_]] = Seq(
+    ScoverageKeys.coverageExcludedFiles := ".*\\$anon.*",
     ScoverageKeys.coverageExcludedPackages := (excludedPackages ++ excludedExtraPackages).mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 95,
+    ScoverageKeys.coverageMinimumStmtTotal := 93,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )

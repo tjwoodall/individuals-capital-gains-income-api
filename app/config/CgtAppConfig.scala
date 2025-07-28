@@ -18,17 +18,18 @@ package config
 
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CgtAppConfig @Inject()(config: ServicesConfig, protected[config] val configuration: Configuration) {
+class CgtAppConfig @Inject() (config: ServicesConfig, protected[config] val configuration: Configuration) {
   // API1661 Config
   def api1661BaseUrl: String                         = config.baseUrl("api1661")
   def api1661Env: String                             = config.getString("microservice.services.api1661.env")
   def api1661Token: String                           = config.getString("microservice.services.api1661.token")
   def api1661EnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.api1661.environmentHeaders")
 
-  def minimumPermittedTaxYear: Int                 = config.getInt("minimumPermittedTaxYear")
+  def minimumPermittedTaxYear: Int = config.getInt("minimumPermittedTaxYear")
   // NRS Config
   def mtdNrsProxyBaseUrl: String = config.baseUrl("mtd-api-nrs-proxy")
 }

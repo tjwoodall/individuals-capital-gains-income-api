@@ -16,7 +16,7 @@
 
 package v1.otherCgt.createAmend.def1.model.request
 
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.functional.syntax.toFunctionalBuilderOps
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Disposal(assetType: String,
@@ -52,6 +52,6 @@ object Disposal {
       (JsPath \ "gainAfterRelief").writeNullable[BigDecimal] and
       (JsPath \ "lossAfterRelief").writeNullable[BigDecimal] and
       (JsPath \ "rttTaxPaid").writeNullable[BigDecimal]
-  )(unlift(Disposal.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

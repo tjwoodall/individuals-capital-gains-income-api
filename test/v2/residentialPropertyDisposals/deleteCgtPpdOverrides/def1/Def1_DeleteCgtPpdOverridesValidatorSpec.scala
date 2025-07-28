@@ -18,7 +18,7 @@ package v2.residentialPropertyDisposals.deleteCgtPpdOverrides.def1
 
 import config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import support.UnitSpec
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.DeleteCgtPpdOverridesValidatorFactory
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
@@ -39,20 +39,23 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     validatorFactory.validator(nino, taxYear)
 
   class Test {
+
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
       .anyNumberOfTimes()
+
   }
+
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is supplied" in new Test  {
+      "a valid request is supplied" in new Test {
         val result = validator(validNino, validTaxYear).validateAndWrapResult()
         result shouldBe Right(Def1_DeleteCgtPpdOverridesRequestData(parsedNino, parsedTaxYear))
       }
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test  {
+      "an invalid nino is supplied" in new Test {
         val result = validator("A12344A", validTaxYear).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, NinoFormatError)
@@ -61,7 +64,7 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     }
 
     "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new Test  {
+      "an invalid tax year is supplied" in new Test {
         val result = validator(validNino, "201718").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, TaxYearFormatError)
@@ -70,7 +73,7 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test  {
+      "an out of range tax year is supplied" in new Test {
         val result = validator(validNino, "2016-17").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
@@ -79,7 +82,7 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     }
 
     "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year range is supplied" in new Test  {
+      "an invalid tax year range is supplied" in new Test {
         val result = validator(validNino, "2017-19").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
@@ -88,7 +91,7 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     }
 
     "return multiple errors" when {
-      "multiple invalid parameters are provided" in new Test  {
+      "multiple invalid parameters are provided" in new Test {
         val result = validator("not-a-nino", "2017-19").validateAndWrapResult()
 
         result shouldBe Left(

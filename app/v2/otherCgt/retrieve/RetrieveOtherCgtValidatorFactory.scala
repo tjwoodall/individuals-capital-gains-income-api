@@ -35,4 +35,5 @@ class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
       case Def1 => new Def1_RetrieveOtherCgtValidator(nino, taxYear)(appConfig)
     }
   }
+
 }

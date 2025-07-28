@@ -24,7 +24,7 @@ import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPp
 
 class DeleteCgtNonPpdValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
-  private val validNino = "AA123456A"
+  private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
 
   private val validatorFactory = new DeleteCgtNonPpdValidatorFactory(mockAppConfig)

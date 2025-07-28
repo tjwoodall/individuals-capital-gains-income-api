@@ -18,7 +18,7 @@ package v1.otherCgt.delete.def1
 
 import config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import support.UnitSpec
 import v1.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v1.otherCgt.delete.model.request.DeleteOtherCgtRequestData

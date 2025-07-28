@@ -29,14 +29,14 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class DeleteCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
-  import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+  import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
   def deleteCgtPpdOverrides(request: DeleteCgtPpdOverridesRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
+    import request.*
 
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
       IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.nino}")

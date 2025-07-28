@@ -28,13 +28,17 @@ import shared.models.outcomes.ResponseWrapper
 import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import shared.utils.MockIdGenerator
 import v2.residentialPropertyDisposals.MockNrsProxyService
-import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
+import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{
+  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
+  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData,
+  Disposal
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
@@ -139,7 +143,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new CreateAmendCgtResidentialPropertyDisposalsController(
+    val controller: CreateAmendCgtResidentialPropertyDisposalsController = new CreateAmendCgtResidentialPropertyDisposalsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendCgtResidentialPropertyDisposalsValidatorFactory,

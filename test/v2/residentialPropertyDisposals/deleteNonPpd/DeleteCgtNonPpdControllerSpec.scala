@@ -85,7 +85,7 @@ class DeleteCgtNonPpdControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteCgtNonPpdController(
+    val controller: DeleteCgtNonPpdController = new DeleteCgtNonPpdController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteCgtNonPpdValidatorFactory,

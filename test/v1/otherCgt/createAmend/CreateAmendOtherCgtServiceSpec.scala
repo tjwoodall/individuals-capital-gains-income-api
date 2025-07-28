@@ -15,10 +15,20 @@
  */
 
 package v1.otherCgt.createAmend
+
 import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.errors.{
+  DownstreamErrorCode,
+  DownstreamErrors,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  RuleTaxYearNotSupportedError,
+  TaxYearFormatError
+}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v1.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
@@ -26,6 +36,7 @@ import v1.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtReques
 import v1.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.Future
+
 class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
 
   private val nino    = "AA112233A"
@@ -86,7 +97,7 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
         ("TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
     }
   }
 

@@ -18,18 +18,18 @@ package v1
 
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsProxyConnector @Inject()(http: HttpClientV2, appConfig: CgtAppConfig)(implicit ec: ExecutionContext) {
+class NrsProxyConnector @Inject() (http: HttpClientV2, appConfig: CgtAppConfig)(implicit ec: ExecutionContext) {
 
-  def submit(nino: String, notableEvent: String, body: JsValue)
-            (implicit hc: HeaderCarrier): Future[Either[UpstreamErrorResponse, Unit]] = {
+  def submit(nino: String, notableEvent: String, body: JsValue)(implicit hc: HeaderCarrier): Future[Either[UpstreamErrorResponse, Unit]] = {
 
     val url = s"${appConfig.mtdNrsProxyBaseUrl}/mtd-api-nrs-proxy/$nino/$notableEvent"
 

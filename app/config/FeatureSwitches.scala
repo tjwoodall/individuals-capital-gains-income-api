@@ -29,7 +29,7 @@ trait FeatureSwitches {
 
   def isPostCessationReceiptsEnabled: Boolean
   def isPassDeleteIntentEnabled: Boolean
-  def isTemporalValidationEnabled(implicit request: Request[_]): Boolean
+  def isTemporalValidationEnabled(implicit request: Request[?]): Boolean
   def isOpwEnabled: Boolean
   def isReleasedInProduction(feature: String): Boolean
   def supportingAgentsAccessControlEnabled: Boolean
@@ -45,7 +45,7 @@ class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwi
   val isPassDeleteIntentEnabled: Boolean      = isEnabled("passDeleteIntentHeader.enabled")
   val isOpwEnabled: Boolean                   = isEnabled("opw.enabled")
 
-  def isTemporalValidationEnabled(implicit request: Request[_]): Boolean = {
+  def isTemporalValidationEnabled(implicit request: Request[?]): Boolean = {
     if (isEnabled("allowTemporalValidationSuspension.enabled")) {
       request.headers.get("suspend-temporal-validations").forall(!BooleanUtils.toBoolean(_))
     } else {

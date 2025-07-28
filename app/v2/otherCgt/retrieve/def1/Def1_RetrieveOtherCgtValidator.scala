@@ -17,7 +17,7 @@
 package v2.otherCgt.retrieve.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.CgtAppConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
@@ -27,8 +27,10 @@ import v2.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v2.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
+
 @Singleton
-class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: CgtAppConfig) extends Validator[RetrieveOtherCgtRequestData] {
+class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: CgtAppConfig)
+    extends Validator[RetrieveOtherCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
   private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
@@ -37,6 +39,6 @@ class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(a
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_RetrieveOtherCgtRequestData)
+    ).mapN(Def1_RetrieveOtherCgtRequestData.apply)
 
 }

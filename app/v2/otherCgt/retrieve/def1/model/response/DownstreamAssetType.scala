@@ -16,30 +16,16 @@
 
 package v2.otherCgt.retrieve.def1.model.response
 
-import play.api.libs.json.Reads
+import play.api.libs.json.Format
 import shared.utils.enums.Enums
 
-sealed trait DownstreamAssetType {
-  def toMtd: AssetType
+enum DownstreamAssetType(val toMtd: AssetType) {
+  case `otherProperty`  extends DownstreamAssetType(AssetType.`other-property`)
+  case `unlistedShares` extends DownstreamAssetType(AssetType.`unlisted-shares`)
+  case `listedShares`   extends DownstreamAssetType(AssetType.`listed-shares`)
+  case `otherAsset`     extends DownstreamAssetType(AssetType.`other-asset`)
 }
 
 object DownstreamAssetType {
-
-  case object `otherProperty` extends DownstreamAssetType {
-    override def toMtd: AssetType = AssetType.`other-property`
-  }
-
-  case object `unlistedShares` extends DownstreamAssetType {
-    override def toMtd: AssetType = AssetType.`unlisted-shares`
-  }
-
-  case object `listedShares` extends DownstreamAssetType {
-    override def toMtd: AssetType = AssetType.`listed-shares`
-  }
-
-  case object `otherAsset` extends DownstreamAssetType {
-    override def toMtd: AssetType = AssetType.`other-asset`
-  }
-
-  implicit val reads: Reads[DownstreamAssetType] = Enums.reads[DownstreamAssetType]
+  given Format[DownstreamAssetType] = Enums.format(values)
 }

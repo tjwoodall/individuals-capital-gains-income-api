@@ -16,11 +16,11 @@
 
 package v2.otherCgt.retrieve.def1.model.response
 
-import AssetType.`other-property`
-import DownstreamAssetType.`otherProperty`
 import play.api.libs.json.{JsError, JsObject, JsValue, Json}
 import shared.models.domain.Timestamp
 import support.UnitSpec
+import v2.otherCgt.retrieve.def1.model.response.AssetType.`other-property`
+import v2.otherCgt.retrieve.def1.model.response.DownstreamAssetType.`otherProperty`
 
 class Def1_RetrieveOtherCgtResponseSpec extends UnitSpec {
 

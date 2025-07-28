@@ -85,7 +85,7 @@ class DeleteCgtPpdOverridesControllerSpec
 
   trait Test extends ControllerTest with AuditEventChecking[GenericAuditDetail] {
 
-    val controller = new DeleteCgtPpdOverridesController(
+    val controller: DeleteCgtPpdOverridesController = new DeleteCgtPpdOverridesController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockDeleteCgtPpdOverridesValidatorFactory,

@@ -25,7 +25,7 @@ import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCreateAmendCgtPpdOverridesConnector extends TestSuite with MockFactory{
+trait MockCreateAmendCgtPpdOverridesConnector extends TestSuite with MockFactory {
 
   val mockCreateAmendCgtPpdOverridesConnector: CreateAmendCgtPpdOverridesConnector = mock[CreateAmendCgtPpdOverridesConnector]
 

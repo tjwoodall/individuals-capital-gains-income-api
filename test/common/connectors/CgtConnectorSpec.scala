@@ -21,7 +21,7 @@ import shared.connectors.ConnectorSpec
 trait CgtConnectorSpec extends ConnectorSpec {
 
   val requiredApi1661Headers: Seq[(String, String)] = List(
-    "Environment" -> "api1661-environment",
+    "Environment"   -> "api1661-environment",
     "Authorization" -> s"Bearer api1661-token",
     "CorrelationId" -> s"$correlationId"
   )
@@ -37,7 +37,7 @@ trait CgtConnectorSpec extends ConnectorSpec {
 
   val otherHeaders: Seq[(String, String)] = List(
     "Gov-Test-Scenario" -> "DEFAULT",
-    "AnotherHeader" -> "HeaderValue"
+    "AnotherHeader"     -> "HeaderValue"
   )
 
   protected trait Api1661Test extends StandardConnectorTest {
@@ -45,4 +45,5 @@ trait CgtConnectorSpec extends ConnectorSpec {
 
     MockedSharedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
   }
+
 }

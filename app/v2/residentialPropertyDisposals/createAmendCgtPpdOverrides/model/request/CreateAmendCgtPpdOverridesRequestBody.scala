@@ -25,9 +25,8 @@ trait CreateAmendCgtPpdOverridesRequestBody
 
 object CreateAmendCgtPpdOverridesRequestBody extends JsonWritesUtil {
 
-  implicit val writes: OWrites[CreateAmendCgtPpdOverridesRequestBody] = writesFrom {
-    case def1: Def1_CreateAmendCgtPpdOverridesRequestBody =>
-      implicitly[OWrites[Def1_CreateAmendCgtPpdOverridesRequestBody]].writes(def1)
+  implicit val writes: OWrites[CreateAmendCgtPpdOverridesRequestBody] = writesFrom { case def1: Def1_CreateAmendCgtPpdOverridesRequestBody =>
+    implicitly[OWrites[Def1_CreateAmendCgtPpdOverridesRequestBody]].writes(def1)
 
   }
 

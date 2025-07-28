@@ -30,10 +30,9 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appC
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
     val schema = CreateAmendCgtResidentialPropertyDisposalsSchema.schema
-    schema match{
+    schema match {
       case Def1 => new Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)(appConfig)
     }
   }
 
-
-  }
+}

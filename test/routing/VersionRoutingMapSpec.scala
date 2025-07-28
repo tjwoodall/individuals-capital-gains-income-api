@@ -32,7 +32,7 @@ class VersionRoutingMapSpec extends UnitSpec with GuiceOneAppPerSuite {
       val versionRoutingMap: VersionRoutingMapImpl = VersionRoutingMapImpl(
         defaultRouter = defaultRouter,
         v1Router = v1Routes,
-        v2Router = v2Routes,
+        v2Router = v2Routes
       )
 
       s"route to ${v1Routes.toString}" in {

@@ -17,7 +17,7 @@
 package v2.otherCgt.createAmend.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
@@ -27,6 +27,7 @@ import shared.models.errors.MtdError
 import v2.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtRulesValidator.validateBusinessRules
 import v2.otherCgt.createAmend.def1.model.request.{Def1_CreateAmendOtherCgtRequestBody, Def1_CreateAmendOtherCgtRequestData}
 import v2.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
+
 class Def1_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
     extends Validator[CreateAmendOtherCgtRequestData] {
 
@@ -39,6 +40,6 @@ class Def1_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsV
       ResolveNino(nino),
       resolveTaxYear(taxYear),
       resolveJson(body)
-    ).mapN(Def1_CreateAmendOtherCgtRequestData) andThen validateBusinessRules
+    ).mapN(Def1_CreateAmendOtherCgtRequestData.apply) andThen validateBusinessRules
 
 }

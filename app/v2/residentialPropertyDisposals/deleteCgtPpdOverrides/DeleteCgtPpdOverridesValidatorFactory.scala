@@ -27,15 +27,13 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class DeleteCgtPpdOverridesValidatorFactory @Inject() (appConfig: CgtAppConfig) {
 
+  def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] = {
 
-  def validator(nino: String, taxYear: String): Validator[DeleteCgtPpdOverridesRequestData] ={
+    val schema = DeleteCgtPpdOverridesSchema.schema
 
-
-  val schema = DeleteCgtPpdOverridesSchema.schema
-
-  schema match {
-    case Def1 => new Def1_DeleteCgtPpdOverridesValidator(nino, taxYear)(appConfig)
+    schema match {
+      case Def1 => new Def1_DeleteCgtPpdOverridesValidator(nino, taxYear)(appConfig)
+    }
   }
-}
 
 }

@@ -20,10 +20,13 @@ import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{RuleDateRangeInvalidError, RuleIncorrectOrEmptyBodyError, RuleTaxYearRangeInvalidError, ValueFormatError, _}
+import shared.models.errors.*
 import support.UnitSpec
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, Def1_CreateAmendCgtPpdOverridesRequestData}
+import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  Def1_CreateAmendCgtPpdOverridesRequestData
+}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with MockAppConfig {
@@ -562,8 +565,6 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
   private val validatorFactory                                        = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
-
-
   class Test {
 
     MockedAppConfig.minimumPermittedTaxYear
@@ -571,6 +572,7 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       .anyNumberOfTimes()
 
   }
+
   "validator" should {
     "return the parsed domain object" when {
       "a valid request is supplied" in new Test {
@@ -785,7 +787,7 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
     }
 
     "return a RuleAmountGainLossError" when {
-      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in new Test{
+      "both amountOfNetGain and amountOfNetLoss are provided for multiplePropertyDisposals" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, bothGainsAndLossMultiplePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
@@ -817,7 +819,7 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
         )
       }
 
-      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in new Test{
+      "both amountOfNetGain and amountOfNetLoss are provided for singlePropertyDisposals" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, bothGainsAndLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 
@@ -833,7 +835,7 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
         )
       }
 
-      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in new Test{
+      "neither amountOfNetGain or amountOfNetLoss are provided for singlePropertyDisposals" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, neitherGainsOrLossSinglePropertyDisposalsRequestBodyJson).validateAndWrapResult()
 

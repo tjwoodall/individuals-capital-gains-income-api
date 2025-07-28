@@ -16,13 +16,14 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import utils.JsonUtils
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestBody
 
 case class Def1_CreateAmendCgtPpdOverridesRequestBody(multiplePropertyDisposals: Option[Seq[MultiplePropertyDisposals]],
-                                                 singlePropertyDisposals: Option[Seq[SinglePropertyDisposals]]) extends CreateAmendCgtPpdOverridesRequestBody
+                                                      singlePropertyDisposals: Option[Seq[SinglePropertyDisposals]])
+    extends CreateAmendCgtPpdOverridesRequestBody
 
 object Def1_CreateAmendCgtPpdOverridesRequestBody extends JsonUtils {
   val empty: Def1_CreateAmendCgtPpdOverridesRequestBody = Def1_CreateAmendCgtPpdOverridesRequestBody(None, None)
@@ -32,6 +33,6 @@ object Def1_CreateAmendCgtPpdOverridesRequestBody extends JsonUtils {
   implicit val writes: OWrites[Def1_CreateAmendCgtPpdOverridesRequestBody] = (
     (JsPath \ "multiplePropertyDisposals").writeNullable[Seq[MultiplePropertyDisposals]] and
       (JsPath \ "singlePropertyDisposals").writeNullable[Seq[SinglePropertyDisposals]]
-  )(unlift(Def1_CreateAmendCgtPpdOverridesRequestBody.unapply))
+  )(o => Tuple.fromProductTyped(o))
 
 }

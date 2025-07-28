@@ -19,10 +19,7 @@ package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 import play.api.libs.json.{Json, OWrites, Reads}
 import v1.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 
-case class Def1_RetrieveAllResidentialPropertyCgtResponse(
-                                                          customerAddedDisposals: Option[CustomerAddedDisposals],
-                                                          ppdService: Option[PpdService])
-
+case class Def1_RetrieveAllResidentialPropertyCgtResponse(customerAddedDisposals: Option[CustomerAddedDisposals], ppdService: Option[PpdService])
     extends RetrieveAllResidentialPropertyCgtResponse
 
 object Def1_RetrieveAllResidentialPropertyCgtResponse {

@@ -17,8 +17,8 @@
 package v1.otherCgt.createAmend.def1.model.request
 
 import play.api.libs.json.{Json, OFormat}
-import shapeless.HNil
 import shared.utils.EmptinessChecker
+import shared.utils.EmptinessChecker.field
 
 case class NonStandardGains(carriedInterestGain: Option[BigDecimal],
                             carriedInterestRttTaxPaid: Option[BigDecimal],
@@ -31,9 +31,11 @@ object NonStandardGains {
   val empty: NonStandardGains = NonStandardGains(None, None, None, None, None, None)
 
   implicit val emptinessChecker: EmptinessChecker[NonStandardGains] = EmptinessChecker.use { body =>
-    "carriedInterestGain" -> body.carriedInterestGain ::
-      "attributedGains"   -> body.attributedGains ::
-      "otherGains"        -> body.otherGains :: HNil
+    List(
+      field("carriedInterestGain", body.carriedInterestGain),
+      field("attributedGains", body.attributedGains),
+      field("otherGains", body.otherGains)
+    )
   }
 
   implicit val format: OFormat[NonStandardGains] = Json.format[NonStandardGains]

@@ -16,15 +16,16 @@
 
 package v2.endpoints
 
-import com.github.tomakehurst.wiremock.client.WireMock._
-import common.errors._
+import com.github.tomakehurst.wiremock.client.WireMock.*
+import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors._
-import shared.services._
+import shared.models.errors.*
+import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
 class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMockMethods {
@@ -448,7 +449,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
           ("AA123456A", "2021-22", formatDisposalsJson, BAD_REQUEST, BadRequestError, Some(formatDisposalsErrors), Some("formatDisposals")),
           ("AA123456A", "2021-22", formatNonStandardGainsJson, BAD_REQUEST, formatNonStandardGainsError, None, Some("formatNonStandardGains"))
         )
-        input.foreach(args => (validationErrorTest _).tupled(args))
+        input.foreach(args => (validationErrorTest).tupled(args))
       }
 
       "downstream service error" when {
@@ -490,7 +491,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        (errorInput ++ tysErrorInput).foreach(args => (serviceErrorTest _).tupled(args))
+        (errorInput ++ tysErrorInput).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
   }

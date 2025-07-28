@@ -30,6 +30,7 @@ import scala.concurrent.Future
 class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig {
 
   private val nino: String = "AA111111A"
+
   val allowedIfsHeaders: Seq[String] = List(
     "Accept",
     "Gov-Test-Scenario",
@@ -38,7 +39,8 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
     "X-Request-Timestamp",
     "X-Session-Id"
   )
-  trait Test { _: ConnectorTest =>
+
+  trait Test { self: ConnectorTest =>
     def taxYear: TaxYear
 
     val connector: CreateAmendOtherCgtConnector = new CreateAmendOtherCgtConnector(
@@ -50,7 +52,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
 
   "createAndAmend" should {
     "return a 204 status" when {
-      "a valid request is made" in new IfsTest  with Test {
+      "a valid request is made" in new IfsTest with Test {
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 

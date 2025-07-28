@@ -45,7 +45,7 @@ trait MockCreateAmendCgtPpdOverridesValidatorFactory extends TestSuite with Mock
       .returns(use)
   }
 
-  def returningSuccess(result:CreateAmendCgtPpdOverridesRequestData): Validator[CreateAmendCgtPpdOverridesRequestData] =
+  def returningSuccess(result: CreateAmendCgtPpdOverridesRequestData): Validator[CreateAmendCgtPpdOverridesRequestData] =
     new Validator[CreateAmendCgtPpdOverridesRequestData] {
       def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = Valid(result)
     }

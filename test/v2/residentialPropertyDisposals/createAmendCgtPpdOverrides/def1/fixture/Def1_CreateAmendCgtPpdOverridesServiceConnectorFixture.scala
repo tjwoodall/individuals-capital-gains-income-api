@@ -17,7 +17,11 @@
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture
 
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
-import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{Def1_CreateAmendCgtPpdOverridesRequestBody, MultiplePropertyDisposals, SinglePropertyDisposals}
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
+  Def1_CreateAmendCgtPpdOverridesRequestBody,
+  MultiplePropertyDisposals,
+  SinglePropertyDisposals
+}
 
 object Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture {
 

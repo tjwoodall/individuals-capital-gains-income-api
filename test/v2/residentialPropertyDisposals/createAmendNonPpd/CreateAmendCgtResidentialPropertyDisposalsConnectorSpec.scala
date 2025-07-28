@@ -19,9 +19,9 @@ package v2.residentialPropertyDisposals.createAmendNonPpd
 import common.connectors.CgtConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
-import uk.gov.hmrc.http.StringContextOps
 
 import scala.concurrent.Future
 
@@ -29,14 +29,14 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
 
   private val nino: String = "AA111111A"
 
-  trait Test { _: ConnectorTest =>
+  trait Test { self: ConnectorTest =>
 
     val connector: CreateAmendCgtResidentialPropertyDisposalsConnector = new CreateAmendCgtResidentialPropertyDisposalsConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
 
-    val taxYear: TaxYear
+    def taxYear: TaxYear
 
     val createAmendCgtResidentialPropertyDisposalsRequest: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData =
       Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
@@ -50,7 +50,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
   "createAndAmend" should {
     "return a 204 status" when {
       "a valid request is made" in new Api1661Test with Test {
-        lazy val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
@@ -64,7 +64,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
       }
 
       "a valid request is made for a TYS tax year" in new IfsTest with Test {
-        lazy val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 

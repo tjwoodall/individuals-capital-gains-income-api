@@ -16,7 +16,7 @@
 
 package common.errors
 
-import play.api.http.Status._
+import play.api.http.Status.*
 import shared.models.errors.MtdError
 
 object PpdSubmissionIdFormatError  extends MtdError("FORMAT_PPD_SUBMISSION_ID", "The provided ppdSubmissionId is invalid", BAD_REQUEST)
@@ -27,6 +27,7 @@ object SourceFormatError           extends MtdError("FORMAT_SOURCE", "The provid
 
 object ClaimOrElectionCodesFormatError
     extends MtdError("FORMAT_CLAIM_OR_ELECTION_CODES", "The format of the claimOrElectionCodes value is invalid", BAD_REQUEST)
+
 // Rule Errors
 object RuleDuplicatedPpdSubmissionIdError
     extends MtdError("RULE_DUPLICATED_PPD_SUBMISSION_ID", "A provided ppdSubmissionId is duplicated", BAD_REQUEST)
@@ -61,8 +62,7 @@ object RuleDisposalDateNotFutureError
 object RuleAmountGainLossError
     extends MtdError("RULE_AMOUNT_GAIN_LOSS", "Either amountOfGain or amountOfLoss, must be provided but not both", BAD_REQUEST)
 
-object RuleOutsideAmendmentWindowError
-  extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
+object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
 
 // Not found errors
 object PpdSubmissionIdNotFoundError extends MtdError("PPD_SUBMISSION_ID_NOT_FOUND", "Matching resource not found", NOT_FOUND)

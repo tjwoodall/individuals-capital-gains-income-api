@@ -16,8 +16,8 @@
 
 package v1.residentialPropertyDisposals.retrieveAll
 
-import shared.controllers.validators.Validator
 import config.CgtAppConfig
+import shared.controllers.validators.Validator
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtSchema.Def1
 import v1.residentialPropertyDisposals.retrieveAll.def1.Def1_RetrieveAllResidentialPropertyCgtValidator
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData

@@ -29,14 +29,14 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
 
   private val nino: String = "AA111111A"
 
-  trait Test { _: ConnectorTest =>
+  trait Test { self: ConnectorTest =>
 
     val connector: CreateAmendCgtResidentialPropertyDisposalsConnector = new CreateAmendCgtResidentialPropertyDisposalsConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
 
-    val taxYear: TaxYear
+    def taxYear: TaxYear
 
     val createAmendCgtResidentialPropertyDisposalsRequest: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData =
       Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
@@ -50,7 +50,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
   "createAndAmend" should {
     "return a 204 status" when {
       "a valid request is made" in new Api1661Test with Test {
-        lazy val taxYear = TaxYear.fromMtd("2019-20")
+        def taxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
@@ -64,7 +64,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
       }
 
       "a valid request is made for a TYS tax year" in new IfsTest with Test {
-        lazy val taxYear = TaxYear.fromMtd("2023-24")
+        def taxYear = TaxYear.fromMtd("2023-24")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 

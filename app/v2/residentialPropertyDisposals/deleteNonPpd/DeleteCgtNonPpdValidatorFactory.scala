@@ -33,6 +33,6 @@ class DeleteCgtNonPpdValidatorFactory @Inject() (appConfig: CgtAppConfig) {
     schema match {
       case Def1 => new Def1_DeleteCgtNonPpdValidator(nino, taxYear)(appConfig)
     }
-    }
+  }
 
 }

@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import cats.syntax.either._
+import cats.syntax.either.*
 import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1, RuleOutsideAmendmentWindowError}
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
@@ -31,8 +31,8 @@ class CreateAmendCgtResidentialPropertyDisposalsService @Inject() (connector: Cr
     extends BaseService {
 
   def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
-                                                                                          ctx: RequestContext,
-                                                                                          ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
+      ctx: RequestContext,
+      ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
 
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
   }

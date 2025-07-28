@@ -19,7 +19,7 @@ package v2.residentialPropertyDisposals.deleteNonPpd
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import shared.config.SharedAppConfig
-import shared.controllers._
+import shared.controllers.*
 import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import shared.models.auth.UserDetails
 import shared.models.errors.ErrorWrapper
@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
 class DeleteCgtNonPpdController @Inject() (val authService: EnrolmentsAuthService,
                                            val lookupService: MtdIdLookupService,

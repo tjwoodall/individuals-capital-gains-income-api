@@ -21,9 +21,8 @@ import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropert
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v1.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
 
-case class Def1_RetrieveAllResidentialPropertyRequestData(nino: Nino,
-                                                          taxYear: TaxYear,
-                                                          source: MtdSourceEnum) extends RetrieveAllResidentialPropertyCgtRequestData {
+case class Def1_RetrieveAllResidentialPropertyRequestData(nino: Nino, taxYear: TaxYear, source: MtdSourceEnum)
+    extends RetrieveAllResidentialPropertyCgtRequestData {
 
   val schema: RetrieveAllResidentialPropertyCgtSchema = RetrieveAllResidentialPropertyCgtSchema.Def1
 }

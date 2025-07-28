@@ -16,7 +16,7 @@
 
 package v1.residentialPropertyDisposals.retrieveAll.def1.model.response
 
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import shared.models.domain.Timestamp
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
@@ -43,7 +43,7 @@ object MultiplePropertyDisposals {
       (JsPath \ "completionDate").readNullable[String] and
       (JsPath \ "amountOfNetGain").readNullable[BigDecimal] and
       (JsPath \ "amountOfLoss").readNullable[BigDecimal]
-  )(MultiplePropertyDisposals.apply _)
+  )(MultiplePropertyDisposals.apply)
 
   implicit val writes: OWrites[MultiplePropertyDisposals] = Json.writes[MultiplePropertyDisposals]
 

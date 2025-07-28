@@ -16,31 +16,18 @@
 
 package v2.otherCgt.createAmend.def1.model.request
 
-import play.api.libs.json.Writes
+import play.api.libs.json.Format
 import shared.utils.enums.Enums
 
-sealed trait AssetType {
-  def toDownstreamString: String
+enum AssetType(val toDownstreamString: String) {
+  case `other-property`  extends AssetType("otherProperty")
+  case `unlisted-shares` extends AssetType("unlistedShares")
+  case `listed-shares`   extends AssetType("listedShares")
+  case `other-asset`     extends AssetType("otherAsset")
 }
 
 object AssetType {
 
-  case object `other-property` extends AssetType {
-    override def toDownstreamString: String = "otherProperty"
-  }
-
-  case object `unlisted-shares` extends AssetType {
-    override def toDownstreamString: String = "unlistedShares"
-  }
-
-  case object `listed-shares` extends AssetType {
-    override def toDownstreamString: String = "listedShares"
-  }
-
-  case object `other-asset` extends AssetType {
-    override def toDownstreamString: String = "otherAsset"
-  }
-
-  implicit val writes: Writes[AssetType]         = Enums.writes[AssetType]
-  val parser: PartialFunction[String, AssetType] = Enums.parser[AssetType]
+  given Format[AssetType]                        = Enums.format(values)
+  val parser: PartialFunction[String, AssetType] = Enums.parser[AssetType](values)
 }

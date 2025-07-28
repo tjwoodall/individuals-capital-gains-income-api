@@ -17,7 +17,7 @@
 package v2.otherCgt.delete.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.CgtAppConfig
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
@@ -37,6 +37,6 @@ class Def1_DeleteOtherCgtValidator @Inject() (nino: String, taxYear: String)(app
     (
       ResolveNino(nino),
       resolveTaxYear(taxYear)
-    ).mapN(Def1_DeleteOtherCgtRequestData)
+    ).mapN(Def1_DeleteOtherCgtRequestData.apply)
 
 }

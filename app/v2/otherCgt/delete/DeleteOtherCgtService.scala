@@ -16,7 +16,7 @@
 
 package v2.otherCgt.delete
 
-import cats.implicits._
+import cats.implicits.*
 import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}

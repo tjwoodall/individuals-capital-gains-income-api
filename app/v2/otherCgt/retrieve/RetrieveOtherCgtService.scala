@@ -25,6 +25,7 @@ import v2.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 @Singleton
 class RetrieveOtherCgtService @Inject() (connector: RetrieveOtherCgtConnector) extends BaseService {
 

@@ -19,7 +19,7 @@ package v1.residentialPropertyDisposals.retrieveAll.def1
 import common.errors.SourceFormatError
 import config.MockAppConfig
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
+import shared.models.errors.*
 import support.UnitSpec
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtValidatorFactory
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
@@ -40,20 +40,22 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
   private def validator(nino: String, taxYear: String, source: Option[String]) = validatorFactory.validator(nino, taxYear, source)
 
   class Test {
+
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
       .anyNumberOfTimes()
+
   }
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is supplied" in new Test  {
+      "a valid request is supplied" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator(validNino, validTaxYear, validSource).validateAndWrapResult()
 
         result shouldBe Right(Def1_RetrieveAllResidentialPropertyRequestData(parsedNino, parsedTaxYear, parsedSource))
       }
-      "a valid request is supplied with no source" in new Test  {
+      "a valid request is supplied with no source" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator(validNino, validTaxYear, None).validateAndWrapResult()
 
@@ -62,7 +64,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test  {
+      "an invalid nino is supplied" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator("A12344A", validTaxYear, validSource).validateAndWrapResult()
 
@@ -71,7 +73,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new Test  {
+      "an invalid tax year is supplied" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator(validNino, "20178", validSource).validateAndWrapResult()
 
@@ -80,7 +82,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year range is supplied" in new Test  {
+      "an invalid tax year range is supplied" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator(validNino, "2019-21", validSource).validateAndWrapResult()
 
@@ -89,7 +91,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "a tax year that is not supported is supplied" in new Test  {
+      "a tax year that is not supported is supplied" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator(validNino, "2018-19", validSource).validateAndWrapResult()
 
@@ -98,7 +100,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return NinoFormatError and TaxYearFormatError errors" when {
-      "request supplied has invalid nino and tax year" in new Test  {
+      "request supplied has invalid nino and tax year" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator("A12344A", "20178", validSource).validateAndWrapResult()
 
@@ -113,7 +115,7 @@ class Def1_RetrieveAllResidentialPropertyCgtValidatorSpec extends UnitSpec with 
     }
 
     "return NinoFormatError, TaxYearFormatError and SourceFormatError errors" when {
-      "request supplied has invalid nino, tax year and source" in new Test  {
+      "request supplied has invalid nino, tax year and source" in new Test {
         val result: Either[ErrorWrapper, RetrieveAllResidentialPropertyCgtRequestData] =
           validator("A12344A", "20178", Some("ABCDE12345FG")).validateAndWrapResult()
 

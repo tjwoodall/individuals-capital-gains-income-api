@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendNonPpd.def1
 
 import cats.data.Validated
-import cats.implicits._
+import cats.implicits.*
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
@@ -25,8 +25,12 @@ import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJson
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
-import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody, Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData}
+import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{
+  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
+  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
+}
 import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
+
 class Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
     extends Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
@@ -38,6 +42,6 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, tax
     ResolveNino(nino),
     resolveTaxYear(taxYear),
     resolveJson(body)
-  ).mapN(Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData) andThen validateBusinessRules
+  ).mapN(Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData.apply) andThen validateBusinessRules
 
 }

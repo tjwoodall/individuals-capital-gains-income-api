@@ -41,7 +41,7 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
   )
 
   trait Test {
-    _: ConnectorTest =>
+    self: ConnectorTest =>
 
     def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 

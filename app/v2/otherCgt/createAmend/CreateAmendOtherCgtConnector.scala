@@ -34,8 +34,8 @@ class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appCon
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
-    import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+    import request.*
+    import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
     val downstreamUri: DownstreamUri[Unit] =
       if (taxYear.useTaxYearSpecificApi) {

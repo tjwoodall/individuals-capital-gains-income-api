@@ -24,7 +24,7 @@ class RetrieveAllResidentialPropertyCgtValidatorFactorySpec extends UnitSpec wit
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
-  private val validSource = Some("source")
+  private val validSource  = Some("source")
 
   private val validatorFactory = new RetrieveAllResidentialPropertyCgtValidatorFactory(mockAppConfig)
 

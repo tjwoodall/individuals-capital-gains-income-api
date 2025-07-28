@@ -16,10 +16,26 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import common.errors.{PpdSubmissionIdNotFoundError, RuleDuplicatedPpdSubmissionIdError, RuleIncorrectDisposalTypeError, RuleOutsideAmendmentWindowError}
+import common.errors.{
+  PpdSubmissionIdNotFoundError,
+  RuleDuplicatedPpdSubmissionIdError,
+  RuleIncorrectDisposalTypeError,
+  RuleOutsideAmendmentWindowError
+}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotEndedError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import shared.models.errors.{
+  DownstreamErrorCode,
+  DownstreamErrors,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NinoFormatError,
+  NotFoundError,
+  RuleTaxYearNotEndedError,
+  RuleTaxYearNotSupportedError,
+  TaxYearFormatError
+}
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture.Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
@@ -27,6 +43,7 @@ import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.req
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
+
 class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
 
   private val nino    = "AA112233A"
@@ -100,8 +117,8 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))
-        (errors ++ extraTysErrors).foreach(args => (failuresArrayError _).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => (failuresArrayError).tupled(args))
       }
     }
   }

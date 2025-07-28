@@ -19,30 +19,27 @@ package definition
 import shared.config.{ConfidenceLevelConfig, MockSharedAppConfig}
 import shared.definition.APIStatus.{ALPHA, BETA}
 import shared.definition.{APIDefinition, APIVersion, Definition}
-import shared.mocks.MockHttpClient
 import shared.routing.{Version1, Version2}
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
-class CgtApiDefinitionFactorySpec extends UnitSpec {
-
-  class Test extends MockHttpClient with MockSharedAppConfig {
-    val apiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "individuals/disposals-income"
-  }
+class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
 
   private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
 
   "definition" when {
     "called" should {
-      "return a valid Definition case class" in new Test {
+      "return a valid Definition case class" in {
         List(Version1, Version2).foreach { version =>
+          MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(version) returns "BETA"
           MockedSharedAppConfig.endpointsEnabled(version) returns true
-          MockedSharedAppConfig.confidenceLevelConfig.returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel,
-            definitionEnabled = true,
-            authValidationEnabled = true)).anyNumberOfTimes()
+          MockedSharedAppConfig.confidenceLevelConfig
+            .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
+            .anyNumberOfTimes()
         }
+
+        val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
 
         apiDefinitionFactory.definition shouldBe
           Definition(
@@ -77,11 +74,18 @@ class CgtApiDefinitionFactorySpec extends UnitSpec {
       (false, ConfidenceLevel.L200, ConfidenceLevel.L50)
     ).foreach { case (definitionEnabled, configCL, expectedDefinitionCL) =>
       s"confidence-level-check.definition.enabled is $definitionEnabled and confidence-level = $configCL" should {
-        s"return confidence level $expectedDefinitionCL" in new Test {
-          MockedSharedAppConfig.confidenceLevelConfig returns ConfidenceLevelConfig(
-            confidenceLevel = configCL,
-            definitionEnabled = definitionEnabled,
-            authValidationEnabled = true)
+        s"return confidence level $expectedDefinitionCL" in {
+          MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+          MockedSharedAppConfig.apiStatus(Version1).returns("BETA").anyNumberOfTimes()
+          MockedSharedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+          MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
+          MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+          MockedSharedAppConfig.confidenceLevelConfig
+            .returns(ConfidenceLevelConfig(confidenceLevel = configCL, definitionEnabled = definitionEnabled, authValidationEnabled = true))
+            .anyNumberOfTimes()
+
+          val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
+
           apiDefinitionFactory.confidenceLevel shouldBe expectedDefinitionCL
         }
       }
@@ -90,15 +94,29 @@ class CgtApiDefinitionFactorySpec extends UnitSpec {
 
   "buildAPIStatus" when {
     "the 'apiStatus' parameter is present and valid" should {
-      "return the correct status" in new Test {
-        MockedSharedAppConfig.apiStatus(Version1) returns "BETA"
+      "return the correct status" in {
+        MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version1).returns("BETA").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+
+        val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
+
         apiDefinitionFactory.buildAPIStatus(Version1) shouldBe BETA
       }
     }
 
     "the 'apiStatus' parameter is present and invalid" should {
-      "default to alpha" in new Test {
-        MockedSharedAppConfig.apiStatus(Version1) returns "ALPHO"
+      "default to alpha" in {
+        MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version1).returns("ALPHO").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version2).returns("ALPHO").anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+
+        val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
+
         apiDefinitionFactory.buildAPIStatus(Version1) shouldBe ALPHA
       }
     }

@@ -30,15 +30,15 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
 
-  import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+  import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
   def retrieveOtherCgt(request: RetrieveOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveOtherCgtResponse]] = {
 
-    import request._
-    import schema._
+    import request.*
+    import schema.*
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>

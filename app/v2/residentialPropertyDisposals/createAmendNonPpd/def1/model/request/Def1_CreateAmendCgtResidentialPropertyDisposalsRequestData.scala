@@ -23,6 +23,6 @@ import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAme
 case class Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(nino: Nino,
                                                                       taxYear: TaxYear,
                                                                       body: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody)
-extends CreateAmendCgtResidentialPropertyDisposalsRequestData{
+    extends CreateAmendCgtResidentialPropertyDisposalsRequestData {
   val schema: CreateAmendCgtResidentialPropertyDisposalsSchema = CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
 }

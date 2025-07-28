@@ -16,7 +16,7 @@
 
 package v2.otherCgt.createAmend.def1.fixture
 
-import v2.otherCgt.createAmend.def1.model.request._
+import v2.otherCgt.createAmend.def1.model.request.*
 
 object Def1_CreateAmendOtherCgtConnectorServiceFixture {
 

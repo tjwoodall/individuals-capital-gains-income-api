@@ -20,7 +20,7 @@ import shared.models.domain.{Nino, TaxYear}
 import v1.residentialPropertyDisposals.retrieveAll.RetrieveAllResidentialPropertyCgtSchema
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 
-trait RetrieveAllResidentialPropertyCgtRequestData{
+trait RetrieveAllResidentialPropertyCgtRequestData {
   def nino: Nino
   def taxYear: TaxYear
   def source: MtdSourceEnum

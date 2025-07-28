@@ -20,19 +20,11 @@ import play.api.libs.json.Format
 import shared.utils.enums.Enums
 import v1.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 
-sealed trait DownstreamSourceEnum {
-  def toMtdEnum: MtdSourceEnum
+enum DownstreamSourceEnum(val toMtdEnum: MtdSourceEnum) {
+  case `HMRC HELD` extends DownstreamSourceEnum(MtdSourceEnum.`hmrc-held`)
+  case CUSTOMER    extends DownstreamSourceEnum(MtdSourceEnum.user)
 }
 
 object DownstreamSourceEnum {
-  implicit val format: Format[DownstreamSourceEnum] = Enums.format[DownstreamSourceEnum]
-
-  case object `HMRC HELD` extends DownstreamSourceEnum {
-    override def toMtdEnum: MtdSourceEnum = MtdSourceEnum.`hmrc-held`
-  }
-
-  case object CUSTOMER extends DownstreamSourceEnum {
-    override def toMtdEnum: MtdSourceEnum = MtdSourceEnum.user
-  }
-
+  given Format[DownstreamSourceEnum] = Enums.format(values)
 }

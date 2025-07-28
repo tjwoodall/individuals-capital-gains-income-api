@@ -19,7 +19,8 @@ package v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request
 import play.api.libs.json.{Json, OFormat}
 import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestBody
 
-case class Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals: Seq[Disposal]) extends CreateAmendCgtResidentialPropertyDisposalsRequestBody{
+case class Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody(disposals: Seq[Disposal])
+    extends CreateAmendCgtResidentialPropertyDisposalsRequestBody {
   def isEmpty: Boolean = disposals.isEmpty
 }
 

@@ -27,4 +27,5 @@ object RetrieveAllResidentialPropertyCgtResponse {
   implicit val writes: OWrites[RetrieveAllResidentialPropertyCgtResponse] = writesFrom { case def1: Def1_RetrieveAllResidentialPropertyCgtResponse =>
     implicitly[OWrites[Def1_RetrieveAllResidentialPropertyCgtResponse]].writes(def1)
   }
+
 }

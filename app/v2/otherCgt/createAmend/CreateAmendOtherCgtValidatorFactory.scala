@@ -16,9 +16,9 @@
 
 package v2.otherCgt.createAmend
 
-import shared.controllers.validators.Validator
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
 import v2.otherCgt.createAmend.CreateAmendOtherCgtSchema.Def1
 import v2.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtValidator
 import v2.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData

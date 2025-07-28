@@ -27,16 +27,16 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
-
+class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+    extends BaseDownstreamConnector {
 
   def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
-                                                                                          hc: HeaderCarrier,
-                                                                                          ec: ExecutionContext,
-                                                                                          correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
-    import request._
-    import shared.connectors.httpparsers.StandardDownstreamHttpParser._
+    import request.*
+    import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
     val uri = if (taxYear.useTaxYearSpecificApi) {
       IfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
