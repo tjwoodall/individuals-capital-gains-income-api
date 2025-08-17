@@ -11,4 +11,3 @@ put:
 
 delete:
   $ref: "./cgt_residential_non_ppd_delete.yaml"
-  summary: Delete CGT Residential Property Disposals (non-PPD)
