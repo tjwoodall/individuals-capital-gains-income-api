@@ -42,7 +42,7 @@
           },
           "allowableCosts":{
             "type":"number",
-            "description":"The total amount of allowable costs that can be deducted from the overall gain or loss. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
+            "description":"The total amount of allowable costs that can be deducted from the disposal proceeds. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
             "example":"5000.99",
             "multipleOf":0.01,
             "minimum":0,
