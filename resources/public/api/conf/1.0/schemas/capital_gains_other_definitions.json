@@ -2,9 +2,9 @@
   "definitions":{
     "disposals":{
       "type":"array",
+      "description":"An array of other Capital Gains disposals.",
       "items":{
         "type":"object",
-        "description":"An array of other Capital Gains disposals.",
         "properties":{
           "assetType":{
             "type":"string",
@@ -66,8 +66,8 @@
           },
           "claimOrElectionCodes":{
             "type":"array",
+            "description":"The claim, election or notice codes related to the disposal. Possible values are:\\\n`PRR` - Private Residence Relief where Letting Relief does not apply\\\n`LET` - Private Residence Relief where Letting Relief applies\\\n`GHO` - Gift Hold-Over Relief\\\n`ROR` - Rollover Relief\\\n`PRO` - Provisional Rollover Relief\\\n`ESH` - Employee Shares\\\n`NVC` - Negligible Value Claims\\\n`SIR` - Social Investment Tax Relief\\\n`OTH` - Other claims\\\n`BAD` - Business Asset Disposal Relief\\\n`INV` - Investors' Relief",
             "items":{
-              "description":"The claim, election or notice codes related to the disposal. Possible values are: PRR - Private Residence Relief where Letting Relief does not apply, LET - Private Residence Relief where Letting Relief applies, GHO - Gift Hold-Over Relief, ROR - Rollover Relief, PRO - Provisional Rollover Relief, ESH - Employee Shares, NVC - Negligible Value Claims, SIR - Social Investment Tax Relief, OTH - Other claims, BAD - Business Asset Disposal Relief, INV - Investors' Relief",
               "type":"string",
               "example":"[\"BAD\",\"OTH\"]"
             }
