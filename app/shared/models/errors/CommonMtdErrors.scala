@@ -100,7 +100,7 @@ object RuleTaxYearNotSupportedError
 object RuleTaxYearForVersionNotSupportedError
     extends MtdError(
       "RULE_TAX_YEAR_FOR_VERSION_NOT_SUPPORTED",
-      "This version of the API supports tax years up to, and including, 2024-25. For tax years from 2025-26 onwards, use version 3",
+      "This version of the API supports tax years up to, and including, 2024-25. For tax years 2025–26 onwards, a new version is in development",
       BAD_REQUEST)
 
 object RuleIncorrectOrEmptyBodyError
