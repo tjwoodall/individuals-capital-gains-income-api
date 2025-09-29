@@ -45,7 +45,7 @@ class DeleteOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: 
     } else {
       IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
     }
-    
+
     val downstreamUri = if (taxYear.useTaxYearSpecificApi) downstreamUri1953 else downstreamUri1741
 
     delete(uri = downstreamUri)
