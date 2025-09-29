@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v1.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
@@ -26,7 +26,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
+class RetrieveOtherCgtControllerIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1951.enabled" -> false) ++ super.servicesConfig
 
   "Calling the 'retrieve other CGT' endpoint" should {
     "return a 200 status code" when {
@@ -86,7 +89,8 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20177", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2025-26", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))
       }
@@ -228,7 +232,7 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }

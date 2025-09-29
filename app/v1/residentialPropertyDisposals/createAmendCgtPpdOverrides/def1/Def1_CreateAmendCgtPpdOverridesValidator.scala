@@ -21,9 +21,9 @@ import cats.implicits.*
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
 import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
   Def1_CreateAmendCgtPpdOverridesRequestBody,
@@ -34,9 +34,13 @@ import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.
 class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
     extends Validator[CreateAmendCgtPpdOverridesRequestData] {
 
-  private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private val resolveJson         = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtPpdOverridesRequestBody]()
+  private lazy val resolveTaxYear = ResolveTaxYearMinMax(
+    (TaxYear.fromDownstreamInt(appConfig.minimumPermittedTaxYear), TaxYear.fromMtd("2024-25")),
+    RuleTaxYearNotSupportedError,
+    RuleTaxYearForVersionNotSupportedError
+  )
+
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtPpdOverridesRequestBody]()
 
   def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = (
     ResolveNino(nino),

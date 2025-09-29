@@ -16,6 +16,7 @@
 
 package v2.endpoints
 
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.RuleOutsideAmendmentWindowError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
@@ -24,16 +25,53 @@ import play.api.libs.ws.DefaultBodyReadables.readableAsString
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
-import shared.services.{AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
+class DeleteCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec {
 
-  "Calling the 'delete cgt non-ppd disposals' endpoint" should {
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1947.enabled" -> true) ++ super.servicesConfig
+
+  private trait Test {
+
+    val nino: String = "AA123456A"
+
+    def taxYear: String
+    def downstreamUri: String
+
+    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
+
+    def setupStubs(): StubMapping
+
+    def request(): WSRequest = {
+      setupStubs()
+      buildRequest(uri)
+        .withHttpHeaders(
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (AUTHORIZATION, "Bearer 123") // some bearer token
+        )
+    }
+
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String       = "2019-20"
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/$nino/$taxYear"
+  }
+
+  private trait TysHipTest extends Test {
+    def taxYear: String       = "2023-24"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/ppd/$nino"
+  }
+
+  "Calling the 'delete cgt ppd overrides' endpoint" should {
     "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
 
-        override def setupStubs(): Unit = {
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT)
         }
 
@@ -44,9 +82,11 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysHipTest {
 
-        override def setupStubs(): Unit = {
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT)
         }
 
@@ -67,7 +107,10 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
-            override def setupStubs(): Unit = {}
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+            }
 
             val response: WSResponse = await(request().delete())
             response.status shouldBe expectedStatus
@@ -80,6 +123,7 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2025-26", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError),
           ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))
@@ -89,7 +133,9 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
-            override def setupStubs(): Unit = {
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
               DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
@@ -103,12 +149,19 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
         def errorBody(code: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "downstream message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "$code",
+             |        "reason": "message"
+             |      }
+             |    ]
+             |  }
              |}
             """.stripMargin
 
-        val errors = List(
+        val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
@@ -116,10 +169,7 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        val extraTysErrors = List(
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
-          (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+        val extraTysErrors = Seq(
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
         )
@@ -127,42 +177,6 @@ class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
         (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
       }
     }
-  }
-
-  private trait Test {
-
-    val nino: String   = "AA123456A"
-    def mtdUri: String = s"/residential-property/$nino/$taxYear"
-
-    def taxYear: String
-    def downstreamUri: String
-
-    def setupStubs(): Unit
-
-    def request(): WSRequest = {
-      AuthStub.authorised()
-      MtdIdLookupStub.ninoFound(nino)
-      setupStubs()
-
-      buildRequest(mtdUri)
-        .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
-        )
-    }
-
-  }
-
-  private trait NonTysTest extends Test {
-    def taxYear: String = "2019-20"
-
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/$taxYear"
-  }
-
-  private trait TysIfsTest extends Test {
-    def taxYear: String = "2023-24"
-
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
   }
 
 }

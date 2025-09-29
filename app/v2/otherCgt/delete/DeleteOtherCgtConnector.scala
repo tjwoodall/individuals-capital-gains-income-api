@@ -16,8 +16,8 @@
 
 package v2.otherCgt.delete
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -38,15 +38,15 @@ class DeleteOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: 
 
     import request.*
 
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Unit](
-        s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}"
-      )
+    lazy val downstreamUri1741 = IfsUri[Unit](s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}")
+
+    lazy val downstreamUri1953 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1953")) {
+      HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/${nino.value}")
     } else {
-      IfsUri[Unit](
-        s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}"
-      )
+      IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
     }
+
+    val downstreamUri = if (taxYear.useTaxYearSpecificApi) downstreamUri1953 else downstreamUri1741
 
     delete(uri = downstreamUri)
 

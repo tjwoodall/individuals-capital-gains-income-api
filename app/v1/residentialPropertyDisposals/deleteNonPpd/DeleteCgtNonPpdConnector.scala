@@ -16,10 +16,10 @@
 
 package v1.residentialPropertyDisposals.deleteNonPpd
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v1.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
@@ -37,14 +37,25 @@ class DeleteCgtNonPpdConnector @Inject() (val http: HttpClientV2, val appConfig:
 
     import request.*
 
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
+    lazy val downstreamUri1875: DownstreamUri[Unit] = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1875")) {
+      HipUri[Unit](
+        s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino"
+      )
     } else {
-      // Note: tax year is in MTD format
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
+      IfsUri[Unit](
+        s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/$nino"
+      )
     }
 
-    delete(downstreamUri)
+    lazy val downstreamUri1740: DownstreamUri[Unit] = IfsUri[Unit](
+      s"income-tax/income/disposals/residential-property/$nino/${taxYear.asMtd}"
+    )
+
+    if (taxYear.useTaxYearSpecificApi) {
+      delete(uri = downstreamUri1875)
+    } else {
+      delete(uri = downstreamUri1740)
+    }
 
   }
 

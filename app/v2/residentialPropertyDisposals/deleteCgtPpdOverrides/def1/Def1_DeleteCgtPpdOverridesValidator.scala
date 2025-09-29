@@ -20,9 +20,10 @@ import cats.data.Validated
 import cats.implicits.*
 import config.CgtAppConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
+import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearForVersionNotSupportedError}
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
@@ -32,7 +33,12 @@ class Def1_DeleteCgtPpdOverridesValidator @Inject() (nino: String, taxYear: Stri
     extends Validator[DeleteCgtPpdOverridesRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
+
+  private lazy val resolveTaxYear =
+    ResolveTaxYearMinMax(
+      (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
+      RuleTaxYearNotSupportedError,
+      RuleTaxYearForVersionNotSupportedError)
 
   def validate: Validated[Seq[MtdError], DeleteCgtPpdOverridesRequestData] =
     (

@@ -154,8 +154,14 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with MockAppCo
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test {
-        validate(taxYear = "2016-17") shouldBe error(RuleTaxYearNotSupportedError)
+      "a tax year after the minimum tax year is supplied" in new Test {
+        validate(taxYear = "2019-20") shouldBe error(RuleTaxYearNotSupportedError)
+      }
+    }
+
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year after the maximum tax year is supplied" in new Test {
+        validate(taxYear = "2025-26") shouldBe error(RuleTaxYearForVersionNotSupportedError)
       }
     }
 

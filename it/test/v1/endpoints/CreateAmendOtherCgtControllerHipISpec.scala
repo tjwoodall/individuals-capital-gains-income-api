@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v1.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
@@ -28,7 +28,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestJson: JsValue = Json.parse(
     """
@@ -357,7 +357,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -374,14 +374,14 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
 
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
 
     override val taxYear: String = "2023-24"
 
     override def request: WSRequest =
       super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
 
-    def downstreamUrl: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
+    def downstreamUrl: String = s"/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino"
 
   }
 
@@ -398,7 +398,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
         verifyNrs(validRequestJson)
       }
 
-      "any valid request is made TYS" in new TysIfsTest {
+      "any valid request is made TYS" in new TysHipTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUrl, NO_CONTENT, JsObject.empty)
@@ -437,6 +437,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
           ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA123456A", "2025-26", validRequestJson, BAD_REQUEST, RuleTaxYearForVersionNotSupportedError, None, None),
 
           // Body errors
           ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -454,7 +455,7 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUrl, downstreamStatus, errorBody(downstreamCode))
@@ -470,10 +471,17 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
         def errorBody(code: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "downstream message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "$code",
+             |        "reason": "message"
+             |      }
+             |    ]
+             |  }
              |}
-            """.stripMargin
+                    """.stripMargin
 
         val errorInput = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
@@ -482,7 +490,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateNotFutureError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

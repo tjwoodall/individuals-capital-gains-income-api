@@ -22,9 +22,9 @@ import cats.implicits.*
 import common.errors.SourceFormatError
 import config.CgtAppConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v2.residentialPropertyDisposals.retrieveAll.def1.model.request.Def1_RetrieveAllResidentialPropertyRequestData
 import v2.residentialPropertyDisposals.retrieveAll.model.request.RetrieveAllResidentialPropertyCgtRequestData
@@ -37,7 +37,12 @@ class Def1_RetrieveAllResidentialPropertyCgtValidator @Inject() (nino: String, t
     extends Validator[RetrieveAllResidentialPropertyCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
+
+  private lazy val resolveTaxYear =
+    ResolveTaxYearMinMax(
+      (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
+      RuleTaxYearNotSupportedError,
+      RuleTaxYearForVersionNotSupportedError)
 
   def validate: Validated[Seq[MtdError], RetrieveAllResidentialPropertyCgtRequestData] =
     (

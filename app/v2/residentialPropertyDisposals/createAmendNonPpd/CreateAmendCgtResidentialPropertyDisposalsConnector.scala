@@ -16,9 +16,9 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
@@ -38,14 +38,21 @@ class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: H
     import request.*
     import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
-    val uri = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
-    } else {
-      // Pre-tys uses MTD tax year format
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")
-    }
+    lazy val downstreamUri1952: DownstreamUri[Unit] =
+      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1952")) {
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino")
+      } else {
+        IfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
+      }
 
-    put(body, uri)
+    lazy val downstreamUri1738: DownstreamUri[Unit] =
+      IfsUri(s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")
+
+    val downstreamUri: DownstreamUri[Unit] =
+      if (taxYear.useTaxYearSpecificApi) downstreamUri1952 else downstreamUri1738
+
+    put(body, downstreamUri)
+
   }
 
 }

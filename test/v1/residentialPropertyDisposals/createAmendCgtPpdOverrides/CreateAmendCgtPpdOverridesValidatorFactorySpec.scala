@@ -25,7 +25,7 @@ import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_Crea
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
   private val validNino    = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private val validTaxYear = "2019-20"
 
   def requestBodyJson(): JsValue = Json.parse(
     s"""

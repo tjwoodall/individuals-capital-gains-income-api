@@ -386,13 +386,22 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an invalid tax year is supplied" in new Test {
+      "a tax year before the minimum" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
-          validator(validNino, "2017-18", validRequestBodyJson).validateAndWrapResult()
+          validator(validNino, "2018-19", validRequestBodyJson).validateAndWrapResult()
 
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
         )
+      }
+    }
+
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year after the maximum tax year is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, "2025-26", validRequestBodyJson).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError))
       }
     }
 

@@ -26,7 +26,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
+class RetrieveOtherCgtControllerHipISpec extends IntegrationBaseSpec {
 
   "Calling the 'retrieve other CGT' endpoint" should {
     "return a 200 status code" when {
@@ -45,7 +45,7 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysIfsTest {
+      "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -86,7 +86,8 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20177", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2025-26", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))
       }
@@ -112,8 +113,15 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
         def errorBody(code: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "downstream message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "$code",
+             |        "reason": "message"
+             |      }
+             |    ]
+             |  }
              |}
             """.stripMargin
 
@@ -240,9 +248,9 @@ class RetrieveOtherCgtControllerISpec extends IntegrationBaseSpec {
     def downstreamUri: String = s"/income-tax/income/disposals/other-gains/$nino/2019-20"
   }
 
-  private trait TysIfsTest extends Test {
-    def taxYear: String       = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
+  private trait TysHipTest extends Test {
+    def taxYear: String       = "2024-25"
+    def downstreamUri: String = s"/itsa/income-tax/v1/24-25/income/disposals/other-gains/$nino"
   }
 
 }

@@ -73,10 +73,19 @@ class Def1_DeleteCgtPpdOverridesValidatorSpec extends UnitSpec with MockAppConfi
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test {
+      "a tax year before the minimum tax year is supplied" in new Test {
         val result = validator(validNino, "2016-17").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
+        )
+      }
+    }
+
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year after the maximum tax year is supplied" in new Test {
+        val result = validator(validNino, "2025-26").validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError)
         )
       }
     }

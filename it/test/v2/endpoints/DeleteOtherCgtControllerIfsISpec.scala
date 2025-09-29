@@ -28,11 +28,14 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class DeleteOtherCgtControllerISpec extends IntegrationBaseSpec {
+class DeleteOtherCgtControllerIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1953.enabled" -> false) ++ super.servicesConfig
 
   "Calling the 'delete other capital gains and disposals' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made" in new NonTysTest with Test {
+      "any valid request is made using IFS" in new NonTysTest with Test {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -88,7 +91,8 @@ class DeleteOtherCgtControllerISpec extends IntegrationBaseSpec {
           ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
           ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError)
+          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2025-26", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))
       }

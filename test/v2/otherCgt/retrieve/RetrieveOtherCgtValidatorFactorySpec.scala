@@ -31,6 +31,7 @@ class RetrieveOtherCgtValidatorFactorySpec extends UnitSpec with MockAppConfig {
     "return the Def1 validator" when {
       "given a request handled by a Def1 schema" in {
         val result = validatorFactory.validator(validNino, validTaxYear)
+
         result shouldBe a[Def1_RetrieveOtherCgtValidator]
       }
     }

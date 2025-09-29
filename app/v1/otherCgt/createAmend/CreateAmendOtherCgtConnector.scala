@@ -16,8 +16,8 @@
 
 package v1.otherCgt.createAmend
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -27,23 +27,29 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateAmendOtherCgtConnector @Inject() (
+    val http: HttpClientV2,
+    val appConfig: SharedAppConfig
+) extends BaseDownstreamConnector {
 
   def createAndAmend(request: CreateAmendOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[DownstreamOutcome[Unit]] = {
+      correlationId: String
+  ): Future[DownstreamOutcome[Unit]] = {
 
-    import request.*
-    import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
+    import request._
+    import shared.connectors.httpparsers.StandardDownstreamHttpParser._
 
-    val downstreamUri: DownstreamUri[Unit] =
-      if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.nino}")
-      } else {
-        IfsUri[Unit](s"income-tax/income/disposals/other-gains/${nino.nino}/${taxYear.asMtd}")
-      }
-    put(body, downstreamUri)
+    lazy val downstreamUri1886 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1886")) {
+      HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/${nino.nino}")
+    } else {
+      IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.nino}")
+    }
+
+    lazy val downstreamUri1739 = IfsUri(s"income-tax/income/disposals/other-gains/${nino.nino}/${taxYear.asMtd}")
+
+    if (taxYear.useTaxYearSpecificApi) put(body, downstreamUri1886) else put(body, downstreamUri1739)
   }
 
 }

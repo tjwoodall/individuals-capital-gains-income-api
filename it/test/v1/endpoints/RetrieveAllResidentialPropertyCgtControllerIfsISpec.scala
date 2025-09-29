@@ -28,7 +28,10 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
 
-class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSpec {
+class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    super.servicesConfig ++ Map("feature-switch.ifs_hip_migration_1881.enabled" -> false)
 
   private trait Test {
 
@@ -154,6 +157,7 @@ class RetrieveAllResidentialPropertyCgtControllerISpec extends IntegrationBaseSp
           ("AA123456A", "20177", "latest", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2015-17", "latest", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2015-16", "latest", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2025-26", "latest", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError),
           ("AA123456A", "2019-20", "test", BAD_REQUEST, SourceFormatError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))

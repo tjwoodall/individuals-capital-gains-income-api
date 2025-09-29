@@ -17,8 +17,8 @@
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import com.google.inject.Singleton
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -38,14 +38,15 @@ class CreateAmendCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val
     import request.*
     import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
-    val downstreamUri =
-      if (taxYear.useTaxYearSpecificApi) {
-        IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino")
-      } else {
-        IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}")
-      }
+    lazy val downstream1946 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1946")) {
+      HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/ppd/${nino.value}")
+    } else {
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.value}")
+    }
 
-    put(body, downstreamUri)
+    lazy val downstream1724 = IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}")
+
+    if (taxYear.useTaxYearSpecificApi) put(body, downstream1946) else put(body, downstream1724)
   }
 
 }

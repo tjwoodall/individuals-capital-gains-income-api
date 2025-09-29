@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v1.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -29,7 +29,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1952.enabled" -> false) ++ super.servicesConfig
 
   val validDisposalDate: String    = "2020-03-27"
   val validCompletionDate: String  = "2020-03-29"
@@ -292,7 +295,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
       setupStubs()
       buildRequest(s"/residential-property/$nino/$taxYear")
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -385,6 +388,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
           ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA123456A", "2025-26", validRequestJson, BAD_REQUEST, RuleTaxYearForVersionNotSupportedError, None, None),
 
           // Body errors
           ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -397,7 +401,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
           ("AA123456A", "2019-20", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
           ("AA123456A", "2019-20", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided"))
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "service error" when {
@@ -436,7 +440,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
@@ -446,7 +449,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerISpec extends Integrat
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

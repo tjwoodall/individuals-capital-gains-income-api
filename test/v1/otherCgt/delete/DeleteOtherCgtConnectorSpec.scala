@@ -17,6 +17,7 @@
 package v1.otherCgt.delete
 
 import common.connectors.CgtConnectorSpec
+import play.api.Configuration
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
@@ -28,8 +29,9 @@ import scala.concurrent.Future
 class DeleteOtherCgtConnectorSpec extends CgtConnectorSpec {
 
   "DeleteOtherCgtConnector" should {
-    "return the expected response for a non-TYS request" when {
+    "return the expected response for a non-TYS IFS request" when {
       "a valid request is made" in new Api1661Test with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1953.enabled" -> false)
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
 
@@ -40,13 +42,28 @@ class DeleteOtherCgtConnectorSpec extends CgtConnectorSpec {
         await(connector.deleteOtherCgt(request)) shouldBe outcome
       }
     }
-    "return the expected response for a TYS request" when {
+    "return the expected response for a TYS IFS request" when {
       "a valid request is made" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1953.enabled" -> false)
         def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
 
         willDelete(
           url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino"
+        ).returns(Future.successful(outcome))
+
+        await(connector.deleteOtherCgt(request)) shouldBe outcome
+      }
+    }
+    "return the expected response for a HIP request" when {
+      "a valid request is made" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1953.enabled" -> true)
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val outcome = Right(ResponseWrapper(correlationId, ()))
+
+        willDelete(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino"
         ).returns(Future.successful(outcome))
 
         await(connector.deleteOtherCgt(request)) shouldBe outcome

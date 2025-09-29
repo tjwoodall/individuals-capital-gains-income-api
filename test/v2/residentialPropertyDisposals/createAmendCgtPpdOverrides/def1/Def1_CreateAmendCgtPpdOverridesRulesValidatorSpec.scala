@@ -634,6 +634,16 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       }
     }
 
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year after the maximum tax year is supplied" in new Test {
+        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+          validator(validNino, "2025-26", validRequestJson).validateAndWrapResult()
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError)
+        )
+      }
+    }
+
     "return RuleIncorrectOrEmptyBodyError error" when {
 
       "a non-empty JSON body is submitted without any expected fields" in new Test {

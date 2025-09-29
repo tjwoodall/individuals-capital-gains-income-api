@@ -88,6 +88,15 @@ class Def1_DeleteOtherCgtValidatorSpec extends UnitSpec with MockAppConfig {
       }
     }
 
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year that is not supported by this version is supplied" in new Test {
+        val result: Either[ErrorWrapper, DeleteOtherCgtRequestData] =
+          validator(validNino, "2025-26")
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError))
+      }
+    }
+
     "return multiple errors" when {
       "request supplied has multiple errors" in new Test {
         val result: Either[ErrorWrapper, DeleteOtherCgtRequestData] =

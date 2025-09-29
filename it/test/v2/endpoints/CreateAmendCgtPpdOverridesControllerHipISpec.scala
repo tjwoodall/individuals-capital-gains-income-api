@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.endpoints
+package v2.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -26,10 +26,10 @@ import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
+import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestBodyJson: JsValue = Json.parse(
     """
@@ -356,7 +356,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -369,13 +369,13 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
   }
 
   private trait NonTysTest extends Test {
-    def taxYear               = "2020-21"
+    def taxYear               = "2019-20"
     def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/$nino/$taxYear"
   }
 
-  private trait TysIfsTest extends Test {
-    def taxYear               = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/23-24/$nino"
+  private trait TysHipTest extends Test {
+    def taxYear               = "2024-25"
+    def downstreamUri: String = s"/itsa/income-tax/v1/24-25/income/disposals/residential-property/ppd/$nino"
 
     override def request: WSRequest =
       super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
@@ -398,7 +398,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
         verifyNrs(validRequestBodyJson)
       }
 
-      "any valid request is made for a TYS tax year" in new TysIfsTest {
+      "any valid request is made for a TYS tax year" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -438,7 +438,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
             response.header("Content-Type") shouldBe Some("application/json")
           }
 
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysIfsTest {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysHipTest {
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
@@ -461,6 +461,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
           ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA123456A", "2025-26", validRequestBodyJson, BAD_REQUEST, RuleTaxYearForVersionNotSupportedError, None, None),
 
           // Body Errors
           ("AA123456A", "2020-21", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -499,8 +500,15 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
         def errorBody(code: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "ifs message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "$code",
+             |        "reason": "message"
+             |      }
+             |    ]
+             |  }
              |}
             """.stripMargin
 
@@ -513,6 +521,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
           (NOT_FOUND, "NO_PPD_SUBMISSIONS_FOUND", NOT_FOUND, NotFoundError),
           (CONFLICT, "DUPLICATE_SUBMISSION", BAD_REQUEST, RuleDuplicatedPpdSubmissionIdError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_TYPE", BAD_REQUEST, RuleIncorrectDisposalTypeError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

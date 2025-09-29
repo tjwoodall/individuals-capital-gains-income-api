@@ -81,11 +81,20 @@ class Def1_DeleteCgtNonPpdValidatorSpec extends UnitSpec with MockAppConfig {
     }
 
     "return RuleTaxYearNotSupportedError error" when {
-      "an invalid tax year is supplied" in new Test {
+      "a tax year before the minimum tax year is supplied" in new Test {
         val result: Either[ErrorWrapper, DeleteCgtNonPpdRequestData] =
           validator(validNino, "2018-19").validateAndWrapResult()
 
         result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))
+      }
+    }
+
+    "return RuleTaxYearForVersionNotSupportedError error" when {
+      "a tax year after the maximum tax year is supplied" in new Test {
+        val result: Either[ErrorWrapper, DeleteCgtNonPpdRequestData] =
+          validator(validNino, "2025-26").validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, RuleTaxYearForVersionNotSupportedError))
       }
     }
 

@@ -17,8 +17,8 @@
 package v1.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import common.connectors.CgtConnectorSpec
-import shared.config.MockSharedAppConfig
-import shared.mocks.MockHttpClient
+import play.api.Configuration
+import shared.connectors.DownstreamOutcome
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
@@ -29,11 +29,19 @@ import scala.concurrent.Future
 
 class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
 
-  trait Test extends MockHttpClient with MockSharedAppConfig {
+  trait Test {
+    self: ConnectorTest =>
 
-    val nino: String = "AA111111A"
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+    val nino: String     = "AA111111A"
 
-    val connector: CreateAmendCgtPpdOverridesConnector = new CreateAmendCgtPpdOverridesConnector(
+    val request = Def1_CreateAmendCgtPpdOverridesRequestData(
+      nino = Nino(nino),
+      taxYear = taxYear,
+      body = requestBodyModel
+    )
+
+    protected val connector: CreateAmendCgtPpdOverridesConnector = new CreateAmendCgtPpdOverridesConnector(
       http = mockHttpClient,
       appConfig = mockSharedAppConfig
     )
@@ -44,13 +52,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
     "createAndAmend" must {
       "return a 204 status for a success scenario" in new Api1661Test with Test {
 
-        val taxYear = TaxYear.fromMtd("2019-20")
-
-        val request = Def1_CreateAmendCgtPpdOverridesRequestData(
-          nino = Nino(nino),
-          taxYear,
-          body = requestBodyModel
-        )
+        override def taxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
@@ -65,19 +67,13 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
     }
 
     "createAndAmend called for a Tax Year Specific tax year" must {
-      "return a 200 status for a success scenario" in
-        new IfsTest with Test {
-          def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+      "return a 200 status for a success scenario" when {
+        "the downstream request to IFS is successful" in new IfsTest with Test {
 
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1946.enabled" -> false))
           implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
 
           val outcome = Right(ResponseWrapper(correlationId, ()))
-
-          val request = Def1_CreateAmendCgtPpdOverridesRequestData(
-            nino = Nino(nino),
-            taxYear,
-            body = requestBodyModel
-          )
 
           willPut(
             url"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino}",
@@ -87,8 +83,19 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
           val result = await(connector.createAmend(request))
           result shouldBe outcome
         }
-    }
 
+        "the downstream request to HIP is successful" in new HipTest with Test {
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1946.enabled" -> true))
+          val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+
+          willPut(url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/ppd/$nino", requestBodyModel)
+            .returns(Future.successful(outcome))
+
+          val result: DownstreamOutcome[Unit] = await(connector.createAmend(request))
+          result shouldBe outcome
+        }
+      }
+    }
   }
 
 }

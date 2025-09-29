@@ -17,6 +17,7 @@
 package v2.otherCgt.createAmend
 
 import config.MockAppConfig
+import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -41,7 +42,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
   )
 
   trait Test { self: ConnectorTest =>
-    def taxYear: TaxYear
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
     val connector: CreateAmendOtherCgtConnector = new CreateAmendOtherCgtConnector(
       http = mockHttpClient,
@@ -50,19 +51,22 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
 
   }
 
-  "createAndAmend" should {
-    "return a 204 status" when {
+  "createAndAmendOtherCgtConnector" should {
+    "return the expected response for a non-TYS IFS request" when {
       "a valid request is made" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData = Def1_CreateAmendOtherCgtRequestData(
-          nino = Nino(nino),
-          taxYear = taxYear,
-          body = mtdRequestBody
-        )
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
 
-        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
 
         willPut(
           url = url"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20",
@@ -71,19 +75,51 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
 
         await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
       }
+    }
 
-      "a valid request is made with Tax Year Specific tax year" in new IfsTest with Test {
+    "return the expected response for a TYS IFS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData = Def1_CreateAmendOtherCgtRequestData(
-          nino = Nino(nino),
-          taxYear = taxYear,
-          body = mtdRequestBody
-        )
-        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
 
         willPut(
           url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino",
+          body = mtdRequestBody
+        ).returns(Future.successful(outcome))
+
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
+      }
+    }
+
+    "return the expected response for a HIP request" when {
+      "a valid request is made" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> true)
+
+        override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino",
           body = mtdRequestBody
         ).returns(Future.successful(outcome))
 

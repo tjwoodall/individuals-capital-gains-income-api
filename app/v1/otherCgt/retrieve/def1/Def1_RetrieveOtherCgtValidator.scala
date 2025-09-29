@@ -20,9 +20,9 @@ import cats.data.Validated
 import cats.implicits.*
 import config.CgtAppConfig
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v1.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v1.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
@@ -33,7 +33,11 @@ class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(a
     extends Validator[RetrieveOtherCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
+
+  private lazy val resolveTaxYear = ResolveTaxYearMinMax(
+    (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
+    RuleTaxYearNotSupportedError,
+    RuleTaxYearForVersionNotSupportedError)
 
   def validate: Validated[Seq[MtdError], Def1_RetrieveOtherCgtRequestData] =
     (

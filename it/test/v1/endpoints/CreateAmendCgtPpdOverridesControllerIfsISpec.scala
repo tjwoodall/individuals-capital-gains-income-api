@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v1.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -26,10 +26,13 @@ import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
-import shared.services.*
+import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1946.enabled" -> false) ++ super.servicesConfig
 
   val validRequestBodyJson: JsValue = Json.parse(
     """
@@ -356,7 +359,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.1.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -461,6 +464,7 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
           ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA123456A", "2025-26", validRequestBodyJson, BAD_REQUEST, RuleTaxYearForVersionNotSupportedError, None, None),
 
           // Body Errors
           ("AA123456A", "2020-21", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -513,7 +517,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
           (NOT_FOUND, "NO_PPD_SUBMISSIONS_FOUND", NOT_FOUND, NotFoundError),
           (CONFLICT, "DUPLICATE_SUBMISSION", BAD_REQUEST, RuleDuplicatedPpdSubmissionIdError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_TYPE", BAD_REQUEST, RuleIncorrectDisposalTypeError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

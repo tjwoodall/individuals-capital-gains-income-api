@@ -16,9 +16,9 @@
 
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{DesUri, IfsUri}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.connectors.DownstreamUri.{HipUri, IfsUri}
+import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
@@ -38,13 +38,16 @@ class DeleteCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val appC
 
     import request.*
 
-    val downstreamUri = if (taxYear.useTaxYearSpecificApi) {
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.nino}")
+    lazy val downstreamUri = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1947")) {
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/ppd/${nino.nino}")
     } else {
-      DesUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${nino.nino}/${taxYear.asMtd}")
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.nino}")
     }
 
-    delete(downstreamUri)
+    lazy val downstreamUri1726: DownstreamUri[Unit] =
+      IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${nino.nino}/${taxYear.asMtd}")
+
+    if (taxYear.useTaxYearSpecificApi) delete(downstreamUri) else delete(downstreamUri1726)
   }
 
 }

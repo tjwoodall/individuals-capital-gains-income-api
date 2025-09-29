@@ -17,7 +17,9 @@
 package v2.otherCgt.retrieve
 
 import common.connectors.CgtConnectorSpec
+import play.api.Configuration
 import shared.models.domain.{Nino, TaxYear, Timestamp}
+import shared.models.errors.NinoFormatError
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
@@ -32,8 +34,8 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
   "RetrieveOtherCgtConnector" should {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new Api1661Test with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
-        val outcome          = Right(ResponseWrapper(correlationId, response))
+        override def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+        val outcome                   = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20"
@@ -42,13 +44,39 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
         await(connector.retrieveOtherCgt(request)) shouldBe outcome
       }
     }
+
     "return the expected response for a TYS request" when {
       "a valid request is made" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome          = Right(ResponseWrapper(correlationId, response))
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> false))
+        val outcome = Right(ResponseWrapper(correlationId, response))
 
         willGet(
           url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino"
+        ).returns(Future.successful(outcome))
+
+        await(connector.retrieveOtherCgt(request)) shouldBe outcome
+      }
+    }
+
+    "return a success response when feature switch is enabled (HIP enabled)" in new HipTest with Test {
+      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> true))
+      val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherCgtResponse]] = Right(ResponseWrapper(correlationId, response))
+
+      willGet(
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
+      ).returns(Future.successful(outcome))
+
+      await(connector.retrieveOtherCgt(request)) shouldBe outcome
+    }
+
+    "given a request returning an error" must {
+      "return an unsuccessful response with the correct correlationId and a single error" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> true))
+
+        val outcome: Left[ResponseWrapper[NinoFormatError.type], Nothing] = Left(ResponseWrapper(correlationId, NinoFormatError))
+
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
         ).returns(Future.successful(outcome))
 
         await(connector.retrieveOtherCgt(request)) shouldBe outcome
@@ -59,7 +87,7 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
-    def taxYear: TaxYear
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
     protected val nino: String = "AA111111A"
 

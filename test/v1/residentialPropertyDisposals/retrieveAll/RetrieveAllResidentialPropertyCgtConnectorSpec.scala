@@ -17,6 +17,7 @@
 package v1.residentialPropertyDisposals.retrieveAll
 
 import org.scalamock.handlers.CallHandler
+import play.api.Configuration
 import shared.connectors.{ConnectorSpec, DownstreamOutcome}
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -59,7 +60,7 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
       ).returns(Future.successful(outcome))
     }
 
-    protected def stubTysHttpResponse(outcome: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse])
+    protected def stubTysIfsHttpResponse(outcome: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]]#Derived = {
       willGet(
         url = url"$baseUrl/income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/$nino",
@@ -67,29 +68,47 @@ class RetrieveAllResidentialPropertyCgtConnectorSpec extends ConnectorSpec {
       ).returns(Future.successful(outcome))
     }
 
+    protected def stubTysHipHttpResponse(outcome: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse])
+        : CallHandler[Future[DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse]]]#Derived = {
+      willGet(
+        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino",
+        queryParams
+      ).returns(Future.successful(outcome))
+    }
+
   }
 
-  "RetrieveAllResidentialPropertyCgtConnector" when {
+  "RetrieveAllResidentialPropertyCgtConnector" must {
 
-    "retrieveAllResidentialPropertyCgt" must {
-      "return a 200 status for a success scenario" in new DesTest with Test {
+    "return a 200 status for a success scenario for Non-TYS tax years" in new DesTest with Test {
 
-        val outcome = Right(ResponseWrapper(correlationId, response))
+      val outcome = Right(ResponseWrapper(correlationId, response))
 
-        stubHttpResponse(outcome)
+      stubHttpResponse(outcome)
+
+      val result: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse] = await(connector.retrieve(request))
+      result shouldBe outcome
+    }
+  }
+
+  "retrieveAllResidentialPropertyCgt for Tax Year Specific (TYS)" must {
+    "return a 200 status for a success scenario for TYS tax Years" when {
+      "the downstream is IFS" in new IfsTest with Test {
+        override def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        val outcome                   = Right(ResponseWrapper(correlationId, response))
+
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> false))
+        stubTysIfsHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse] = await(connector.retrieve(request))
         result shouldBe outcome
       }
-    }
-
-    "retrieveAllResidentialPropertyCgt for Tax Year Specific (TYS)" must {
-      "return a 200 status for a success scenario" in new IfsTest with Test {
+      "the downstream is HIP" in new HipTest with Test {
         override def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+        val outcome                   = Right(ResponseWrapper(correlationId, response))
 
-        val outcome = Right(ResponseWrapper(correlationId, response))
-
-        stubTysHttpResponse(outcome)
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> true))
+        stubTysHipHttpResponse(outcome)
 
         val result: DownstreamOutcome[RetrieveAllResidentialPropertyCgtResponse] = await(connector.retrieve(request))
         result shouldBe outcome

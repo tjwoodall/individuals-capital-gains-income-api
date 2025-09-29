@@ -21,9 +21,9 @@ import cats.implicits.*
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinimum}
+import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
 import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtRulesValidator.validateBusinessRules
 import v2.otherCgt.createAmend.def1.model.request.{Def1_CreateAmendOtherCgtRequestBody, Def1_CreateAmendOtherCgtRequestData}
 import v2.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
@@ -32,8 +32,13 @@ class Def1_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsV
     extends Validator[CreateAmendOtherCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
-  private lazy val resolveJson    = new ResolveNonEmptyJsonObject[Def1_CreateAmendOtherCgtRequestBody]()
+
+  private lazy val resolveTaxYear = ResolveTaxYearMinMax(
+    (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
+    RuleTaxYearNotSupportedError,
+    RuleTaxYearForVersionNotSupportedError)
+
+  private lazy val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendOtherCgtRequestBody]()
 
   def validate: Validated[Seq[MtdError], CreateAmendOtherCgtRequestData] =
     (

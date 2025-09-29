@@ -17,6 +17,7 @@
 package v1.residentialPropertyDisposals.createAmendNonPpd
 
 import common.connectors.CgtConnectorSpec
+import play.api.Configuration
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
@@ -50,9 +51,9 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
   "createAndAmend" should {
     "return a 204 status" when {
       "a valid request is made" in new Api1661Test with Test {
-        def taxYear = TaxYear.fromMtd("2019-20")
+        def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
           url = url"$baseUrl/income-tax/income/disposals/residential-property/$nino/2019-20",
@@ -63,13 +64,30 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
         await(connector.createAndAmend(createAmendCgtResidentialPropertyDisposalsRequest)) shouldBe outcome
       }
 
-      "a valid request is made for a TYS tax year" in new IfsTest with Test {
-        def taxYear = TaxYear.fromMtd("2023-24")
+      "a valid request is made for a TYS tax year on IFS" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1952.enabled" -> false))
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
         willPut(
           url = url"$baseUrl/income-tax/income/disposals/residential-property/23-24/$nino",
+          body = requestBody
+        )
+          .returns(Future.successful(outcome))
+
+        await(connector.createAndAmend(createAmendCgtResidentialPropertyDisposalsRequest)) shouldBe outcome
+      }
+
+      "a valid request is made for a TYS tax year on HIP" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1952.enabled" -> true))
+
+        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino",
           body = requestBody
         )
           .returns(Future.successful(outcome))
