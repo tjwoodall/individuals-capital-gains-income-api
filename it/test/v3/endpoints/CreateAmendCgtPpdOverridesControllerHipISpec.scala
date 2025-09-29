@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v3.endpoints
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -29,10 +29,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1946.enabled" -> false) ++ super.servicesConfig
+class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestBodyJson: JsValue = Json.parse(
     """
@@ -359,7 +356,7 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -372,13 +369,13 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
   }
 
   private trait NonTysTest extends Test {
-    def taxYear               = "2020-21"
+    def taxYear               = "2019-20"
     def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/$nino/$taxYear"
   }
 
-  private trait TysIfsTest extends Test {
-    def taxYear               = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/23-24/$nino"
+  private trait TysHipTest extends Test {
+    def taxYear               = "2024-25"
+    def downstreamUri: String = s"/itsa/income-tax/v1/24-25/income/disposals/residential-property/ppd/$nino"
 
     override def request: WSRequest =
       super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
@@ -401,7 +398,7 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
         verifyNrs(validRequestBodyJson)
       }
 
-      "any valid request is made for a TYS tax year" in new TysIfsTest {
+      "any valid request is made for a TYS tax year" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -441,7 +438,7 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
             response.header("Content-Type") shouldBe Some("application/json")
           }
 
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysIfsTest {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysHipTest {
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
@@ -464,7 +461,6 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
           ("AA123456A", "20177", validRequestBodyJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestBodyJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestBodyJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
-          ("AA123456A", "2025-26", validRequestBodyJson, BAD_REQUEST, RuleTaxYearForVersionNotSupportedError, None, None),
 
           // Body Errors
           ("AA123456A", "2020-21", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -503,8 +499,15 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
         def errorBody(code: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "ifs message"
+             |  "origin": "HoD",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "$code",
+             |        "reason": "message"
+             |      }
+             |    ]
+             |  }
              |}
             """.stripMargin
 

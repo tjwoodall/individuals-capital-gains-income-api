@@ -16,7 +16,6 @@
 
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{
@@ -89,8 +88,7 @@ class DeleteCgtPpdOverridesServiceSpec extends UnitSpec {
       )
 
       val extraTysErrors = List(
-        "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
-        "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))

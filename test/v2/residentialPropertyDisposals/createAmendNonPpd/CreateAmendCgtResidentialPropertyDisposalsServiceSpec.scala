@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1, RuleOutsideAmendmentWindowError}
+import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{
@@ -87,7 +87,6 @@ class CreateAmendCgtResidentialPropertyDisposalsServiceSpec extends ServiceSpec 
           ("INVALID_DISPOSAL_DATE", RuleDisposalDateErrorV1),
           ("INVALID_COMPLETION_DATE", RuleCompletionDateError),
           ("INVALID_ACQUISITION_DATE", RuleAcquisitionDateAfterDisposalDateError),
-          ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
           ("SERVER_ERROR", InternalError),
           ("SERVICE_UNAVAILABLE", InternalError)
         )

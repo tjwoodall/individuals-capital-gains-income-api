@@ -44,7 +44,7 @@ Then go to http://localhost:9680/api-documentation/docs/openapi/preview and ente
 appropriate port and version:
 
 ```
-http://localhost:7764/api/conf/2.0/application.yaml
+http://localhost:7764/api/conf/3.0/application.yaml
 ```
 
 ## Changelog

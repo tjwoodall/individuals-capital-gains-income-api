@@ -16,7 +16,7 @@
 
 package v2.otherCgt.createAmend
 
-import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError, RuleOutsideAmendmentWindowError}
+import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError}
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{
@@ -88,7 +88,6 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
         ("INVALID_PAYLOAD", InternalError),
         ("INVALID_DISPOSAL_DATE", RuleDisposalDateNotFutureError),
         ("INVALID_ACQUISITION_DATE", RuleAcquisitionDateError),
-        ("OUTSIDE_AMENDMENT_WINDOW", RuleOutsideAmendmentWindowError),
         ("SERVER_ERROR", InternalError),
         ("SERVICE_UNAVAILABLE", InternalError)
       )
