@@ -1,0 +1,131 @@
+/*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package v3.otherCgt.createAmend
+
+import config.MockAppConfig
+import play.api.Configuration
+import shared.connectors.ConnectorSpec
+import shared.models.domain.{Nino, TaxYear}
+import shared.models.outcomes.ResponseWrapper
+import uk.gov.hmrc.http.StringContextOps
+import v3.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
+import v3.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
+import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
+
+import scala.concurrent.Future
+
+class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig {
+
+  private val nino: String = "AA111111A"
+
+  val allowedIfsHeaders: Seq[String] = List(
+    "Accept",
+    "Gov-Test-Scenario",
+    "Content-Type",
+    "Location",
+    "X-Request-Timestamp",
+    "X-Session-Id"
+  )
+
+  trait Test { self: ConnectorTest =>
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+    val connector: CreateAmendOtherCgtConnector = new CreateAmendOtherCgtConnector(
+      http = mockHttpClient,
+      appConfig = mockSharedAppConfig
+    )
+
+  }
+
+  "createAndAmendOtherCgtConnector" should {
+    "return the expected response for a non-TYS IFS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
+
+        override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
+
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/$nino/2019-20",
+          body = mtdRequestBody
+        ).returns(Future.successful(outcome))
+
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
+      }
+    }
+
+    "return the expected response for a TYS IFS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
+
+        override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino",
+          body = mtdRequestBody
+        ).returns(Future.successful(outcome))
+
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
+      }
+    }
+
+    "return the expected response for a HIP request" when {
+      "a valid request is made" in new HipTest with Test {
+        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> true)
+
+        override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
+
+        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
+          Def1_CreateAmendOtherCgtRequestData(
+            nino = Nino(nino),
+            taxYear = taxYear,
+            body = mtdRequestBody
+          )
+
+        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
+          Right(ResponseWrapper(correlationId, ()))
+
+        willPut(
+          url = url"$baseUrl/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino",
+          body = mtdRequestBody
+        ).returns(Future.successful(outcome))
+
+        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
+      }
+    }
+  }
+
+}

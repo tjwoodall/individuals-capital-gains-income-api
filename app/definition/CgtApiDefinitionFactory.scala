@@ -18,7 +18,7 @@ package definition
 
 import shared.config.SharedAppConfig
 import shared.definition.*
-import shared.routing.{Version, Version1, Version2}
+import shared.routing.*
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import javax.inject.{Inject, Singleton}
@@ -51,6 +51,11 @@ class CgtApiDefinitionFactory @Inject() (sharedAppConfig: SharedAppConfig) exten
             version = Version2,
             status = buildAPIStatus(Version2),
             endpointsEnabled = appConfig.endpointsEnabled(Version2)
+          ),
+          APIVersion(
+            version = Version3,
+            status = buildAPIStatus(Version3),
+            endpointsEnabled = appConfig.endpointsEnabled(Version3)
           )
         ),
         requiresTrust = None

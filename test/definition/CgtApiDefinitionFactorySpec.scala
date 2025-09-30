@@ -19,7 +19,7 @@ package definition
 import shared.config.{ConfidenceLevelConfig, MockSharedAppConfig}
 import shared.definition.APIStatus.{ALPHA, BETA}
 import shared.definition.{APIDefinition, APIVersion, Definition}
-import shared.routing.{Version1, Version2}
+import shared.routing.*
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -30,7 +30,7 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in {
-        List(Version1, Version2).foreach { version =>
+        List(Version1, Version2, Version3).foreach { version =>
           MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(version) returns "BETA"
           MockedSharedAppConfig.endpointsEnabled(version) returns true
@@ -58,6 +58,11 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
                   version = Version2,
                   status = BETA,
                   endpointsEnabled = true
+                ),
+                APIVersion(
+                  version = Version3,
+                  status = BETA,
+                  endpointsEnabled = true
                 )
               ),
               requiresTrust = None
@@ -78,8 +83,10 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
           MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(Version1).returns("BETA").anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+          MockedSharedAppConfig.apiStatus(Version3).returns("BETA").anyNumberOfTimes()
           MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
           MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+          MockedSharedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
           MockedSharedAppConfig.confidenceLevelConfig
             .returns(ConfidenceLevelConfig(confidenceLevel = configCL, definitionEnabled = definitionEnabled, authValidationEnabled = true))
             .anyNumberOfTimes()
@@ -98,8 +105,10 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
         MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
         MockedSharedAppConfig.apiStatus(Version1).returns("BETA").anyNumberOfTimes()
         MockedSharedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version3).returns("BETA").anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
 
         val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
 
@@ -112,8 +121,10 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
         MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
         MockedSharedAppConfig.apiStatus(Version1).returns("ALPHO").anyNumberOfTimes()
         MockedSharedAppConfig.apiStatus(Version2).returns("ALPHO").anyNumberOfTimes()
+        MockedSharedAppConfig.apiStatus(Version3).returns("ALPHO").anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
         MockedSharedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+        MockedSharedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
 
         val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockSharedAppConfig)
 

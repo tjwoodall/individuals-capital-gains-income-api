@@ -439,7 +439,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

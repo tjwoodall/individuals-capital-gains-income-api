@@ -25,7 +25,7 @@ import shared.services.DownstreamStub
 
 class IndividualsCapitalGainsIncomeAuthSupportingAgentsAllowedISpec extends AuthSupportingAgentsAllowedISpec {
 
-  val callingApiVersion = "2.0"
+  val callingApiVersion = "3.0"
 
   val supportingAgentsAllowedEndpoint = "delete-cgt-non-ppd"
 

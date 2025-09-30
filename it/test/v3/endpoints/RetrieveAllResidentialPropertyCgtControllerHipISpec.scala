@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.endpoints
+package v3.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.SourceFormatError
@@ -28,10 +28,7 @@ import shared.services.*
 import shared.support.IntegrationBaseSpec
 import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
 
-class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    super.servicesConfig ++ Map("feature-switch.ifs_hip_migration_1881.enabled" -> false)
+class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBaseSpec {
 
   private trait Test {
 
@@ -59,26 +56,22 @@ class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBas
       buildRequest(mtdUri)
         .addQueryStringParameters(mtdQueryParams*)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
 
   }
 
-  private trait NonTysTest extends Test {
-    def taxYear: String       = "2020-21"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2020-21"
-  }
-
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def taxYear: String       = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino"
   }
 
   "Calling the 'retrieve all residential property cgt' endpoint" should {
     "return a 200 status code" when {
-      "any valid request is made" in new NonTysTest {
+
+      "any valid request is made for Tax Year Specific (TYS)" in new TysHipTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -93,22 +86,7 @@ class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBas
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made for Tax Year Specific (TYS)" in new TysIfsTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("view" -> "LATEST"), OK, downstreamResponse)
-        }
-
-        val response: WSResponse = await(mtdRequest.get())
-        response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid request is made without source" in new NonTysTest {
+      "any valid request is made without source" in new TysHipTest {
         override def source: Option[String] = None
 
         override def setupStubs(): StubMapping = {
@@ -133,7 +111,7 @@ class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBas
                                 requestSource: String,
                                 expectedStatus: Int,
                                 expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+          s"validation fails with ${expectedBody.code} error" in new TysHipTest {
 
             override val nino: String           = requestNino
             override val taxYear: String        = requestTaxYear
@@ -157,7 +135,6 @@ class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBas
           ("AA123456A", "20177", "latest", BAD_REQUEST, TaxYearFormatError),
           ("AA123456A", "2015-17", "latest", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2015-16", "latest", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2025-26", "latest", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError),
           ("AA123456A", "2019-20", "test", BAD_REQUEST, SourceFormatError)
         )
         input.foreach(args => (validationErrorTest).tupled(args))
@@ -165,7 +142,7 @@ class RetrieveAllResidentialPropertyCgtControllerIfsISpec extends IntegrationBas
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()

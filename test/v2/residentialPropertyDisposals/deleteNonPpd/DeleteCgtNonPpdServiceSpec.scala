@@ -16,7 +16,6 @@
 
 package v2.residentialPropertyDisposals.deleteNonPpd
 
-import common.errors.RuleOutsideAmendmentWindowError
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{
@@ -85,10 +84,9 @@ class DeleteCgtNonPpdServiceSpec extends ServiceSpec {
         )
 
         val extraTysErrors = List(
-          "INVALID_CORRELATION_ID"   -> InternalError,
-          "TAX_YEAR_NOT_SUPPORTED"   -> RuleTaxYearNotSupportedError,
-          "NOT_FOUND"                -> NotFoundError,
-          "OUTSIDE_AMENDMENT_WINDOW" -> RuleOutsideAmendmentWindowError
+          "INVALID_CORRELATION_ID" -> InternalError,
+          "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError,
+          "NOT_FOUND"              -> NotFoundError
         )
 
         (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
