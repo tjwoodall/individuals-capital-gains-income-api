@@ -1,20 +1,17 @@
 get:
   $ref: "./capital_gains_other_retrieve.yaml"
-  summary: Retrieve Other Capital Gains and Disposals
   security:
     - User-Restricted:
         - read:self-assessment
 
 put:
   $ref: "./capital_gains_other_create_amend.yaml"
-  summary: Create and Amend Other Capital Gains and Disposals
   security:
     - User-Restricted:
         - write:self-assessment
 
 delete:
   $ref: "./capital_gains_other_delete.yaml"
-  summary: Delete Other Capital Gains and Disposals
   security:
     - User-Restricted:
         - write:self-assessment
