@@ -1,5 +1,4 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Create and Amend Other Capital Gains and Disposals Request",
   "description": "Create and Amend Other Capital Gains and Disposals Request",
   "type": "object",

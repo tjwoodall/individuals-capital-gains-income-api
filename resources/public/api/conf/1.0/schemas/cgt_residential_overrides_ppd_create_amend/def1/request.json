@@ -1,5 +1,4 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Create and Amend 'Report and Pay Capital Gains Tax on Property' Overrides Request",
   "description": "Create and Amend 'Report and Pay Capital Gains Tax on Property' Overrides Request",
   "type": "object",

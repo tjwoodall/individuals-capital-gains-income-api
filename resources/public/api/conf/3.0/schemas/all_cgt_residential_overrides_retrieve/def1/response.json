@@ -1,5 +1,4 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Retrieve All CGT Residential Property Disposals and Overrides Response",
   "description": "Retrieve All CGT Residential Property Disposals and Overrides Response",
   "type": "object",
