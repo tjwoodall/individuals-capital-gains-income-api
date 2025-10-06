@@ -41,8 +41,7 @@ requestBody:
       examples:
         example-1:
           description: Full CGT Overrides Amendment
-          value:
-            $ref: './examples/cgt_residential_overrides_ppd_create_amend/def1/request.json'
+          externalValue: './examples/cgt_residential_overrides_ppd_create_amend/def1/request.json'
 
 
 responses:
