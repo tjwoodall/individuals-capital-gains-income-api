@@ -37,8 +37,7 @@ requestBody:
       examples:
         example-1:
           description: Other Capital Gains and Disposals with Gains
-          value:
-            $ref: './examples/capital_gains_other_create_amend/def1/request.json'
+          externalValue: './examples/capital_gains_other_create_amend/def1/request.json'
 
 responses:
   "200":
