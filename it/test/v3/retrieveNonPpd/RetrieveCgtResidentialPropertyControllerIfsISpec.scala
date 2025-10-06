@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.retrieveNonPpd
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.errors.SourceFormatError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
@@ -26,58 +25,50 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
+import v3.residentialPropertyDisposals.retrieveNonPpd.def1.fixture.Def1_RetrieveCgtResidentialPropertyControllerFixture
 
-class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBaseSpec {
+class RetrieveCgtResidentialPropertyControllerIfsISpec extends IntegrationBaseSpec {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1881.enabled" -> false) ++ super.servicesConfig
 
   private trait Test {
 
-    def nino: String           = "AA123456A"
-    def source: Option[String] = Some("latest")
+    def nino: String = "AA123456A"
 
-    def taxYear: String
+    def taxYear: String = "2023-24"
 
-    def downstreamUri: String
-    val downstreamResponse: JsValue = Def1_RetrieveAllResidentialPropertyCgtControllerFixture.ifsJson
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
 
-    def mtdUri: String       = s"/residential-property/$nino/$taxYear"
-    val mtdResponse: JsValue = Def1_RetrieveAllResidentialPropertyCgtControllerFixture.mtdJson
+    val downstreamResponse: JsValue = Def1_RetrieveCgtResidentialPropertyControllerFixture.downstreamJson
 
-    def mtdQueryParams: Seq[(String, String)] =
-      Seq("source" -> source)
-        .collect { case (k, Some(v)) =>
-          (k, v)
-        }
+    private def mtdUri: String = s"/residential-property/$nino/$taxYear"
+
+    val mtdResponse: JsValue = Def1_RetrieveCgtResidentialPropertyControllerFixture.mtdJson
 
     def setupStubs(): StubMapping
 
     def mtdRequest: WSRequest = {
       setupStubs()
       buildRequest(mtdUri)
-        .addQueryStringParameters(mtdQueryParams*)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123")
         )
     }
 
   }
 
-  private trait TysHipTest extends Test {
-    def taxYear: String       = "2023-24"
-    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino"
-  }
-
-  "Calling the 'retrieve all residential property cgt' endpoint" should {
+  "Calling the Retrieve CGT Residential Property Disposals (non-PPD) endpoint" should {
     "return a 200 status code" when {
 
-      "any valid request is made for Tax Year Specific (TYS)" in new TysHipTest {
+      "a valid request is made for Tax Year Specific (TYS)" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("view" -> "LATEST"), OK, downstreamResponse)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(mtdRequest.get())
@@ -86,36 +77,35 @@ class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBas
         response.header("Content-Type") shouldBe Some("application/json")
       }
 
-      "any valid request is made without source" in new TysHipTest {
-        override def source: Option[String] = None
+      "a valid request is made pre-TYS" in new Test {
+
+        override def taxYear: String = "2022-23"
+
+        override def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2022-23"
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("view" -> "LATEST"), OK, downstreamResponse)
+          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
         }
 
         val response: WSResponse = await(mtdRequest.get())
         response.status shouldBe OK
         response.json shouldBe mtdResponse
         response.header("Content-Type") shouldBe Some("application/json")
+
       }
     }
 
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String,
-                                requestTaxYear: String,
-                                requestSource: String,
-                                expectedStatus: Int,
-                                expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new TysHipTest {
+        def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"validation fails with ${expectedBody.code} error" in new Test {
 
-            override val nino: String           = requestNino
-            override val taxYear: String        = requestTaxYear
-            override val source: Option[String] = Some(requestSource)
+            override val nino: String    = requestNino
+            override val taxYear: String = requestTaxYear
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -131,24 +121,23 @@ class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBas
         }
 
         val input = Seq(
-          ("AA1123A", "2019-20", "latest", BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20177", "latest", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2015-17", "latest", BAD_REQUEST, RuleTaxYearRangeInvalidError),
-          ("AA123456A", "2015-16", "latest", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2019-20", "test", BAD_REQUEST, SourceFormatError)
+          ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20177", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2015-17", BAD_REQUEST, RuleTaxYearRangeInvalidError),
+          ("AA123456A", "2015-16", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, Map("view" -> "LATEST"), downstreamStatus, errorBody(downstreamCode))
+              DownstreamStub.onError(DownstreamStub.GET, downstreamUri, downstreamStatus, errorBody(downstreamCode))
             }
 
             val response: WSResponse = await(mtdRequest.get())
@@ -169,14 +158,14 @@ class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBas
         val input = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_VIEW", BAD_REQUEST, SourceFormatError),
+          (BAD_REQUEST, "INVALID_VIEW", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-        input.foreach(args => (serviceErrorTest).tupled(args))
+        input.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }
