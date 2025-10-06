@@ -42,8 +42,7 @@ responses:
         examples:
           example-response:
             description: Example Response
-            value:
-              $ref: './examples/capital_gains_other_retrieve/def1/response.json'
+            externalValue: './examples/capital_gains_other_retrieve/def1/response.json'
 
   "400":
     description: Bad request
