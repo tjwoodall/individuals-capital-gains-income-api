@@ -65,7 +65,6 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
           service.createAndAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withNoContentResult(OK)
 
       requestHandler.handleRequest()
     }

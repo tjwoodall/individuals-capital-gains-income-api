@@ -104,7 +104,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
   )
 
   "CreateAmendCgtResidentialPropertyDisposalsController" should {
-    "return a successful response with status OK" when {
+    "return a successful response with status NO_CONTENT" when {
       "happy path" in new Test {
         willUseValidator(returningSuccess(requestData))
 
@@ -116,7 +116,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerSpec
           .createAndAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson))
+        runOkTestWithAudit(expectedStatus = NO_CONTENT, None, Some(validRequestJson))
       }
     }
 

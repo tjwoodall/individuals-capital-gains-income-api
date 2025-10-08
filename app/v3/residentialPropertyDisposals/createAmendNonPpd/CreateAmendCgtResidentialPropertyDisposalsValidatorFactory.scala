@@ -17,21 +17,26 @@
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
 import config.CgtAppConfig
+import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import v3.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
+import v3.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.{Def1, Def2}
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.Def2_CreateAmendCgtResidentialPropertyDisposalsValidator
 import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import javax.inject.Inject
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: CgtAppConfig) {
+class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
-    val schema = CreateAmendCgtResidentialPropertyDisposalsSchema.schema
+    val schema = CreateAmendCgtResidentialPropertyDisposalsSchema.schemaFor(taxYear)
+
     schema match {
-      case Def1 => new Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)(appConfig)
+      case Valid(Def1)     => new Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)
+      case Valid(Def2)     => new Def2_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
 

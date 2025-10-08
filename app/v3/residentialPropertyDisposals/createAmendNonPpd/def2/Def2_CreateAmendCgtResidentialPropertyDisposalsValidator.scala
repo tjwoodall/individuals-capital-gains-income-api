@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.residentialPropertyDisposals.createAmendNonPpd.def1
+package v3.residentialPropertyDisposals.createAmendNonPpd.def2
 
 import cats.data.Validated
 import cats.implicits.*
@@ -23,24 +23,25 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v3.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
-import v3.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{
-  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
-  Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.Def2_CreateAmendCgtResidentialPropertyDisposalsRulesValidator.validateBusinessRules
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.{
+  Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
+  Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData
 }
 import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
-class Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody]()
 
-  override def validate: Validated[Seq[MtdError], Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
+  override def validate: Validated[Seq[MtdError], Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
+
     (
       ResolveNino(nino),
       resolveJson(body)
     ).mapN { (validNino, requestBody) =>
-      Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData(
+      Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData(
         nino = validNino,
         taxYear = TaxYear.fromMtd(taxYear),
         body = requestBody

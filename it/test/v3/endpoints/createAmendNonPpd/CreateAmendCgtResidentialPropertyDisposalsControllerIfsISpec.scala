@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.endpoints.createAmendNonPpd
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -29,7 +29,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1952.enabled" -> false) ++ super.servicesConfig
 
   val validDisposalDate: String    = "2020-03-27"
   val validCompletionDate: String  = "2020-03-29"
@@ -281,10 +284,10 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
 
   trait Test {
 
-    val nino: String    = "AA123456A"
-    def taxYear: String = "2023-24"
+    val nino: String = "AA123456A"
+    def taxYear: String
 
-    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino"
+    def downstreamUri: String
 
     def setupStubs(): StubMapping
 
@@ -304,9 +307,24 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
 
   }
 
+  trait NonTysTest extends Test {
+    def taxYear: String = "2019-20"
+
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2019-20"
+  }
+
+  trait TysTest extends Test {
+    def taxYear: String = "2023-24"
+
+    override def request: WSRequest =
+      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
+
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
+  }
+
   "Calling the 'create and amend other CGT' endpoint" should {
-    "return a 200 status code" when {
-      "any valid request is made for a TYS tax year" in new Test {
+    "return a 204 status code" when {
+      "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -316,7 +334,22 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
         }
 
         val response: WSResponse = await(request.put(validRequestJson))
-        response.status shouldBe OK
+        response.status shouldBe NO_CONTENT
+
+        verifyNrs(validRequestJson)
+      }
+
+      "any valid request is made for a TYS tax year" in new TysTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
+        }
+
+        val response: WSResponse = await(request.put(validRequestJson))
+        response.status shouldBe NO_CONTENT
 
         verifyNrs(validRequestJson)
       }
@@ -331,7 +364,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
                                 expectedError: MtdError,
                                 expectedErrors: Option[ErrorWrapper],
                                 scenario: Option[String]): Unit = {
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new Test {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new NonTysTest {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -355,7 +388,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
           ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
-
           // Body errors
           ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
           ("AA123456A", "2019-20", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
@@ -372,7 +404,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
 
       "service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -390,36 +422,33 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
           }
         }
 
-        def errorBody(`type`: String): String =
+        def errorBody(code: String): String =
           s"""
              |{
-             |  "origin": "HIP",
-             |  "response": {
-             |    "failures": [
-             |      {
-             |        "type": "${`type`}",
-             |        "reason": "downstream message"
-             |      }
-             |    ]
-             |  }
+             |   "code": "$code",
+             |   "reason": "ifs message"
              |}
-             |""".stripMargin
+            """.stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
+        )
+
+        val extraTysErrors = Seq(
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        errors.foreach(args => serviceErrorTest.tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

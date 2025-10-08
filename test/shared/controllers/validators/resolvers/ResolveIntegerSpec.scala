@@ -30,7 +30,7 @@ class ResolveIntegerSpec extends UnitSpec with ScalaCheckDrivenPropertyChecks {
       val min: Int = -100
       val max: Int = 100
 
-      val error   = ValueFormatError.forPathAndRange(path, s"$min", s"$max")
+      val error   = ValueFormatError.forIntegerPathAndRange(path, s"$min", s"$max")
       val resolve = ResolveInteger(min, max)
 
       "return the error with the correct message if and only if the value is outside the inclusive range" when {

@@ -19,6 +19,7 @@ package v3.residentialPropertyDisposals.createAmendNonPpd.model.request
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody
 
 trait CreateAmendCgtResidentialPropertyDisposalsRequestBody
 
@@ -28,6 +29,8 @@ object CreateAmendCgtResidentialPropertyDisposalsRequestBody extends JsonWritesU
     case def1: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody =>
       implicitly[OWrites[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestBody]].writes(def1)
 
+    case def2: Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody =>
+      implicitly[OWrites[Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody]].writes(def2)
   }
 
 }

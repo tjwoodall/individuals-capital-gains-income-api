@@ -37,6 +37,12 @@ object RuleIncorrectDisposalTypeError
 
 object RuleGainLossError extends MtdError("RULE_GAIN_LOSS", "Only one of gain or loss values can be provided", BAD_REQUEST)
 
+object RuleIncorrectLossesSubmittedError
+    extends MtdError(
+      "RULE_INCORRECT_LOSSES_SUBMITTED",
+      "LossesFromThisYear can not be submitted if the numberOfDisposals is less than or equal to 1",
+      BAD_REQUEST)
+
 object RuleDisposalDateErrorV1 extends MtdError("RULE_DISPOSAL_DATE", "The disposalDate must be within the specified tax year", BAD_REQUEST)
 
 object RuleCompletionDateError

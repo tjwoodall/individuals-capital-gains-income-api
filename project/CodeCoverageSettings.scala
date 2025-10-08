@@ -36,10 +36,10 @@ object CodeCoverageSettings {
     "api.connectors.NrsProxyConnector"
   )
 
-  val settings: Seq[Setting[_]] = Seq(
+  val settings: Seq[Setting[?]] = Seq(
     ScoverageKeys.coverageExcludedFiles := ".*\\$anon.*",
     ScoverageKeys.coverageExcludedPackages := (excludedPackages ++ excludedExtraPackages).mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 93,
+    ScoverageKeys.coverageMinimumStmtTotal := 94,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )

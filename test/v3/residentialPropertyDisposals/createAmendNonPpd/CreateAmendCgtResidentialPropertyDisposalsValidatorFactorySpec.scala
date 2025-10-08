@@ -16,16 +16,16 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
-import common.utils.JsonErrorValidators
 import config.MockAppConfig
+import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
+import common.utils.JsonErrorValidators
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.Def2_CreateAmendCgtResidentialPropertyDisposalsValidator
+import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
-
-  private val validNino    = "AA123456A"
-  private val validTaxYear = "2021-22"
 
   def requestBodyJson(): JsValue = Json.parse(
     s"""
@@ -35,16 +35,35 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends Uni
      """.stripMargin
   )
 
+  private trait Test {
+
+    MockedAppConfig.minimumPermittedTaxYear
+      .returns(2021)
+      .anyNumberOfTimes()
+
+  }
+
   private val validRequestBody = requestBodyJson()
 
-  private val validatorFactory = new CreateAmendCgtResidentialPropertyDisposalsValidatorFactory(mockAppConfig)
+  private def validatorFactory(taxYear: String): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+    new CreateAmendCgtResidentialPropertyDisposalsValidatorFactory().validator(nino = "ignoredNino", taxYear = taxYear, validRequestBody)
 
   "running a validation" should {
     "return the Def1 validator" when {
-      "given a request handled by a Def1 schema" in {
-        val result = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
-        result shouldBe a[Def1_CreateAmendCgtResidentialPropertyDisposalsValidator]
+      "given a request handled by a Def1 schema" in new Test {
+        validatorFactory("2024-25") shouldBe a[Def1_CreateAmendCgtResidentialPropertyDisposalsValidator]
+      }
+    }
 
+    "return the Def2 validator" when {
+      "given a request handled by a Def2 schema" in new Test {
+        validatorFactory("2025-26") shouldBe a[Def2_CreateAmendCgtResidentialPropertyDisposalsValidator]
+      }
+    }
+
+    "return no valid schema" when {
+      "given a request handled by no valid schema" in new Test {
+        validatorFactory("INVALID_TAX_YEAR") shouldBe a[AlwaysErrorsValidator]
       }
     }
 
