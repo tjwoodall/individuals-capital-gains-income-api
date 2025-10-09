@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.retrieveOtherCgt
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT

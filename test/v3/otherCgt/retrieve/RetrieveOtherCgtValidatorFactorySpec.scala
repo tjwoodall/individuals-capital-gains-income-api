@@ -17,22 +17,39 @@
 package v3.otherCgt.retrieve
 
 import config.MockAppConfig
+import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
 import support.UnitSpec
 import v3.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
+import v3.otherCgt.retrieve.def2.Def2_RetrieveOtherCgtValidator
+import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
 class RetrieveOtherCgtValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
-  private val validNino    = "AA123456A"
-  private val validTaxYear = "2021-22"
+  private def validatorFor(taxYear: String): Validator[RetrieveOtherCgtRequestData] =
+    new RetrieveOtherCgtValidatorFactory().validator(nino = "ignoredNino", taxYear = taxYear)
 
-  private val validatorFactory = new RetrieveOtherCgtValidatorFactory(mockAppConfig)
+  private trait Test {
 
-  "validator" should {
-    "return the Def1 validator" when {
-      "given a request handled by a Def1 schema" in {
-        val result = validatorFactory.validator(validNino, validTaxYear)
+    MockedAppConfig.minimumPermittedTaxYear
+      .returns(2021)
+      .anyNumberOfTimes()
 
-        result shouldBe a[Def1_RetrieveOtherCgtValidator]
+  }
+
+  "RetrieveOtherCgtValidatorFactory" when {
+    "given a request corresponding to a Def1 schema" should {
+      "return a Def1 validator" in new Test {
+        validatorFor("2024-25") shouldBe a[Def1_RetrieveOtherCgtValidator]
+      }
+    }
+    "given a request corresponding to a Def2 schema" should {
+      "return a Def2 validator" in new Test {
+        validatorFor("2025-26") shouldBe a[Def2_RetrieveOtherCgtValidator]
+      }
+    }
+    "given a request where no valid schema could be determined" should {
+      "return a validator returning the errors" in new Test {
+        validatorFor("BAD_TAX_YEAR") shouldBe an[AlwaysErrorsValidator]
       }
     }
   }

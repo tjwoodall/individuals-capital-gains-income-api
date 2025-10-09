@@ -17,22 +17,25 @@
 package v3.otherCgt.retrieve
 
 import config.CgtAppConfig
+import cats.data.Validated.{Invalid, Valid}
 import shared.controllers.validators.Validator
-import v3.otherCgt.retrieve.RetrieveOtherCgtSchema.Def1
+import v3.otherCgt.retrieve.RetrieveOtherCgtSchema.{Def1, Def2}
 import v3.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
+import v3.otherCgt.retrieve.def2.Def2_RetrieveOtherCgtValidator
 import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
+class RetrieveOtherCgtValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveOtherCgtRequestData] = {
-
-    val schema = RetrieveOtherCgtSchema.schema
+    val schema = RetrieveOtherCgtSchema.schemaFor(taxYear)
 
     schema match {
-      case Def1 => new Def1_RetrieveOtherCgtValidator(nino, taxYear)(appConfig)
+      case Valid(Def1)     => new Def1_RetrieveOtherCgtValidator(nino, taxYear)
+      case Valid(Def2)     => new Def2_RetrieveOtherCgtValidator(nino, taxYear)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
 

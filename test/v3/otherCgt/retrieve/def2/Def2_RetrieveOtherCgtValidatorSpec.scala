@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package v3.otherCgt.retrieve.def1
+package v3.otherCgt.retrieve.def2
 
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.*
 import support.UnitSpec
-import v3.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
+import v3.otherCgt.retrieve.def2.model.request.Def2_RetrieveOtherCgtRequestData
 import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
-class Def1_RetrieveOtherCgtValidatorSpec extends UnitSpec {
+class Def2_RetrieveOtherCgtValidatorSpec extends UnitSpec {
 
   private implicit val correlationId: String = "1234"
 
@@ -32,14 +32,14 @@ class Def1_RetrieveOtherCgtValidatorSpec extends UnitSpec {
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String, taxYear: String) = new Def1_RetrieveOtherCgtValidator(nino, taxYear).validateAndWrapResult()
+  private def validator(nino: String, taxYear: String) = new Def2_RetrieveOtherCgtValidator(nino, taxYear).validateAndWrapResult()
 
   "validator" should {
     "return the parsed domain object" when {
       "a valid request is supplied" in {
         val result: Either[ErrorWrapper, RetrieveOtherCgtRequestData] = validator(validNino, validTaxYear)
 
-        result shouldBe Right(Def1_RetrieveOtherCgtRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def2_RetrieveOtherCgtRequestData(parsedNino, parsedTaxYear))
       }
     }
 

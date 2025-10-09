@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.retrieveOtherCgt
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
@@ -26,7 +26,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class RetrieveOtherCgtControllerHipISpec extends IntegrationBaseSpec {
+class Def1_RetrieveOtherCgtControllerHipISpec extends IntegrationBaseSpec {
 
   "Calling the 'retrieve other CGT' endpoint" should {
     "return a 200 status code" when {

@@ -45,14 +45,7 @@ class RetrieveOtherCgtControllerSpec
     with MockIdGenerator
     with MockSharedAppConfig {
 
-  val taxYear: String = "2019-20"
-
-  val requestData: RetrieveOtherCgtRequestData = Def1_RetrieveOtherCgtRequestData(
-    nino = Nino(validNino),
-    taxYear = TaxYear.fromMtd(taxYear)
-  )
-
-  val responseModel: RetrieveOtherCgtResponse = Def1_RetrieveOtherCgtResponse(
+  val def1_responseModel: RetrieveOtherCgtResponse = Def1_RetrieveOtherCgtResponse(
     submittedOn = Timestamp("2021-05-07T16:18:44.403Z"),
     disposals = Some(
       List(
@@ -92,7 +85,7 @@ class RetrieveOtherCgtControllerSpec
     adjustments = Some(-39999999999.99)
   )
 
-  val validResponseJson: JsValue = Json.parse(
+  val def1_validResponseJson: JsValue = Json.parse(
     """
       |{
       |   "submittedOn":"2021-05-07T16:18:44.403Z",
@@ -131,20 +124,18 @@ class RetrieveOtherCgtControllerSpec
      """.stripMargin
   )
 
-  val mtdResponse: JsObject = validResponseJson.as[JsObject]
-
   "RetrieveOtherCgtController" should {
-    "return a successful response with status 200 (OK)" when {
+    "return a successful Def1 response with status 200 (OK)" when {
       "given a valid request" in new Test {
         willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherCgtService
           .retrieve(requestData)
-          .returns(Future.successful(Right(ResponseWrapper(correlationId, responseModel))))
+          .returns(Future.successful(Right(ResponseWrapper(correlationId, def1_responseModel))))
 
         runOkTest(
           expectedStatus = OK,
-          maybeExpectedResponseBody = Some(mtdResponse)
+          maybeExpectedResponseBody = Some(def1_validResponseJson.as[JsObject])
         )
       }
     }
@@ -169,6 +160,13 @@ class RetrieveOtherCgtControllerSpec
   }
 
   trait Test extends ControllerTest {
+
+    val taxYear = "2019-20"
+
+    val requestData: RetrieveOtherCgtRequestData = Def1_RetrieveOtherCgtRequestData(
+      nino = Nino(validNino),
+      taxYear = TaxYear.fromMtd(taxYear)
+    )
 
     val controller: RetrieveOtherCgtController = new RetrieveOtherCgtController(
       authService = mockEnrolmentsAuthService,

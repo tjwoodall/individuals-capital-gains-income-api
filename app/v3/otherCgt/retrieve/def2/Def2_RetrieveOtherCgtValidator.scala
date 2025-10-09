@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-package v3.otherCgt.retrieve.def1
+package v3.otherCgt.retrieve.def2
 
 import cats.data.Validated
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.ResolveNino
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v3.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
+import v3.otherCgt.retrieve.def2.model.request.Def2_RetrieveOtherCgtRequestData
 import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String) extends Validator[RetrieveOtherCgtRequestData] {
+class Def2_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String) extends Validator[RetrieveOtherCgtRequestData] {
 
-  override def validate: Validated[Seq[MtdError], Def1_RetrieveOtherCgtRequestData] =
-    ResolveNino(nino).map(validNino => Def1_RetrieveOtherCgtRequestData(validNino, TaxYear.fromMtd(taxYear)))
+  override def validate: Validated[Seq[MtdError], Def2_RetrieveOtherCgtRequestData] =
+    ResolveNino(nino).map(validNino => Def2_RetrieveOtherCgtRequestData(validNino, TaxYear.fromMtd(taxYear)))
 
 }
