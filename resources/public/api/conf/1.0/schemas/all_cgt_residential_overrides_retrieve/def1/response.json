@@ -14,7 +14,7 @@
           "multipleOf": 0.01,
           "minimum": 0.00,
           "maximum": 99999999999.99,
-          "example": "1999.99"
+          "example": 1999.99
         },
         "multiplePropertyDisposals": {
           "type": "array",
@@ -53,12 +53,12 @@
                 "minimum": 2,
                 "maximum": 999,
                 "multipleOf": 1,
-                "example": "3"
+                "example": 3
               },
               "disposalTaxYear": {
                 "description": "The tax year in which the properties were disposed. The 2021-22 tax year would be represented as 2022.",
                 "type": "number",
-                "example": "2022",
+                "example": 2022,
                 "pattern": "^2[0-9]{3}$"
               },
               "completionDate": {
@@ -72,7 +72,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "amountOfNetLoss": {
                 "description": "The total amount of net loss from the disposals.  Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -80,7 +80,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               }
             },
             "required": [
@@ -136,7 +136,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "acquisitionDate": {
                 "description": "The date the disposed property was acquired in the format YYYY-MM-DD.",
@@ -149,7 +149,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "improvementCosts": {
                 "description": "The total costs to improve the property. Only relates to costs that added value to the property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -157,7 +157,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "additionalCosts": {
                 "description": "The total amount of additional costs when the property was acquired (Acquisition Fees) or disposed of (Disposal Fees). It may include fees for surveyors, estate agents and solicitors. If the costs were shared, enter only the amount of that particular owner's share. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -165,7 +165,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "prfAmount": {
                 "description": "The total amount of Private Residence Relief claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -173,7 +173,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "otherReliefAmount": {
                 "description": "The total amount of other reliefs claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -181,7 +181,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "lossesFromThisYear": {
                 "description": "The amount of Capital Gains Tax losses from other disposals in the current tax year that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -189,7 +189,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "lossesFromPreviousYear": {
                 "description": "The amount of Capital Gains Tax losses from disposals in previous tax years that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -197,7 +197,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "amountOfNetGain": {
                 "description": "The total amount of net gain from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -205,7 +205,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "amountOfNetLoss": {
                 "description": "The total amount of net loss from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -213,7 +213,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               }
             },
             "required": [
@@ -265,7 +265,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "acquisitionDate": {
                 "description": "The date the disposed property was acquired in the format YYYY-MM-DD",
@@ -278,7 +278,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "improvementCosts": {
                 "description": "The total costs to improve the property. Only relates to costs that added value to the property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -286,7 +286,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "additionalCosts": {
                 "description": "The total amount of additional costs when the property was acquired (Acquisition Fees) or disposed of (Disposal Fees). It may include fees for surveyors, estate agents and solicitors. If the costs were shared, enter only the amount of that particular owner's share. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -294,7 +294,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "5000.99"
+                "example": 5000.99
               },
               "prfAmount": {
                 "description": "The total amount of Private Residence Relief claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -302,7 +302,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "otherReliefAmount": {
                 "description": "The total amount of other reliefs claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -310,7 +310,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "lossesFromThisYear": {
                 "description": "The amount of Capital Gains Tax losses from other disposals in the current tax year that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -318,7 +318,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "lossesFromPreviousYear": {
                 "description": "The amount of Capital Gains Tax losses from disposals in previous tax years that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -326,7 +326,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "amountOfNetGain": {
                 "description": "The total amount of net gain from the disposal.  Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -334,7 +334,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               },
               "amountOfNetLoss": {
                 "description": "The total amount of net loss from the disposal.  Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -342,7 +342,7 @@
                 "multipleOf": 0.01,
                 "minimum": 0.00,
                 "maximum": 99999999999.99,
-                "example": "1999.99"
+                "example": 1999.99
               }
             },
             "required": [
