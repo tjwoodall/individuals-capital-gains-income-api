@@ -35,7 +35,7 @@
           "disposalProceeds":{
             "type":"number",
             "description":"The total proceeds from the disposal of the asset. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -43,7 +43,7 @@
           "allowableCosts":{
             "type":"number",
             "description":"The total amount of allowable costs that can be deducted from the disposal proceeds. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -51,7 +51,7 @@
           "gain":{
             "type":"number",
             "description":"The total gain from the disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -59,7 +59,7 @@
           "loss":{
             "type":"number",
             "description":"The total loss from the disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -75,7 +75,7 @@
           "gainAfterRelief":{
             "type":"number",
             "description":"The total net gain after any reliefs have been applied. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -83,7 +83,7 @@
           "lossAfterRelief":{
             "type":"number",
             "description":"The total net loss after any reliefs have been applied. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -91,7 +91,7 @@
           "rttTaxPaid":{
             "type":"number",
             "description":"The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-            "example":"5000.99",
+            "example": 5000.99,
             "multipleOf":0.01,
             "minimum":0,
             "maximum":99999999999.99
@@ -114,7 +114,7 @@
         "carriedInterestGain":{
           "type":"number",
           "description":"The total amount of all the carried interest gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -122,7 +122,7 @@
         "carriedInterestRttTaxPaid":{
           "type":"number",
           "description":"The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for all of the carried interest gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -130,7 +130,7 @@
         "attributedGains":{
           "type":"number",
           "description":"The total amount of all the attributed gains where personal losses cannot be set off. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -138,7 +138,7 @@
         "attributedGainsRttTaxPaid":{
           "type":"number",
           "description":"The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for all of the attributed interest gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -146,7 +146,7 @@
         "otherGains":{
           "type":"number",
           "description":"The total amount of any other asset type gains not reported elsewhere for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -154,7 +154,7 @@
         "otherGainsRttTaxPaid":{
           "type":"number",
           "description":"The total amount of tax paid through the Capital Gains Tax Real Time Transactions service on any other asset-type gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -168,7 +168,7 @@
         "broughtForwardLossesUsedInCurrentYear":{
           "type":"number",
           "description":"The total amount of brought forward losses used for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -176,7 +176,7 @@
         "setAgainstInYearGains":{
           "type":"number",
           "description":"The total amount of trading losses set against chargeable gains for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -184,7 +184,7 @@
         "setAgainstInYearGeneralIncome":{
           "type":"number",
           "description":"The total amount of losses set against general income for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -192,7 +192,7 @@
         "setAgainstEarlierYear":{
           "type":"number",
           "description":"The total amount of losses set against general income for the tax year previous to the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
-          "example":"5000.99",
+          "example": 5000.99,
           "multipleOf":0.01,
           "minimum":0,
           "maximum":99999999999.99
@@ -202,7 +202,7 @@
     "adjustments":{
       "type":"number",
       "description":"The amount of included adjustments to reduce or increase the Capital Gains Tax payable. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
-      "example":"5000.99",
+      "example": 5000.99,
       "multipleOf":0.01,
       "minimum":-99999999999.99,
       "maximum":99999999999.99
