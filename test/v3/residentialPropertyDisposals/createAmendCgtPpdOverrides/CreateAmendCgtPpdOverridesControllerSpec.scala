@@ -126,7 +126,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
   )
 
   "CreateAmendCgtPpdOverridesController" should {
-    "return a successful response with status OK" when {
+    "return a successful response with status NO_CONTENT" when {
       "happy path" in new Test {
         willUseValidator(returningSuccess(requestData))
         MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
@@ -139,7 +139,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson))
+        runOkTestWithAudit(expectedStatus = NO_CONTENT, None, Some(validRequestJson))
       }
     }
 

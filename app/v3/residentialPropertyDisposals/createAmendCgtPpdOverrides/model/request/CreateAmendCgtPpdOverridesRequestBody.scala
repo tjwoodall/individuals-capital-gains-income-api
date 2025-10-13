@@ -20,13 +20,15 @@ import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestBody
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request.Def2_CreateAmendCgtPpdOverridesRequestBody
 
 trait CreateAmendCgtPpdOverridesRequestBody
 
 object CreateAmendCgtPpdOverridesRequestBody extends JsonWritesUtil {
 
-  implicit val writes: OWrites[CreateAmendCgtPpdOverridesRequestBody] = writesFrom { case def1: Def1_CreateAmendCgtPpdOverridesRequestBody =>
-    implicitly[OWrites[Def1_CreateAmendCgtPpdOverridesRequestBody]].writes(def1)
+  implicit val writes: OWrites[CreateAmendCgtPpdOverridesRequestBody] = writesFrom {
+    case def1: Def1_CreateAmendCgtPpdOverridesRequestBody => implicitly[OWrites[Def1_CreateAmendCgtPpdOverridesRequestBody]].writes(def1)
+    case def2: Def2_CreateAmendCgtPpdOverridesRequestBody => implicitly[OWrites[Def2_CreateAmendCgtPpdOverridesRequestBody]].writes(def2)
 
   }
 

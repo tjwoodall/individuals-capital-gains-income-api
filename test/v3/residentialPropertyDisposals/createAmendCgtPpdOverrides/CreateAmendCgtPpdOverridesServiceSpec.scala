@@ -88,16 +88,6 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
             await(service.createAmend(createAmendCgtPpdOverridesRequest)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
-        def failuresArrayError(downstreamErrorCode: String, error: MtdError): Unit =
-          s"a $downstreamErrorCode error is returned from the connector in a failures array" in new Test {
-
-            MockCreateAmendCgtPpdOverridesConnector
-              .createAmend(createAmendCgtPpdOverridesRequest)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors(List(DownstreamErrorCode(downstreamErrorCode)))))))
-
-            await(service.createAmend(createAmendCgtPpdOverridesRequest)) shouldBe Left(ErrorWrapper(correlationId, error))
-          }
-
         val errors = List(
           ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
           ("INVALID_TAX_YEAR", TaxYearFormatError),
@@ -117,8 +107,7 @@ class CreateAmendCgtPpdOverridesServiceSpec extends ServiceSpec {
           ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
-        (errors ++ extraTysErrors).foreach(args => (failuresArrayError).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
       }
     }
   }

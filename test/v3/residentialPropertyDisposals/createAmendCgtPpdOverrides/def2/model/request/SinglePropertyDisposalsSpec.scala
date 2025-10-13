@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
+package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request
 
 import play.api.libs.json.{JsError, JsValue, Json}
 import support.UnitSpec
@@ -35,7 +35,9 @@ class SinglePropertyDisposalsSpec extends UnitSpec {
       |   "otherReliefAmount": 3434.23,
       |   "lossesFromThisYear": 436.23,
       |   "lossesFromPreviousYear": 234.23,
-      |   "amountOfNetGain": 4567.89
+      |   "amountOfNetGain": 4567.89,
+      |   "gainsWithBadr": 2344.99,
+      |   "gainsWithInv": 3212.44
       |}
       |""".stripMargin
   )
@@ -45,7 +47,7 @@ class SinglePropertyDisposalsSpec extends UnitSpec {
       "AB0000000098",
       "2020-02-28",
       454.24,
-      Some("2020-03-29"),
+      "2020-03-29",
       3434.45,
       233.45,
       423.34,
@@ -54,10 +56,12 @@ class SinglePropertyDisposalsSpec extends UnitSpec {
       Some(436.23),
       Some(234.23),
       Some(4567.89),
-      None
+      None,
+      Some(2344.99),
+      Some(3212.44)
     )
 
-  val desJson: JsValue = Json.parse(
+  val hipJson: JsValue = Json.parse(
     """
       |{
       |   "ppdSubmissionId": "AB0000000098",
@@ -71,7 +75,9 @@ class SinglePropertyDisposalsSpec extends UnitSpec {
       |   "otherReliefAmount": 3434.23,
       |   "lossesFromThisYear": 436.23,
       |   "lossesFromPreviousYear": 234.23,
-      |   "amountOfNetGain": 4567.89
+      |   "amountOfNetGain": 4567.89,
+      |   "gainsWithBADR": 2344.99,
+      |   "gainsWithINV": 3212.44
       |}
       |""".stripMargin
   )
@@ -110,7 +116,7 @@ class SinglePropertyDisposalsSpec extends UnitSpec {
 
     "written JSON" should {
       "produce the expected JsObject" in {
-        Json.toJson(singlePropertyDisposalsModel) shouldBe desJson
+        Json.toJson(singlePropertyDisposalsModel) shouldBe hipJson
       }
     }
   }

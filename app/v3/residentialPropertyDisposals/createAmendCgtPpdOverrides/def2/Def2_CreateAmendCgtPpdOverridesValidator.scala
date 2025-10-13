@@ -14,34 +14,30 @@
  * limitations under the License.
  */
 
-package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
+package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2
 
 import cats.data.Validated
-import cats.implicits.*
+import cats.implicits._
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject}
 import shared.models.domain.TaxYear
 import shared.models.errors.MtdError
-import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
-import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  Def1_CreateAmendCgtPpdOverridesRequestData
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.Def2_CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request.{
+  Def2_CreateAmendCgtPpdOverridesRequestBody,
+  Def2_CreateAmendCgtPpdOverridesRequestData
 }
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)
+class Def2_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)
     extends Validator[CreateAmendCgtPpdOverridesRequestData] {
-  private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtPpdOverridesRequestBody]()
+  private val resolveJson = new ResolveNonEmptyJsonObject[Def2_CreateAmendCgtPpdOverridesRequestBody]()
 
   def validate: Validated[Seq[MtdError], CreateAmendCgtPpdOverridesRequestData] = (
     ResolveNino(nino),
     resolveJson(body)
   ).mapN((validNino, validBody) =>
-    Def1_CreateAmendCgtPpdOverridesRequestData(
-      validNino,
-      TaxYear.fromMtd(taxYear),
-      validBody
-    )) andThen validateBusinessRules
+    Def2_CreateAmendCgtPpdOverridesRequestData(validNino, TaxYear.fromMtd(taxYear), validBody)) andThen validateBusinessRules
 
 }

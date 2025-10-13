@@ -56,16 +56,14 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
 
       val validator = validatorFactory.validator(nino, taxYear, request.body)
 
-      val requestHandler = RequestHandler
+      RequestHandler
         .withValidator(validator)
         .withService { req =>
           nrsProxyService.submitAsync(nino, "itsa-cgt-disposal-ppd", request.body)
           service.createAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withNoContentResult(OK)
-
-      requestHandler.handleRequest()
+        .handleRequest()
     }
 
   private def auditHandler(nino: String, taxYear: String, request: UserRequest[JsValue]): AuditHandler = {

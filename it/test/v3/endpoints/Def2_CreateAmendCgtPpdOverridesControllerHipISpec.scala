@@ -29,50 +29,58 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
+class Def2_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validRequestBodyJson: JsValue = Json.parse(
     """
       |{
       |    "multiplePropertyDisposals": [
-      |         {
+      |        {
       |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetGain": 1234.78
-      |         },
-      |         {
+      |            "amountOfNetGain": 1234.78,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        },
+      |        {
       |            "ppdSubmissionId": "AB0000000098",
-      |            "amountOfNetLoss": 134.99
-      |         }
+      |            "amountOfNetLoss": 134.99,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        }
       |    ],
       |    "singlePropertyDisposals": [
-      |         {
-      |             "ppdSubmissionId": "AB0000000099",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetGain": 4567.89
-      |         },
-      |         {
-      |             "ppdSubmissionId": "AB0000000091",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetLoss": 4567.89
-      |         }
+      |        {
+      |            "ppdSubmissionId": "AB0000000099",
+      |            "completionDate": "2023-04-28",
+      |            "disposalProceeds": 454.24,
+      |            "acquisitionDate": "2023-04-29",
+      |            "acquisitionAmount": 3434.45,
+      |            "improvementCosts": 233.45,
+      |            "additionalCosts": 423.34,
+      |            "prfAmount": 2324.67,
+      |            "otherReliefAmount": 3434.23,
+      |            "lossesFromThisYear": 436.23,
+      |            "lossesFromPreviousYear": 234.23,
+      |            "amountOfNetGain": 4567.89,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        },
+      |        {
+      |            "ppdSubmissionId": "AB0000000091",
+      |            "completionDate": "2023-08-28",
+      |            "disposalProceeds": 454.24,
+      |            "acquisitionDate": "2023-08-29",
+      |            "acquisitionAmount": 3434.45,
+      |            "improvementCosts": 233.45,
+      |            "additionalCosts": 423.34,
+      |            "prfAmount": 2324.67,
+      |            "otherReliefAmount": 3434.23,
+      |            "lossesFromThisYear": 436.23,
+      |            "lossesFromPreviousYear": 234.23,
+      |            "amountOfNetLoss": 4567.89,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        }
       |    ]
       |}
       |""".stripMargin
@@ -345,10 +353,10 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
 
   private trait Test {
 
-    def nino: String = "AA123456A"
-    def taxYear: String
-    def downstreamUri: String
-    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
+    def nino: String          = "AA123456A"
+    def taxYear: String       = "2025-26"
+    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/income/disposals/residential-property/ppd/$nino"
+    def uri: String           = s"/residential-property/$nino/$taxYear/ppd"
 
     def setupStubs(): StubMapping
 
@@ -357,7 +365,8 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
       buildRequest(uri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123"),
+          "suspend-temporal-validations" -> "true"
         )
     }
 
@@ -368,23 +377,10 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
 
   }
 
-  private trait NonTysTest extends Test {
-    def taxYear               = "2019-20"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/$nino/$taxYear"
-  }
-
-  private trait TysHipTest extends Test {
-    def taxYear               = "2024-25"
-    def downstreamUri: String = s"/itsa/income-tax/v1/24-25/income/disposals/residential-property/ppd/$nino"
-
-    override def request: WSRequest =
-      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
-
-  }
-
   "Calling Create and Amend 'Report and Pay Capital Gains Tax on Property' Overrides endpoint" should {
-    "return a 200 status code" when {
-      "any valid request is made" in new NonTysTest {
+    "return a 204 status code" when {
+
+      "any valid request is made for a TYS tax year" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -393,21 +389,7 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
         }
 
         val response: WSResponse = await(request.put(validRequestBodyJson))
-        response.status shouldBe OK
-
-        verifyNrs(validRequestBodyJson)
-      }
-
-      "any valid request is made for a TYS tax year" in new TysHipTest {
-
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
-        }
-
-        val response: WSResponse = await(request.put(validRequestBodyJson))
-        response.status shouldBe OK
+        response.status shouldBe NO_CONTENT
 
         verifyNrs(validRequestBodyJson)
       }
@@ -422,23 +404,8 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
                                 expectedError: MtdError,
                                 expectedErrors: Option[ErrorWrapper],
                                 scenario: Option[String]): Unit = {
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new NonTysTest {
-            override val nino: String    = requestNino
-            override val taxYear: String = requestTaxYear
 
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-            }
-
-            val response: WSResponse = await(request.put(requestBody))
-            response.status shouldBe expectedStatus
-            response.json shouldBe expectedErrors.fold(Json.toJson(expectedError))(errorWrapper => Json.toJson(errorWrapper))
-            response.header("Content-Type") shouldBe Some("application/json")
-          }
-
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysHipTest {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new Test {
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
@@ -472,18 +439,18 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
           ("AA123456A", "2020-21", invalidValueRequestBodyJson, BAD_REQUEST, invalidValueErrors, None, Some("invalidNumValues")),
           ("AA123456A", "2020-21", jsonWithIds("notAnID", "notAnID"), BAD_REQUEST, ppdSubmissionFormatError, None, Some("badIDs"))
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
-      "ifs service error" when {
-        def serviceErrorTest(ifsStatus: Int, ifsCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"ifs returns an $ifsCode error and status $ifsStatus" in new NonTysTest {
+      "hip service error" when {
+        def serviceErrorTest(hipStatus: Int, hipCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"hip returns an $hipCode error and status $hipStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
               AuthStub.authorised()
               MtdIdLookupStub.ninoFound(nino)
-              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, ifsStatus, errorBody(ifsCode))
+              DownstreamStub.onError(DownstreamStub.PUT, downstreamUri, hipStatus, errorBody(hipCode))
             }
 
             val response: WSResponse = await(request.put(validRequestBodyJson))
@@ -509,7 +476,7 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
              |    ]
              |  }
              |}
-            """.stripMargin
+                  """.stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
@@ -529,7 +496,7 @@ class CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec w
           (BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

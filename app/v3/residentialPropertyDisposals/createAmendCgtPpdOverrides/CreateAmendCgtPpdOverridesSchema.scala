@@ -16,12 +16,29 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
+import cats.data.Validated
+import cats.data.Validated.Valid
+import config.CgtAppConfig
+import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
+import shared.models.domain.TaxYear
+import shared.models.errors.MtdError
+
+import scala.math.Ordered.orderingToOrdered
+
 sealed trait CreateAmendCgtPpdOverridesSchema
 
 object CreateAmendCgtPpdOverridesSchema {
 
   case object Def1 extends CreateAmendCgtPpdOverridesSchema
+  case object Def2 extends CreateAmendCgtPpdOverridesSchema
 
-  val schema: CreateAmendCgtPpdOverridesSchema = Def1
+  def schemaFor(taxYearString: String)(implicit appConfig: CgtAppConfig): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {
+    ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString) andThen schemaFor
+  }
+
+  def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {
+    if (taxYear >= TaxYear.fromMtd("2025-26")) Valid(Def2) else Valid(Def1)
+
+  }
 
 }

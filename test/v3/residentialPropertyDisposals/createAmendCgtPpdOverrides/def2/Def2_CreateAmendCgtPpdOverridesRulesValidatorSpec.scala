@@ -14,69 +14,86 @@
  * limitations under the License.
  */
 
-package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
+package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2
 
 import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
+import shared.models.errors.{
+  DateFormatError,
+  ErrorWrapper,
+  NinoFormatError,
+  RuleDateRangeInvalidError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesValidatorFactory
-import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  Def1_CreateAmendCgtPpdOverridesRequestData
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request.{
+  Def2_CreateAmendCgtPpdOverridesRequestBody,
+  Def2_CreateAmendCgtPpdOverridesRequestData
 }
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with MockAppConfig {
-
+class Def2_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with MockAppConfig {
   private val validNino                      = "AA123456A"
-  private val validTaxYear                   = "2019-20"
+  private val validTaxYear                   = "2025-26"
   private implicit val correlationId: String = "1234"
 
   private val validRequestJson: JsValue = Json.parse(
     """
       |{
       |    "multiplePropertyDisposals": [
-      |         {
+      |        {
       |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetGain": 1234.78
-      |         },
-      |         {
+      |            "amountOfNetGain": 1234.78,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        },
+      |        {
       |            "ppdSubmissionId": "AB0000000098",
-      |            "amountOfNetLoss": 134.99
-      |         }
+      |            "amountOfNetLoss": 134.99,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        }
       |    ],
       |    "singlePropertyDisposals": [
-      |         {
-      |             "ppdSubmissionId": "AB0000000099",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetGain": 4567.89
-      |         },
-      |         {
-      |             "ppdSubmissionId": "AB0000000091",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetLoss": 4567.89
-      |         }
+      |        {
+      |            "ppdSubmissionId": "AB0000000099",
+      |            "completionDate": "2023-04-28",
+      |            "disposalProceeds": 454.24,
+      |            "acquisitionDate": "2023-04-29",
+      |            "acquisitionAmount": 3434.45,
+      |            "improvementCosts": 233.45,
+      |            "additionalCosts": 423.34,
+      |            "prfAmount": 2324.67,
+      |            "otherReliefAmount": 3434.23,
+      |            "lossesFromThisYear": 436.23,
+      |            "lossesFromPreviousYear": 234.23,
+      |            "amountOfNetGain": 4567.89,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        },
+      |        {
+      |            "ppdSubmissionId": "AB0000000091",
+      |            "completionDate": "2023-08-28",
+      |            "disposalProceeds": 454.24,
+      |            "acquisitionDate": "2023-08-29",
+      |            "acquisitionAmount": 3434.45,
+      |            "improvementCosts": 233.45,
+      |            "additionalCosts": 423.34,
+      |            "prfAmount": 2324.67,
+      |            "otherReliefAmount": 3434.23,
+      |            "lossesFromThisYear": 436.23,
+      |            "lossesFromPreviousYear": 234.23,
+      |            "amountOfNetLoss": 4567.89,
+      |            "gainsWithBadr": 1999.99,
+      |            "gainsWithInv": 1999.99
+      |        }
       |    ]
       |}
       |""".stripMargin
@@ -85,16 +102,20 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
   private val validOnlyMultiplePropertyDisposalsRequestJson: JsValue = Json.parse(
     """
       |{
-      |    "multiplePropertyDisposals": [
-      |         {
-      |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetGain": 1234.78
-      |         },
-      |         {
-      |            "ppdSubmissionId": "AB0000000098",
-      |            "amountOfNetLoss": 134.99
-      |         }
-      |    ]
+      |  "multiplePropertyDisposals": [
+      |    {
+      |      "ppdSubmissionId": "AB0000000092",
+      |      "amountOfNetGain": 1234.78,
+      |      "gainsWithBadr": 1999.99,
+      |      "gainsWithInv": 1999.99
+      |    },
+      |    {
+      |      "ppdSubmissionId": "AB0000000098",
+      |      "amountOfNetLoss": 134.99,
+      |      "gainsWithBadr": 1999.99,
+      |      "gainsWithInv": 1999.99
+      |    }
+      |  ]
       |}
       |""".stripMargin
   )
@@ -102,36 +123,40 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
   private val validOnlySinglePropertyDisposalsRequestJson: JsValue = Json.parse(
     """
       |{
-      |   "singlePropertyDisposals": [
-      |         {
-      |             "ppdSubmissionId": "AB0000000098",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetGain": 4567.89
-      |         },
-      |         {
-      |             "ppdSubmissionId": "AB0000000091",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetLoss": 4567.89
-      |         }
-      |    ]
+      |  "singlePropertyDisposals": [
+      |    {
+      |      "ppdSubmissionId": "AB0000000099",
+      |      "completionDate": "2023-04-28",
+      |      "disposalProceeds": 454.24,
+      |      "acquisitionDate": "2023-04-29",
+      |      "acquisitionAmount": 3434.45,
+      |      "improvementCosts": 233.45,
+      |      "additionalCosts": 423.34,
+      |      "prfAmount": 2324.67,
+      |      "otherReliefAmount": 3434.23,
+      |      "lossesFromThisYear": 436.23,
+      |      "lossesFromPreviousYear": 234.23,
+      |      "amountOfNetGain": 4567.89,
+      |      "gainsWithBadr": 1999.99,
+      |      "gainsWithInv": 1999.99
+      |    },
+      |    {
+      |      "ppdSubmissionId": "AB0000000091",
+      |      "completionDate": "2023-08-28",
+      |      "disposalProceeds": 454.24,
+      |      "acquisitionDate": "2023-08-29",
+      |      "acquisitionAmount": 3434.45,
+      |      "improvementCosts": 233.45,
+      |      "additionalCosts": 423.34,
+      |      "prfAmount": 2324.67,
+      |      "otherReliefAmount": 3434.23,
+      |      "lossesFromThisYear": 436.23,
+      |      "lossesFromPreviousYear": 234.23,
+      |      "amountOfNetLoss": 4567.89,
+      |      "gainsWithBadr": 1999.99,
+      |      "gainsWithInv": 1999.99
+      |    }
+      |  ]
       |}
       |""".stripMargin
   )
@@ -151,14 +176,6 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       |    ],
       |    "singlePropertyDisposals": [
       |         {
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
       |             "lossesFromThisYear": 436.23,
       |             "lossesFromPreviousYear": 234.23,
       |             "amountOfNetGain": 4567.89
@@ -246,100 +263,6 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       |             "completionDate": "2020-02-28",
       |             "disposalProceeds": 454.24,
       |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetGain": 4567.89
-      |         },
-      |         {
-      |             "ppdSubmissionId": "AB0000000091",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45,
-      |             "improvementCosts": 233.45,
-      |             "additionalCosts": 423.34,
-      |             "prfAmount": 2324.67,
-      |             "otherReliefAmount": 3434.23,
-      |             "lossesFromThisYear": 436.23,
-      |             "lossesFromPreviousYear": 234.23,
-      |             "amountOfNetLoss": 4567.89
-      |         }
-      |    ]
-      |}
-      |""".stripMargin
-  )
-
-  private val invalidValueRequestBodyJson: JsValue = Json.parse(
-    """
-      |{
-      |    "multiplePropertyDisposals": [
-      |         {
-      |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetGain": 1234.787385
-      |         },
-      |         {
-      |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetLoss": -134.99
-      |         }
-      |    ],
-      |    "singlePropertyDisposals": [
-      |         {
-      |             "ppdSubmissionId": "AB0000000092",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": 454.24999,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45346,
-      |             "improvementCosts": 233.4628,
-      |             "additionalCosts": 423.34829,
-      |             "prfAmount": -2324.67,
-      |             "otherReliefAmount": -3434.23,
-      |             "lossesFromThisYear": 436.23297423,
-      |             "lossesFromPreviousYear": 234.2334728,
-      |             "amountOfNetGain": 4567.8974726
-      |         },
-      |         {
-      |             "ppdSubmissionId": "AB0000000092",
-      |             "completionDate": "2020-02-28",
-      |             "disposalProceeds": -454.24,
-      |             "acquisitionDate": "2020-03-29",
-      |             "acquisitionAmount": 3434.45837,
-      |             "improvementCosts": 233.4628,
-      |             "additionalCosts": -423.34,
-      |             "prfAmount": 2324.678372,
-      |             "otherReliefAmount": -3434.23,
-      |             "lossesFromThisYear": 436.23287,
-      |             "lossesFromPreviousYear": -234.23,
-      |             "amountOfNetLoss": 4567.8983724
-      |         }
-      |    ]
-      |}
-      |""".stripMargin
-  )
-
-  private def invalidDateRequestBodyJson(acquisitionDate: String, completionDate: String): JsValue = Json.parse(
-    s"""
-      |{
-      |    "multiplePropertyDisposals": [
-      |         {
-      |            "ppdSubmissionId": "AB0000000092",
-      |            "amountOfNetGain": 1234.78
-      |         },
-      |         {
-      |            "ppdSubmissionId": "AB0000000098",
-      |            "amountOfNetLoss": 134.99
-      |         }
-      |    ],
-      |    "singlePropertyDisposals": [
-      |         {
-      |             "ppdSubmissionId": "AB0000000099",
-      |             "completionDate": "$completionDate",
-      |             "disposalProceeds": 454.24,
-      |             "acquisitionDate": "$acquisitionDate",
       |             "acquisitionAmount": 3434.45,
       |             "improvementCosts": 233.45,
       |             "additionalCosts": 423.34,
@@ -556,13 +479,113 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       |""".stripMargin
   )
 
+  private val invalidValueRequestBodyJson: JsValue = Json.parse(
+    """
+      |{
+      |    "multiplePropertyDisposals": [
+      |         {
+      |            "ppdSubmissionId": "AB0000000092",
+      |            "amountOfNetGain": 1234.787385,
+      |            "gainsWithBadr": 244.99444444
+      |         },
+      |         {
+      |            "ppdSubmissionId": "AB0000000092",
+      |            "amountOfNetLoss": -134.99,
+      |            "gainsWithBadr": -134.99,
+      |            "gainsWithInv": -134.99
+      |         }
+      |    ],
+      |    "singlePropertyDisposals": [
+      |         {
+      |             "ppdSubmissionId": "AB0000000092",
+      |             "completionDate": "2020-02-28",
+      |             "disposalProceeds": 454.24999,
+      |             "acquisitionDate": "2020-03-29",
+      |             "acquisitionAmount": 3434.45346,
+      |             "improvementCosts": 233.4628,
+      |             "additionalCosts": 423.34829,
+      |             "prfAmount": -2324.67,
+      |             "otherReliefAmount": -3434.23,
+      |             "lossesFromThisYear": 436.23297423,
+      |             "lossesFromPreviousYear": 234.2334728,
+      |             "amountOfNetGain": 4567.8974726,
+      |             "gainsWithBadr": -134.99,
+      |             "gainsWithInv": -134.99
+      |         },
+      |         {
+      |             "ppdSubmissionId": "AB0000000092",
+      |             "completionDate": "2020-02-28",
+      |             "disposalProceeds": -454.24,
+      |             "acquisitionDate": "2020-03-29",
+      |             "acquisitionAmount": 3434.45837,
+      |             "improvementCosts": 233.4628,
+      |             "additionalCosts": -423.34,
+      |             "prfAmount": 2324.678372,
+      |             "otherReliefAmount": -3434.23,
+      |             "lossesFromThisYear": 436.23287,
+      |             "lossesFromPreviousYear": -234.23,
+      |             "amountOfNetLoss": 4567.8983724
+      |         }
+      |    ]
+      |}
+      |""".stripMargin
+  )
+
+  private def invalidDateRequestBodyJson(acquisitionDate: String, completionDate: String): JsValue = Json.parse(
+    s"""
+       |{
+       |    "multiplePropertyDisposals": [
+       |         {
+       |            "ppdSubmissionId": "AB0000000092",
+       |            "amountOfNetGain": 1234.78
+       |         },
+       |         {
+       |            "ppdSubmissionId": "AB0000000098",
+       |            "amountOfNetLoss": 134.99
+       |         }
+       |    ],
+       |    "singlePropertyDisposals": [
+       |         {
+       |             "ppdSubmissionId": "AB0000000099",
+       |             "completionDate": "$completionDate",
+       |             "disposalProceeds": 454.24,
+       |             "acquisitionDate": "$acquisitionDate",
+       |             "acquisitionAmount": 3434.45,
+       |             "improvementCosts": 233.45,
+       |             "additionalCosts": 423.34,
+       |             "prfAmount": 2324.67,
+       |             "otherReliefAmount": 3434.23,
+       |             "lossesFromThisYear": 436.23,
+       |             "lossesFromPreviousYear": 234.23,
+       |             "amountOfNetGain": 4567.89
+       |         },
+       |         {
+       |             "ppdSubmissionId": "AB0000000091",
+       |             "completionDate": "2020-02-28",
+       |             "disposalProceeds": 454.24,
+       |             "acquisitionDate": "2020-03-29",
+       |             "acquisitionAmount": 3434.45,
+       |             "improvementCosts": 233.45,
+       |             "additionalCosts": 423.34,
+       |             "prfAmount": 2324.67,
+       |             "otherReliefAmount": 3434.23,
+       |             "lossesFromThisYear": 436.23,
+       |             "lossesFromPreviousYear": 234.23,
+       |             "amountOfNetLoss": 4567.89
+       |         }
+       |    ]
+       |}
+       |""".stripMargin
+  )
+
   private val parsedNino                  = Nino(validNino)
   private val parsedTaxYear               = TaxYear.fromMtd(validTaxYear)
-  private val parsedValidRequestBody      = validRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
-  private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
-  private val parsedValidSingleOnlyBody   = validOnlySinglePropertyDisposalsRequestJson.as[Def1_CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidRequestBody      = validRequestJson.as[Def2_CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidMultipleOnlyBody = validOnlyMultiplePropertyDisposalsRequestJson.as[Def2_CreateAmendCgtPpdOverridesRequestBody]
+  private val parsedValidSingleOnlyBody   = validOnlySinglePropertyDisposalsRequestJson.as[Def2_CreateAmendCgtPpdOverridesRequestBody]
 
-  private val validatorFactory                                        = new CreateAmendCgtPpdOverridesValidatorFactory
+  private val validatorFactory = new CreateAmendCgtPpdOverridesValidatorFactory
+
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
   class Test {
@@ -578,59 +601,59 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
       "a valid request is supplied" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
           validator(validNino, validTaxYear, validRequestJson).validateAndWrapResult()
-        result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody))
+        result shouldBe Right(Def2_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody))
       }
-    }
 
-    "a valid request containing only multiple disposals is supplied" in new Test {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
-      result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidMultipleOnlyBody))
-    }
-
-    "a valid request containing only single disposals is supplied" in new Test {
-      val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-        validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
-      result shouldBe Right(Def1_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidSingleOnlyBody))
-    }
-
-    "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test {
+      "a valid request containing only multiple disposals is supplied" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, NinoFormatError)
-        )
+          validator(validNino, validTaxYear, validOnlyMultiplePropertyDisposalsRequestJson).validateAndWrapResult()
+        result shouldBe Right(Def2_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidMultipleOnlyBody))
       }
-    }
 
-    "return TaxYearFormatError error" when {
-      "an invalid tax year is supplied" in new Test {
+      "a valid request containing only single disposals is supplied" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator(validNino, "201718", validRequestJson).validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, TaxYearFormatError)
-        )
+          validator(validNino, validTaxYear, validOnlySinglePropertyDisposalsRequestJson).validateAndWrapResult()
+        result shouldBe Right(Def2_CreateAmendCgtPpdOverridesRequestData(parsedNino, parsedTaxYear, parsedValidSingleOnlyBody))
       }
-    }
 
-    "return RuleTaxYearRangeInvalidError error" when {
-      "an invalid tax year range is supplied" in new Test {
-        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
-        )
+      "return NinoFormatError error" when {
+        "an invalid nino is supplied" in new Test {
+          val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+            validator("A12344A", validTaxYear, validRequestJson).validateAndWrapResult()
+          result shouldBe Left(
+            ErrorWrapper(correlationId, NinoFormatError)
+          )
+        }
       }
-    }
 
-    "return RuleTaxYearNotSupportedError error" when {
-      "an out of range tax year is supplied" in new Test {
-        val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
-          validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
-        result shouldBe Left(
-          ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
-        )
+      "return TaxYearFormatError error" when {
+        "an invalid tax year is supplied" in new Test {
+          val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+            validator(validNino, "201718", validRequestJson).validateAndWrapResult()
+          result shouldBe Left(
+            ErrorWrapper(correlationId, TaxYearFormatError)
+          )
+        }
+      }
+
+      "return RuleTaxYearRangeInvalidError error" when {
+        "an invalid tax year range is supplied" in new Test {
+          val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+            validator(validNino, "2017-19", validRequestJson).validateAndWrapResult()
+          result shouldBe Left(
+            ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
+          )
+        }
+      }
+
+      "return RuleTaxYearNotSupportedError error" when {
+        "an out of range tax year is supplied" in new Test {
+          val result: Either[ErrorWrapper, CreateAmendCgtPpdOverridesRequestData] =
+            validator(validNino, "2016-17", validRequestJson).validateAndWrapResult()
+          result shouldBe Left(
+            ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
+          )
+        }
       }
     }
 
@@ -654,7 +677,15 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
             RuleIncorrectOrEmptyBodyError.withPaths(Seq(
               "/multiplePropertyDisposals/0/ppdSubmissionId",
               "/multiplePropertyDisposals/1/ppdSubmissionId",
+              "/singlePropertyDisposals/0/acquisitionAmount",
+              "/singlePropertyDisposals/0/acquisitionDate",
+              "/singlePropertyDisposals/0/additionalCosts",
+              "/singlePropertyDisposals/0/completionDate",
+              "/singlePropertyDisposals/0/disposalProceeds",
+              "/singlePropertyDisposals/0/improvementCosts",
+              "/singlePropertyDisposals/0/otherReliefAmount",
               "/singlePropertyDisposals/0/ppdSubmissionId",
+              "/singlePropertyDisposals/0/prfAmount",
               "/singlePropertyDisposals/1/ppdSubmissionId"
             ))
           )
@@ -723,7 +754,10 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
             correlationId,
             ValueFormatError.withPaths(Seq(
               "/multiplePropertyDisposals/0/amountOfNetGain",
+              "/multiplePropertyDisposals/0/gainsWithBadr",
               "/multiplePropertyDisposals/1/amountOfNetLoss",
+              "/multiplePropertyDisposals/1/gainsWithBadr",
+              "/multiplePropertyDisposals/1/gainsWithInv",
               "/singlePropertyDisposals/0/disposalProceeds",
               "/singlePropertyDisposals/0/acquisitionAmount",
               "/singlePropertyDisposals/0/improvementCosts",
@@ -733,6 +767,8 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
               "/singlePropertyDisposals/0/lossesFromThisYear",
               "/singlePropertyDisposals/0/lossesFromPreviousYear",
               "/singlePropertyDisposals/0/amountOfNetGain",
+              "/singlePropertyDisposals/0/gainsWithBadr",
+              "/singlePropertyDisposals/0/gainsWithInv",
               "/singlePropertyDisposals/1/disposalProceeds",
               "/singlePropertyDisposals/1/acquisitionAmount",
               "/singlePropertyDisposals/1/improvementCosts",
@@ -851,6 +887,7 @@ class Def1_CreateAmendCgtPpdOverridesRulesValidatorSpec extends UnitSpec with Mo
         )
       }
     }
+
   }
 
 }

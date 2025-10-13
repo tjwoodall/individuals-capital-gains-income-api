@@ -19,10 +19,21 @@ package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 import common.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
+import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.Def2_CreateAmendCgtPpdOverridesValidator
+import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
 class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+
+  private trait Test {
+
+    MockedAppConfig.minimumPermittedTaxYear
+      .returns(2020)
+      .anyNumberOfTimes()
+
+  }
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2019-20"
@@ -37,17 +48,29 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with JsonE
 
   private val validRequestBody = requestBodyJson()
 
-  private val validatorFactory = new CreateAmendCgtPpdOverridesValidatorFactory(mockAppConfig)
+  private val validatorFactory = new CreateAmendCgtPpdOverridesValidatorFactory
 
-  "running a validation" should {
-    "return the Def1 validator" when {
-      "given a request handled by a Def1 schema" in {
-        val result = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
+  "CreateAmendCgtPpdOverridesValidatorFactory" when {
+    "given a request corresponding to a Def1 schema" should {
+      "return a Def1 validator" in new Test {
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
         result shouldBe a[Def1_CreateAmendCgtPpdOverridesValidator]
-
       }
     }
 
+    "given a request corresponding to a Def2 schema" should {
+      "return a Def2 validator" in new Test {
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "2025-26", validRequestBody)
+        result shouldBe a[Def2_CreateAmendCgtPpdOverridesValidator]
+      }
+    }
+
+    "given a request where no valid schema could be determined" should {
+      "return a validator returning the errors" in new Test {
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "BAD_TAX_YEAR", validRequestBody)
+        result shouldBe a[AlwaysErrorsValidator]
+      }
+    }
   }
 
 }
