@@ -41,7 +41,7 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
-    def taxYear: TaxYear
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
     val request: Def2_RetrieveCgtPpdOverridesRequestData = Def2_RetrieveCgtPpdOverridesRequestData(Nino(nino), taxYear, source)
 
@@ -74,38 +74,56 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
   }
 
   "RetrieveCgtPpdOverridesConnector" should {
+    "return a 200 status for a success scenario" when {
+      List(
+        (false, None),
+        (true, Some("PPD"))
+      ).foreach { case (passIntentHeaderFlag, intentValue) =>
+        s"the request is for Non-TYS tax years and passIntentHeader is set to $passIntentHeaderFlag" in new DesTest with Test {
+          override def taxYear: TaxYear       = TaxYear.fromMtd("2018-19")
+          override def intent: Option[String] = intentValue
 
-    "return a 200 status for a success" when {
-      "the request is for Non-TYS tax years" in new DesTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
-        val outcome          = Right(ResponseWrapper(correlationId, response))
+          val outcome = Right(ResponseWrapper(correlationId, response))
 
-        stubHttpResponse(outcome)
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
 
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
+          stubHttpResponse(outcome)
 
-      "the request is for TYS tax years and the downstream is IFS" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome          = Right(ResponseWrapper(correlationId, response))
+          val result: DownstreamOutcome[RetrieveCgtPpdOverridesResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
 
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> false))
-        stubTysIfsHttpResponse(outcome)
+        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is IFS" in new IfsTest with Test {
+          override def intent: Option[String] = intentValue
 
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
+          val outcome = Right(ResponseWrapper(correlationId, response))
 
-      "the request is for TYS tax years and the downstream is HIP" in new HipTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome          = Right(ResponseWrapper(correlationId, response))
+          MockedSharedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration("ifs_hip_migration_1881.enabled" -> false, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+            )
+            .twice()
+          stubTysIfsHttpResponse(outcome)
 
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> true))
-        stubTysHipHttpResponse(outcome)
+          val result: DownstreamOutcome[RetrieveCgtPpdOverridesResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
 
-        val result = await(connector.retrieve(request))
-        result shouldBe outcome
+        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is HIP" in new HipTest with Test {
+          override def intent: Option[String] = intentValue
+
+          val outcome = Right(ResponseWrapper(correlationId, response))
+
+          MockedSharedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration("ifs_hip_migration_1881.enabled" -> true, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+            )
+            .twice()
+          stubTysHipHttpResponse(outcome)
+
+          val result: DownstreamOutcome[RetrieveCgtPpdOverridesResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
       }
     }
   }

@@ -50,7 +50,10 @@ class RetrieveCgtResidentialPropertyConnector @Inject() (val http: HttpClientV2,
       case _ =>
         DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }
-    get(downstreamUri)
+
+    val maybeIntent: Option[String] = if (ConfigFeatureSwitches().isEnabled("passIntentHeader")) Some("NON_PPD") else None
+
+    get(downstreamUri, maybeIntent = maybeIntent)
   }
 
 }

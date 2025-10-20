@@ -39,7 +39,7 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
   trait Test {
     self: ConnectorTest =>
 
-    def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
+    def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
     val request: Def1_RetrieveCgtResidentialPropertyRequestData =
       Def1_RetrieveCgtResidentialPropertyRequestData(Nino(nino), taxYear)
@@ -70,39 +70,57 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
 
   }
 
-  "RetrieveCgtResidentialPropertyConnector" must {
+  "RetrieveCgtResidentialPropertyConnector" should {
+    "return a 200 status for a success scenario" when {
+      List(
+        (false, None),
+        (true, Some("NON_PPD"))
+      ).foreach { case (passIntentHeaderFlag, intentValue) =>
+        s"the request is for Non-TYS tax years and passIntentHeader is set to $passIntentHeaderFlag" in new DesTest with Test {
+          override def taxYear: TaxYear       = TaxYear.fromMtd("2018-19")
+          override def intent: Option[String] = intentValue
 
-    "return a 200 status for a success scenario for Non-TYS tax years" in new DesTest with Test {
+          val outcome = Right(ResponseWrapper(correlationId, response))
 
-      val outcome = Right(ResponseWrapper(correlationId, response))
+          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
 
-      stubHttpResponse(outcome)
+          stubHttpResponse(outcome)
 
-      val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
-      result shouldBe outcome
-    }
-  }
+          val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
 
-  "retrieve for Tax Year Specific (TYS)" must {
-    "return a 200 status for a success scenario for TYS tax Years" when {
-      "the downstream is IFS" in new IfsTest with Test {
-        override def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome                   = Right(ResponseWrapper(correlationId, response))
+        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is IFS" in new IfsTest with Test {
+          override def intent: Option[String] = intentValue
 
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> false))
-        stubTysIfsHttpResponse(outcome)
+          val outcome = Right(ResponseWrapper(correlationId, response))
 
-        val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
-        result shouldBe outcome
-      }
-      "the downstream is HIP" in new HipTest with Test {
-        override def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        val outcome                   = Right(ResponseWrapper(correlationId, response))
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1881.enabled" -> true))
-        stubTysHipHttpResponse(outcome)
+          MockedSharedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration("ifs_hip_migration_1881.enabled" -> false, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+            )
+            .twice()
+          stubTysIfsHttpResponse(outcome)
 
-        val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
-        result shouldBe outcome
+          val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
+
+        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is HIP" in new HipTest with Test {
+          override def intent: Option[String] = intentValue
+
+          val outcome = Right(ResponseWrapper(correlationId, response))
+
+          MockedSharedAppConfig.featureSwitchConfig
+            .returns(
+              Configuration("ifs_hip_migration_1881.enabled" -> true, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+            )
+            .twice()
+          stubTysHipHttpResponse(outcome)
+
+          val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
+          result shouldBe outcome
+        }
       }
     }
   }

@@ -35,6 +35,7 @@ class RetrieveCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val ap
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveCgtPpdOverridesResponse]] = {
+
     import request.*
     import schema.*
 
@@ -52,7 +53,9 @@ class RetrieveCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val ap
         DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }
 
-    get(downstreamUri, queryParams)
+    val maybeIntent: Option[String] = if (ConfigFeatureSwitches().isEnabled("passIntentHeader")) Some("PPD") else None
+
+    get(downstreamUri, queryParams, maybeIntent)
   }
 
 }
