@@ -16,17 +16,14 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def2
 
-import common.errors.{ClaimOrElectionCodesFormatError, CustomerRefFormatError, RuleGainLossError, RuleIncorrectLossesSubmittedError}
+import common.errors.*
 import config.MockAppConfig
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.*
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
-import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.{
-  Def2_CreateAmendCgtResidentialPropertyDisposalsRequestBody,
-  Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData
-}
+import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.*
 import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 class Def2_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitSpec with MockAppConfig {
@@ -757,18 +754,30 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
       }
     }
 
-    "return RuleGainLossError error" when {
-      "gain and loss fields are both supplied" in new Test {
+    "return RuleAmountGainLossError error" when {
+      "amountOfNetGain and amountOfNetLoss fields are both supplied" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, gainAndLossJson).validateAndWrapResult()
 
         result shouldBe Left(
-          ErrorWrapper(correlationId, RuleGainLossError.withPath("/disposals/0"))
+          ErrorWrapper(correlationId, RuleAmountGainLossError.withPath("/disposals/0"))
+        )
+      }
+
+      "neither amountOfNetGain or amountOfNetLoss fields are supplied" in new Test {
+        val neitherGainOrLoss: JsValue = gainAndLossJson.as[JsObject] - "amountOfNetGain" - "amountOfNetLoss"
+
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, validTaxYear, neitherGainOrLoss).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleAmountGainLossError.withPath("/disposals/0"))
         )
       }
     }
+
     "return RuleIncorrectLossesSubmittedError error" when {
-      "numberOfDisposals and lossesFromThisYear fields are both supplied" in new Test {
+      "numberOfDisposals and lossesFromThisYear fields are both supplied and there are less than 2 disposals" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, numberOfDisposalsJson).validateAndWrapResult()
 

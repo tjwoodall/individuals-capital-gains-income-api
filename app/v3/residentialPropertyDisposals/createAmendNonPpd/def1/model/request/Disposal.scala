@@ -33,7 +33,10 @@ case class Disposal(customerReference: Option[String],
                     lossesFromPreviousYear: Option[BigDecimal],
                     amountOfNetGain: Option[BigDecimal],
                     amountOfNetLoss: Option[BigDecimal]) {
+
   def gainAndLossAreBothSupplied: Boolean = amountOfNetLoss.isDefined && amountOfNetGain.isDefined
+
+  def isNetAmountEmpty: Boolean = amountOfNetLoss.isEmpty && amountOfNetGain.isEmpty
 }
 
 object Disposal {

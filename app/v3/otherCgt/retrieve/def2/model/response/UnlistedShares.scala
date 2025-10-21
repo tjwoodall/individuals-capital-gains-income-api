@@ -17,9 +17,9 @@
 package v3.otherCgt.retrieve.def2.model.response
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.*
 
-case class UnlistedShares(numberOfDisposals: Int,
+case class UnlistedShares(numberOfDisposals: BigInt,
                           assetDescription: String,
                           companyName: String,
                           companyRegistrationNumber: Option[String],
@@ -44,7 +44,7 @@ case class UnlistedShares(numberOfDisposals: Int,
 object UnlistedShares {
 
   implicit val reads: Reads[UnlistedShares] = (
-    (JsPath \ "numberOfDisposals").read[Int] and
+    (JsPath \ "numberOfDisposals").read[BigInt] and
       (JsPath \ "assetDescription").read[String] and
       (JsPath \ "companyName").read[String] and
       (JsPath \ "companyRegistrationNumber").readNullable[String] and

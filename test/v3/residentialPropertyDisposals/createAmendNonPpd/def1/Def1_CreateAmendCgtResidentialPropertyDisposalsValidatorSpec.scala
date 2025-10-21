@@ -16,9 +16,9 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def1
 
-import common.errors.{CustomerRefFormatError, RuleGainLossError}
+import common.errors.*
 import config.MockAppConfig
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.*
 import support.UnitSpec
@@ -328,8 +328,6 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
   private def validator(nino: String, taxYear: String, body: JsValue) =
     validatorFactory.validator(nino, taxYear, body)
 
-//  private val MINIMUM_YEAR = 2020
-//  MockedAppConfig.minimumPermittedTaxYear returns MINIMUM_YEAR
   class Test {
 
     MockedAppConfig.minimumPermittedTaxYear
@@ -625,13 +623,24 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
       }
     }
 
-    "return RuleGainLossError error" when {
-      "gain and loss fields are both supplied" in new Test {
+    "return RuleAmountGainLossError error" when {
+      "amountOfNetGain and amountOfNetLoss fields are both supplied" in new Test {
         val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
           validator(validNino, validTaxYear, gainAndLossJson).validateAndWrapResult()
 
         result shouldBe Left(
-          ErrorWrapper(correlationId, RuleGainLossError.withPath("/disposals/0"))
+          ErrorWrapper(correlationId, RuleAmountGainLossError.withPath("/disposals/0"))
+        )
+      }
+
+      "neither amountOfNetGain or amountOfNetLoss fields are supplied" in new Test {
+        val neitherGainOrLoss: JsValue = gainAndLossJson.as[JsObject] - "amountOfNetGain" - "amountOfNetLoss"
+
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, validTaxYear, neitherGainOrLoss).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleAmountGainLossError.withPath("/disposals/0"))
         )
       }
     }

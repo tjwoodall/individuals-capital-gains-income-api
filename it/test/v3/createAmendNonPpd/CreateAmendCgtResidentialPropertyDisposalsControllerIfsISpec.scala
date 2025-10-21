@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package v3.endpoints.createAmendNonPpd
+package v3.createAmendNonPpd
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -29,7 +29,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1952.enabled" -> false) ++ super.servicesConfig
 
   val validDisposalDate: String    = "2020-03-27"
   val validCompletionDate: String  = "2020-03-29"
@@ -40,7 +43,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "CGTDISPOSAL01",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -51,10 +53,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 1999.99,
       |         "prfAmount": 1999.99,
       |         "otherReliefAmount": 1999.99,
-      |         "gainsWithBadr": 99999999999.99,
-      |         "gainsBeforeLosses": 99999999999.99,
-      |         "lossesFromThisYear": 1999.99,  
-      |         "claimOrElectionCodes": ["PRR"],
+      |         "lossesFromThisYear": 1999.99,
+      |         "lossesFromPreviousYear": 1999.99,
       |         "amountOfNetGain": 1999.99
       |      }
       |   ]
@@ -90,26 +90,20 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
      """.stripMargin
   )
 
-  val missingFieldsError: MtdError = RuleIncorrectOrEmptyBodyError.copy(
-    paths = Some(
-      Seq(
-        "/disposals/0/acquisitionAmount",
-        "/disposals/0/acquisitionDate",
-        "/disposals/0/completionDate",
-        "/disposals/0/disposalDate",
-        "/disposals/0/disposalProceeds",
-        "/disposals/0/gainsBeforeLosses",
-        "/disposals/0/numberOfDisposals"
-      )
-    )
-  )
+  val missingFieldsError: MtdError = RuleIncorrectOrEmptyBodyError.withPaths(
+    Seq(
+      "/disposals/0/acquisitionAmount",
+      "/disposals/0/acquisitionDate",
+      "/disposals/0/completionDate",
+      "/disposals/0/disposalDate",
+      "/disposals/0/disposalProceeds"
+    ))
 
   val decimalsTooBigJson: JsValue = Json.parse(
     s"""
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "CGTDISPOSAL01",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -120,9 +114,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 100000000000.00,
       |         "prfAmount": 100000000000.00,
       |         "otherReliefAmount": 100000000000.00,
-      |         "gainsWithBadr": 100000000000.00,
-      |         "gainsBeforeLosses": 100000000000.00,
       |         "lossesFromThisYear": 100000000000.00,
+      |         "lossesFromPreviousYear": 100000000000.00,
       |         "amountOfNetGain": 100000000000.00
       |      }
       |   ]
@@ -135,7 +128,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "CGTDISPOSAL01",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -146,9 +138,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": -0.1,
       |         "prfAmount": -0.1,
       |         "otherReliefAmount": -0.1,
-      |         "gainsWithBadr": -0.1,
-      |         "gainsBeforeLosses": -0.1,
       |         "lossesFromThisYear": -0.1,
+      |         "lossesFromPreviousYear": -0.1,
       |         "amountOfNetGain": -0.1
       |      }
       |   ]
@@ -156,29 +147,24 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
      """.stripMargin
   )
 
-  val DecimalsOutOfRangeError: MtdError = ValueFormatError.copy(
-    message = "The value must be between 0 and 99999999999.99",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalProceeds",
-        "/disposals/0/acquisitionAmount",
-        "/disposals/0/gainsBeforeLosses",
-        "/disposals/0/improvementCosts",
-        "/disposals/0/additionalCosts",
-        "/disposals/0/prfAmount",
-        "/disposals/0/otherReliefAmount",
-        "/disposals/0/gainsWithBadr",
-        "/disposals/0/lossesFromThisYear",
-        "/disposals/0/amountOfNetGain"
-      ))
-  )
+  val decimalsOutOfRangeError: MtdError = ValueFormatError.withPaths(
+    Seq(
+      "/disposals/0/disposalProceeds",
+      "/disposals/0/acquisitionAmount",
+      "/disposals/0/improvementCosts",
+      "/disposals/0/additionalCosts",
+      "/disposals/0/prfAmount",
+      "/disposals/0/otherReliefAmount",
+      "/disposals/0/lossesFromThisYear",
+      "/disposals/0/lossesFromPreviousYear",
+      "/disposals/0/amountOfNetGain"
+    ))
 
   val datesNotFormattedJson: JsValue = Json.parse(
     s"""
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "CGTDISPOSAL01",
       |         "disposalDate": "202005-07",
       |         "completionDate": "21-05-07",
@@ -189,9 +175,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 1999.99,
       |         "prfAmount": 1999.99,
       |         "otherReliefAmount": 1999.99,
-      |         "gainsWithBadr": 1999.99,
-      |         "gainsBeforeLosses": 1999.99,
       |         "lossesFromThisYear": 1999.99,
+      |         "lossesFromPreviousYear": 1999.99,
       |         "amountOfNetGain": 1999.99
       |      }
       |   ]
@@ -199,22 +184,14 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
      """.stripMargin
   )
 
-  val datesNotFormattedError: MtdError = DateFormatError.copy(
-    message = "The supplied date format is not valid",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalDate",
-        "/disposals/0/completionDate",
-        "/disposals/0/acquisitionDate"
-      ))
-  )
+  val datesNotFormattedError: MtdError =
+    DateFormatError.withPaths(Seq("/disposals/0/disposalDate", "/disposals/0/completionDate", "/disposals/0/acquisitionDate"))
 
   val customerRefTooLongJson: JsValue = Json.parse(
     s"""
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "ThisIs91CharactersLongCGTDIS000000000000000000000000000000000000000000000000000000000000001",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -225,9 +202,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 1999.99,
       |         "prfAmount": 1999.99,
       |         "otherReliefAmount": 1999.99,
-      |         "gainsWithBadr": 1999.99,
-      |         "gainsBeforeLosses": 1999.99,
       |         "lossesFromThisYear": 1999.99,
+      |         "lossesFromPreviousYear": 1999.99,
       |         "amountOfNetGain": 1999.99
       |      }
       |   ]
@@ -240,7 +216,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -251,9 +226,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 1999.99,
       |         "prfAmount": 1999.99,
       |         "otherReliefAmount": 1999.99,
-      |         "gainsWithBadr": 1999.99,
-      |         "gainsBeforeLosses": 1999.99,
       |         "lossesFromThisYear": 1999.99,
+      |         "lossesFromPreviousYear": 1999.99,
       |         "amountOfNetGain": 1999.99
       |      }
       |   ]
@@ -261,49 +235,13 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
      """.stripMargin
   )
 
-  val numberOfDisposalsError: MtdError = ValueFormatError.copy(
-    message = "The value must be an integer between 1 and 9999",
-    paths = Some(
-      Seq(
-        "/disposals/0/numberOfDisposals"
-      ))
-  )
-
-  val claimOrElectionCodesError: MtdError = ClaimOrElectionCodesFormatError.withPath("/disposals/0/claimOrElectionCodes/1")
-
   val customerRefError: MtdError = CustomerRefFormatError.withPath("/disposals/0/customerReference")
-
-  val badClaimOrElectionCodesJson: JsValue = Json.parse(
-    s"""
-       |{
-       |   "disposals":[
-       |      {
-       |         "numberOfDisposals": 2,
-       |         "customerReference": "CGTDISPOSAL01",
-       |         "disposalDate": "$validDisposalDate",
-       |         "completionDate": "$validCompletionDate",
-       |         "disposalProceeds": 1999.99,
-       |         "acquisitionDate": "$validAcquisitionDate",
-       |         "acquisitionAmount": 1999.99,
-       |         "improvementCosts": 1999.99,
-       |         "additionalCosts": 1999.99,
-       |         "prfAmount": 1999.99,
-       |         "otherReliefAmount": 1999.99,
-       |         "gainsBeforeLosses": 123.43,
-       |         "claimOrElectionCodes": ["PRR", "BADS"],
-       |         "amountOfNetGain": 1999.99
-       |      }
-       |   ]
-       |}
-         """.stripMargin
-  )
 
   val gainLossJson: JsValue = Json.parse(
     s"""
       |{
       |   "disposals":[
       |      {
-      |         "numberOfDisposals": 3,
       |         "customerReference": "CGTDISPOSAL01",
       |         "disposalDate": "$validDisposalDate",
       |         "completionDate": "$validCompletionDate",
@@ -314,9 +252,8 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "additionalCosts": 1999.99,
       |         "prfAmount": 1999.99,
       |         "otherReliefAmount": 1999.99,
-      |         "gainsWithBadr": 1999.99,
-      |         "gainsBeforeLosses": 1999.99,
       |         "lossesFromThisYear": 1999.99,
+      |         "lossesFromPreviousYear": 1999.99,
       |         "amountOfNetGain": 19999.99,
       |         "amountOfNetLoss": 19999.99
       |      }
@@ -325,77 +262,14 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
      """.stripMargin
   )
 
-  val lossesFromThisYearJson: JsValue = Json.parse(
-    s"""
-       |{
-       |   "disposals":[
-       |      {
-       |         "numberOfDisposals": 1,
-       |         "customerReference": "CGTDISPOSAL01",
-       |         "disposalDate": "$validDisposalDate",
-       |         "completionDate": "$validCompletionDate",
-       |         "disposalProceeds": 1999.99,
-       |         "acquisitionDate": "$validAcquisitionDate",
-       |         "acquisitionAmount": 1999.99,
-       |         "improvementCosts": 1999.99,
-       |         "additionalCosts": 1999.99,
-       |         "prfAmount": 1999.99,
-       |         "otherReliefAmount": 1999.99,
-       |         "gainsBeforeLosses": 123.43,
-       |         "lossesFromThisYear": 1999.99,
-       |         "amountOfNetGain": 1999.99
-       |      }
-       |   ]
-       |}
-     """.stripMargin
-  )
-
-  val numberOfDisposalsJson: JsValue = Json.parse(
-    s"""
-       |{
-       |   "disposals":[
-       |      {
-       |         "numberOfDisposals": -1,
-       |         "customerReference": "CGTDISPOSAL01",
-       |         "disposalDate": "$validDisposalDate",
-       |         "completionDate": "$validCompletionDate",
-       |         "disposalProceeds": 1999.99,
-       |         "acquisitionDate": "$validAcquisitionDate",
-       |         "acquisitionAmount": 1999.99,
-       |         "improvementCosts": 1999.99,
-       |         "additionalCosts": 1999.99,
-       |         "prfAmount": 1999.99,
-       |         "otherReliefAmount": 1999.99,
-       |         "gainsBeforeLosses": 123.43,
-       |         "amountOfNetGain": 1999.99
-       |      }
-       |   ]
-       |}
-       """.stripMargin
-  )
-
-  val gainLossError: MtdError = RuleGainLossError.copy(
-    message = "Only one of gain or loss values can be provided",
-    paths = Some(
-      Seq(
-        "/disposals/0"
-      ))
-  )
-
-  val lossesFromThisYearRuleError: MtdError = RuleIncorrectLossesSubmittedError.copy(
-    message = "LossesFromThisYear can not be submitted if the numberOfDisposals is less than or equal to 1",
-    paths = Some(
-      Seq(
-        "/disposals/0"
-      ))
-  )
+  val gainLossError: MtdError = RuleAmountGainLossError.withPath("/disposals/0")
 
   trait Test {
 
-    val nino: String    = "AA123456A"
-    def taxYear: String = "2025-26"
+    val nino: String = "AA123456A"
+    def taxYear: String
 
-    def downstreamUri: String = s"/itsa/income-tax/v1/25-26/income/disposals/residential-property/$nino"
+    def downstreamUri: String
 
     def setupStubs(): StubMapping
 
@@ -415,9 +289,39 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
 
   }
 
+  trait NonTysTest extends Test {
+    def taxYear: String = "2019-20"
+
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2019-20"
+  }
+
+  trait TysTest extends Test {
+    def taxYear: String = "2023-24"
+
+    override def request: WSRequest =
+      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
+
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
+  }
+
   "Calling the 'create and amend other CGT' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made for a TYS tax year" in new Test {
+      "any valid request is made" in new NonTysTest {
+
+        override def setupStubs(): StubMapping = {
+          AuditStub.audit()
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
+        }
+
+        val response: WSResponse = await(request.put(validRequestJson))
+        response.status shouldBe NO_CONTENT
+
+        verifyNrs(validRequestJson)
+      }
+
+      "any valid request is made for a TYS tax year" in new TysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -442,7 +346,7 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
                                 expectedError: MtdError,
                                 expectedErrors: Option[ErrorWrapper],
                                 scenario: Option[String]): Unit = {
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new Test {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new NonTysTest {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -462,38 +366,27 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
 
         val input = Seq(
           // Path errors
-          ("AA1123A", "2025-26", validRequestJson, BAD_REQUEST, NinoFormatError, None, None),
+          ("AA1123A", "2019-20", validRequestJson, BAD_REQUEST, NinoFormatError, None, None),
           ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
-
           // Body errors
-          ("AA123456A", "2025-26", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
-          ("AA123456A", "2025-26", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
-          ("AA123456A", "2025-26", missingFieldsJson, BAD_REQUEST, missingFieldsError, None, Some("missing all mandatory fields")),
-          ("AA123456A", "2025-26", decimalsTooBigJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too big")),
-          ("AA123456A", "2025-26", decimalsTooSmallJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too small")),
-          ("AA123456A", "2025-26", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
-          ("AA123456A", "2025-26", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
-          ("AA123456A", "2025-26", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
-          ("AA123456A", "2025-26", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided")),
-          (
-            "AA123456A",
-            "2025-26",
-            lossesFromThisYearJson,
-            BAD_REQUEST,
-            lossesFromThisYearRuleError,
-            None,
-            Some("numberOfDisposals and lossesFromThisYear provided")),
-          ("AA123456A", "2025-26", numberOfDisposalsJson, BAD_REQUEST, numberOfDisposalsError, None, Some("numberOfDisposals is less than 1")),
-          ("AA123456A", "2025-26", badClaimOrElectionCodesJson, BAD_REQUEST, claimOrElectionCodesError, None, Some("invalid claimOrElectionCodes"))
+          ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
+          ("AA123456A", "2019-20", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
+          ("AA123456A", "2019-20", missingFieldsJson, BAD_REQUEST, missingFieldsError, None, Some("missing all mandatory fields")),
+          ("AA123456A", "2019-20", decimalsTooBigJson, BAD_REQUEST, decimalsOutOfRangeError, None, Some("Decimals too big")),
+          ("AA123456A", "2019-20", decimalsTooSmallJson, BAD_REQUEST, decimalsOutOfRangeError, None, Some("Decimals too small")),
+          ("AA123456A", "2019-20", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
+          ("AA123456A", "2019-20", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
+          ("AA123456A", "2019-20", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
+          ("AA123456A", "2019-20", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided"))
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -511,36 +404,33 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
           }
         }
 
-        def errorBody(`type`: String): String =
+        def errorBody(code: String): String =
           s"""
              |{
-             |  "origin": "HIP",
-             |  "response": {
-             |    "failures": [
-             |      {
-             |        "type": "${`type`}",
-             |        "reason": "downstream message"
-             |      }
-             |    ]
-             |  }
+             |   "code": "$code",
+             |   "reason": "ifs message"
              |}
-             |""".stripMargin
+            """.stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
+        )
+
+        val extraTysErrors = Seq(
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        errors.foreach(args => serviceErrorTest.tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

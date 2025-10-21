@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -146,21 +146,18 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
      """.stripMargin
   )
 
-  val DecimalsOutOfRangeError: MtdError = ValueFormatError.copy(
-    message = "The value must be between 0 and 99999999999.99",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalProceeds",
-        "/disposals/0/acquisitionAmount",
-        "/disposals/0/improvementCosts",
-        "/disposals/0/additionalCosts",
-        "/disposals/0/prfAmount",
-        "/disposals/0/otherReliefAmount",
-        "/disposals/0/lossesFromThisYear",
-        "/disposals/0/lossesFromPreviousYear",
-        "/disposals/0/amountOfNetGain"
-      ))
-  )
+  val decimalsOutOfRangeError: MtdError = ValueFormatError.withPaths(
+    Seq(
+      "/disposals/0/disposalProceeds",
+      "/disposals/0/acquisitionAmount",
+      "/disposals/0/improvementCosts",
+      "/disposals/0/additionalCosts",
+      "/disposals/0/prfAmount",
+      "/disposals/0/otherReliefAmount",
+      "/disposals/0/lossesFromThisYear",
+      "/disposals/0/lossesFromPreviousYear",
+      "/disposals/0/amountOfNetGain"
+    ))
 
   val datesNotFormattedJson: JsValue = Json.parse(
     s"""
@@ -271,13 +268,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
      """.stripMargin
   )
 
-  val gainLossError: MtdError = RuleGainLossError.copy(
-    message = "Only one of gain or loss values can be provided",
-    paths = Some(
-      Seq(
-        "/disposals/0"
-      ))
-  )
+  val gainLossError: MtdError = RuleAmountGainLossError.withPath("/disposals/0")
 
   trait Test {
 
@@ -361,8 +352,8 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends Integ
           ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
           ("AA123456A", "2019-20", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
           ("AA123456A", "2019-20", missingFieldsJson, BAD_REQUEST, missingFieldsError, None, Some("missing all mandatory fields")),
-          ("AA123456A", "2019-20", decimalsTooBigJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too big")),
-          ("AA123456A", "2019-20", decimalsTooSmallJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too small")),
+          ("AA123456A", "2019-20", decimalsTooBigJson, BAD_REQUEST, decimalsOutOfRangeError, None, Some("Decimals too big")),
+          ("AA123456A", "2019-20", decimalsTooSmallJson, BAD_REQUEST, decimalsOutOfRangeError, None, Some("Decimals too small")),
           ("AA123456A", "2019-20", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
           ("AA123456A", "2019-20", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
           ("AA123456A", "2019-20", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),

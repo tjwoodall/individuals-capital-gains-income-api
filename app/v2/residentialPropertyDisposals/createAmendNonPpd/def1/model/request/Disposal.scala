@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ case class Disposal(customerReference: Option[String],
                     amountOfNetGain: Option[BigDecimal],
                     amountOfNetLoss: Option[BigDecimal]) {
   def gainAndLossAreBothSupplied: Boolean = amountOfNetLoss.isDefined && amountOfNetGain.isDefined
+
+  def isNetAmountEmpty: Boolean = amountOfNetLoss.isEmpty && amountOfNetGain.isEmpty
 }
 
 object Disposal {

@@ -20,10 +20,10 @@ import play.api.libs.json.Format
 import shared.utils.enums.Enums
 
 enum DownstreamAssetType(val toMtd: String) {
-  case `otherProperty`            extends DownstreamAssetType("other-property")
-  case `listedShares`             extends DownstreamAssetType("listed-shares")
-  case `otherAsset`               extends DownstreamAssetType("other-asset")
-  case `nonUkResidentialProperty` extends DownstreamAssetType("non-uk-residential-property")
+  case otherProperty            extends DownstreamAssetType("other-property")
+  case listedShares             extends DownstreamAssetType("listed-shares")
+  case otherAssets              extends DownstreamAssetType("other-assets")
+  case nonUkResidentialProperty extends DownstreamAssetType("non-uk-residential-property")
 }
 
 object DownstreamAssetType {

@@ -21,7 +21,7 @@ import cats.data.Validated.Invalid
 import cats.implicits.*
 import common.errors.*
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern, ResolveInteger}
+import shared.controllers.validators.resolvers.*
 import shared.models.errors.{DateFormatError, MtdError}
 import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.{Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
@@ -84,8 +84,10 @@ object Def2_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
       case None => valid
     }
 
-    val validatedLossOrGains = if (disposal.gainAndLossAreBothSupplied) {
-      Invalid(List(RuleGainLossError.copy(paths = Some(Seq(s"/disposals/$index")))))
+    val validatedLossOrGains: Validated[Seq[MtdError], Unit] = if (disposal.gainAndLossAreBothSupplied) {
+      Invalid(List(RuleAmountGainLossError.withPath(s"/disposals/$index")))
+    } else if (disposal.isNetAmountEmpty) {
+      Invalid(List(RuleAmountGainLossError.withPath(s"/disposals/$index")))
     } else {
       valid
     }
@@ -103,7 +105,7 @@ object Def2_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
     }
 
     val validatedLossesFromThisYearRule = if (numberOfDisposals <= 1 && lossesFromThisYear.isDefined) {
-      Invalid(List(RuleIncorrectLossesSubmittedError.copy(paths = Some(Seq(s"/disposals/$index")))))
+      Invalid(List(RuleIncorrectLossesSubmittedError.withPath(s"/disposals/$index")))
     } else {
       valid
     }

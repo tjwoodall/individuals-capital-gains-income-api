@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints.createAmendNonPpd
+package v3.createAmendNonPpd
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -29,10 +29,7 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1952.enabled" -> false) ++ super.servicesConfig
+class Def1_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
   val validDisposalDate: String    = "2020-03-27"
   val validCompletionDate: String  = "2020-03-29"
@@ -90,16 +87,14 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
      """.stripMargin
   )
 
-  val missingFieldsError: MtdError = RuleIncorrectOrEmptyBodyError.copy(
-    paths = Some(
-      Seq(
-        "/disposals/0/acquisitionAmount",
-        "/disposals/0/acquisitionDate",
-        "/disposals/0/completionDate",
-        "/disposals/0/disposalDate",
-        "/disposals/0/disposalProceeds"
-      ))
-  )
+  val missingFieldsError: MtdError = RuleIncorrectOrEmptyBodyError.withPaths(
+    Seq(
+      "/disposals/0/acquisitionAmount",
+      "/disposals/0/acquisitionDate",
+      "/disposals/0/completionDate",
+      "/disposals/0/disposalDate",
+      "/disposals/0/disposalProceeds"
+    ))
 
   val decimalsTooBigJson: JsValue = Json.parse(
     s"""
@@ -149,21 +144,18 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
      """.stripMargin
   )
 
-  val DecimalsOutOfRangeError: MtdError = ValueFormatError.copy(
-    message = "The value must be between 0 and 99999999999.99",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalProceeds",
-        "/disposals/0/acquisitionAmount",
-        "/disposals/0/improvementCosts",
-        "/disposals/0/additionalCosts",
-        "/disposals/0/prfAmount",
-        "/disposals/0/otherReliefAmount",
-        "/disposals/0/lossesFromThisYear",
-        "/disposals/0/lossesFromPreviousYear",
-        "/disposals/0/amountOfNetGain"
-      ))
-  )
+  val DecimalsOutOfRangeError: MtdError = ValueFormatError.withPaths(
+    Seq(
+      "/disposals/0/disposalProceeds",
+      "/disposals/0/acquisitionAmount",
+      "/disposals/0/improvementCosts",
+      "/disposals/0/additionalCosts",
+      "/disposals/0/prfAmount",
+      "/disposals/0/otherReliefAmount",
+      "/disposals/0/lossesFromThisYear",
+      "/disposals/0/lossesFromPreviousYear",
+      "/disposals/0/amountOfNetGain"
+    ))
 
   val datesNotFormattedJson: JsValue = Json.parse(
     s"""
@@ -189,15 +181,8 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
      """.stripMargin
   )
 
-  val datesNotFormattedError: MtdError = DateFormatError.copy(
-    message = "The supplied date format is not valid",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalDate",
-        "/disposals/0/completionDate",
-        "/disposals/0/acquisitionDate"
-      ))
-  )
+  val datesNotFormattedError: MtdError =
+    DateFormatError.withPaths(Seq("/disposals/0/disposalDate", "/disposals/0/completionDate", "/disposals/0/acquisitionDate"))
 
   val customerRefTooLongJson: JsValue = Json.parse(
     s"""
@@ -274,20 +259,14 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
      """.stripMargin
   )
 
-  val gainLossError: MtdError = RuleGainLossError.copy(
-    message = "Only one of gain or loss values can be provided",
-    paths = Some(
-      Seq(
-        "/disposals/0"
-      ))
-  )
+  val gainLossError: MtdError = RuleAmountGainLossError.withPath("/disposals/0")
 
   trait Test {
 
-    val nino: String = "AA123456A"
-    def taxYear: String
+    val nino: String    = "AA123456A"
+    def taxYear: String = "2023-24"
 
-    def downstreamUri: String
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino"
 
     def setupStubs(): StubMapping
 
@@ -307,39 +286,9 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
 
   }
 
-  trait NonTysTest extends Test {
-    def taxYear: String = "2019-20"
-
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2019-20"
-  }
-
-  trait TysTest extends Test {
-    def taxYear: String = "2023-24"
-
-    override def request: WSRequest =
-      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
-
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
-  }
-
   "Calling the 'create and amend other CGT' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made" in new NonTysTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
-        }
-
-        val response: WSResponse = await(request.put(validRequestJson))
-        response.status shouldBe NO_CONTENT
-
-        verifyNrs(validRequestJson)
-      }
-
-      "any valid request is made for a TYS tax year" in new TysTest {
+      "any valid request is made for a TYS tax year" in new Test {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -364,7 +313,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
                                 expectedError: MtdError,
                                 expectedErrors: Option[ErrorWrapper],
                                 scenario: Option[String]): Unit = {
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new NonTysTest {
+          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new Test {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -388,6 +337,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
           ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+
           // Body errors
           ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
           ("AA123456A", "2019-20", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
@@ -404,7 +354,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
 
       "service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
 
             override def setupStubs(): StubMapping = {
               AuditStub.audit()
@@ -422,33 +372,35 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           }
         }
 
-        def errorBody(code: String): String =
+        def errorBody(`type`: String): String =
           s"""
              |{
-             |   "code": "$code",
-             |   "reason": "ifs message"
+             |  "origin": "HIP",
+             |  "response": {
+             |    "failures": [
+             |      {
+             |        "type": "${`type`}",
+             |        "reason": "downstream message"
+             |      }
+             |    ]
+             |  }
              |}
-            """.stripMargin
+             |""".stripMargin
 
         val errors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
-          (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
-          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
-          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
-        )
-
-        val extraTysErrors = Seq(
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

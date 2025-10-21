@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package v2.residentialPropertyDisposals.createAmendNonPpd.def1
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.*
-import common.errors.{CustomerRefFormatError, RuleGainLossError}
+import common.errors.{CustomerRefFormatError, RuleAmountGainLossError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
+import shared.controllers.validators.resolvers.*
 import shared.models.errors.{DateFormatError, MtdError}
+import v2.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator.valid
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.{Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
@@ -82,8 +83,10 @@ object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
       case None => valid
     }
 
-    val validatedLossOrGains = if (disposal.gainAndLossAreBothSupplied) {
-      Invalid(List(RuleGainLossError.copy(paths = Some(Seq(s"/disposals/$index")))))
+    val validatedLossOrGains: Validated[Seq[MtdError], Unit] = if (disposal.gainAndLossAreBothSupplied) {
+      Invalid(List(RuleAmountGainLossError.withPath(s"/disposals/$index")))
+    } else if (disposal.isNetAmountEmpty) {
+      Invalid(List(RuleAmountGainLossError.withPath(s"/disposals/$index")))
     } else {
       valid
     }
