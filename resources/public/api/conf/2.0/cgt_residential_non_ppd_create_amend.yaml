@@ -87,8 +87,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleDisposalDate'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
-          RULE_GAIN_LOSS:
-            $ref: './common/errors.yaml#/components/examples/ruleGainLoss'
+          RULE_AMOUNT_GAIN_LOSS:
+            $ref: './common/errors.yaml#/components/examples/ruleAmountGainLoss'
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
 
