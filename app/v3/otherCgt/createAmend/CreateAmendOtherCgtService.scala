@@ -17,7 +17,7 @@
 package v3.otherCgt.createAmend
 
 import cats.implicits.toBifunctorOps
-import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError, RuleOutsideAmendmentWindowError}
+import common.errors.*
 import shared.controllers.RequestContext
 import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import shared.services.{BaseService, ServiceOutcome}
@@ -30,9 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateAmendOtherCgtService @Inject() (connector: CreateAmendOtherCgtConnector) extends BaseService {
 
   def createAmend(request: CreateAmendOtherCgtRequestData)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Unit]] = {
-
     connector.createAndAmend(request).map(_.leftMap(mapDownstreamErrors(downstreamErrorMap)))
-
   }
 
   private val downstreamErrorMap: Map[String, MtdError] = {
@@ -49,8 +47,11 @@ class CreateAmendOtherCgtService @Inject() (connector: CreateAmendOtherCgtConnec
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
-      "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
+      "INVALID_CORRELATION_ID"     -> InternalError,
+      "TAX_YEAR_NOT_SUPPORTED"     -> RuleTaxYearNotSupportedError,
+      "INVALID_CLAIM_DISPOSALS"    -> RuleInvalidClaimDisposalsError,
+      "INVALID_PROPERTY_DISPOSALS" -> RuleInvalidClaimOrElectionCodesError,
+      "MISSING_COMPANY_NAME"       -> RuleMissingCompanyNameError
     )
 
     errors ++ extraTysErrors

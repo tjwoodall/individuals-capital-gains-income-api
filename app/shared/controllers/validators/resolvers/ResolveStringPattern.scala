@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,18 @@ case class ResolveStringPattern(regexFormat: Regex, error: MtdError) extends Res
       Invalid(List(error))
 
   def apply(value: String): Validated[Seq[MtdError], String] = resolver(value)
+
+  def apply(value: Option[String]): Validated[Seq[MtdError], Option[String]] = resolver.resolveOptionally(value)
 }
 
 object ResolveStringPattern {
 
   def apply(value: String, regexFormat: Regex, error: MtdError): Validated[Seq[MtdError], String] = {
+    val resolver = ResolveStringPattern(regexFormat, error)
+    resolver(value)
+  }
+
+  def apply(value: Option[String], regexFormat: Regex, error: MtdError): Validated[Seq[MtdError], Option[String]] = {
     val resolver = ResolveStringPattern(regexFormat, error)
     resolver(value)
   }

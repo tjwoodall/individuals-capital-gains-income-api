@@ -19,14 +19,15 @@ package v3.otherCgt.createAmend.model.request
 import play.api.libs.json.OWrites
 import shared.utils.JsonWritesUtil
 import v3.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestBody
+import v3.otherCgt.createAmend.def2.model.request.Def2_CreateAmendOtherCgtRequestBody
 
 trait CreateAmendOtherCgtRequestBody
 
 object CreateAmendOtherCgtRequestBody extends JsonWritesUtil {
 
-  implicit val writes: OWrites[CreateAmendOtherCgtRequestBody] = writesFrom { case def1: Def1_CreateAmendOtherCgtRequestBody =>
-    implicitly[OWrites[Def1_CreateAmendOtherCgtRequestBody]].writes(def1)
-
+  implicit val writes: OWrites[CreateAmendOtherCgtRequestBody] = writesFrom {
+    case def1: Def1_CreateAmendOtherCgtRequestBody => implicitly[OWrites[Def1_CreateAmendOtherCgtRequestBody]].writes(def1)
+    case def2: Def2_CreateAmendOtherCgtRequestBody => implicitly[OWrites[Def2_CreateAmendOtherCgtRequestBody]].writes(def2)
   }
 
 }

@@ -68,7 +68,6 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
           service.createAmend(req)
         }
         .withAuditing(auditHandler(nino, taxYear, request))
-        .withNoContentResult(OK)
 
       requestHandler.handleRequest()
     }

@@ -16,19 +16,10 @@
 
 package v3.otherCgt.createAmend
 
-import common.errors.{RuleAcquisitionDateError, RuleDisposalDateNotFutureError, RuleOutsideAmendmentWindowError}
+import common.errors.*
 import shared.controllers.EndpointLogContext
 import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{
-  DownstreamErrorCode,
-  DownstreamErrors,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  RuleTaxYearNotSupportedError,
-  TaxYearFormatError
-}
+import shared.models.errors.*
 import shared.models.outcomes.ResponseWrapper
 import shared.services.ServiceSpec
 import v3.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
@@ -57,7 +48,7 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
 
   }
 
-  "createAndAmend" should {
+  "createAmend" should {
     "return a success response" when {
       "a valid request is made" in new Test {
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
@@ -70,7 +61,6 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
     }
 
     "map errors according to spec" when {
-
       def serviceError(downstreamErrorCode: String, error: MtdError): Unit =
         s"a $downstreamErrorCode error is returned from the connector" in new Test {
 
@@ -94,11 +84,14 @@ class CreateAmendOtherCgtServiceSpec extends ServiceSpec {
       )
 
       val extraTysErrors = List(
-        ("INVALID_CORRELATION_ID" -> InternalError),
-        ("TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError)
+        ("INVALID_CORRELATION_ID", InternalError),
+        ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError),
+        ("INVALID_CLAIM_DISPOSALS", RuleInvalidClaimDisposalsError),
+        ("INVALID_PROPERTY_DISPOSALS", RuleInvalidClaimOrElectionCodesError),
+        ("MISSING_COMPANY_NAME", RuleMissingCompanyNameError)
       )
 
-      (errors ++ extraTysErrors).foreach(args => (serviceError).tupled(args))
+      (errors ++ extraTysErrors).foreach(args => serviceError.tupled(args))
     }
   }
 

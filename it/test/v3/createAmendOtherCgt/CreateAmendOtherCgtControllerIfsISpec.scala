@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v3.endpoints
+package v3.createAmendOtherCgt
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
@@ -28,7 +28,10 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
-class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
+class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  override def servicesConfig: Map[String, Any] =
+    Map("feature-switch.ifs_hip_migration_1886.enabled" -> false) ++ super.servicesConfig
 
   val validRequestJson: JsValue = Json.parse(
     """
@@ -357,7 +360,7 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
       setupStubs()
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.1.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
@@ -374,19 +377,19 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
 
   }
 
-  private trait TysHipTest extends Test {
+  private trait TysIfsTest extends Test {
 
     override val taxYear: String = "2023-24"
 
     override def request: WSRequest =
       super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
 
-    def downstreamUrl: String = s"/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino"
+    def downstreamUrl: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
 
   }
 
   "Calling the 'create and amend other CGT' endpoint" should {
-    "return a 200 status code" when {
+    "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
 
         override def setupStubs(): Unit = {
@@ -394,18 +397,18 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
         }
 
         val response: WSResponse = await(request.put(validRequestJson))
-        response.status shouldBe OK
+        response.status shouldBe NO_CONTENT
         verifyNrs(validRequestJson)
       }
 
-      "any valid request is made TYS" in new TysHipTest {
+      "any valid request is made TYS" in new TysIfsTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUrl, NO_CONTENT, JsObject.empty)
         }
 
         val response: WSResponse = await(request.put(validRequestJson))
-        response.status shouldBe OK
+        response.status shouldBe NO_CONTENT
         verifyNrs(validRequestJson)
       }
     }
@@ -454,7 +457,7 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUrl, downstreamStatus, errorBody(downstreamCode))
@@ -470,17 +473,10 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
         def errorBody(code: String): String =
           s"""
              |{
-             |  "origin": "HoD",
-             |  "response": {
-             |    "failures": [
-             |      {
-             |        "type": "$code",
-             |        "reason": "message"
-             |      }
-             |    ]
-             |  }
+             |   "code": "$code",
+             |   "reason": "downstream message"
              |}
-                    """.stripMargin
+            """.stripMargin
 
         val errorInput = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
@@ -489,6 +485,7 @@ class CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with Wir
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateNotFutureError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateError),
+          (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )

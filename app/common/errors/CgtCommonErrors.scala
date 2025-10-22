@@ -23,7 +23,13 @@ object PpdSubmissionIdFormatError  extends MtdError("FORMAT_PPD_SUBMISSION_ID", 
 object CustomerRefFormatError      extends MtdError("FORMAT_CUSTOMER_REF", "The provided customer reference is invalid", BAD_REQUEST)
 object AssetDescriptionFormatError extends MtdError("FORMAT_ASSET_DESCRIPTION", "The provided asset description is invalid", BAD_REQUEST)
 object AssetTypeFormatError        extends MtdError("FORMAT_ASSET_TYPE", "The format of the assetType value is invalid", BAD_REQUEST)
-object SourceFormatError           extends MtdError("FORMAT_SOURCE", "The provided source is invalid", BAD_REQUEST)
+object TokenNameFormatError        extends MtdError("FORMAT_TOKEN_NAME", "The provided tokenName is invalid", BAD_REQUEST)
+object CompanyNameFormatError      extends MtdError("FORMAT_COMPANY_NAME", "The provided companyName is invalid", BAD_REQUEST)
+
+object CompanyRegistrationNumberFormatError
+    extends MtdError("FORMAT_COMPANY_REGISTRATION_NUMBER", "The provided companyRegistrationNumber is invalid", BAD_REQUEST)
+
+object SourceFormatError extends MtdError("FORMAT_SOURCE", "The provided source is invalid", BAD_REQUEST)
 
 object ClaimOrElectionCodesFormatError
     extends MtdError("FORMAT_CLAIM_OR_ELECTION_CODES", "The format of the claimOrElectionCodes value is invalid", BAD_REQUEST)
@@ -67,6 +73,20 @@ object RuleDisposalDateNotFutureError
 
 object RuleAmountGainLossError
     extends MtdError("RULE_AMOUNT_GAIN_LOSS", "Either amountOfNetGain or amountOfNetLoss, must be provided but not both", BAD_REQUEST)
+
+object RuleInvalidClaimDisposalsError
+    extends MtdError(
+      "RULE_INVALID_CLAIM_DISPOSALS",
+      "BAD and INV relief codes cannot be claimed in the same disposal. Itemise disposals separately",
+      BAD_REQUEST)
+
+object RuleMissingCompanyNameError extends MtdError("RULE_MISSING_COMPANY_NAME", "companyName is required for listed shares", BAD_REQUEST)
+
+object RuleInvalidClaimOrElectionCodesError
+    extends MtdError("RULE_INVALID_CLAIM_OR_ELECTION_CODES", "INV relief code does not apply to non-UK residential property disposals", BAD_REQUEST) {
+
+  def forListedShares: MtdError = copy(message = "PRR and LET relief codes do not apply to listed shares disposals")
+}
 
 object RuleOutsideAmendmentWindowError extends MtdError("RULE_OUTSIDE_AMENDMENT_WINDOW", "You are outside the amendment window", BAD_REQUEST)
 

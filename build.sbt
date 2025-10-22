@@ -33,7 +33,8 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= List(
       "-feature",
-      "-Wconf:src=routes/.*:silent"
+      "-Wconf:src=routes/.*:silent",
+      "-Xmax-inlines:64"
     )
   )
   .settings(

@@ -16,22 +16,27 @@
 
 package v3.otherCgt.createAmend
 
+import cats.data.Validated.{Invalid, Valid}
 import config.CgtAppConfig
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
-import v3.otherCgt.createAmend.CreateAmendOtherCgtSchema.Def1
+import v3.otherCgt.createAmend.CreateAmendOtherCgtSchema.{Def1, Def2}
 import v3.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtValidator
+import v3.otherCgt.createAmend.def2.Def2_CreateAmendOtherCgtValidator
 import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CreateAmendOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
+class CreateAmendOtherCgtValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendOtherCgtRequestData] = {
-    val schema = CreateAmendOtherCgtSchema.schema
+    val schema = CreateAmendOtherCgtSchema.schemaFor(taxYear)
+
     schema match {
-      case Def1 => new Def1_CreateAmendOtherCgtValidator(nino, taxYear, body)(appConfig)
+      case Valid(Def1)     => new Def1_CreateAmendOtherCgtValidator(nino, taxYear, body)
+      case Valid(Def2)     => new Def2_CreateAmendOtherCgtValidator(nino, taxYear, body)
+      case Invalid(errors) => Validator.returningErrors(errors)
     }
   }
 

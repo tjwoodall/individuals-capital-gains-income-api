@@ -132,7 +132,7 @@ class CreateAmendOtherCgtControllerSpec
   )
 
   "CreateAmendOtherCgtController" should {
-    "return OK" when {
+    "return NO_CONTENT" when {
       "happy path" in new Test {
 
         willUseValidator(returningSuccess(requestData))
@@ -145,7 +145,7 @@ class CreateAmendOtherCgtControllerSpec
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
 
-        runOkTestWithAudit(expectedStatus = OK, None, Some(validRequestJson))
+        runOkTestWithAudit(expectedStatus = NO_CONTENT, None, Some(validRequestJson))
       }
     }
 
