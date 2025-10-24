@@ -136,10 +136,10 @@ components:
         message: The provided ppdSubmissionId is invalid
 
     ruleAmountGainLoss:
-      description: Either amountOfGain or amountOfLoss, must be provided but not both.
+      description: Either amountOfNetGain or amountOfNetLoss, must be provided but not both.
       value:
         code: RULE_AMOUNT_GAIN_LOSS
-        message: Either amountOfGain or amountOfLoss, must be provided but not both
+        message: Either amountOfNetGain or amountOfNetLoss, must be provided but not both
 
     ruleTaxYearNotEnded:
       description: The submission has been made before the taxYear it relates to has ended.
