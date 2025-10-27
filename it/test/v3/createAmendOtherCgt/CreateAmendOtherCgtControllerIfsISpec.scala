@@ -33,15 +33,15 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
   override def servicesConfig: Map[String, Any] =
     Map("feature-switch.ifs_hip_migration_1886.enabled" -> false) ++ super.servicesConfig
 
-  val validRequestJson: JsValue = Json.parse(
-    """
+  def validRequestJson(year: String = "2023"): JsValue = Json.parse(
+    s"""
       |{
       |   "disposals":[
       |      {
       |         "assetType":"other-property",
       |         "assetDescription":"string",
-      |         "acquisitionDate":"2021-05-07",
-      |         "disposalDate":"2021-05-07",
+      |         "acquisitionDate":"$year-05-07",
+      |         "disposalDate":"$year-05-07",
       |         "disposalProceeds":59999999999.99,
       |         "allowableCosts":59999999999.99,
       |         "gain":59999999999.99,
@@ -322,8 +322,8 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
         DateFormatError.copy(
           paths = Some(
             Seq(
-              "/disposals/0/disposalDate",
-              "/disposals/0/acquisitionDate"
+              "/disposals/0/acquisitionDate",
+              "/disposals/0/disposalDate"
             ))
         )
       ))
@@ -349,7 +349,7 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
     val nino: String    = "AA123456A"
     val taxYear: String = "2021-22"
 
-    def uri: String = s"/other-gains/$nino/$taxYear"
+    private def uri: String = s"/other-gains/$nino/$taxYear"
 
     def setupStubs(): Unit = ()
 
@@ -396,9 +396,9 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUrl, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request.put(validRequestJson))
+        val response: WSResponse = await(request.put(validRequestJson("2021")))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson)
+        verifyNrs(validRequestJson("2021"))
       }
 
       "any valid request is made TYS" in new TysIfsTest {
@@ -407,9 +407,9 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
           DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUrl, NO_CONTENT, JsObject.empty)
         }
 
-        val response: WSResponse = await(request.put(validRequestJson))
+        val response: WSResponse = await(request.put(validRequestJson()))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson)
+        verifyNrs(validRequestJson())
       }
     }
 
@@ -436,10 +436,10 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
 
         val input = Seq(
           // Path errors
-          ("AA1123A", "2019-20", validRequestJson, BAD_REQUEST, NinoFormatError, None, None),
-          ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
-          ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
-          ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA1123A", "2019-20", validRequestJson("2021"), BAD_REQUEST, NinoFormatError, None, None),
+          ("AA123456A", "20177", validRequestJson("2021"), BAD_REQUEST, TaxYearFormatError, None, None),
+          ("AA123456A", "2015-17", validRequestJson("2021"), BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
+          ("AA123456A", "2018-19", validRequestJson("2021"), BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
 
           // Body errors
           ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -452,7 +452,7 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
           ("AA123456A", "2021-22", formatDisposalsJson, BAD_REQUEST, BadRequestError, Some(formatDisposalsErrors), Some("formatDisposals")),
           ("AA123456A", "2021-22", formatNonStandardGainsJson, BAD_REQUEST, formatNonStandardGainsError, None, Some("formatNonStandardGains"))
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(validationErrorTest.tupled)
       }
 
       "downstream service error" when {
@@ -463,7 +463,7 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUrl, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request.put(validRequestJson))
+            val response: WSResponse = await(request.put(validRequestJson()))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
@@ -494,7 +494,7 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
-        (errorInput ++ tysErrorInput).foreach(args => (serviceErrorTest).tupled(args))
+        (errorInput ++ tysErrorInput).foreach(serviceErrorTest.tupled)
       }
     }
   }

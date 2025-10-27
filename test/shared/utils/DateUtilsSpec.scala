@@ -16,7 +16,7 @@
 
 package shared.utils
 
-import java.time.LocalDateTime
+import java.time.{Clock, LocalDate, LocalDateTime}
 
 class DateUtilsSpec extends UnitSpec {
 
@@ -28,6 +28,17 @@ class DateUtilsSpec extends UnitSpec {
         )
         result shouldBe "Tue, 17 Jan 2023 12:00:00 GMT"
       }
+    }
+  }
+
+  "getCurrentDate" should {
+    "return the current date in UTC in the format [yyyy-MM-dd]" in {
+      val result: LocalDate   = DateUtils.getCurrentDate
+      val expected: LocalDate = LocalDate.now(Clock.systemUTC())
+
+      result.toString should fullyMatch regex """\d{4}-\d{2}-\d{2}""".r
+
+      result shouldBe expected
     }
   }
 

@@ -27,8 +27,12 @@ import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 class CreateAmendOtherCgtValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
 
-  private def validatorFor(taxYear: String): Validator[CreateAmendOtherCgtRequestData] =
-    new CreateAmendOtherCgtValidatorFactory().validator(nino = "ignoredNino", taxYear = taxYear, body = JsObject.empty)
+  private def validatorFor(taxYear: String): Validator[CreateAmendOtherCgtRequestData] = new CreateAmendOtherCgtValidatorFactory().validator(
+    nino = "ignoredNino",
+    taxYear = taxYear,
+    body = JsObject.empty,
+    temporalValidationEnabled = true
+  )
 
   private trait Test {
 

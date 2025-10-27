@@ -34,7 +34,7 @@ trait MockCreateAmendOtherCgtValidatorFactory extends TestSuite with MockFactory
   object MockedCreateAmendCgtPpdOverridesValidatorFactory {
 
     def validator(): CallHandler[Validator[CreateAmendOtherCgtRequestData]] =
-      (mockCreateAmendOtherCgtValidatorFactory.validator(_: String, _: String, _: JsValue)).expects(*, *, *)
+      (mockCreateAmendOtherCgtValidatorFactory.validator(_: String, _: String, _: JsValue, _: Boolean)).expects(*, *, *, *)
 
   }
 

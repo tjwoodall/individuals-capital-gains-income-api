@@ -17,7 +17,7 @@
 package shared.utils
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneId}
+import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset}
 import java.util.Locale
 
 object DateUtils {
@@ -27,4 +27,6 @@ object DateUtils {
     .withZone(ZoneId.of("GMT"))
 
   def longDateTimestampGmt(dateTime: LocalDateTime): String = longDateTimeFormatGmt.format(dateTime)
+
+  def getCurrentDate: LocalDate = LocalDate.now(ZoneOffset.UTC)
 }

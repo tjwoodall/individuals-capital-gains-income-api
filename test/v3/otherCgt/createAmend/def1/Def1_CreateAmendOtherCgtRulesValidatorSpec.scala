@@ -39,7 +39,7 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with JsonError
            |  "assetType": "listed-shares",
            |  "assetDescription": "shares",
            |  "acquisitionDate": "2020-02-01",
-           |  "disposalDate": "2020-03-01",
+           |  "disposalDate": "2020-06-01",
            |  "disposalProceeds": 1000.12,
            |  "allowableCosts": 1000.12,
            |  "claimOrElectionCodes": ["LET","PRR", "PRO", "GHO", "ROR", "ESH", "NVC", "SIR", "OTH", "BAD", "INV"],
@@ -60,7 +60,7 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with JsonError
          |  "assetType": "listed-shares",
          |  "assetDescription": "shares",
          |  "acquisitionDate": "2020-02-01",
-         |  "disposalDate": "2020-03-01",
+         |  "disposalDate": "2020-06-01",
          |  "disposalProceeds": 1000.12,
          |  "allowableCosts": 1000.12
          |}""".stripMargin
@@ -309,8 +309,8 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with JsonError
           error(
             DateFormatError.withPaths(
               Seq(
-                "/disposals/0/disposalDate",
-                "/disposals/0/acquisitionDate"
+                "/disposals/0/acquisitionDate",
+                "/disposals/0/disposalDate"
               )))
       }
     }
@@ -335,6 +335,19 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with JsonError
       }
     }
 
+    "return ClaimOrElectionCodesFormatError error" when {
+      "incorrect claimOrElectionCodes supplied" in {
+        validate(body = requestBodyJson(disposalJson.update("/claimOrElectionCodes", Json.arr("LET", "*BAD*", "PRR", "PRO", "*BAD*")))) shouldBe
+          error(
+            ClaimOrElectionCodesFormatError.withPaths(
+              Seq(
+                "/disposals/0/claimOrElectionCodes/1",
+                "/disposals/0/claimOrElectionCodes/4"
+              ))
+          )
+      }
+    }
+
     "return RuleGainLossError error" when {
       "both gain and loss are supplied" in {
         validate(validNino, validTaxYear, requestBodyJson(disposalJson + ("loss" -> JsNumber(1.2)))) shouldBe
@@ -349,18 +362,25 @@ class Def1_CreateAmendOtherCgtRulesValidatorSpec extends UnitSpec with JsonError
       }
     }
 
-    "return ClaimOrElectionCodesFormatError error" when {
-      "incorrect claimOrElectionCodes supplied" in {
-        validate(body = requestBodyJson(disposalJson.update("/claimOrElectionCodes", Json.arr("LET", "*BAD*", "PRR", "PRO", "*BAD*")))) shouldBe
-          error(
-            ClaimOrElectionCodesFormatError.withPaths(
-              Seq(
-                "/disposals/0/claimOrElectionCodes/1",
-                "/disposals/0/claimOrElectionCodes/4"
-              ))
-          )
+    "return RuleAcquisitionDateError error" when {
+      "acquisitionDate later than disposalDate is supplied" in {
+        validate(body = requestBodyJson(minimalDisposalJson.update("/acquisitionDate", JsString("2020-12-31")))) shouldBe
+          error(RuleAcquisitionDateError.withPath("/disposals/0"))
       }
     }
+
+    "return RuleDisposalDateNotFutureError error" when {
+      "disposalDate before the start of the tax year is supplied" in {
+        validate(body = requestBodyJson(minimalDisposalJson.update("/disposalDate", JsString("2020-04-05")))) shouldBe
+          error(RuleDisposalDateNotFutureError.withPath("/disposals/0/disposalDate"))
+      }
+
+      "disposalDate after the end of the tax year is supplied" in {
+        validate(body = requestBodyJson(minimalDisposalJson.update("/disposalDate", JsString("2021-04-06")))) shouldBe
+          error(RuleDisposalDateNotFutureError.withPath("/disposals/0/disposalDate"))
+      }
+    }
+
   }
 
 }

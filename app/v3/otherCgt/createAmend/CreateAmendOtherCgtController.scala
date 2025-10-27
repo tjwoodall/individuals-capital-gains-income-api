@@ -16,6 +16,7 @@
 
 package v3.otherCgt.createAmend
 
+import config.FeatureSwitches
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import shared.config.SharedAppConfig
@@ -58,7 +59,8 @@ class CreateAmendOtherCgtController @Inject() (val authService: EnrolmentsAuthSe
       val validator = validatorFactory.validator(
         nino = nino,
         taxYear = taxYear,
-        body = request.body
+        body = request.body,
+        temporalValidationEnabled = FeatureSwitches(sharedAppConfig.featureSwitchConfig).isTemporalValidationEnabled
       )
 
       val requestHandler = RequestHandler

@@ -22,12 +22,59 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
+import shared.models.domain.TaxYear
 import shared.models.errors.*
 import shared.services.*
 import shared.support.{IntegrationBaseSpec, WireMockMethods}
+import shared.utils.DateUtils.getCurrentDate
 import v3.otherCgt.createAmend.def2.fixture.Def2_CreateAmendOtherCgtFixture.*
 
 class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
+
+  private def futureDisposalDatesRequestBodyMtdJson(futureDisposalDate: String): JsValue = Json.parse(
+    s"""
+      |{
+      |  "cryptoassets": [
+      |    {
+      |      "numberOfDisposals": 1,
+      |      "assetDescription": "description string",
+      |      "tokenName": "Name of token",
+      |      "acquisitionDate": "2025-08-04",
+      |      "disposalDate": "$futureDisposalDate",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gainsBeforeLosses": 99999999999.99,
+      |      "amountOfNetGain": 99999999999.99
+      |    }
+      |  ],
+      |  "otherGains": [
+      |    {
+      |      "assetType": "other-property",
+      |      "numberOfDisposals": 1,
+      |      "assetDescription": "example of this asset",
+      |      "acquisitionDate": "2025-04-07",
+      |      "disposalDate": "$futureDisposalDate",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gainsBeforeLosses": 99999999999.99,
+      |      "amountOfNetGain": 99999999999.99
+      |    }
+      |  ],
+      |  "unlistedShares": [
+      |    {
+      |      "numberOfDisposals": 1,
+      |      "assetDescription": "My asset",
+      |      "companyName": "Bob the Builder",
+      |      "acquisitionDate": "2025-04-10",
+      |      "disposalDate": "$futureDisposalDate",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gainsBeforeLosses": 99999999999.99
+      |    }
+      |  ]
+      |}
+    """.stripMargin
+  )
 
   private val allInvalidFieldsRequestBodyJson: JsValue = Json.parse(
     s"""
@@ -48,6 +95,17 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |      "amountOfNetGain": 99999999999.999,
       |      "amountOfNetLoss": -99999999999.99,
       |      "rttTaxPaid": 99999999999.999
+      |    },
+      |    {
+      |      "numberOfDisposals": 1,
+      |      "assetDescription": "description string",
+      |      "tokenName": "Name of token",
+      |      "acquisitionDate": "2025-04-06",
+      |      "disposalDate": "2025-04-05",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gainsBeforeLosses": 99999999999.99,
+      |      "amountOfNetGain": 99999999999.99
       |    }
       |  ],
       |  "otherGains": [
@@ -75,7 +133,7 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |      "numberOfDisposals": 1,
       |      "assetDescription": "example of this asset",
       |      "acquisitionDate": "2025-04-07",
-      |      "disposalDate": "2025-07-10",
+      |      "disposalDate": "2026-04-06",
       |      "disposalProceeds": 99999999999.99,
       |      "allowableCosts": 99999999999.99,
       |      "gainsBeforeLosses": 99999999999.99,
@@ -86,7 +144,7 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |      "assetType": "other-property",
       |      "numberOfDisposals": 1,
       |      "assetDescription": "example of this asset",
-      |      "acquisitionDate": "2025-04-07",
+      |      "acquisitionDate": "2025-07-11",
       |      "disposalDate": "2025-07-10",
       |      "disposalProceeds": 99999999999.99,
       |      "allowableCosts": 99999999999.99,
@@ -141,6 +199,17 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |      "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.999,
       |      "eisOrSeisReliefDuePreviousYear": -99999999999.99,
       |      "rttTaxPaid": 99999999999.999
+      |    },
+      |    {
+      |      "numberOfDisposals": 1,
+      |      "assetDescription": "My asset",
+      |      "companyName": "Bob the Builder",
+      |      "companyRegistrationNumber": "11111111",
+      |      "acquisitionDate": "2025-04-06",
+      |      "disposalDate": "2025-04-05",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gainsBeforeLosses": 99999999999.99
       |    }
       |  ],
       |  "gainExcludedIndexedSecurities": {
@@ -263,7 +332,15 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         "/lifetimeAllowance/lifetimeAllowanceInv"
       )
     ),
+    RuleAcquisitionDateError.withPaths(Seq("/cryptoassets/1", "/otherGains/2", "/unlistedShares/1")),
     RuleAmountGainLossError.withPaths(Seq("/cryptoassets/0", "/otherGains/0")),
+    RuleDisposalDateNotFutureError.withPaths(
+      Seq(
+        "/cryptoassets/1/disposalDate",
+        "/otherGains/1/disposalDate",
+        "/unlistedShares/1/disposalDate"
+      )
+    ),
     RuleInvalidClaimDisposalsError.withPaths(
       Seq(
         "/otherGains/0/claimOrElectionCodes",
@@ -335,6 +412,8 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
     def downstreamUrl: String = s"/itsa/income-tax/v1/25-26/income/disposals/other-gains/$nino"
 
+    val suspendTemporalValidations: String = "false"
+
     def setupStubs(): Unit = ()
 
     def request: WSRequest = {
@@ -345,7 +424,8 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       buildRequest(mtdUri)
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.3.0+json"),
-          (AUTHORIZATION, "Bearer 123") // some bearer token
+          (AUTHORIZATION, "Bearer 123"),
+          ("suspend-temporal-validations", suspendTemporalValidations)
         )
     }
 
@@ -358,7 +438,7 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
   "Calling the 'Create and Amend Other Capital Gains and Disposals' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made" in new Test {
+      "any valid request is made with past disposalDates within a non-future tax year and suspendTemporalValidations is false" in new Test {
         override def setupStubs(): Unit = DownstreamStub.onSuccess(
           DownstreamStub.PUT,
           downstreamUrl,
@@ -369,6 +449,48 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         val response: WSResponse = await(request.put(fullRequestBodyMtdJson))
         response.status shouldBe NO_CONTENT
         verifyNrs(fullRequestBodyMtdJson)
+      }
+
+      "any valid request is made with future disposalDates within the current tax year and suspendTemporalValidations is true" in new Test {
+        val currentTaxYear: TaxYear    = TaxYear.currentTaxYear
+        val futureDisposalDate: String = getCurrentDate.plusDays(1).toString
+
+        override val taxYear: String                    = currentTaxYear.asMtd
+        override val suspendTemporalValidations: String = "true"
+
+        override def downstreamUrl: String = s"/itsa/income-tax/v1/${currentTaxYear.asTysDownstream}/income/disposals/other-gains/$nino"
+
+        override def setupStubs(): Unit = DownstreamStub.onSuccess(
+          DownstreamStub.PUT,
+          downstreamUrl,
+          NO_CONTENT,
+          JsObject.empty
+        )
+
+        val response: WSResponse = await(request.put(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate)))
+        response.status shouldBe NO_CONTENT
+        verifyNrs(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate))
+      }
+
+      "any valid request is made with future disposalDates within a future tax year and suspendTemporalValidations is true" in new Test {
+        val futureTaxYear: TaxYear     = TaxYear.ending(TaxYear.currentTaxYear.year + 1)
+        val futureDisposalDate: String = futureTaxYear.startDate.toString
+
+        override val taxYear: String                    = futureTaxYear.asMtd
+        override val suspendTemporalValidations: String = "true"
+
+        override def downstreamUrl: String = s"/itsa/income-tax/v1/${futureTaxYear.asTysDownstream}/income/disposals/other-gains/$nino"
+
+        override def setupStubs(): Unit = DownstreamStub.onSuccess(
+          DownstreamStub.PUT,
+          downstreamUrl,
+          NO_CONTENT,
+          JsObject.empty
+        )
+
+        val response: WSResponse = await(request.put(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate)))
+        response.status shouldBe NO_CONTENT
+        verifyNrs(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate))
       }
     }
 

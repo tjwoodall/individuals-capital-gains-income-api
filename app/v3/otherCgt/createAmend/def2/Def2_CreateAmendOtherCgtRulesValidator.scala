@@ -17,15 +17,18 @@
 package v3.otherCgt.createAmend.def2
 
 import cats.data.Validated
-import cats.data.Validated.Invalid
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.errors.*
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveBigInteger, ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern, ResolverSupport}
+import shared.controllers.validators.resolvers.*
+import shared.models.domain.TaxYear
 import shared.models.errors.{DateFormatError, MtdError}
+import shared.utils.DateUtils.getCurrentDate
 import v3.otherCgt.createAmend.def2.model.request.*
 
-object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_CreateAmendOtherCgtRequestData] with ResolverSupport {
+import java.time.LocalDate
+
+object Def2_CreateAmendOtherCgtRulesValidator extends ResolverSupport {
 
   private val assetDescriptionAndTokenNameRegex = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
   private val companyNameRegex                  = "^.{0,160}$".r
@@ -33,37 +36,86 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
   private val resolveParsedNumber               = ResolveParsedNumber()
   private val resolveBigInteger                 = ResolveBigInteger(1, 99999999999L)
 
+  private def combine(results: Validated[Seq[MtdError], ?]*): Validated[Seq[MtdError], Unit] = results.traverse_(identity)
+
   private def resolveEnum[A](parser: PartialFunction[String, A], error: => MtdError): Resolver[String, A] =
     resolvePartialFunction(error)(parser)
 
-  def validateBusinessRules(parsed: Def2_CreateAmendOtherCgtRequestData): Validated[Seq[MtdError], Def2_CreateAmendOtherCgtRequestData] = {
+  def validateBusinessRules(parsed: Def2_CreateAmendOtherCgtRequestData,
+                            temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Def2_CreateAmendOtherCgtRequestData] = {
     import parsed.body.*
 
     combine(
-      validateCryptoassets(cryptoassets),
-      validateOtherGains(otherGains),
-      validateUnlistedShares(unlistedShares),
+      validateCryptoassets(cryptoassets, parsed.taxYear, temporalValidationEnabled),
+      validateOtherGains(otherGains, parsed.taxYear, temporalValidationEnabled),
+      validateUnlistedShares(unlistedShares, parsed.taxYear, temporalValidationEnabled),
       validateGainExcludedIndexedSecurities(gainExcludedIndexedSecurities),
       validateQualifyingAssetHoldingCompany(qualifyingAssetHoldingCompany),
       validateNonStandardGains(nonStandardGains),
       validateLosses(losses),
       validateAdjustments(adjustments),
       validateLifetimeAllowance(lifetimeAllowance)
-    ).onSuccess(parsed)
+    ).map(_ => parsed)
   }
 
   private def validateClaimOrElectionCodes[A](claimOrElectionCodes: Option[Seq[String]],
                                               parser: PartialFunction[String, A],
                                               basePath: String): Validated[Seq[MtdError], Unit] = {
-    claimOrElectionCodes.fold(valid) { codes =>
+    claimOrElectionCodes.fold(Valid(())) { codes =>
       codes.zipWithIndex.traverse_ { case (code, subIndex) =>
         resolveEnum(parser, ClaimOrElectionCodesFormatError.withPath(s"$basePath/claimOrElectionCodes/$subIndex"))(code)
       }
     }
   }
 
-  private def validateCryptoassets(cryptoassets: Option[Seq[Cryptoassets]]): Validated[Seq[MtdError], Unit] = {
-    cryptoassets.fold(valid) { cryptoassets =>
+  private def validateAcquisitionAndDisposalDates(acquisitionDate: LocalDate,
+                                                  disposalDate: LocalDate,
+                                                  taxYear: TaxYear,
+                                                  basePath: String,
+                                                  temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+    val currentDate = getCurrentDate
+
+    val isAcquisitionDateInvalid = acquisitionDate.isAfter(disposalDate)
+
+    val isDisposalDateInvalid = {
+      val isOutsideTaxYear = disposalDate.isBefore(taxYear.startDate) || disposalDate.isAfter(taxYear.endDate)
+      val isAfterToday     = disposalDate.isAfter(currentDate)
+
+      if (temporalValidationEnabled) isOutsideTaxYear || isAfterToday else isOutsideTaxYear
+    }
+
+    val validatedAcquisitionDateRule = if (isAcquisitionDateInvalid) {
+      Invalid(List(RuleAcquisitionDateError.withPath(basePath)))
+    } else {
+      Valid(())
+    }
+
+    val validatedDisposalDateRule = if (isDisposalDateInvalid) {
+      Invalid(List(RuleDisposalDateNotFutureError.withPath(s"$basePath/disposalDate")))
+    } else {
+      Valid(())
+    }
+
+    combine(validatedAcquisitionDateRule, validatedDisposalDateRule)
+  }
+
+  private def resolveAndValidateDates(acquisitionDate: String,
+                                      disposalDate: String,
+                                      basePath: String,
+                                      taxYear: TaxYear,
+                                      temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+    (
+      ResolveIsoDate(acquisitionDate, DateFormatError.withPath(s"$basePath/acquisitionDate")),
+      ResolveIsoDate(disposalDate, DateFormatError.withPath(s"$basePath/disposalDate"))
+    ).tupled.andThen { case (acquisitionDate, disposalDate) =>
+      validateAcquisitionAndDisposalDates(acquisitionDate, disposalDate, taxYear, basePath, temporalValidationEnabled)
+    }
+  }
+
+  private def validateCryptoassets(cryptoassets: Option[Seq[Cryptoassets]],
+                                   taxYear: TaxYear,
+                                   temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+    cryptoassets.fold(Valid(())) { cryptoassets =>
       cryptoassets.zipWithIndex.traverse_ { case (cryptoassets, index) =>
         val basePath = s"/cryptoassets/$index"
 
@@ -81,12 +133,13 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
           TokenNameFormatError.withPath(s"$basePath/tokenName")
         )
 
-        val validatedDates = List(
-          (cryptoassets.acquisitionDate, s"$basePath/acquisitionDate"),
-          (cryptoassets.disposalDate, s"$basePath/disposalDate")
-        ).traverse_ { case (value, path) =>
-          ResolveIsoDate(value, DateFormatError.withPath(path))
-        }
+        val validatedDates = resolveAndValidateDates(
+          cryptoassets.acquisitionDate,
+          cryptoassets.disposalDate,
+          basePath,
+          taxYear,
+          temporalValidationEnabled
+        )
 
         val validatedMandatoryDecimalNumbers = List(
           (cryptoassets.disposalProceeds, s"$basePath/disposalProceeds"),
@@ -115,7 +168,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
         val validatedLossGainsRule = if (cryptoassets.hasNetAmountViolation) {
           Invalid(List(RuleAmountGainLossError.withPath(basePath)))
         } else {
-          valid
+          Valid(())
         }
 
         combine(
@@ -132,8 +185,10 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
     }
   }
 
-  private def validateOtherGains(otherGains: Option[Seq[OtherGains]]): Validated[Seq[MtdError], Unit] = {
-    otherGains.fold(valid) { otherGains =>
+  private def validateOtherGains(otherGains: Option[Seq[OtherGains]],
+                                 taxYear: TaxYear,
+                                 temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+    otherGains.fold(Valid(())) { otherGains =>
       otherGains.zipWithIndex.traverse_ { case (otherGains, index) =>
         val basePath = s"/otherGains/$index"
 
@@ -162,12 +217,13 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
           CompanyRegistrationNumberFormatError.withPath(s"$basePath/companyRegistrationNumber")
         )
 
-        val validatedDates = List(
-          (otherGains.acquisitionDate, s"$basePath/acquisitionDate"),
-          (otherGains.disposalDate, s"$basePath/disposalDate")
-        ).traverse_ { case (value, path) =>
-          ResolveIsoDate(value, DateFormatError.withPath(path))
-        }
+        val validatedDates = resolveAndValidateDates(
+          otherGains.acquisitionDate,
+          otherGains.disposalDate,
+          basePath,
+          taxYear,
+          temporalValidationEnabled
+        )
 
         val validatedMandatoryDecimalNumbers = List(
           (otherGains.disposalProceeds, s"$basePath/disposalProceeds"),
@@ -197,7 +253,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
         val validatedCompanyNameListedSharesRule = if (otherGains.isMissingCompanyNameForListedShares) {
           Invalid(List(RuleMissingCompanyNameError.withPath(basePath)))
         } else {
-          valid
+          Valid(())
         }
 
         val validatedClaimOrElectionCodesRule = if (otherGains.hasInvalidListedSharesCodes) {
@@ -205,19 +261,19 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
         } else if (otherGains.hasInvalidNonUkCode) {
           Invalid(List(RuleInvalidClaimOrElectionCodesError.withPath(basePath)))
         } else {
-          valid
+          Valid(())
         }
 
         val validatedBadInvRule = if (otherGains.bothBadAndInvSupplied) {
           Invalid(List(RuleInvalidClaimDisposalsError.withPath(s"$basePath/claimOrElectionCodes")))
         } else {
-          valid
+          Valid(())
         }
 
         val validatedLossGainsRule = if (otherGains.hasNetAmountViolation) {
           Invalid(List(RuleAmountGainLossError.withPath(basePath)))
         } else {
-          valid
+          Valid(())
         }
 
         combine(
@@ -239,8 +295,10 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
     }
   }
 
-  private def validateUnlistedShares(unlistedShares: Option[Seq[UnlistedShares]]): Validated[Seq[MtdError], Unit] = {
-    unlistedShares.fold(valid) { unlistedShares =>
+  private def validateUnlistedShares(unlistedShares: Option[Seq[UnlistedShares]],
+                                     taxYear: TaxYear,
+                                     temporalValidationEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+    unlistedShares.fold(Valid(())) { unlistedShares =>
       unlistedShares.zipWithIndex.traverse_ { case (unlistedShares, index) =>
         val basePath = s"/unlistedShares/$index"
 
@@ -264,12 +322,13 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
           CompanyRegistrationNumberFormatError.withPath(s"$basePath/companyRegistrationNumber")
         )
 
-        val validatedDates = List(
-          (unlistedShares.acquisitionDate, s"$basePath/acquisitionDate"),
-          (unlistedShares.disposalDate, s"$basePath/disposalDate")
-        ).traverse_ { case (value, path) =>
-          ResolveIsoDate(value, DateFormatError.withPath(path))
-        }
+        val validatedDates = resolveAndValidateDates(
+          unlistedShares.acquisitionDate,
+          unlistedShares.disposalDate,
+          basePath,
+          taxYear,
+          temporalValidationEnabled
+        )
 
         val validatedMandatoryDecimalNumbers = List(
           (unlistedShares.disposalProceeds, s"$basePath/disposalProceeds"),
@@ -304,7 +363,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
         val validatedBadInvRule = if (unlistedShares.bothBadAndInvSupplied) {
           Invalid(List(RuleInvalidClaimDisposalsError.withPath(s"$basePath/claimOrElectionCodes")))
         } else {
-          valid
+          Valid(())
         }
 
         combine(
@@ -325,18 +384,18 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
   private def validateGainExcludedIndexedSecurities(
       gainExcludedIndexedSecurities: Option[GainExcludedIndexedSecurities]
   ): Validated[Seq[MtdError], Unit] = {
-    gainExcludedIndexedSecurities.fold(valid) { gainExcludedIndexedSecurities =>
+    gainExcludedIndexedSecurities.fold(Valid(())) { gainExcludedIndexedSecurities =>
       resolveParsedNumber(
         gainExcludedIndexedSecurities.gainsFromExcludedSecurities,
         "/gainExcludedIndexedSecurities/gainsFromExcludedSecurities"
-      ).toUnit
+      ).map(_ => ())
     }
   }
 
   private def validateQualifyingAssetHoldingCompany(
       qualifyingAssetHoldingCompany: Option[QualifyingAssetHoldingCompany]
   ): Validated[Seq[MtdError], Unit] = {
-    qualifyingAssetHoldingCompany.fold(valid) { qualifyingAssetHoldingCompany =>
+    qualifyingAssetHoldingCompany.fold(Valid(())) { qualifyingAssetHoldingCompany =>
       List(
         (qualifyingAssetHoldingCompany.gainsFromQahcBeforeLosses, "/qualifyingAssetHoldingCompany/gainsFromQahcBeforeLosses"),
         (qualifyingAssetHoldingCompany.lossesFromQahc, "/qualifyingAssetHoldingCompany/lossesFromQahc")
@@ -347,7 +406,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
   }
 
   private def validateNonStandardGains(nonStandardGains: Option[NonStandardGains]): Validated[Seq[MtdError], Unit] = {
-    nonStandardGains.fold(valid) { nonStandardGains =>
+    nonStandardGains.fold(Valid(())) { nonStandardGains =>
       List(
         (nonStandardGains.attributedGains, "/nonStandardGains/attributedGains"),
         (nonStandardGains.attributedGainsRttTaxPaid, "/nonStandardGains/attributedGainsRttTaxPaid"),
@@ -360,7 +419,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
   }
 
   private def validateLosses(losses: Option[Losses]): Validated[Seq[MtdError], Unit] = {
-    losses.fold(valid) { losses =>
+    losses.fold(Valid(())) { losses =>
       List(
         (losses.broughtForwardLossesUsedInCurrentYear, "/losses/broughtForwardLossesUsedInCurrentYear"),
         (losses.setAgainstInYearGains, "/losses/setAgainstInYearGains"),
@@ -373,13 +432,13 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
   }
 
   private def validateAdjustments(adjustments: Option[Adjustments]): Validated[Seq[MtdError], Unit] = {
-    adjustments.fold(valid) { adjustments =>
-      resolveParsedNumber(adjustments.adjustmentAmount, "/adjustments/adjustmentAmount").toUnit
+    adjustments.fold(Valid(())) { adjustments =>
+      resolveParsedNumber(adjustments.adjustmentAmount, "/adjustments/adjustmentAmount").map(_ => ())
     }
   }
 
   private def validateLifetimeAllowance(lifetimeAllowance: Option[LifetimeAllowance]): Validated[Seq[MtdError], Unit] = {
-    lifetimeAllowance.fold(valid) { lifetimeAllowance =>
+    lifetimeAllowance.fold(Valid(())) { lifetimeAllowance =>
       List(
         (lifetimeAllowance.lifetimeAllowanceBadr, "/lifetimeAllowance/lifetimeAllowanceBadr"),
         (lifetimeAllowance.lifetimeAllowanceInv, "/lifetimeAllowance/lifetimeAllowanceInv")

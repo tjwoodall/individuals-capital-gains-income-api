@@ -28,15 +28,15 @@ import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
 class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  val validRequestJson: JsValue = Json.parse(
-    """
+  def validRequestJson(year: String = "2023"): JsValue = Json.parse(
+    s"""
       |{
       |   "disposals":[
       |      {
       |         "assetType":"other-property",
       |         "assetDescription":"string",
-      |         "acquisitionDate":"2021-05-07",
-      |         "disposalDate":"2021-05-07",
+      |         "acquisitionDate":"$year-05-07",
+      |         "disposalDate":"$year-05-07",
       |         "disposalProceeds":59999999999.99,
       |         "allowableCosts":59999999999.99,
       |         "gain":59999999999.99,
@@ -138,18 +138,10 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
     BadRequestError,
     Some(
       Seq(
-        RuleGainAfterReliefLossAfterReliefError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0"
-            ))
-        ),
-        RuleGainLossError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0"
-            ))
-        )))
+        RuleGainAfterReliefLossAfterReliefError.withPath("/disposals/0"),
+        RuleGainLossError.withPath("/disposals/0")
+      )
+    )
   )
 
   val decimalsTooBigJson: JsValue = Json.parse(
@@ -228,26 +220,24 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
     """.stripMargin
   )
 
-  val positiveDecimalsOutOfRangeError: MtdError = ValueFormatError.copy(
-    message = "The value must be between 0 and 99999999999.99",
-    paths = Some(
-      Seq(
-        "/disposals/0/disposalProceeds",
-        "/disposals/0/allowableCosts",
-        "/disposals/0/gain",
-        "/disposals/0/gainAfterRelief",
-        "/disposals/0/rttTaxPaid",
-        "/nonStandardGains/carriedInterestGain",
-        "/nonStandardGains/carriedInterestRttTaxPaid",
-        "/nonStandardGains/attributedGains",
-        "/nonStandardGains/attributedGainsRttTaxPaid",
-        "/nonStandardGains/otherGains",
-        "/nonStandardGains/otherGainsRttTaxPaid",
-        "/losses/broughtForwardLossesUsedInCurrentYear",
-        "/losses/setAgainstInYearGains",
-        "/losses/setAgainstInYearGeneralIncome",
-        "/losses/setAgainstEarlierYear"
-      ))
+  val positiveDecimalsOutOfRangeError: MtdError = ValueFormatError.withPaths(
+    Seq(
+      "/disposals/0/disposalProceeds",
+      "/disposals/0/allowableCosts",
+      "/disposals/0/gain",
+      "/disposals/0/gainAfterRelief",
+      "/disposals/0/rttTaxPaid",
+      "/nonStandardGains/carriedInterestGain",
+      "/nonStandardGains/carriedInterestRttTaxPaid",
+      "/nonStandardGains/attributedGains",
+      "/nonStandardGains/attributedGainsRttTaxPaid",
+      "/nonStandardGains/otherGains",
+      "/nonStandardGains/otherGainsRttTaxPaid",
+      "/losses/broughtForwardLossesUsedInCurrentYear",
+      "/losses/setAgainstInYearGains",
+      "/losses/setAgainstInYearGeneralIncome",
+      "/losses/setAgainstEarlierYear"
+    )
   )
 
   val decimalsOutOfRangeErrors: ErrorWrapper = ErrorWrapper(
@@ -295,33 +285,22 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
     BadRequestError,
     Some(
       Seq(
-        AssetDescriptionFormatError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0/assetDescription"
-            ))
+        AssetDescriptionFormatError.withPath("/disposals/0/assetDescription"),
+        AssetTypeFormatError.withPath("/disposals/0/assetType"),
+        ClaimOrElectionCodesFormatError.withPaths(
+          Seq(
+            "/disposals/0/claimOrElectionCodes/0",
+            "/disposals/0/claimOrElectionCodes/1"
+          )
         ),
-        AssetTypeFormatError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0/assetType"
-            ))
-        ),
-        ClaimOrElectionCodesFormatError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0/claimOrElectionCodes/0",
-              "/disposals/0/claimOrElectionCodes/1"
-            ))
-        ),
-        DateFormatError.copy(
-          paths = Some(
-            Seq(
-              "/disposals/0/disposalDate",
-              "/disposals/0/acquisitionDate"
-            ))
+        DateFormatError.withPaths(
+          Seq(
+            "/disposals/0/acquisitionDate",
+            "/disposals/0/disposalDate"
+          )
         )
-      ))
+      )
+    )
   )
 
   val formatNonStandardGainsJson: JsValue = Json.parse(
@@ -336,8 +315,51 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
     """.stripMargin
   )
 
-  val formatNonStandardGainsError: MtdError = RuleIncorrectOrEmptyBodyError.copy(
-    paths = Some(Seq("/nonStandardGains"))
+  val formatNonStandardGainsError: MtdError = RuleIncorrectOrEmptyBodyError.withPath("/nonStandardGains")
+
+  val allInvalidDateRulesJson: JsValue = Json.parse(
+    """
+      |{
+      |  "disposals": [
+      |    {
+      |      "assetType": "other-property",
+      |      "assetDescription": "string",
+      |      "acquisitionDate": "2021-05-07",
+      |      "disposalDate": "2021-04-05",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "gain": 99999999999.99,
+      |      "claimOrElectionCodes": [
+      |        "OTH"
+      |      ],
+      |      "gainAfterRelief": 99999999999.99,
+      |      "rttTaxPaid": 99999999999.99
+      |    },
+      |    {
+      |      "assetType": "other-property",
+      |      "assetDescription": "string",
+      |      "acquisitionDate": "2021-05-07",
+      |      "disposalDate": "2022-04-06",
+      |      "disposalProceeds": 99999999999.99,
+      |      "allowableCosts": 99999999999.99,
+      |      "loss": 99999999999.99,
+      |      "lossAfterRelief": 99999999999.99,
+      |      "rttTaxPaid": 99999999999.99
+      |    }
+      |  ]
+      |}
+    """.stripMargin
+  )
+
+  val allInvalidDateRulesErrors: ErrorWrapper = ErrorWrapper(
+    correlationId = "",
+    BadRequestError,
+    Some(
+      Seq(
+        RuleAcquisitionDateError.withPath("/disposals/0"),
+        RuleDisposalDateNotFutureError.withPaths(Seq("/disposals/0/disposalDate", "/disposals/1/disposalDate"))
+      )
+    )
   )
 
   private trait Test {
@@ -387,9 +409,9 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
           JsObject.empty
         )
 
-        val response: WSResponse = await(request.put(validRequestJson))
+        val response: WSResponse = await(request.put(validRequestJson("2021")))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson)
+        verifyNrs(validRequestJson("2021"))
       }
 
       "any valid request is made TYS" in new TysHipTest {
@@ -400,9 +422,9 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
           JsObject.empty
         )
 
-        val response: WSResponse = await(request.put(validRequestJson))
+        val response: WSResponse = await(request.put(validRequestJson()))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson)
+        verifyNrs(validRequestJson())
       }
     }
 
@@ -429,10 +451,10 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
         val input = Seq(
           // Path errors
-          ("AA1123A", "2019-20", validRequestJson, BAD_REQUEST, NinoFormatError, None, None),
-          ("AA123456A", "20177", validRequestJson, BAD_REQUEST, TaxYearFormatError, None, None),
-          ("AA123456A", "2015-17", validRequestJson, BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
-          ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
+          ("AA1123A", "2019-20", validRequestJson("2021"), BAD_REQUEST, NinoFormatError, None, None),
+          ("AA123456A", "20177", validRequestJson("2021"), BAD_REQUEST, TaxYearFormatError, None, None),
+          ("AA123456A", "2015-17", validRequestJson("2021"), BAD_REQUEST, RuleTaxYearRangeInvalidError, None, None),
+          ("AA123456A", "2018-19", validRequestJson("2021"), BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
 
           // Body errors
           ("AA123456A", "2021-22", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
@@ -443,6 +465,7 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
           ("AA123456A", "2021-22", decimalsTooBigJson, BAD_REQUEST, BadRequestError, Some(decimalsOutOfRangeErrors), Some("decimalsTooBig")),
           ("AA123456A", "2021-22", decimalsTooSmallJson, BAD_REQUEST, BadRequestError, Some(decimalsOutOfRangeErrors), Some("decimalsTooSmall")),
           ("AA123456A", "2021-22", formatDisposalsJson, BAD_REQUEST, BadRequestError, Some(formatDisposalsErrors), Some("formatDisposals")),
+          ("AA123456A", "2021-22", allInvalidDateRulesJson, BAD_REQUEST, BadRequestError, Some(allInvalidDateRulesErrors), Some("allDateRules")),
           ("AA123456A", "2021-22", formatNonStandardGainsJson, BAD_REQUEST, formatNonStandardGainsError, None, Some("formatNonStandardGains"))
         )
 
@@ -459,7 +482,7 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
               errorBody(downstreamCode)
             )
 
-            val response: WSResponse = await(request.put(validRequestJson))
+            val response: WSResponse = await(request.put(validRequestJson()))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")

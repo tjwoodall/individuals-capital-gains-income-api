@@ -22,8 +22,11 @@ import cats.implicits.*
 import common.errors.*
 import shared.controllers.validators.RulesValidator
 import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.models.domain.TaxYear
 import shared.models.errors.{DateFormatError, MtdError}
 import v3.otherCgt.createAmend.def1.model.request.*
+
+import java.time.LocalDate
 
 object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_CreateAmendOtherCgtRequestData] {
 
@@ -36,22 +39,45 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
     import parsed.*
 
     combine(
-      validateDisposalSequence(body),
+      validateDisposalSequence(body, taxYear),
       validateNonStandardGains(body),
       validateLosses(body),
       validateAdjustments(body)
     ).onSuccess(parsed)
   }
 
-  private def validateDisposalSequence(requestBody: Def1_CreateAmendOtherCgtRequestBody): Validated[Seq[MtdError], Unit] = {
+  private def validateAcquisitionAndDisposalDates(acquisitionDate: LocalDate,
+                                                  disposalDate: LocalDate,
+                                                  taxYear: TaxYear,
+                                                  basePath: String): Validated[Seq[MtdError], Unit] = {
+    val isAcquisitionDateInvalid = acquisitionDate.isAfter(disposalDate)
+
+    val isDisposalDateInvalid = disposalDate.isBefore(taxYear.startDate) || disposalDate.isAfter(taxYear.endDate)
+
+    val validatedAcquisitionDateRule = if (isAcquisitionDateInvalid) {
+      Invalid(List(RuleAcquisitionDateError.withPath(basePath)))
+    } else {
+      valid
+    }
+
+    val validatedDisposalDateRule = if (isDisposalDateInvalid) {
+      Invalid(List(RuleDisposalDateNotFutureError.withPath(s"$basePath/disposalDate")))
+    } else {
+      valid
+    }
+
+    combine(validatedAcquisitionDateRule, validatedDisposalDateRule)
+  }
+
+  private def validateDisposalSequence(requestBody: Def1_CreateAmendOtherCgtRequestBody, taxYear: TaxYear): Validated[Seq[MtdError], Unit] = {
     requestBody.disposals.fold[Validated[Seq[MtdError], Unit]](Valid(())) { disposals =>
       disposals.zipWithIndex.traverse_ { case (disposal, index) =>
-        validateDisposal(disposal, index)
+        validateDisposal(disposal, index, taxYear)
       }
     }
   }
 
-  private def validateDisposal(disposal: Disposal, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateDisposal(disposal: Disposal, index: Int, taxYear: TaxYear): Validated[Seq[MtdError], Unit] = {
     import disposal.*
 
     val validatedMandatoryDecimalNumbers = List(
@@ -71,12 +97,11 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
       resolveNonNegativeParsedNumber(value, path)
     }
 
-    val validatedDates = List(
-      (disposalDate, s"/disposals/$index/disposalDate"),
-      (acquisitionDate, s"/disposals/$index/acquisitionDate")
-    ).traverse_ { case (value, path) =>
-      val resolveDate = ResolveIsoDate(DateFormatError.withPath(path))
-      resolveDate(value)
+    val validatedDates = (
+      ResolveIsoDate(acquisitionDate, DateFormatError.withPath(s"/disposals/$index/acquisitionDate")),
+      ResolveIsoDate(disposalDate, DateFormatError.withPath(s"/disposals/$index/disposalDate"))
+    ).tupled.andThen { case (acquisitionDate, disposalDate) =>
+      validateAcquisitionAndDisposalDates(acquisitionDate, disposalDate, taxYear, s"/disposals/$index")
     }
 
     val validatedAssetDescription: Validated[Seq[MtdError], String] =
