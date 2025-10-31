@@ -66,6 +66,16 @@
       "description": "The amount of Capital Gains Tax losses from disposals in previous tax years that reduce the overall gain of this disposal.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
       "example": "1999.99"
     },
+    "gainsWithBadr": {
+      "type": "number",
+      "description": "The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "example": "1999.99"
+    },
+    "gainsWithInv": {
+      "type": "number",
+      "description": "The total amount of gains eligible for Investor's Relief (INV) before losses have been deducted.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "example": "1999.99"
+    },
     "singlePropertyDisposals": {
       "type": "object",
         "properties": {
@@ -100,6 +110,50 @@
         "ppdSubmissionId": {"$ref": "#/definitions/ppdSubmissionId"},
         "amountOfNetGain": {"$ref": "#/definitions/amountOfNetGain"},
         "amountOfNetLoss": {"$ref": "#/definitions/amountOfNetLoss"}
+      },
+      "required": [
+        "ppdSubmissionId"
+      ]
+    },
+    "singlePropertyDisposals2526": {
+      "type": "object",
+        "properties": {
+          "ppdSubmissionId": {"$ref": "#/definitions/ppdSubmissionId"},
+          "completionDate": {"$ref": "#/definitions/completionDate"},
+          "disposalProceeds": {"$ref": "#/definitions/disposalProceeds"},
+          "acquisitionDate": {"$ref": "#/definitions/acquisitionDate"},
+          "acquisitionAmount": {"$ref": "#/definitions/acquisitionAmount"},
+          "improvementCosts": {"$ref": "#/definitions/improvementCosts"},
+          "additionalCosts": {"$ref": "#/definitions/additionalCosts"},
+          "prfAmount": {"$ref": "#/definitions/prfAmount"},
+          "otherReliefAmount": {"$ref": "#/definitions/otherReliefAmount"},
+          "lossesFromThisYear": {"$ref": "#/definitions/lossesFromThisYear"},
+          "lossesFromPreviousYear": {"$ref": "#/definitions/lossesFromPreviousYear"},
+          "amountOfNetGain": {"$ref": "#/definitions/amountOfNetGain"},
+          "amountOfNetLoss": {"$ref": "#/definitions/amountOfNetLoss"},
+          "gainsWithBadr": {"$ref": "#/definitions/gainsWithBadr"},
+          "gainsWithInv": {"$ref": "#/definitions/gainsWithInv"}
+        },
+        "required": [
+          "ppdSubmissionId",
+          "completionDate",
+          "disposalProceeds",
+          "acquisitionDate",
+          "acquisitionAmount",
+          "improvementCosts",
+          "additionalCosts",
+          "prfAmount",
+          "otherReliefAmount"
+        ]
+    },
+    "multiplePropertyDisposals2526": {
+      "type": "object",
+      "properties": {
+        "ppdSubmissionId": {"$ref": "#/definitions/ppdSubmissionId"},
+        "amountOfNetGain": {"$ref": "#/definitions/amountOfNetGain"},
+        "amountOfNetLoss": {"$ref": "#/definitions/amountOfNetLoss"},
+        "gainsWithBadr": {"$ref": "#/definitions/gainsWithBadr"},
+        "gainsWithInv": {"$ref": "#/definitions/gainsWithInv"}
       },
       "required": [
         "ppdSubmissionId"
