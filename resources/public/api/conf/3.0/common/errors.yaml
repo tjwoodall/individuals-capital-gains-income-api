@@ -117,6 +117,12 @@ components:
         code: RULE_OUTSIDE_AMENDMENT_WINDOW
         message: You are outside the amendment window
 
+    ruleIncorrectLossesSubmitted:
+      description: The Losses from this year can not be submitted if the number of disposals is less than or equal to 1.
+      value:
+        code: RULE_INCORRECT_LOSSES_SUBMITTED
+        message: LossesFromThisYear can not be submitted if the numberOfDisposals is less than or equal to 1
+
     ruleCompletionDate:
       description: The completionDate must be within the specific tax year and not in the future. If the specified tax year has not ended, the completionDate must be between 7th March and 5th April.
       value:
