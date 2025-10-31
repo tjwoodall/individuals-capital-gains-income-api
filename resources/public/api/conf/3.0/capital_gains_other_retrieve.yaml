@@ -38,12 +38,18 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/capital_gains_other_retrieve/def1/response.json'
+          oneOf:
+            - $ref: './schemas/capital_gains_other_retrieve/def1/response.json'
+            - $ref: './schemas/capital_gains_other_retrieve/def2/response.json'
         examples:
-          example-response:
-            description: Example Response
+          TY 2024-25 or before:
+            description: Tax Year 2024-25 or before
             value:
               $ref: './examples/capital_gains_other_retrieve/def1/response.json'
+          TY 2025-26 and after:
+            description: Tax Year 2025-26 and after
+            value:
+              $ref: './examples/capital_gains_other_retrieve/def2/response.json'
 
   "400":
     description: Bad request

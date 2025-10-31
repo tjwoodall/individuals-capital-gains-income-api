@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Retrieve Other Capital Gains and Disposals Response",
+  "title": "TY 2024-25 or before",
   "description": "Retrieve Other Capital Gains and Disposals Response",
   "type": "object",
   "properties": {
