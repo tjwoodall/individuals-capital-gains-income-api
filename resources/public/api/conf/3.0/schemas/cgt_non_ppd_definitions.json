@@ -88,17 +88,19 @@
     },
     "claimOrElectionCodes": {
       "type": "array",
-      "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief",
+      "description": "The claim, election or notice codes related to the disposal.\n\nPossible values are: \n\n* **PRR**: Private Residence Relief where Letting Relief does not apply \n\n* **LET**: Private Residence Relief where Letting Relief applies\n\n* **GHO**: Gift Hold-Over Relief\n\n* **ROR**: Rollover Relief \n\n* **PRO**: Provisional Rollover Relief\n\n* **BAD**: Business Asset Disposal Relief \n\n* **NVC**: Negligible Value Claims\n\n* **OTH**: Other claims",
       "items":{
         "type": "string",
         "example": "[\"BAD\",\"OTH\"]",
         "enum":[
+          "PRR",
+          "LET",
           "GHO",
           "ROR",
           "PRO",
+          "BAD",
           "NVC",
-          "OTH",
-          "BAD"
+          "OTH"
         ]
       }
     },
