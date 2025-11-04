@@ -62,6 +62,24 @@ components:
       value:
         code: FORMAT_CLAIM_OR_ELECTION_CODES
         message: The format of the claimOrElectionCodes value is invalid
+    
+    cgtOtherFormatTokenName:
+      description: The format of the supplied tokenName is not valid.
+      value:
+        code: FORMAT_TOKEN_NAME
+        message: The provided tokenName is invalid
+    
+    cgtOtherFormatCompanyName:
+      description: The format of the supplied companyName is not valid.
+      value:
+        code: FORMAT_COMPANY_NAME
+        message: The provided companyName is invalid
+    
+    cgtOtherFormatCompanyRegistrationName:
+      description: The format of the supplied companyRegistrationNumber is not valid
+      value:
+        code: FORMAT_COMPANY_REGISTRATION_NUMBER
+        message: The provided companyRegistrationNumber is invalid
 
     ruleDisposalDateNotFuture:
       description: The disposalDate must be in the specified tax year and no later than today's date.
@@ -92,6 +110,24 @@ components:
       value:
         code: RULE_GAIN_AFTER_RELIEF_LOSS_AFTER_RELIEF
         message: Only one of gainAfterRelief or lossAfterRelief values can be provided
+    
+    ruleInvalidClaimDisposals:
+      description: BAD and INV relief codes cannot be claimed in the same disposal; If both apply, they must be reported as separate disposals.
+      value:
+        code: RULE_INVALID_CLAIM_DISPOSALS
+        message: BAD and INV relief codes cannot be claimed in the same disposal. Itemise disposals separately
+    
+    ruleMissingCompanyName:
+      description: Company name is required for listed shares.
+      value:
+        code: RULE_MISSING_COMPANY_NAME
+        message: companyName is required for listed shares
+    
+    ruleInvalidClaimOrElectionCodes:
+      description: INV relief code does not apply to non-UK residential property disposals.
+      value:
+        code: RULE_INVALID_CLAIM_OR_ELECTION_CODES
+        message: INV relief code does not apply to non-UK residential property disposals
 
     formatSource:
       description: The format of the supplied source is not valid.
