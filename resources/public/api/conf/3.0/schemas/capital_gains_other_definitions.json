@@ -3,7 +3,10 @@
     "numberOfDisposals": {
       "type": "number",
       "description": "The total number of property disposals submitted.\n\nThe value must be an integer between 1 and 99999999999.",
-      "example": 3
+      "example": 3,
+      "multipleOf":1,
+      "minimum":1,
+      "maximum":9999
     },
     "assetDescription": {
       "type": "string",
@@ -30,27 +33,42 @@
     "disposalProceeds": {
       "type": "number",
       "description": "The total proceeds from the disposal of the asset. \n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "allowableCosts": {
       "type": "number",
       "description": "The total amount of allowable costs that can be deducted from the disposal proceeds. \n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsWithBadr": {
       "type": "number",
       "description": "The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted. \n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsBeforeLosses": {
       "type": "number",
       "description": "The total amount of gains before losses have been deducted. \n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lossesField": {
       "type": "number",
       "description": "The total allowable losses from the disposal.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "claimOrElectionCodesCryptoassets": {
       "type": "array",
@@ -90,17 +108,26 @@
     "amountOfNetGain": {
       "type": "number",
       "description": "The total amount of net gain from the disposal. Either gain or loss must be populated but not both.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "amountOfNetLoss": {
       "type": "number",
       "description": "The total amount of net loss from the disposal. Either gain or loss must be populated but not both.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "rttTaxPaid": {
       "type": "number",
       "description": "The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for this disposal.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "assetType":{
       "type":"string",
@@ -127,7 +154,10 @@
     "gainsWithInv": {
       "type": "number",
       "description": "The total amount of gains eligible for Investor's Relief (INV) before losses have been deducted.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "claimOrElectionCodesOtherGains": {
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values for listed shares are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust\n\nPossible values for non-uk residential property are:\n\n* **PRR** - Private Residence Relief where Letting Relief does not apply\n\n* **LET** - Private Residence Relief where Letting Relief applies\n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **EOT** - Employee Ownership Trust\n\nPossible values for other property and other assets are:\n\n* **PRR** - Private Residence Relief where Letting Relief does not apply\n\n* **LET** - Private Residence Relief where Letting Relief applies\n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust",
@@ -197,110 +227,174 @@
     "gainsReportedOnRtt": {
       "type": "number",
       "description": "The gains from this disposal reported through the Capital Gains Tax Real Time Transactions service for this disposal.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsExceedingLifetimeLimit": {
       "type": "number",
       "description": "The portion of gains exceeding the applicable lifetime relief limit.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsUnderSeis": {
       "type": "number",
       "description": "The gains eligible for Seed Enterprise Investment Scheme (SEIS) relief.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lossUsedAgainstGeneralIncome": {
       "type": "number",
       "description": "The losses from this disposal applied against general income in the current tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "eisOrSeisReliefDueCurrentYear": {
       "type": "number",
       "description": "The Enterprise Investment Scheme (EIS) or Seed Enterprise Investment Scheme (SEIS) relief due for the current tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lossesUsedAgainstGeneralIncomePreviousYear": {
       "type": "number",
       "description": "The losses applied against general income from the previous tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "eisOrSeisReliefDuePreviousYear": {
       "type": "number",
       "description": "The Enterprise Investment Scheme (EIS) or Seed Enterprise Investment Scheme (SEIS) relief due from the previous tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsFromExcludedSecurities": {
       "type": "number",
       "description": "The gains arising from excluded indexed securities.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 199.99
+      "example": 199.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "gainsFromQahcBeforeLosses": {
       "type": "number",
       "description": "The gains from QAHC disposals before deducting any losses.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lossesFromQahc": {
       "type": "number",
       "description": "The losses arising from QAHC disposals.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "attributedGains": {
       "type": "number",
       "description": "The total amount of all the attributed gains where personal losses cannot be set off.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "attributedGainsRttTaxPaid": {
       "type": "number",
       "description": "The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for all of the attributed interest gains.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "otherGainsField": {
       "type": "number",
       "description": "The total amount of any other asset type gains not reported elsewhere for the specified tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "otherGainsRttTaxPaid": {
       "type": "number",
       "description": "The total amount of tax paid through the Capital Gains Tax Real Time Transactions service on any other asset-type gains.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "broughtForwardLossesUsedInCurrentYear": {
       "type": "number",
       "description": "The total amount of brought forward losses used for the specified tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "setAgainstInYearGains": {
       "type": "number",
       "description": "The total amount of trading losses set against chargeable gains for the specified tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "setAgainstEarlierYear": {
       "type": "number",
       "description": "The total amount of losses set against general income for the tax year previous to the specified tax year.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lossesToCarryForward": {
       "type": "number",
       "description": "The losses from this year to carry forward to future tax years.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "adjustmentAmount": {
       "type": "number",
       "description": "The amount of included adjustments to reduce or increase the Capital Gains Tax payable.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lifetimeAllowanceBadr": {
       "type": "number",
       "description": "The lifetime allowance eligible for Business Asset Disposal Relief (BADR).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "lifetimeAllowanceInv": {
       "type": "number",
       "description": "The lifetime allowance eligible for Investor's Relief (INV).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
-      "example": 1999.99
+      "example": 1999.99,
+      "multipleOf":0.01,
+      "minimum":0,
+      "maximum":99999999999.99
     },
     "cryptoassets": {
       "type": "array",
+      "description": "An array of cryptoassets entries.",
       "items": {
         "type": "object",
         "properties": {
@@ -333,6 +427,7 @@
     },
     "otherGains": {
       "type": "array",
+      "description": "An array of other gains entries.",
       "items": {
         "type": "object",
         "properties": {
@@ -368,6 +463,7 @@
     },
     "unlistedShares": {
       "type": "array",
+      "description": "An array of unlisted shares entries.",
       "items": {
         "type": "object",
         "properties": {
@@ -407,18 +503,21 @@
     },
     "gainExcludedIndexedSecurities": {
       "type": "object",
+      "description": "Object containing details of gains from excluded indexed securities.",
       "properties": {
         "gainsFromExcludedSecurities" : {"$ref": "#/definitions/gainsFromExcludedSecurities"}
       }
     },
     "qualifyingAssetHoldingCompany": {
       "type": "object",
+      "description": "Object containing details of gains and losses from Qualifying Asset Holding Company (QAHC) disposals.",
       "properties": {
         "gainsFromQahcBeforeLosses" : {"$ref": "#/definitions/gainsFromQahcBeforeLosses"},
         "lossesFromQahc" : {"$ref": "#/definitions/lossesFromQahc"}
       }
     },
     "nonStandardGains2526": {
+      "description": "Object containing details of non-standard gains.",
       "type": "object",
       "properties": {
         "attributedGains" : {"$ref": "#/definitions/attributedGains"},
@@ -429,6 +528,7 @@
     },
     "losses2526": {
       "type": "object",
+      "description": "Object containing details of Capital Gains Tax losses relating to other disposals and non-standard gains.",
       "properties": {
         "broughtForwardLossesUsedInCurrentYear" : {"$ref": "#/definitions/broughtForwardLossesUsedInCurrentYear"},
         "setAgainstInYearGains" : {"$ref": "#/definitions/setAgainstInYearGains"},
@@ -438,12 +538,14 @@
     },
     "adjustments2526": {
       "type": "object",
+      "description": "Object containing details of Capital Gains Tax adjustment amounts.",
       "properties": {
         "adjustmentAmount" : {"$ref": "#/definitions/adjustmentAmount"}
       }
     },
     "lifetimeAllowance": {
       "type": "object",
+      "description": "Object containing lifetime allowance eligible for Business Asset Disposal Relief and Investors' Relief.",
       "properties": {
         "lifetimeAllowanceBadr" : {"$ref": "#/definitions/lifetimeAllowanceBadr"},
         "lifetimeAllowanceInv" : {"$ref": "#/definitions/lifetimeAllowanceInv"}
