@@ -1,9 +1,8 @@
 summary: Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
 description: |
   This API provides the capability to retrieve the residential property disposals subject to capital gains tax for 
-  payment for property disposal (PPD) and non payment for property disposal (non-PPD).  This includes:
+  payment for property disposal (PPD). This includes:
   
-    - User submitted residential property disposals
     - Disposals previously reported via the HMRC 'Report and Pay Capital Gains Tax on UK Property'
     - User submitted disposal overrides
   
@@ -44,12 +43,18 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/all_cgt_residential_overrides_retrieve/def1/response.json'
+          oneOf:
+            - $ref: './schemas/cgt_residential_overrides_ppd_retrieve/def1/response.json'
+            - $ref: './schemas/cgt_residential_overrides_ppd_retrieve/def2/response.json'
         examples:
-          example-response:
-            description: Example Response
+          TY 2024-25 or before:
+            description: Tax Year 2024-25 or before
             value:
-              $ref: './examples/all_cgt_residential_overrides_retrieve/def1/response.json'
+              $ref: './examples/cgt_residential_overrides_ppd_retrieve/def1/response.json'
+          TY 2025-26 and after:
+            description: Tax Year 2025-26 and after
+            value:
+              $ref: './examples/cgt_residential_overrides_ppd_retrieve/def2/response.json'
 
   "400":
     description: Bad request
