@@ -17,7 +17,7 @@
     "tokenName": {
       "type": "string",
       "description": "The name of the crypotasset token.",
-      "example": "",
+      "example": "Bitcoin",
       "pattern":"^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
     },
     "acquisitionDate": {
