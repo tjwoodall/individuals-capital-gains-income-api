@@ -34,7 +34,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/capital_gains_other_create_amend/def1/request.json'
           - $ref: './schemas/capital_gains_other_create_amend/def2/request.json'
       examples:
