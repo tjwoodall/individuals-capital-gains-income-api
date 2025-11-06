@@ -93,7 +93,7 @@
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief",
       "items":{
         "type": "string",
-        "example": "[\"BAD\",\"OTH\"]",
+        "example": "BAD",
         "enum":[
           "GHO",
           "ROR",
@@ -109,7 +109,7 @@
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **ESH** - Employee Shares\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust",
       "items":{
         "type": "string",
-        "example": "[\"BAD\",\"OTH\"]",
+        "example": "BAD",
         "enum":[
           "GHO",
           "ROR",
@@ -185,7 +185,7 @@
           "title": "For listed shares",
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\"]",
+            "example": "BAD",
             "enum": [
               "GHO",
               "ROR",
@@ -204,7 +204,7 @@
           "title": "For non-uk residential property",
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\"]",
+            "example": "BAD",
             "enum": [
               "PRR",
               "LET",
@@ -224,7 +224,7 @@
           "title": "For other property and other assets",
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\"]",
+            "example": "BAD",
             "enum": [
               "PRR",
               "LET",
@@ -640,7 +640,7 @@
             "description":"The claim, election or notice codes related to the disposal. Possible values are:\\\n`PRR` - Private Residence Relief where Letting Relief does not apply\\\n`LET` - Private Residence Relief where Letting Relief applies\\\n`GHO` - Gift Hold-Over Relief\\\n`ROR` - Rollover Relief\\\n`PRO` - Provisional Rollover Relief\\\n`ESH` - Employee Shares\\\n`NVC` - Negligible Value Claims\\\n`SIR` - Social Investment Tax Relief\\\n`OTH` - Other claims\\\n`BAD` - Business Asset Disposal Relief\\\n`INV` - Investors' Relief",
             "items":{
               "type":"string",
-              "example":"[\"BAD\",\"OTH\"]"
+              "example":"BAD"
             }
           },
           "gainAfterRelief":{
