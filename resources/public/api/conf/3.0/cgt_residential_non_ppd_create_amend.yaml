@@ -40,7 +40,7 @@ requestBody:
   content:
     application/json:
       schema:
-        oneOf:
+        anyOf:
           - $ref: './schemas/cgt_residential_non_ppd_create_amend/def1/request.json'
           - $ref: './schemas/cgt_residential_non_ppd_create_amend/def2/request.json'
       examples:
