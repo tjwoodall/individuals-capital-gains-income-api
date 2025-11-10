@@ -1,24 +1,18 @@
 summary: Retrieve CGT Residential Property Disposals (non-PPD)
 description: |
-  This API provides the capability to retrieve the residential property disposals subject to capital gains tax for 
-  payment for property disposal (PPD) and non payment for property disposal (non-PPD).  This includes:
-  
-    - User submitted residential property disposals
-    - Disposals previously reported via the HMRC 'Report and Pay Capital Gains Tax on UK Property'
-    - User submitted disposal overrides
+  This endpoint enables you to retrieve the residential property disposals subject to capital gains tax for non payment
+  for property disposal (non-PPD). This includes user submitted residential property disposals.
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
   
-  | Header Value (Gov-Test-Scenario)        | Scenario                                                                                                                                                                                                                                    |
-  |-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                                                                                                 
-  | N/A - DEFAULT<br> **?source=user**      | Requesting **user** source simulates success response with User provided disposals and overrides.                                                                                                                                           |
-  | N/A - DEFAULT<br> **?source=hmrc-held** | Requesting **hmrc-held** source simulates success response with HMRC held disposals.                                                                                                                                                        |
-  | N/A - DEFAULT<br> **?source=latest**    | Requesting **latest** source simulates success response with Latest disposals and overrides submitted.                                                                                                                                      |
-  | LOSS<br> **source=latest**              | Requesting **latest** source with LOSS simulates success response with User provided disposals and overrides with losses.                                                                                                                   |
-  | NOT_FOUND                               | Simulates the scenario where no data is found.                                                                                                                                                                                              | 
-  | STATEFUL                                | Performs a stateful retrieve. <p> Information and data held by HMRC is not available in the sandbox environment. Providing ‘source=hmrc-held’ will result in the expected HTTP 404 (matching resource not found) error being returned. </p> |  
-  | REQUEST_CANNOT_BE_FULFILLED             | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors.                                                                                                               |
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                                                     |
+  |----------------------------------|------------------------------------------------------------------------------------------------------------------------------|                                                                                                                 
+  | N/A - DEFAULT                    | Simulates success response.                                                                                                  |
+  | LOSS                             | Simulates success loss response.                                                                                             |
+  | NOT_FOUND                        | Simulates the scenario where no data is found.                                                                               | 
+  | STATEFUL                         | Performs a stateful retrieve.                                                                                                |  
+  | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
 
 tags:
   - Capital Gains on Residential Property Disposals
@@ -26,7 +20,6 @@ tags:
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYearMinimum2021'
-  - $ref: './common/queryParameters.yaml#/components/parameters/source'
   - $ref: './common/headers.yaml#/components/parameters/acceptHeader'
   - $ref: './common/headers.yaml#/components/parameters/authorizationReadScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
@@ -44,12 +37,18 @@ responses:
     content:
       application/json:
         schema:
-          $ref: './schemas/all_cgt_residential_overrides_retrieve/def1/response.json'
+          oneOf:
+            - $ref: './schemas/cgt_residential_non_ppd_retrieve/def1/response.json'
+            - $ref: './schemas/cgt_residential_non_ppd_retrieve/def2/response.json'
         examples:
-          example-response:
-            description: Example Response
+          TY 2024-25 or before:
+            description: Tax Year 2024-25 or before
             value:
-              $ref: './examples/all_cgt_residential_overrides_retrieve/def1/response.json'
+              $ref: './examples/cgt_residential_non_ppd_retrieve/def1/response.json'
+          TY 2025-26 and after:
+            description: Tax Year 2025-26 and after
+            value:
+              $ref: './examples/cgt_residential_non_ppd_retrieve/def2/response.json'
 
   "400":
     description: Bad request
@@ -65,8 +64,6 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatNino'
           FORMAT_TAX_YEAR:
             $ref: './common/errors.yaml#/components/examples/formatTaxYear'
-          FORMAT_SOURCE:
-            $ref: './common/errors.yaml#/components/examples/formatSource'
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:
