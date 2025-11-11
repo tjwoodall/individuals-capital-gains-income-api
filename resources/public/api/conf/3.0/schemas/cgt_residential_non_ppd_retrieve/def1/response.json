@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TY 2024-25 or before",
+  "type": "object",
+  "properties": {
+    "customerAddedDisposals": {
+      "type": "object",
+      "description": "Residential property disposals that weren't reported via the 'Report and pay Capital Gains Tax on UK property' service and submitted by the customer into ITSA.",
+      "properties": {
+        "submittedOn": {
+          "description": "The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
+          "type": "string",
+          "format": "date-time",
+          "example": "2020-07-07T10:59:47.544Z"
+        },
+        "disposals": {
+          "type": "array",
+          "description": "An array of residential property disposals.",
+          "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals"}
+        }
+      },
+      "required": [
+        "submittedOn",
+        "disposals"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "customerAddedDisposals"
+  ],
+  "additionalProperties": false
+}

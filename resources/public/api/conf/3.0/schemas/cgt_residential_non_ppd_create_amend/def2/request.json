@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TY 2025-26 onwards",
+  "type": "object",
+  "properties": {
+    "disposals": {
+      "type": "array",
+      "description": "An array of residential property disposals.",
+      "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals2526"}
+    }
+  },
+  "required": [
+    "disposals"
+  ]
+}
