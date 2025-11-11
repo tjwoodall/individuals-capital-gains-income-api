@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "TY 2025-26 onwards",
-  "description": "Create and Amend Other Capital Gains and Disposals Request",
   "type": "object",
   "properties": {
     "cryptoassets": {

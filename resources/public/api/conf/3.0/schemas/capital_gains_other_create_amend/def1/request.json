@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "TY 2024-25 or before",
-  "description": "Create and Amend Other Capital Gains and Disposals Request",
   "type": "object",
   "properties": {
     "disposals": {"$ref": "../../capital_gains_other_definitions.json#/definitions/disposals"},

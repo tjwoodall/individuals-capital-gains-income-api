@@ -1,8 +1,9 @@
 summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
 description: |
-  This endpoint enables you to override residential property disposals submissions previously submitted via the HMRC 
-  'Report and pay Capital Gains Tax on UK property' service (payment for property disposal or PPD) for a given National 
-  Insurance number and tax year. This endpoint can only be used after the tax year has ended.
+  This endpoint enables you to override residential property disposal submissions previously submitted via HMRC
+  for payment for property disposal (PPD) (using the 'Report and pay Capital Gains Tax on UK property' service) for
+  a given National Insurance number and tax year.
+  This endpoint can only be used after the tax year has ended. 
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -15,9 +16,9 @@ description: |
   | INCORRECT_DISPOSAL_TYPE          | Simulate the scenario where a ppdSubmissionId in the request is being used for the incorrect disposal type. |
   | DUPLICATED_PPD_SUBMISSION_ID     | Simulates the scenario where a ppdSubmissionId is duplicated.                                               |
   | TAX_YEAR_NOT_ENDED               | Simulates the scenario where the tax year provided has not ended.                                           |  
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
   | STATEFUL                         | Performs a stateful create or update.                                                                       |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
-  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.          |
 
 tags:
   - Capital Gains on Residential Property Disposals
@@ -43,11 +44,9 @@ requestBody:
           - $ref: './schemas/cgt_residential_overrides_ppd_create_amend/def2/request.json'
       examples:
         TY 2024-25 or before:
-          description: Tax Year 2024-25 or before
           value:
             $ref: './examples/cgt_residential_overrides_ppd_create_amend/def1/request.json'
-        TY 2025-26 and after:
-          description: Tax Year 2025-26 and after
+        TY 2025-26 onwards:
           value:
             $ref: './examples/cgt_residential_overrides_ppd_create_amend/def2/request.json'
 
@@ -96,7 +95,7 @@ responses:
           RULE_INCORRECT_GOV_TEST_SCENARIO:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
           RULE_DATE_RANGE_INVALID:
-              $ref: './common/errors.yaml#/components/examples/ruleDateRangeInvalid'
+            $ref: './common/errors.yaml#/components/examples/ruleDateRangeInvalid'
           RULE_OUTSIDE_AMENDMENT_WINDOW:
             $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
 

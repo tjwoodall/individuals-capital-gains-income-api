@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "TY 2024-25 or before",
-  "description": "Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) Response",
   "type": "object",
   "properties": {
     "ppdYearToDate": {
@@ -10,7 +9,7 @@
       "multipleOf": 0.01,
       "minimum": 0.00,
       "maximum": 99999999999.99,
-      "example": "1999.99"
+      "example": 1999.99
     },
     "multiplePropertyDisposals": {
       "type": "array",
@@ -28,38 +27,40 @@
             ]
           },
           "submittedOn": {
-            "description": "The date the disposals were submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
+            "description": "The date the disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
             "type": "string",
             "example": "2020-07-07T10:59:47.544Z"
           },
           "ppdSubmissionId": {
-            "description": "The reference number returned to the customer from the Report and pay Capital Gains Tax on UK property service.",
+            "description": "The reference number returned to the customer from the 'Report and pay Capital Gains Tax on UK property' service.",
             "type": "string",
             "example": "Da2467289108",
             "pattern": "^[A-Za-z0-9]{12}$"
           },
           "ppdSubmissionDate": {
-            "description": "The date the disposals were submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
+            "description": "The date the disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
             "type": "string",
+            "format": "date-time",
             "example": "2020-07-07T10:59:47.544Z"
           },
           "numberOfDisposals": {
-            "description": "The number of properties disposed of within a single Report and pay Capital Gains Tax on UK property service submission. The value must be between 2 and 999",
-            "type": "number",
+            "description": "The number of properties disposed of within a single 'Report and pay Capital Gains Tax on UK property' service submission. The value must be between 2 and 999",
+            "type": "integer",
             "minimum": 2,
             "maximum": 999,
             "multipleOf": 1,
-            "example": "3"
+            "example": 3
           },
           "disposalTaxYear": {
             "description": "The tax year in which the properties were disposed. The 2021-22 tax year would be represented as 2022.",
-            "type": "number",
-            "example": "2022",
+            "type": "integer",
+            "example": 2022,
             "pattern": "^2[0-9]{3}$"
           },
           "completionDate": {
-            "description": "The completion date of the sale or disposal of the properties, in the format YYYY-MM-DD.",
+            "description": "The completion date of the sale or disposal of the properties, in the format `YYYY-MM-DD`.",
             "type": "string",
+            "format": "date",
             "example": "2022-03-08"
           },
           "amountOfNetGain": {
@@ -68,7 +69,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "amountOfNetLoss": {
             "description": "The total amount of net loss from the disposals.  Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -76,7 +77,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           }
         },
         "required": [
@@ -103,6 +104,7 @@
           "submittedOn": {
             "description": "The date the disposals were submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
             "type": "string",
+            "format": "date-time",
             "example": "2020-07-07T10:59:47.544Z"
           },
           "ppdSubmissionId": {
@@ -114,16 +116,19 @@
           "ppdSubmissionDate": {
             "description": "The date the disposal was submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
             "type": "string",
+            "format": "date-time",
             "example": "2020-07-07T10:59:47.544Z"
           },
           "disposalDate": {
-            "description": "The date that contracts were exchanged between the owner and the recipient in the format YYYY-MM-DD. The date must fall within the specified taxYear.",
+            "description": "The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear.",
             "type": "string",
+            "format": "date",
             "example": "2022-02-04"
           },
           "completionDate": {
-            "description": "The completion date of the sale or disposal of the property, in the format YYYY-MM-DD.",
+            "description": "The completion date of the sale or disposal of the property, in the format `YYYY-MM-DD`.",
             "type": "string",
+            "format": "date",
             "example": "2022-03-08"
           },
           "disposalProceeds": {
@@ -132,11 +137,12 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "acquisitionDate": {
-            "description": "The date the disposed property was acquired in the format YYYY-MM-DD.",
+            "description": "The date the disposed property was acquired in the format `YYYY-MM-DD`.",
             "type": "string",
+            "format": "date",
             "example": "2018-04-06"
           },
           "acquisitionAmount": {
@@ -145,7 +151,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "improvementCosts": {
             "description": "The total costs to improve the property. Only relates to costs that added value to the property. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -153,7 +159,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "additionalCosts": {
             "description": "The total amount of additional costs when the property was acquired (Acquisition Fees) or disposed of (Disposal Fees). It may include fees for surveyors, estate agents and solicitors. If the costs were shared, enter only the amount of that particular owner's share. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -161,7 +167,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "prfAmount": {
             "description": "The total amount of Private Residence Relief claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -169,7 +175,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "otherReliefAmount": {
             "description": "The total amount of other reliefs claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -177,7 +183,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "lossesFromThisYear": {
             "description": "The amount of Capital Gains Tax losses from other disposals in the current tax year that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -185,7 +191,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "lossesFromPreviousYear": {
             "description": "The amount of Capital Gains Tax losses from disposals in previous tax years that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -193,7 +199,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "amountOfNetGain": {
             "description": "The total amount of net gain from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -201,7 +207,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           },
           "amountOfNetLoss": {
             "description": "The total amount of net loss from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.",
@@ -209,7 +215,7 @@
             "multipleOf": 0.01,
             "minimum": 0.00,
             "maximum": 99999999999.99,
-            "example": "1999.99"
+            "example": 1999.99
           }
         },
         "required": [

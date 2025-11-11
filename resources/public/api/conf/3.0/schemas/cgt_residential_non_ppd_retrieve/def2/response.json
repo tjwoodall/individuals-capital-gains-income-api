@@ -1,16 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "TY 2025-26 onwards",
-  "description": "Retrieve All CGT Residential Property Disposals and Overrides Response",
   "type": "object",
   "properties": {
     "customerAddedDisposals": {
       "type": "object",
-      "description": "Residential property disposals that weren't reported via the Report and pay Capital Gains Tax on UK property service and submitted by the customer into ITSA.",
+      "description": "Residential property disposals that weren't reported via the 'Report and pay Capital Gains Tax on UK property' service and submitted by the customer into ITSA.",
       "properties": {
         "submittedOn": {
-          "description": "The date the residential property disposals were submitted, in the format YYYY-MM-DDThh:mm:ss.SSSZ",
+          "description": "The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
           "type": "string",
+          "format": "date-time",
           "example": "2020-07-07T10:59:47.544Z"
         },
         "disposals": {
@@ -24,5 +24,9 @@
         "disposals"
       ]
     }
-  }
+  },
+  "required": [
+    "customerAddedDisposals"
+  ],
+  "additionalProperties": false
 }

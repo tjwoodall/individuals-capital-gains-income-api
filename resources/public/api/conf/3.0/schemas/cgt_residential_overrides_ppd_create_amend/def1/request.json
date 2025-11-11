@@ -1,7 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "TY 2024-25 or before",
-  "description": "Create and Amend 'Report and Pay Capital Gains Tax on Property' Overrides Request",
   "type": "object",
   "properties": {
     "multiplePropertyDisposals": {

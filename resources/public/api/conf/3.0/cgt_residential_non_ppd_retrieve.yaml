@@ -42,11 +42,9 @@ responses:
             - $ref: './schemas/cgt_residential_non_ppd_retrieve/def2/response.json'
         examples:
           TY 2024-25 or before:
-            description: Tax Year 2024-25 or before
             value:
               $ref: './examples/cgt_residential_non_ppd_retrieve/def1/response.json'
-          TY 2025-26 and after:
-            description: Tax Year 2025-26 and after
+          TY 2025-26 onwards:
             value:
               $ref: './examples/cgt_residential_non_ppd_retrieve/def2/response.json'
 
@@ -108,4 +106,3 @@ responses:
         examples:
           RULE_REQUEST_CANNOT_BE_FULFILLED:
             $ref: './common/errors.yaml#/components/examples/requestCannotBeFulfilled'
-

@@ -1,7 +1,6 @@
 summary: Delete Other Capital Gains and Disposals
 description: |
-  This endpoint allows the developer to delete user submitted Other Capital Gains and Disposals
-  with the exception of residential property, for a given NINO and tax year.
+  This endpoint enables you to delete an "other disposals & gains" data submission for a given National Insurance number and tax year.
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -10,9 +9,9 @@ description: |
   |----------------------------------|-------------------------------------------------------|
   | N/A - DEFAULT                    | Simulates success response with gains.                |
   | NOT_FOUND                        | Simulates the scenario where no disposals were found. |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
   | STATEFUL                         | Performs a stateful delete.                           |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
-  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
 
 tags:

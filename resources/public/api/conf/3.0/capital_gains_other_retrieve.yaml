@@ -1,7 +1,7 @@
 summary: Retrieve Other Capital Gains and Disposals
 description: |
-  This endpoint allows the developer to retrieve other Capital Gains and disposals
-  with the exception of residential property, for a given NINO and tax year
+  This endpoint enables you to retrieve data on capital gains and disposals with the exception of residential property,
+  for a given National Insurance number and tax year.
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
@@ -43,11 +43,9 @@ responses:
             - $ref: './schemas/capital_gains_other_retrieve/def2/response.json'
         examples:
           TY 2024-25 or before:
-            description: Tax Year 2024-25 or before
             value:
               $ref: './examples/capital_gains_other_retrieve/def1/response.json'
-          TY 2025-26 and after:
-            description: Tax Year 2025-26 and after
+          TY 2025-26 onwards:
             value:
               $ref: './examples/capital_gains_other_retrieve/def2/response.json'
 

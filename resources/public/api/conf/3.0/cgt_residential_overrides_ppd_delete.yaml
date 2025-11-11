@@ -10,9 +10,9 @@ description: |
   |----------------------------------|------------------------------------------------|
   | N/A - DEFAULT                    | Simulates success response.                    |
   | NOT_FOUND                        | Simulates the scenario where no data is found. |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
   | STATEFUL                         | Performs a stateful delete.                    |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
-  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window. |
 
 tags:
   - Capital Gains on Residential Property Disposals
