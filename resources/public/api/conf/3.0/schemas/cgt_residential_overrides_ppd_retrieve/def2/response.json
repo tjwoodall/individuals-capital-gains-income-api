@@ -55,8 +55,7 @@
           "disposalTaxYear": {
             "description": "The tax year in which the properties were disposed. The 2021-22 tax year would be represented as 2022.",
             "type": "integer",
-            "example": 2022,
-            "pattern": "^2[0-9]{3}$"
+            "example": 2022
           },
           "completionDate": {
             "description": "The completion date of the sale or disposal of the properties, in the format `YYYY-MM-DD`.",
