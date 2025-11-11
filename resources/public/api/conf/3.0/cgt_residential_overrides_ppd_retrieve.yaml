@@ -43,7 +43,7 @@ responses:
     content:
       application/json:
         schema:
-          oneOf:
+          anyOf:
             - $ref: './schemas/cgt_residential_overrides_ppd_retrieve/def1/response.json'
             - $ref: './schemas/cgt_residential_overrides_ppd_retrieve/def2/response.json'
         examples:
