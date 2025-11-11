@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TY 2025-26 onwards",
+  "type": "object",
+  "properties": {
+    "multiplePropertyDisposals": {
+      "type": "array",
+      "description": "Details about the property disposals.",
+      "items": {"$ref": "../../cgt_overrides_definitions.json#/definitions/multiplePropertyDisposals2526"}
+    },
+    "singlePropertyDisposals": {
+      "type": "array",
+      "description": "Details about the single property disposals.",
+      "items": {"$ref": "../../cgt_overrides_definitions.json#/definitions/singlePropertyDisposals2526"}
+    }
+  }
+}

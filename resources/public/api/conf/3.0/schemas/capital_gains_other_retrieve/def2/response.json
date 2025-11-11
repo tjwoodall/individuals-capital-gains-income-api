@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TY 2025-26 onwards",
+  "type": "object",
+  "properties": {
+    "submittedOn": {
+      "type": "string",
+      "description": "The date the disposals were submitted to the 'Report and pay Capital Gains Tax on UK property' service. It is in the format `YYYY-MM-DDThh:mm:ssZ`.",
+      "format": "date-time",
+      "example": "2020-07-06T09:37:17Z"
+    },
+    "cryptoassets": {"$ref": "../../capital_gains_other_definitions.json#/definitions/cryptoassets"},
+    "otherGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/otherGains"},
+    "unlistedShares": {"$ref": "../../capital_gains_other_definitions.json#/definitions/unlistedShares"},
+    "gainExcludedIndexedSecurities": {"$ref": "../../capital_gains_other_definitions.json#/definitions/gainExcludedIndexedSecurities"},
+    "qualifyingAssetHoldingCompany": {"$ref": "../../capital_gains_other_definitions.json#/definitions/qualifyingAssetHoldingCompany"},
+    "nonStandardGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/nonStandardGains2526"},
+    "losses": {"$ref": "../../capital_gains_other_definitions.json#/definitions/losses2526"},
+    "adjustments": {"$ref": "../../capital_gains_other_definitions.json#/definitions/adjustments2526"},
+    "lifetimeAllowance": {"$ref": "../../capital_gains_other_definitions.json#/definitions/lifetimeAllowance"}
+  },
+  "required": [
+    "submittedOn"
+  ]
+}

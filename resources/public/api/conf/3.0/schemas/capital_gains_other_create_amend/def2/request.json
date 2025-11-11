@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TY 2025-26 onwards",
+  "type": "object",
+  "properties": {
+    "cryptoassets": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/cryptoassets"
+    },
+    "otherGains": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/otherGains"
+    },
+    "unlistedShares": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/unlistedShares"
+    },
+    "gainExcludedIndexedSecurities": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/gainExcludedIndexedSecurities"
+    },
+    "qualifyingAssetHoldingCompany": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/qualifyingAssetHoldingCompany"
+    },
+    "nonStandardGains": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/nonStandardGains2526"
+    },
+    "losses": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/losses2526"
+    },
+    "adjustments": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/adjustments2526"
+    },
+    "lifetimeAllowance": {
+      "$ref": "../../capital_gains_other_definitions.json#/definitions/lifetimeAllowance"
+    }
+  }
+}

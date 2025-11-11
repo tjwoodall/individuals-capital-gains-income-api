@@ -1,0 +1,134 @@
+{
+  "submittedOn": "2026-02-07T16:18:44.403Z",
+  "cryptoassets": [
+    {
+      "numberOfDisposals": 1,
+      "assetDescription": "description string",
+      "tokenName": "Name of token",
+      "acquisitionDate": "2025-08-04",
+      "disposalDate": "2025-09-04",
+      "disposalProceeds": 99999999999.99,
+      "allowableCosts": 99999999999.99,
+      "gainsWithBadr": 99999999999.99,
+      "gainsBeforeLosses": 99999999999.99,
+      "losses": 99999999999.99,
+      "claimOrElectionCodes": [
+        "GHO"
+      ],
+      "amountOfNetGain": 99999999999.99,
+      "rttTaxPaid": 99999999999.99
+    },
+    {
+      "numberOfDisposals": 2,
+      "assetDescription": "description string",
+      "tokenName": "Name of token",
+      "acquisitionDate": "2025-08-04",
+      "disposalDate": "2025-09-04",
+      "disposalProceeds": 99999999999.99,
+      "allowableCosts": 99999999999.99,
+      "gainsWithBadr": 99999999999.99,
+      "gainsBeforeLosses": 99999999999.99,
+      "losses": 99999999999.99,
+      "claimOrElectionCodes": [
+        "GHO"
+      ],
+      "amountOfNetLoss": 99999999999.99,
+      "rttTaxPaid": 99999999999.99
+    }
+  ],
+  "otherGains": [
+    {
+      "assetType": "other-property",
+      "numberOfDisposals": 1,
+      "assetDescription": "example of this asset",
+      "companyName": "Bob the Builder",
+      "companyRegistrationNumber": "11111111",
+      "acquisitionDate": "2025-04-07",
+      "disposalDate": "2025-07-10",
+      "disposalProceeds": 99999999999.99,
+      "allowableCosts": 99999999999.99,
+      "gainsWithBadr": 99999999999.99,
+      "gainsWithInv": 99999999999.99,
+      "gainsBeforeLosses": 99999999999.99,
+      "losses": 99999999999.99,
+      "claimOrElectionCodes": [
+        "PRR"
+      ],
+      "amountOfNetGain": 99999999999.99,
+      "rttTaxPaid": 99999999999.99
+    },
+    {
+      "assetType": "other-property",
+      "numberOfDisposals": 1,
+      "assetDescription": "example of this asset",
+      "companyName": "Bob the Builder",
+      "companyRegistrationNumber": "11111111",
+      "acquisitionDate": "2025-04-07",
+      "disposalDate": "2025-07-10",
+      "disposalProceeds": 99999999999.99,
+      "allowableCosts": 99999999999.99,
+      "gainsWithBadr": 99999999999.99,
+      "gainsWithInv": 99999999999.99,
+      "gainsBeforeLosses": 99999999999.99,
+      "losses": 99999999999.99,
+      "claimOrElectionCodes": [
+        "PRR"
+      ],
+      "amountOfNetLoss": 99999999999.99,
+      "rttTaxPaid": 99999999999.99
+    }
+  ],
+  "unlistedShares": [
+    {
+      "numberOfDisposals": 1,
+      "assetDescription": "My asset",
+      "companyName": "Bob the Builder",
+      "companyRegistrationNumber": "11111111",
+      "acquisitionDate": "2025-04-10",
+      "disposalDate": "2025-04-12",
+      "disposalProceeds": 99999999999.99,
+      "allowableCosts": 99999999999.99,
+      "gainsWithBadr": 99999999999.99,
+      "gainsWithInv": 99999999999.99,
+      "gainsBeforeLosses": 99999999999.99,
+      "losses": 99999999999.99,
+      "claimOrElectionCodes": [
+        "GHO"
+      ],
+      "gainsReportedOnRtt": 99999999999.99,
+      "gainsExceedingLifetimeLimit": 99999999999.99,
+      "gainsUnderSeis": 99999999999.99,
+      "lossUsedAgainstGeneralIncome": 99999999999.99,
+      "eisOrSeisReliefDueCurrentYear": 99999999999.99,
+      "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
+      "eisOrSeisReliefDuePreviousYear": 99999999999.99,
+      "rttTaxPaid": 99999999999.99
+    }
+  ],
+  "gainExcludedIndexedSecurities": {
+    "gainsFromExcludedSecurities": 99999999999.99
+  },
+  "qualifyingAssetHoldingCompany": {
+    "gainsFromQahcBeforeLosses": 99999999999.99,
+    "lossesFromQahc": 99999999999.99
+  },
+  "nonStandardGains": {
+    "attributedGains": 99999999999.99,
+    "attributedGainsRttTaxPaid": 99999999999.99,
+    "otherGains": 99999999999.99,
+    "otherGainsRttTaxPaid": 99999999999.99
+  },
+  "losses": {
+    "broughtForwardLossesUsedInCurrentYear": 99999999999.99,
+    "setAgainstInYearGains": 99999999999.99,
+    "setAgainstEarlierYear": 99999999999.99,
+    "lossesToCarryForward": 99999999999.99
+  },
+  "adjustments": {
+    "adjustmentAmount": 99999999999.99
+  },
+  "lifetimeAllowance": {
+    "lifetimeAllowanceBadr": 99999999999.99,
+    "lifetimeAllowanceInv": 99999999999.99
+  }
+}
