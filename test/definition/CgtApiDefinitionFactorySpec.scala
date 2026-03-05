@@ -30,7 +30,7 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
   "definition" when {
     "called" should {
       "return a valid Definition case class" in {
-        List(Version1, Version2, Version3).foreach { version =>
+        List(Version2, Version3).foreach { version =>
           MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
           MockedSharedAppConfig.apiStatus(version) returns "BETA"
           MockedSharedAppConfig.endpointsEnabled(version) returns true
@@ -49,11 +49,6 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockSharedAppConfig {
               context = "individuals/disposals-income",
               categories = Seq("INCOME_TAX_MTD"),
               versions = Seq(
-                APIVersion(
-                  version = Version1,
-                  status = BETA,
-                  endpointsEnabled = true
-                ),
                 APIVersion(
                   version = Version2,
                   status = BETA,

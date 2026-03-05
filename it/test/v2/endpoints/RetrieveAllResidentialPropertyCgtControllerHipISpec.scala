@@ -26,7 +26,7 @@ import play.api.test.Helpers.AUTHORIZATION
 import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
-import v1.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
+import v2.residentialPropertyDisposals.retrieveAll.def1.fixture.Def1_RetrieveAllResidentialPropertyCgtControllerFixture
 
 class RetrieveAllResidentialPropertyCgtControllerHipISpec extends IntegrationBaseSpec {
 
