@@ -20,7 +20,7 @@ import org.scalamock.scalatest.MockFactory
 import play.api.http.Status.BAD_REQUEST
 import shared.models.errors.{MtdError, NinoFormatError, NotFoundError}
 import support.UnitSpec
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.RawData
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.RawData
 
 class ValidatorSpec extends UnitSpec with MockFactory {
 

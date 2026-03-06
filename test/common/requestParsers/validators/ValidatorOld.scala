@@ -17,7 +17,7 @@
 package common.requestParsers.validators
 
 import shared.models.errors.MtdError
-import v1.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.RawData
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.RawData
 
 trait ValidatorOld[A <: RawData] {
 
