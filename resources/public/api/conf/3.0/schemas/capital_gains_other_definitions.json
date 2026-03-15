@@ -20,17 +20,17 @@
       "example": "",
       "pattern":"^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
     },
-    "acquisitionDate": {
-      "type": "string",
-      "description": "The date the asset was acquired in the format `YYYY-MM-DD`.",
+    "acquisitionDate":{
+      "type":"string",
+      "description":"The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.",
       "format": "date",
-      "example": "2025-03-04"
+      "example":"2022-03-04"
     },
-    "disposalDate": {
-      "type": "string",
-      "description": "The date that the asset was disposed of in the format `YYYY-MM-DD`.",
-      "format": "date",
-      "example": "2025-03-04"
+    "disposalDate":{
+       "type":"string",
+       "description":"The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.",
+       "format": "date",
+       "example":"2022-03-04"
     },
     "disposalProceeds": {
       "type": "number",
@@ -143,7 +143,7 @@
     },
     "companyName": {
       "type": "string",
-      "description": "The name of the company. Required for listed shares.",
+      "description": "The name of the company.",
       "example": "Company One",
       "pattern":"^.{0,160}$"
     },
@@ -577,13 +577,13 @@
           },
           "acquisitionDate":{
             "type":"string",
-            "description":"The date the asset was acquired in the format `YYYY-MM-DD`.",
+            "description":"The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.",
             "format": "date",
             "example":"2022-03-04"
           },
           "disposalDate":{
             "type":"string",
-            "description":"The date that the asset was disposed of in the format `YYYY-MM-DD`.",
+            "description":"The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.",
             "format": "date",
             "example":"2022-03-04"
           },
