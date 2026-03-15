@@ -88,6 +88,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
             $ref: './common/errors.yaml#/components/examples/ruleIncorrectOrEmptyBody'
+          RULE_INCORRECT_NON_STANDARD_GAINS:
+            $ref: './common/errors.yaml#/components/examples/ruleIncorrectNonStandardGains'
           RULE_DISPOSAL_DATE_NOT_FUTURE:
             $ref: './common/errors.yaml#/components/examples/ruleDisposalDateNotFuture'
           RULE_ACQUISITION_DATE:
