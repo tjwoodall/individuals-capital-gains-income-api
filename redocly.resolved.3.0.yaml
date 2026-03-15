@@ -159,7 +159,7 @@ paths:
                                   pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                                 disposalDate:
                                   type: string
-                                  description: The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear.
+                                  description: The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last property was disposed of.
                                   format: date
                                   example: '2022-02-04'
                                 completionDate:
@@ -176,7 +176,7 @@ paths:
                                   maximum: 99999999999.99
                                 acquisitionDate:
                                   type: string
-                                  description: The date the disposed property was acquired, in the format `YYYY-MM-DD`.
+                                  description: The date the disposed property was acquired, in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first property was acquired.
                                   format: date
                                   example: '2018-04-06'
                                 acquisitionAmount:
@@ -288,7 +288,7 @@ paths:
                                   pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                                 disposalDate:
                                   type: string
-                                  description: The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear.
+                                  description: The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last property was disposed of.
                                   format: date
                                   example: '2022-02-04'
                                 completionDate:
@@ -305,7 +305,7 @@ paths:
                                   maximum: 99999999999.99
                                 acquisitionDate:
                                   type: string
-                                  description: The date the disposed property was acquired, in the format `YYYY-MM-DD`.
+                                  description: The date the disposed property was acquired, in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first property was acquired.
                                   format: date
                                   example: '2018-04-06'
                                 acquisitionAmount:
@@ -2704,12 +2704,12 @@ paths:
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             acquisitionDate:
                               type: string
-                              description: The date the asset was acquired in the format `YYYY-MM-DD`.
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
                               format: date
                               example: '2022-03-04'
                             disposalDate:
                               type: string
-                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`.
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
                               format: date
                               example: '2022-03-04'
                             disposalProceeds:
@@ -2910,14 +2910,14 @@ paths:
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             acquisitionDate:
                               type: string
-                              description: The date the asset was acquired in the format `YYYY-MM-DD`.
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalDate:
                               type: string
-                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`.
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalProceeds:
                               type: number
                               description: |-
@@ -3066,7 +3066,7 @@ paths:
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             companyName:
                               type: string
-                              description: The name of the company. Required for listed shares.
+                              description: The name of the company.
                               example: Company One
                               pattern: ^.{0,160}$
                             companyRegistrationNumber:
@@ -3076,14 +3076,14 @@ paths:
                               pattern: ^(?:\d{8}|[A-Za-z]{2}\d{6})$
                             acquisitionDate:
                               type: string
-                              description: The date the asset was acquired in the format `YYYY-MM-DD`.
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalDate:
                               type: string
-                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`.
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalProceeds:
                               type: number
                               description: |-
@@ -3324,7 +3324,7 @@ paths:
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             companyName:
                               type: string
-                              description: The name of the company. Required for listed shares.
+                              description: The name of the company.
                               example: Company One
                               pattern: ^.{0,160}$
                             companyRegistrationNumber:
@@ -3334,14 +3334,14 @@ paths:
                               pattern: ^(?:\d{8}|[A-Za-z]{2}\d{6})$
                             acquisitionDate:
                               type: string
-                              description: The date the asset was acquired in the format `YYYY-MM-DD`.
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalDate:
                               type: string
-                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`.
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
                               format: date
-                              example: '2025-03-04'
+                              example: '2022-03-04'
                             disposalProceeds:
                               type: number
                               description: |-
@@ -4254,6 +4254,11 @@ paths:
                 RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
                   description: An empty or non-matching body was submitted.
                   value: *ref_26
+                RULE_INCORRECT_NON_STANDARD_GAINS:
+                  description: At least one of carriedInterestGain, attributedGains or otherGains must be provided.
+                  value:
+                    code: RULE_INCORRECT_NON_STANDARD_GAINS
+                    message: At least one of carriedInterestGain, attributedGains or otherGains must be provided
                 RULE_DISPOSAL_DATE_NOT_FUTURE:
                   description: The disposalDate must be in the specified tax year and no later than today's date.
                   value:
