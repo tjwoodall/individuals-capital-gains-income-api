@@ -28,7 +28,8 @@
     },
     "acquisitionDate": {
       "type": "string",
-      "description": "The date the disposed property was acquired, in the format YYYY-MM-DD.",
+      "description": "The date the disposed property was acquired, in the format `YYYY-MM-DD`.",
+      "format": "date",
       "example": "2020-04-06"
     },
     "acquisitionAmount": {

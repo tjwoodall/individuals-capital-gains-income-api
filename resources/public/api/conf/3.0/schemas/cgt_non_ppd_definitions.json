@@ -8,7 +8,7 @@
     },
     "disposalDate": {
       "type": "string",
-      "description": "The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear.",
+      "description": "The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last property was disposed of.",
       "format": "date",
       "example": "2022-02-04"
     },
@@ -28,7 +28,7 @@
     },
     "acquisitionDate": {
       "type": "string",
-      "description": "The date the disposed property was acquired, in the format `YYYY-MM-DD`.",
+      "description": "The date the disposed property was acquired, in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first property was acquired.",
       "format": "date",
       "example": "2018-04-06"
     },
