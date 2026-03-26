@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: "Individuals Capital Gains Income (MTD) [test only]"
+  title: Individuals Capital Gains Income (MTD)
   description: "\nThe following groups of endpoints are stateful in the Sandbox:\n\
     \n  - [Capital Gains on Residential Property Disposals](#tag/Capital-Gains-on-Residential-Property-Disposals)\n\
     \  - [Other Capital Gains and Disposals](#tag/Other-Capital-Gains-and-Disposals)\n\
