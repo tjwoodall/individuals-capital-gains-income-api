@@ -1,4 +1,4 @@
-summary: "Create and Amend CGT Residential Property Disposals (non-PPD) [test only]"
+summary: Create and Amend CGT Residential Property Disposals (non-PPD)
 description: |
   
   This endpoint enables you to submit residential property disposals that are not reported via the 'Report and pay Capital Gains Tax on UK property' service
@@ -78,6 +78,8 @@ responses:
             $ref: './common/errors.yaml#/components/examples/formatDate'
           FORMAT_CUSTOMER_REF:
             $ref: './common/errors.yaml#/components/examples/formatCustomerRef'
+          FORMAT_CLAIM_OR_ELECTION_CODES:
+            $ref: './common/errors.yaml#/components/examples/cgtOtherFormatClaimOrElectionCodes'
           RULE_TAX_YEAR_NOT_SUPPORTED:
             $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
           RULE_TAX_YEAR_RANGE_INVALID:

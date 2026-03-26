@@ -1,4 +1,4 @@
-summary: "Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]"
+summary: Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
 description: |
   This endpoint enables you to retrieve the residential property disposals subject to capital gains tax for payment for property disposal (PPD).
   This includes:

@@ -1,4 +1,4 @@
-summary: "Delete Other Capital Gains and Disposals [test only]"
+summary: Delete Other Capital Gains and Disposals
 description: |
   This endpoint enables you to delete an "other disposals & gains" data submission for a given National Insurance number and tax year.
   
