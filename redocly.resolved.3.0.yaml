@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: '3.0'
-  title: Individuals Capital Gains Income (MTD) [test only]
+  title: Individuals Capital Gains Income (MTD)
   description: |
 
     The following groups of endpoints are stateful in the Sandbox:
@@ -55,7 +55,7 @@ paths:
       security:
         - User-Restricted:
             - read:self-assessment
-      summary: Retrieve CGT Residential Property Disposals (non-PPD) [test only]
+      summary: Retrieve CGT Residential Property Disposals (non-PPD)
       description: |
         This endpoint enables you to retrieve the residential property disposals subject to capital gains tax for non payment
         for property disposal (non-PPD). This includes user submitted residential property disposals.
@@ -429,45 +429,10 @@ paths:
               examples:
                 TY 2024-25 or before:
                   value:
-                    customerAddedDisposals:
-                      submittedOn: '2020-08-07T10:59:47.544Z'
-                      disposals:
-                        - customerReference: CGTDISPOSAL01
-                          disposalDate: '2020-05-04'
-                          completionDate: '2020-05-08'
-                          disposalProceeds: 1999.99
-                          acquisitionDate: '2018-04-06'
-                          acquisitionAmount: 1999.99
-                          improvementCosts: 1999.99
-                          additionalCosts: 5000.99
-                          prfAmount: 1999.99
-                          otherReliefAmount: 1999.99
-                          lossesFromThisYear: 1999.99
-                          lossesFromPreviousYear: 1999.99
-                          amountOfNetGain: 1999.99
+                    $ref: ./examples/cgt_residential_non_ppd_retrieve/def1/response.json
                 TY 2025-26 onwards:
                   value:
-                    customerAddedDisposals:
-                      submittedOn: '2020-08-07T10:59:47.544Z'
-                      disposals:
-                        - numberOfDisposals: 3
-                          customerReference: CGTDISPOSAL01
-                          disposalDate: '2020-05-04'
-                          completionDate: '2020-05-08'
-                          disposalProceeds: 1999.99
-                          acquisitionDate: '2018-04-06'
-                          acquisitionAmount: 1999.99
-                          improvementCosts: 1999.99
-                          additionalCosts: 5000.99
-                          prfAmount: 1999.99
-                          otherReliefAmount: 1999.99
-                          gainsWithBadr: 1999.99
-                          gainsBeforeLosses: 1999.99
-                          lossesFromThisYear: 1999.99
-                          claimOrElectionCodes:
-                            - GHO
-                            - BAD
-                          amountOfNetGain: 1999.99
+                    $ref: ./examples/cgt_residential_non_ppd_retrieve/def2/response.json
         '400':
           description: Bad request
           headers:
@@ -597,7 +562,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Create and Amend CGT Residential Property Disposals (non-PPD) [test only]
+      summary: Create and Amend CGT Residential Property Disposals (non-PPD)
       description: |
 
         This endpoint enables you to submit residential property disposals that are not reported via the 'Report and pay Capital Gains Tax on UK property' service
@@ -699,72 +664,10 @@ paths:
             examples:
               TY 2024-25 or before:
                 value:
-                  disposals:
-                    - customerReference: ABC-2345
-                      disposalDate: '2021-01-29'
-                      completionDate: '2021-04-01'
-                      disposalProceeds: 2345.67
-                      acquisitionDate: '2021-01-22'
-                      acquisitionAmount: 2341.45
-                      improvementCosts: 345.34
-                      additionalCosts: 234.89
-                      prfAmount: 67.9
-                      otherReliefAmount: 123.89
-                      lossesFromThisYear: 456.89
-                      lossesFromPreviousYear: 124.87
-                      amountOfNetGain: 567.9
-                    - customerReference: AB3456789012
-                      disposalDate: '2021-01-21'
-                      completionDate: '2021-03-20'
-                      disposalProceeds: 234.32
-                      acquisitionDate: '2021-01-21'
-                      acquisitionAmount: 345.23
-                      improvementCosts: 456.23
-                      additionalCosts: 234.34
-                      prfAmount: 238.34
-                      otherReliefAmount: 267.12
-                      lossesFromThisYear: 361.89
-                      lossesFromPreviousYear: 123.89
-                      amountOfNetLoss: 345.89
+                  $ref: ./examples/cgt_residential_non_ppd_create_amend/def1/request.json
               TY 2025-26 onwards:
                 value:
-                  disposals:
-                    - numberOfDisposals: 3
-                      customerReference: ABC-2345
-                      disposalDate: '2021-01-29'
-                      completionDate: '2021-04-25'
-                      disposalProceeds: 2345.67
-                      acquisitionDate: '2021-03-22'
-                      acquisitionAmount: 2341.45
-                      improvementCosts: 345.34
-                      additionalCosts: 234.89
-                      prfAmount: 67.9
-                      otherReliefAmount: 123.89
-                      gainsWithBadr: 123.64
-                      gainsBeforeLosses: 123.43
-                      lossesFromThisYear: 456.89
-                      claimOrElectionCodes:
-                        - PRR
-                        - PRO
-                      amountOfNetGain: 567.9
-                    - numberOfDisposals: 5
-                      customerReference: AB3456789012
-                      disposalDate: '2021-01-21'
-                      completionDate: '2021-03-20'
-                      disposalProceeds: 234.32
-                      acquisitionDate: '2021-02-21'
-                      acquisitionAmount: 345.23
-                      improvementCosts: 456.23
-                      additionalCosts: 234.34
-                      prfAmount: 238.34
-                      otherReliefAmount: 267.12
-                      gainsWithBadr: 123.64
-                      gainsBeforeLosses: 123.43
-                      lossesFromThisYear: 361.89
-                      claimOrElectionCodes:
-                        - GHO
-                        - OTH
-                      amountOfNetLoss: 345.89
+                  $ref: ./examples/cgt_residential_non_ppd_create_amend/def2/request.json
       responses:
         '204':
           description: No Content
@@ -817,6 +720,11 @@ paths:
                   value:
                     code: FORMAT_CUSTOMER_REF
                     message: The provided customer reference is invalid
+                FORMAT_CLAIM_OR_ELECTION_CODES:
+                  description: The format of the supplied claimOrElectionCodes value is invalid.
+                  value: &ref_39
+                    code: FORMAT_CLAIM_OR_ELECTION_CODES
+                    message: The format of the claimOrElectionCodes value is invalid
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
                   value: *ref_13
@@ -911,7 +819,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Delete CGT Residential Property Disposals (non-PPD) [test only]
+      summary: Delete CGT Residential Property Disposals (non-PPD)
       description: |
         This endpoint enables you to delete a Capital Gains Tax (CGT) residential property disposal for a non payment for 
         property disposal (non-PPD) data submission for a specified taxable entity ID and tax year.
@@ -1083,7 +991,7 @@ paths:
       security:
         - User-Restricted:
             - read:self-assessment
-      summary: Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]
+      summary: Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
       description: |
         This endpoint enables you to retrieve the residential property disposals subject to capital gains tax for payment for property disposal (PPD).
         This includes:
@@ -1581,118 +1489,10 @@ paths:
               examples:
                 TY 2024-25 or before:
                   value:
-                    ppdYearToDate: 1999.99
-                    multiplePropertyDisposals:
-                      - source: hmrc-held
-                        submittedOn: '2020-07-07T10:59:47.544Z'
-                        ppdSubmissionId: Da2467289108
-                        ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                        numberOfDisposals: 3
-                        disposalTaxYear: 2021
-                        completionDate: '2020-03-08'
-                        amountOfNetGain: 1999.99
-                      - source: hmrc-held
-                        submittedOn: '2020-07-08T12:37:47.623Z'
-                        ppdSubmissionId: Da2467289109
-                        ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                        numberOfDisposals: 2
-                        disposalTaxYear: 2021
-                        completionDate: '2020-02-06'
-                        amountOfNetLoss: 1999.99
-                    singlePropertyDisposals:
-                      - source: hmrc-held
-                        submittedOn: '2020-07-07T10:59:47.544Z'
-                        ppdSubmissionId: Da2467289110
-                        ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                        disposalDate: '2020-05-04'
-                        completionDate: '2020-05-08'
-                        disposalProceeds: 1999.99
-                        acquisitionDate: '2018-04-06'
-                        acquisitionAmount: 1999.99
-                        improvementCosts: 1999.99
-                        additionalCosts: 5000.99
-                        prfAmount: 1999.99
-                        otherReliefAmount: 1999.99
-                        lossesFromThisYear: 1999.99
-                        lossesFromPreviousYear: 1999.99
-                        amountOfNetGain: 1999.99
-                      - source: hmrc-held
-                        submittedOn: '2020-07-08T12:37:47.623Z'
-                        ppdSubmissionId: Da2467289111
-                        ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                        disposalDate: '2020-05-04'
-                        completionDate: '2020-05-08'
-                        disposalProceeds: 1999.99
-                        acquisitionDate: '2017-03-08'
-                        acquisitionAmount: 1999.99
-                        improvementCosts: 1999.99
-                        additionalCosts: 5000.99
-                        prfAmount: 1999.99
-                        otherReliefAmount: 1999.99
-                        lossesFromThisYear: 1999.99
-                        lossesFromPreviousYear: 1999.99
-                        amountOfNetLoss: 1999.99
+                    $ref: ./examples/cgt_residential_overrides_ppd_retrieve/def1/response.json
                 TY 2025-26 onwards:
                   value:
-                    ppdYearToDate: 1999.99
-                    multiplePropertyDisposals:
-                      - source: hmrc-held
-                        submittedOn: '2020-07-07T10:59:47.544Z'
-                        ppdSubmissionId: Da2467289108
-                        ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                        numberOfDisposals: 3
-                        disposalTaxYear: 2021
-                        completionDate: '2020-03-08'
-                        gainsWithBadr: 1999.99
-                        gainsWithInv: 1999.99
-                        amountOfNetGain: 1999.99
-                      - source: hmrc-held
-                        submittedOn: '2020-07-08T12:37:47.623Z'
-                        ppdSubmissionId: Da2467289109
-                        ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                        numberOfDisposals: 2
-                        disposalTaxYear: 2021
-                        completionDate: '2020-02-06'
-                        gainsWithBadr: 1999.99
-                        gainsWithInv: 1999.99
-                        amountOfNetLoss: 1999.99
-                    singlePropertyDisposals:
-                      - source: hmrc-held
-                        submittedOn: '2020-07-07T10:59:47.544Z'
-                        ppdSubmissionId: Da2467289110
-                        ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                        disposalDate: '2020-05-04'
-                        completionDate: '2020-05-08'
-                        disposalProceeds: 1999.99
-                        acquisitionDate: '2018-04-06'
-                        acquisitionAmount: 1999.99
-                        improvementCosts: 1999.99
-                        additionalCosts: 5000.99
-                        prfAmount: 1999.99
-                        otherReliefAmount: 1999.99
-                        gainsWithBadr: 1999.99
-                        gainsWithInv: 1999.99
-                        lossesFromThisYear: 1999.99
-                        lossesFromPreviousYear: 1999.99
-                        amountOfNetGain: 1999.99
-                      - source: hmrc-held
-                        submittedOn: '2020-07-08T12:37:47.623Z'
-                        ppdSubmissionId: Da2467289111
-                        ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                        disposalDate: '2020-05-04'
-                        completionDate: '2020-05-08'
-                        disposalProceeds: 1999.99
-                        acquisitionDate: '2017-03-08'
-                        acquisitionAmount: 1999.99
-                        improvementCosts: 1999.99
-                        additionalCosts: 5000.99
-                        prfAmount: 1999.99
-                        otherReliefAmount: 1999.99
-                        gainsWithBadr: 1999.99
-                        gainsWithInv: 1999.99
-                        lossesFromThisYear: 1999.99
-                        lossesFromPreviousYear: 1999.99
-                        amountOfNetLoss: 1999.99
+                    $ref: ./examples/cgt_residential_overrides_ppd_retrieve/def2/response.json
         '400':
           description: Bad request
           headers:
@@ -1804,7 +1604,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]
+      summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
       description: |
         This endpoint enables you to override residential property disposal submissions previously submitted via HMRC
         for payment for property disposal (PPD) (using the 'Report and pay Capital Gains Tax on UK property' service) for
@@ -2201,76 +2001,10 @@ paths:
             examples:
               TY 2024-25 or before:
                 value:
-                  multiplePropertyDisposals:
-                    - ppdSubmissionId: AB0000000092
-                      amountOfNetGain: 1234.78
-                    - ppdSubmissionId: AB0000000098
-                      amountOfNetLoss: 134.99
-                  singlePropertyDisposals:
-                    - ppdSubmissionId: AB0000000099
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetGain: 4567.89
-                    - ppdSubmissionId: AB0000000091
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetLoss: 4567.89
+                  $ref: ./examples/cgt_residential_overrides_ppd_create_amend/def1/request.json
               TY 2025-26 onwards:
                 value:
-                  multiplePropertyDisposals:
-                    - ppdSubmissionId: AB0000000092
-                      amountOfNetGain: 1234.78
-                      gainsWithBadr: 1999.99
-                      gainsWithInv: 1999.99
-                    - ppdSubmissionId: AB0000000098
-                      amountOfNetLoss: 134.99
-                      gainsWithBadr: 1999.99
-                      gainsWithInv: 1999.99
-                  singlePropertyDisposals:
-                    - ppdSubmissionId: AB0000000099
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetGain: 4567.89
-                      gainsWithBadr: 1999.99
-                      gainsWithInv: 1999.99
-                    - ppdSubmissionId: AB0000000091
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetLoss: 4567.89
-                      gainsWithBadr: 1999.99
-                      gainsWithInv: 1999.99
+                  $ref: ./examples/cgt_residential_overrides_ppd_create_amend/def2/request.json
       responses:
         '204':
           description: No Content
@@ -2436,7 +2170,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) [test only]
+      summary: Delete 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD)
       description: |
         This endpoint enables you to delete user submitted overrides for previously submitted disposals for payment for 
         property disposal (PPD) reported via the HMRC 'Report and pay Capital Gains Tax on UK property' service.
@@ -2608,7 +2342,7 @@ paths:
       security:
         - User-Restricted:
             - read:self-assessment
-      summary: Retrieve Other Capital Gains and Disposals [test only]
+      summary: Retrieve Other Capital Gains and Disposals
       description: |
         This endpoint enables you to retrieve data on capital gains and disposals with the exception of residential property,
         for a given National Insurance number and tax year.
@@ -3661,7 +3395,7 @@ paths:
                           adjustmentAmount:
                             type: number
                             description: |-
-                              The amount of included adjustments to reduce or increase the Capital Gains Tax payable.
+                              The amount of included adjustments to increase the Capital Gains Tax payable.
 
                               The value must be between 0 and 99999999999.99 up to 2 decimal places.
                             example: 1999.99
@@ -3670,12 +3404,12 @@ paths:
                             maximum: 99999999999.99
                       lifetimeAllowance:
                         type: object
-                        description: Object containing lifetime allowance eligible for Business Asset Disposal Relief and Investors' Relief.
+                        description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
                         properties: &ref_38
                           lifetimeAllowanceBadr:
                             type: number
                             description: |-
-                              The lifetime allowance eligible for Business Asset Disposal Relief (BADR).
+                              The lifetime allowance of Business Asset Disposal Relief (BADR) and Entrepreneurs' Relief claimed to date.
 
                               The value must be between 0 and 99999999999.99 up to 2 decimal places.
                             example: 1999.99
@@ -3685,7 +3419,7 @@ paths:
                           lifetimeAllowanceInv:
                             type: number
                             description: |-
-                              The lifetime allowance eligible for Investor's Relief (INV).
+                              The lifetime allowance of Investors' Relief (INV) claimed to date.
 
                               The value must be between 0 and 99999999999.99 up to 2 decimal places.
                             example: 1999.99
@@ -3697,142 +3431,10 @@ paths:
               examples:
                 TY 2024-25 or before:
                   value:
-                    submittedOn: '2020-07-06T09:37:17.000Z'
-                    disposals:
-                      - assetType: other-property
-                        assetDescription: Property Sale
-                        acquisitionDate: '2021-05-01'
-                        disposalDate: '2021-06-01'
-                        disposalProceeds: 1000.12
-                        allowableCosts: 1000.12
-                        gain: 1000.12
-                        claimOrElectionCodes:
-                          - PRR
-                        gainAfterRelief: 1000.12
-                        rttTaxPaid: 1000.12
-                    nonStandardGains:
-                      carriedInterestGain: 1000.12
-                      carriedInterestRttTaxPaid: 1000.12
-                      attributedGains: 1000.12
-                      attributedGainsRttTaxPaid: 1000.12
-                      otherGains: 1000.12
-                      otherGainsRttTaxPaid: 1000.12
-                    losses:
-                      broughtForwardLossesUsedInCurrentYear: 1000.12
-                      setAgainstInYearGains: 1000.12
-                      setAgainstInYearGeneralIncome: 1000.12
-                      setAgainstEarlierYear: 1000.12
-                    adjustments: 1000.12
+                    $ref: ./examples/capital_gains_other_retrieve/def1/response.json
                 TY 2025-26 onwards:
                   value:
-                    submittedOn: '2026-02-07T16:18:44.403Z'
-                    cryptoassets:
-                      - numberOfDisposals: 1
-                        assetDescription: description string
-                        tokenName: Name of token
-                        acquisitionDate: '2025-08-04'
-                        disposalDate: '2025-09-04'
-                        disposalProceeds: 99999999999.99
-                        allowableCosts: 99999999999.99
-                        gainsWithBadr: 99999999999.99
-                        gainsBeforeLosses: 99999999999.99
-                        losses: 99999999999.99
-                        claimOrElectionCodes:
-                          - GHO
-                        amountOfNetGain: 99999999999.99
-                        rttTaxPaid: 99999999999.99
-                      - numberOfDisposals: 2
-                        assetDescription: description string
-                        tokenName: Name of token
-                        acquisitionDate: '2025-08-04'
-                        disposalDate: '2025-09-04'
-                        disposalProceeds: 99999999999.99
-                        allowableCosts: 99999999999.99
-                        gainsWithBadr: 99999999999.99
-                        gainsBeforeLosses: 99999999999.99
-                        losses: 99999999999.99
-                        claimOrElectionCodes:
-                          - GHO
-                        amountOfNetLoss: 99999999999.99
-                        rttTaxPaid: 99999999999.99
-                    otherGains:
-                      - assetType: other-property
-                        numberOfDisposals: 1
-                        assetDescription: example of this asset
-                        companyName: Bob the Builder
-                        companyRegistrationNumber: '11111111'
-                        acquisitionDate: '2025-04-07'
-                        disposalDate: '2025-07-10'
-                        disposalProceeds: 99999999999.99
-                        allowableCosts: 99999999999.99
-                        gainsWithBadr: 99999999999.99
-                        gainsWithInv: 99999999999.99
-                        gainsBeforeLosses: 99999999999.99
-                        losses: 99999999999.99
-                        claimOrElectionCodes:
-                          - PRR
-                        amountOfNetGain: 99999999999.99
-                        rttTaxPaid: 99999999999.99
-                      - assetType: other-property
-                        numberOfDisposals: 1
-                        assetDescription: example of this asset
-                        companyName: Bob the Builder
-                        companyRegistrationNumber: '11111111'
-                        acquisitionDate: '2025-04-07'
-                        disposalDate: '2025-07-10'
-                        disposalProceeds: 99999999999.99
-                        allowableCosts: 99999999999.99
-                        gainsWithBadr: 99999999999.99
-                        gainsWithInv: 99999999999.99
-                        gainsBeforeLosses: 99999999999.99
-                        losses: 99999999999.99
-                        claimOrElectionCodes:
-                          - PRR
-                        amountOfNetLoss: 99999999999.99
-                        rttTaxPaid: 99999999999.99
-                    unlistedShares:
-                      - numberOfDisposals: 1
-                        assetDescription: My asset
-                        companyName: Bob the Builder
-                        companyRegistrationNumber: '11111111'
-                        acquisitionDate: '2025-04-10'
-                        disposalDate: '2025-04-12'
-                        disposalProceeds: 99999999999.99
-                        allowableCosts: 99999999999.99
-                        gainsWithBadr: 99999999999.99
-                        gainsWithInv: 99999999999.99
-                        gainsBeforeLosses: 99999999999.99
-                        losses: 99999999999.99
-                        claimOrElectionCodes:
-                          - GHO
-                        gainsReportedOnRtt: 99999999999.99
-                        gainsExceedingLifetimeLimit: 99999999999.99
-                        gainsUnderSeis: 99999999999.99
-                        lossUsedAgainstGeneralIncome: 99999999999.99
-                        eisOrSeisReliefDueCurrentYear: 99999999999.99
-                        lossesUsedAgainstGeneralIncomePreviousYear: 99999999999.99
-                        eisOrSeisReliefDuePreviousYear: 99999999999.99
-                        rttTaxPaid: 99999999999.99
-                    gainExcludedIndexedSecurities:
-                      gainsFromExcludedSecurities: 99999999999.99
-                    qualifyingAssetHoldingCompany:
-                      gainsFromQahcBeforeLosses: 99999999999.99
-                      lossesFromQahc: 99999999999.99
-                    nonStandardGains:
-                      attributedGains: 99999999999.99
-                      attributedGainsRttTaxPaid: 99999999999.99
-                      otherGains: 99999999999.99
-                      otherGainsRttTaxPaid: 99999999999.99
-                    losses:
-                      broughtForwardLossesUsedInCurrentYear: 99999999999.99
-                      setAgainstInYearGains: 99999999999.99
-                      setAgainstEarlierYear: 99999999999.99
-                      lossesToCarryForward: 99999999999.99
-                    adjustments:
-                      adjustmentAmount: 99999999999.99
-                    lifetimeAllowance:
-                      lifetimeAllowanceBadr: 99999999999.99
-                      lifetimeAllowanceInv: 99999999999.99
+                    $ref: ./examples/capital_gains_other_retrieve/def2/response.json
         '400':
           description: Bad request
           headers:
@@ -3941,7 +3543,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Create and Amend Other Capital Gains and Disposals [test only]
+      summary: Create and Amend Other Capital Gains and Disposals
       description: |
         This endpoint enables you to submit other capital gains and disposals with the exception of residential property,
         for a given National Insurance number and tax year.
@@ -4064,114 +3666,15 @@ paths:
                       properties: *ref_37
                     lifetimeAllowance:
                       type: object
-                      description: Object containing lifetime allowance eligible for Business Asset Disposal Relief and Investors' Relief.
+                      description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
                       properties: *ref_38
             examples:
               TY 2024-25 or before:
                 value:
-                  disposals:
-                    - assetType: other-property
-                      assetDescription: Property Sale
-                      acquisitionDate: '2021-05-01'
-                      disposalDate: '2021-06-01'
-                      disposalProceeds: 1000.12
-                      allowableCosts: 1000.12
-                      gain: 1000.12
-                      claimOrElectionCodes:
-                        - PRR
-                      gainAfterRelief: 1000.12
-                      rttTaxPaid: 1000.12
-                  nonStandardGains:
-                    carriedInterestGain: 1000.12
-                    carriedInterestRttTaxPaid: 1000.12
-                    attributedGains: 1000.12
-                    attributedGainsRttTaxPaid: 1000.12
-                    otherGains: 1000.12
-                    otherGainsRttTaxPaid: 1000.12
-                  losses:
-                    broughtForwardLossesUsedInCurrentYear: 1000.12
-                    setAgainstInYearGains: 1000.12
-                    setAgainstInYearGeneralIncome: 1000.12
-                    setAgainstEarlierYear: 1000.12
-                  adjustments: 1000.12
+                  $ref: ./examples/capital_gains_other_create_amend/def1/request.json
               TY 2025-26 onwards:
                 value:
-                  cryptoassets:
-                    - numberOfDisposals: 1
-                      assetDescription: description string
-                      tokenName: Name of token
-                      acquisitionDate: '2025-08-04'
-                      disposalDate: '2025-09-04'
-                      disposalProceeds: 99999999999.99
-                      allowableCosts: 99999999999.99
-                      gainsWithBadr: 99999999999.99
-                      gainsBeforeLosses: 99999999999.99
-                      losses: 99999999999.99
-                      claimOrElectionCodes:
-                        - GHO
-                      amountOfNetGain: 99999999999.99
-                      rttTaxPaid: 99999999999.99
-                  otherGains:
-                    - assetType: other-property
-                      numberOfDisposals: 1
-                      assetDescription: example of this asset
-                      companyName: Bob the Builder
-                      companyRegistrationNumber: '11111111'
-                      acquisitionDate: '2025-04-07'
-                      disposalDate: '2025-07-10'
-                      disposalProceeds: 99999999999.99
-                      allowableCosts: 99999999999.99
-                      gainsWithBadr: 99999999999.99
-                      gainsWithInv: 99999999999.99
-                      gainsBeforeLosses: 99999999999.99
-                      losses: 99999999999.99
-                      claimOrElectionCodes:
-                        - PRR
-                      amountOfNetGain: 99999999999.99
-                      rttTaxPaid: 99999999999.99
-                  unlistedShares:
-                    - numberOfDisposals: 1
-                      assetDescription: My asset
-                      companyName: Bob the Builder
-                      companyRegistrationNumber: '11111111'
-                      acquisitionDate: '2025-04-10'
-                      disposalDate: '2025-04-12'
-                      disposalProceeds: 99999999999.99
-                      allowableCosts: 99999999999.99
-                      gainsWithBadr: 99999999999.99
-                      gainsWithInv: 99999999999.99
-                      gainsBeforeLosses: 99999999999.99
-                      losses: 99999999999.99
-                      claimOrElectionCodes:
-                        - GHO
-                      gainsReportedOnRtt: 99999999999.99
-                      gainsExceedingLifetimeLimit: 99999999999.99
-                      gainsUnderSeis: 99999999999.99
-                      lossUsedAgainstGeneralIncome: 99999999999.99
-                      eisOrSeisReliefDueCurrentYear: 99999999999.99
-                      lossesUsedAgainstGeneralIncomePreviousYear: 99999999999.99
-                      eisOrSeisReliefDuePreviousYear: 99999999999.99
-                      rttTaxPaid: 99999999999.99
-                  gainExcludedIndexedSecurities:
-                    gainsFromExcludedSecurities: 99999999999.99
-                  qualifyingAssetHoldingCompany:
-                    gainsFromQahcBeforeLosses: 99999999999.99
-                    lossesFromQahc: 99999999999.99
-                  nonStandardGains:
-                    attributedGains: 99999999999.99
-                    attributedGainsRttTaxPaid: 99999999999.99
-                    otherGains: 99999999999.99
-                    otherGainsRttTaxPaid: 99999999999.99
-                  losses:
-                    broughtForwardLossesUsedInCurrentYear: 99999999999.99
-                    setAgainstInYearGains: 99999999999.99
-                    setAgainstEarlierYear: 99999999999.99
-                    lossesToCarryForward: 99999999999.99
-                  adjustments:
-                    adjustmentAmount: 99999999999.99
-                  lifetimeAllowance:
-                    lifetimeAllowanceBadr: 99999999999.99
-                    lifetimeAllowanceInv: 99999999999.99
+                  $ref: ./examples/capital_gains_other_create_amend/def2/request.json
       responses:
         '204':
           description: No Content
@@ -4242,9 +3745,7 @@ paths:
                     message: The format of the assetType value is invalid
                 FORMAT_CLAIM_OR_ELECTION_CODES:
                   description: The format of the supplied claimOrElectionCodes value is invalid.
-                  value:
-                    code: FORMAT_CLAIM_OR_ELECTION_CODES
-                    message: The format of the claimOrElectionCodes value is invalid
+                  value: *ref_39
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
                   value: *ref_14
@@ -4353,7 +3854,7 @@ paths:
       security:
         - User-Restricted:
             - write:self-assessment
-      summary: Delete Other Capital Gains and Disposals [test only]
+      summary: Delete Other Capital Gains and Disposals
       description: |
         This endpoint enables you to delete an "other disposals & gains" data submission for a given National Insurance number and tax year.
 
