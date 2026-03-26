@@ -459,74 +459,7 @@ paths:
                 example-response:
                   description: Example Response
                   value:
-                    ppdService:
-                      ppdYearToDate: 1999.99
-                      multiplePropertyDisposals:
-                        - source: hmrc-held
-                          submittedOn: '2020-07-07T10:59:47.544Z'
-                          ppdSubmissionId: Da2467289108
-                          ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                          numberOfDisposals: 3
-                          disposalTaxYear: 2021
-                          completionDate: '2020-03-08'
-                          amountOfNetGain: 1999.99
-                        - source: hmrc-held
-                          submittedOn: '2020-07-08T12:37:47.623Z'
-                          ppdSubmissionId: Da2467289109
-                          ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                          numberOfDisposals: 2
-                          disposalTaxYear: 2021
-                          completionDate: '2020-02-06'
-                          amountOfNetLoss: 1999.99
-                      singlePropertyDisposals:
-                        - source: hmrc-held
-                          submittedOn: '2020-07-07T10:59:47.544Z'
-                          ppdSubmissionId: Da2467289109
-                          ppdSubmissionDate: '2020-07-07T10:59:47.544Z'
-                          disposalDate: '2020-05-04'
-                          completionDate: '2020-05-08'
-                          disposalProceeds: 1999.99
-                          acquisitionDate: '2018-04-06'
-                          acquisitionAmount: 1999.99
-                          improvementCosts: 1999.99
-                          additionalCosts: 5000.99
-                          prfAmount: 1999.99
-                          otherReliefAmount: 1999.99
-                          lossesFromThisYear: 1999.99
-                          lossesFromPreviousYear: 1999.99
-                          amountOfNetGain: 1999.99
-                        - source: hmrc-held
-                          submittedOn: '2020-07-08T12:37:47.623Z'
-                          ppdSubmissionId: Da2467289111
-                          ppdSubmissionDate: '2020-07-08T12:37:47.623Z'
-                          disposalDate: '2020-05-04'
-                          completionDate: '2020-05-08'
-                          disposalProceeds: 1999.99
-                          acquisitionDate: '2017-03-08'
-                          acquisitionAmount: 1999.99
-                          improvementCosts: 1999.99
-                          additionalCosts: 5000.99
-                          prfAmount: 1999.99
-                          otherReliefAmount: 1999.99
-                          lossesFromThisYear: 1999.99
-                          lossesFromPreviousYear: 1999.99
-                          amountOfNetLoss: 1999.99
-                    customerAddedDisposals:
-                      submittedOn: '2020-08-07T10:59:47.544Z'
-                      disposals:
-                        - customerReference: CGTDISPOSAL01
-                          disposalDate: '2020-05-04'
-                          completionDate: '2020-05-08'
-                          disposalProceeds: 1999.99
-                          acquisitionDate: '2018-04-06'
-                          acquisitionAmount: 1999.99
-                          improvementCosts: 1999.99
-                          additionalCosts: 5000.99
-                          prfAmount: 1999.99
-                          otherReliefAmount: 1999.99
-                          lossesFromThisYear: 1999.99
-                          lossesFromPreviousYear: 1999.99
-                          amountOfNetGain: 1999.99
+                    $ref: ./examples/all_cgt_residential_overrides_retrieve/def1/response.json
         '400':
           description: Bad request
           headers:
@@ -819,33 +752,7 @@ paths:
               example-1:
                 description: Full CGT Non PPD Amendment
                 value:
-                  disposals:
-                    - customerReference: ABC-2345
-                      disposalDate: '2021-01-29'
-                      completionDate: '2021-04-01'
-                      disposalProceeds: 2345.67
-                      acquisitionDate: '2021-01-22'
-                      acquisitionAmount: 2341.45
-                      improvementCosts: 345.34
-                      additionalCosts: 234.89
-                      prfAmount: 67.9
-                      otherReliefAmount: 123.89
-                      lossesFromThisYear: 456.89
-                      lossesFromPreviousYear: 124.87
-                      amountOfNetGain: 567.9
-                    - customerReference: AB3456789012
-                      disposalDate: '2021-01-21'
-                      completionDate: '2021-03-20'
-                      disposalProceeds: 234.32
-                      acquisitionDate: '2021-01-21'
-                      acquisitionAmount: 345.23
-                      improvementCosts: 456.23
-                      additionalCosts: 234.34
-                      prfAmount: 238.34
-                      otherReliefAmount: 267.12
-                      lossesFromThisYear: 361.89
-                      lossesFromPreviousYear: 123.89
-                      amountOfNetLoss: 345.89
+                  $ref: ./examples/cgt_residential_non_ppd_create_amend/def1/request.json
       responses:
         '200':
           description: Success
@@ -1331,36 +1238,7 @@ paths:
               example-1:
                 description: Full CGT Overrides Amendment
                 value:
-                  multiplePropertyDisposals:
-                    - ppdSubmissionId: AB0000000092
-                      amountOfNetGain: 1234.78
-                    - ppdSubmissionId: AB0000000098
-                      amountOfNetLoss: 134.99
-                  singlePropertyDisposals:
-                    - ppdSubmissionId: AB0000000099
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetGain: 4567.89
-                    - ppdSubmissionId: AB0000000091
-                      completionDate: '2020-02-28'
-                      disposalProceeds: 454.24
-                      acquisitionDate: '2020-03-29'
-                      acquisitionAmount: 3434.45
-                      improvementCosts: 233.45
-                      additionalCosts: 423.34
-                      prfAmount: 2324.67
-                      otherReliefAmount: 3434.23
-                      lossesFromThisYear: 436.23
-                      lossesFromPreviousYear: 234.23
-                      amountOfNetLoss: 4567.89
+                  $ref: ./examples/cgt_residential_overrides_ppd_create_amend/def1/request.json
       responses:
         '200':
           description: Success
@@ -1965,32 +1843,7 @@ paths:
                 example-response:
                   description: Example Response
                   value:
-                    submittedOn: '2020-07-06T09:37:17.000Z'
-                    disposals:
-                      - assetType: other-property
-                        assetDescription: Property Sale
-                        acquisitionDate: '2021-05-01'
-                        disposalDate: '2021-06-01'
-                        disposalProceeds: 1000.12
-                        allowableCosts: 1000.12
-                        gain: 1000.12
-                        claimOrElectionCodes:
-                          - PRR
-                        gainAfterRelief: 1000.12
-                        rttTaxPaid: 1000.12
-                    nonStandardGains:
-                      carriedInterestGain: 1000.12
-                      carriedInterestRttTaxPaid: 1000.12
-                      attributedGains: 1000.12
-                      attributedGainsRttTaxPaid: 1000.12
-                      otherGains: 1000.12
-                      otherGainsRttTaxPaid: 1000.12
-                    losses:
-                      broughtForwardLossesUsedInCurrentYear: 1000.12
-                      setAgainstInYearGains: 1000.12
-                      setAgainstInYearGeneralIncome: 1000.12
-                      setAgainstEarlierYear: 1000.12
-                    adjustments: 1000.12
+                    $ref: ./examples/capital_gains_other_retrieve/def1/response.json
         '400':
           description: Bad request
           headers:
@@ -2190,31 +2043,7 @@ paths:
               example-1:
                 description: Other Capital Gains and Disposals with Gains
                 value:
-                  disposals:
-                    - assetType: other-property
-                      assetDescription: Property Sale
-                      acquisitionDate: '2021-05-01'
-                      disposalDate: '2021-06-01'
-                      disposalProceeds: 1000.12
-                      allowableCosts: 1000.12
-                      gain: 1000.12
-                      claimOrElectionCodes:
-                        - PRR
-                      gainAfterRelief: 1000.12
-                      rttTaxPaid: 1000.12
-                  nonStandardGains:
-                    carriedInterestGain: 1000.12
-                    carriedInterestRttTaxPaid: 1000.12
-                    attributedGains: 1000.12
-                    attributedGainsRttTaxPaid: 1000.12
-                    otherGains: 1000.12
-                    otherGainsRttTaxPaid: 1000.12
-                  losses:
-                    broughtForwardLossesUsedInCurrentYear: 1000.12
-                    setAgainstInYearGains: 1000.12
-                    setAgainstInYearGeneralIncome: 1000.12
-                    setAgainstEarlierYear: 1000.12
-                  adjustments: 1000.12
+                  $ref: ./examples/capital_gains_other_create_amend/def1/request.json
       responses:
         '200':
           description: Success
