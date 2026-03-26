@@ -372,7 +372,7 @@
     },
     "adjustmentAmount": {
       "type": "number",
-      "description": "The amount of included adjustments to reduce or increase the Capital Gains Tax payable.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "description": "The amount of included adjustments to increase the Capital Gains Tax payable.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
       "example": 1999.99,
       "multipleOf": 0.01,
       "minimum": 0,
@@ -380,7 +380,7 @@
     },
     "lifetimeAllowanceBadr": {
       "type": "number",
-      "description": "The lifetime allowance eligible for Business Asset Disposal Relief (BADR).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "description": "The lifetime allowance of Business Asset Disposal Relief (BADR) and Entrepreneurs' Relief claimed to date.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
       "example": 1999.99,
       "multipleOf": 0.01,
       "minimum": 0,
@@ -388,7 +388,7 @@
     },
     "lifetimeAllowanceInv": {
       "type": "number",
-      "description": "The lifetime allowance eligible for Investor's Relief (INV).\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
+      "description": "The lifetime allowance of Investors' Relief (INV) claimed to date.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
       "example": 1999.99,
       "multipleOf": 0.01,
       "minimum": 0,
@@ -547,7 +547,7 @@
     },
     "lifetimeAllowance": {
       "type": "object",
-      "description": "Object containing lifetime allowance eligible for Business Asset Disposal Relief and Investors' Relief.",
+      "description": "Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.",
       "properties": {
         "lifetimeAllowanceBadr" : {"$ref": "#/definitions/lifetimeAllowanceBadr"},
         "lifetimeAllowanceInv" : {"$ref": "#/definitions/lifetimeAllowanceInv"}

@@ -1,4 +1,4 @@
-summary: "Retrieve Other Capital Gains and Disposals [test only]"
+summary: Retrieve Other Capital Gains and Disposals
 description: |
   This endpoint enables you to retrieve data on capital gains and disposals with the exception of residential property,
   for a given National Insurance number and tax year.

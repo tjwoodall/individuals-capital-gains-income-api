@@ -1,4 +1,4 @@
-summary: "Retrieve CGT Residential Property Disposals (non-PPD) [test only]"
+summary: Retrieve CGT Residential Property Disposals (non-PPD)
 description: |
   This endpoint enables you to retrieve the residential property disposals subject to capital gains tax for non payment
   for property disposal (non-PPD). This includes user submitted residential property disposals.

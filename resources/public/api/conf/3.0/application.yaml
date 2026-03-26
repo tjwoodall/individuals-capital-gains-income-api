@@ -2,7 +2,7 @@ openapi: "3.0.3"
 
 info:
   version: "3.0"
-  title: "Individuals Capital Gains Income (MTD) [test only]"
+  title: Individuals Capital Gains Income (MTD)
   description: |
     
     The following groups of endpoints are stateful in the Sandbox:

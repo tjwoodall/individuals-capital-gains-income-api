@@ -1,4 +1,4 @@
-summary: "Create and Amend Other Capital Gains and Disposals [test only]"
+summary: Create and Amend Other Capital Gains and Disposals
 description: |
   This endpoint enables you to submit other capital gains and disposals with the exception of residential property,
   for a given National Insurance number and tax year.
