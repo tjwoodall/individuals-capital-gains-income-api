@@ -17,7 +17,6 @@
 package v3.otherCgt.retrieve
 
 import common.connectors.CgtConnectorSpec
-import play.api.Configuration
 import shared.models.domain.{Nino, TaxYear, Timestamp}
 import shared.models.errors.NinoFormatError
 import shared.models.outcomes.ResponseWrapper
@@ -46,45 +45,32 @@ class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
       }
     }
 
-    "return the expected response for a TYS request" when {
-      "a valid request is made" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> false))
-        val outcome = Right(ResponseWrapper(correlationId, def1_response))
+    "given a valid request (TYS) to HIP" must {
+      "return a success response" in new HipTest with Test {
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherCgtResponse]] = Right(ResponseWrapper(correlationId, def1_response))
 
         willGet(
-          url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino"
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
+        ).returns(Future.successful(outcome))
+
+        await(connector.retrieveOtherCgt(request)) shouldBe outcome
+      }
+
+      "return a success def2 response" in new HipTest with Test {
+        override def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
+
+        val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherCgtResponse]] = Right(ResponseWrapper(correlationId, minimumResponseModel))
+
+        willGet(
+          url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
         ).returns(Future.successful(outcome))
 
         await(connector.retrieveOtherCgt(request)) shouldBe outcome
       }
     }
 
-    "return a success response when feature switch is enabled (HIP enabled)" in new HipTest with Test {
-      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> true))
-      val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherCgtResponse]] = Right(ResponseWrapper(correlationId, def1_response))
-
-      willGet(
-        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
-      ).returns(Future.successful(outcome))
-
-      await(connector.retrieveOtherCgt(request)) shouldBe outcome
-    }
-
-    "return a success def2 response when feature switch is enabled (HIP enabled)" in new HipTest with Test {
-      override def taxYear: TaxYear = TaxYear.fromMtd("2025-26")
-      MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> true))
-      val outcome: Right[Nothing, ResponseWrapper[RetrieveOtherCgtResponse]] = Right(ResponseWrapper(correlationId, minimumResponseModel))
-
-      willGet(
-        url = url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/$nino"
-      ).returns(Future.successful(outcome))
-
-      await(connector.retrieveOtherCgt(request)) shouldBe outcome
-    }
-
     "given a request returning an error" must {
       "return an unsuccessful response with the correct correlationId and a single error" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1951.enabled" -> true))
 
         val outcome: Left[ResponseWrapper[NinoFormatError.type], Nothing] = Left(ResponseWrapper(correlationId, NinoFormatError))
 

@@ -16,7 +16,7 @@
 
 package v2.otherCgt.createAmend
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,11 +37,8 @@ class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appCon
     import request.*
     import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
-    lazy val downstreamUri1886 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1886")) {
+    lazy val downstreamUri1886 =
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/${nino.nino}")
-    } else {
-      IfsUri[Unit](s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.nino}")
-    }
 
     lazy val downstreamUri1739 = IfsUri(s"income-tax/income/disposals/other-gains/${nino.nino}/${taxYear.asMtd}")
 

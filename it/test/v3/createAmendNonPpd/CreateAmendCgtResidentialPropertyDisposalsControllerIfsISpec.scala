@@ -31,9 +31,6 @@ import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
 class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1952.enabled" -> false) ++ super.servicesConfig
-
   val validDisposalDate: String    = "2020-03-27"
   val validCompletionDate: String  = "2020-03-29"
   val validAcquisitionDate: String = "2020-03-25"
@@ -295,33 +292,9 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
     def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/2019-20"
   }
 
-  trait TysTest extends Test {
-    def taxYear: String = "2023-24"
-
-    override def request: WSRequest =
-      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
-
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
-  }
-
   "Calling the 'create and amend other CGT' endpoint" should {
     "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
-        }
-
-        val response: WSResponse = await(request.put(validRequestJson))
-        response.status shouldBe NO_CONTENT
-
-        verifyNrs(validRequestJson)
-      }
-
-      "any valid request is made for a TYS tax year" in new TysTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -424,13 +397,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        val extraTysErrors = Seq(
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        errors.foreach(serviceErrorTest.tupled)
       }
     }
   }

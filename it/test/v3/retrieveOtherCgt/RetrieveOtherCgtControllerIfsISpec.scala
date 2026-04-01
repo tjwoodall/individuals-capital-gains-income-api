@@ -28,27 +28,9 @@ import shared.support.IntegrationBaseSpec
 
 class RetrieveOtherCgtControllerIfsISpec extends IntegrationBaseSpec {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1951.enabled" -> false) ++ super.servicesConfig
-
   "Calling the 'retrieve other CGT' endpoint" should {
     "return a 200 status code" when {
       "any valid request is made" in new NonTysTest {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, OK, downstreamResponse)
-        }
-
-        val response: WSResponse = await(request.get())
-        response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
-
-      "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysIfsTest {
 
         override def setupStubs(): StubMapping = {
           AuditStub.audit()
@@ -128,13 +110,7 @@ class RetrieveOtherCgtControllerIfsISpec extends IntegrationBaseSpec {
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        val extraTysErrors = Seq(
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        errors.foreach(serviceErrorTest.tupled)
       }
     }
   }
@@ -241,11 +217,6 @@ class RetrieveOtherCgtControllerIfsISpec extends IntegrationBaseSpec {
   private trait NonTysTest extends Test {
     def taxYear: String       = "2019-20"
     def downstreamUri: String = s"/income-tax/income/disposals/other-gains/$nino/2019-20"
-  }
-
-  private trait TysIfsTest extends Test {
-    def taxYear: String       = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
   }
 
 }

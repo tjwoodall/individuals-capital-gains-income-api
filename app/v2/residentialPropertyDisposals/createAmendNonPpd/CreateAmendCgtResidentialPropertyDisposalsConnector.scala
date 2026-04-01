@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,11 +39,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: H
     import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
     lazy val downstreamUri1952: DownstreamUri[Unit] =
-      if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1952")) {
-        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino")
-      } else {
-        IfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.nino}")
-      }
+      HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino")
 
     lazy val downstreamUri1738: DownstreamUri[Unit] =
       IfsUri(s"income-tax/income/disposals/residential-property/${nino.nino}/${taxYear.asMtd}")

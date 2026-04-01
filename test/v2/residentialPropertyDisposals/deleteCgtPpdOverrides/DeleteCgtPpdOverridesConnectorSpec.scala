@@ -16,7 +16,6 @@
 
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
-import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.errors.{InternalError, NinoFormatError}
@@ -85,24 +84,10 @@ class DeleteCgtPpdOverridesConnectorSpec extends ConnectorSpec {
       }
 
     }
+
     "return the expected response for a TYS request" when {
-      "a valid request is made" in new IfsTest with Test {
-        def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1947.enabled" -> false)
-
-        val outcome = Right(ResponseWrapper(correlationId, ()))
-
-        willDelete(
-          url"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/$nino"
-        ).returns(Future.successful(outcome))
-
-        await(connector.deleteCgtPpdOverrides(request)) shouldBe outcome
-      }
-    }
-    "return the expected response for a HIP request" when {
       "a valid request is made" in new HipTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2024-25")
-        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1947.enabled" -> true)
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 

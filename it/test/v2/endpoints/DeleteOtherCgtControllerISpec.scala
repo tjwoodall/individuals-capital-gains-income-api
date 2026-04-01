@@ -27,14 +27,26 @@ import shared.models.errors.*
 import shared.services.*
 import shared.support.IntegrationBaseSpec
 
-class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1953.enabled" -> true) ++ super.servicesConfig
+class DeleteOtherCgtControllerISpec extends IntegrationBaseSpec {
 
   "Calling the 'delete other capital gains and disposals' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made using HIP" in new Test {
+      "any valid request is made using IFS" in new NonTysTest with Test {
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          MtdIdLookupStub.ninoFound(nino)
+          DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT)
+        }
+
+        val response: WSResponse = await(request().delete())
+        response.status shouldBe NO_CONTENT
+        response.body shouldBe ""
+        response.header("Content-Type") shouldBe None
+        response.header("X-CorrelationId").nonEmpty shouldBe true
+      }
+
+      "any valid request with a Tax Year Specific (TYS) tax year is made" in new TysHipTest with Test {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -54,7 +66,23 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
 
       "validation error" when {
         def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new Test {
+          s"Non-Tys validation fails with ${expectedBody.code} error" in new NonTysTest with Test {
+
+            override val nino: String    = requestNino
+            override val taxYear: String = requestTaxYear
+
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+            }
+
+            val response: WSResponse = await(request().delete())
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("Content-Type") shouldBe Some("application/json")
+          }
+
+          s"validation fails with ${expectedBody.code} error" in new TysHipTest with Test {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -78,12 +106,12 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
           ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError),
           ("AA123456A", "2025-26", BAD_REQUEST, RuleTaxYearForVersionNotSupportedError)
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "downstream service error" when {
-        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new Test {
+        def nonTysServiceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest with Test {
 
             override def setupStubs(): StubMapping = {
               AuthStub.authorised()
@@ -98,22 +126,23 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
           }
         }
 
-        def errorBody(`type`: String): String =
-          s"""
-             |{
-             |  "origin": "HoD",
-             |  "response": {
-             |    "failures": [
-             |      {
-             |        "type": "${`type`}",
-             |        "reason": "downstream message"
-             |      }
-             |    ]
-             |  }
-             |}
-               """.stripMargin
+        def tysHipServiceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"Tys downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest with Test {
 
-        val errors = Seq(
+            override def setupStubs(): StubMapping = {
+              AuthStub.authorised()
+              MtdIdLookupStub.ninoFound(nino)
+              DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            }
+
+            val response: WSResponse = await(request().delete())
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("Content-Type") shouldBe Some("application/json")
+          }
+        }
+
+        val nonTysErrors = Seq(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
@@ -121,14 +150,19 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
+        nonTysErrors.foreach(args => nonTysServiceErrorTest.tupled(args))
 
-        val extraTysErrors = Seq(
+        val tysHipErrors = Seq(
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
+          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
+          (NOT_FOUND, "NO_DATA_FOUND", NOT_FOUND, NotFoundError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        tysHipErrors.foreach(args => tysHipServiceErrorTest.tupled(args))
       }
     }
   }
@@ -137,11 +171,9 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
 
     val nino: String = "AA123456A"
 
-    def taxYear: String                   = "2023-24"
-    private def taxYearDownstream: String = "23-24"
-
-    private def mtdUri: String = s"/other-gains/$nino/$taxYear"
-    def downstreamUri: String  = s"/itsa/income-tax/v1/$taxYearDownstream/income/disposals/other-gains/$nino"
+    def taxYear: String
+    def mtdUri: String = s"/other-gains/$nino/$taxYear"
+    def downstreamUri: String
 
     def setupStubs(): StubMapping
 
@@ -154,6 +186,31 @@ class DeleteOtherCgtControllerHipISpec extends IntegrationBaseSpec {
         )
     }
 
+    def errorBody(`type`: String): String =
+      s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "${`type`}",
+         |        "reason": "downstream message"
+         |      }
+         |    ]
+         |  }
+         |}
+                   """.stripMargin
+
+  }
+
+  private trait NonTysTest extends Test {
+    def taxYear: String       = "2019-20"
+    def downstreamUri: String = s"/income-tax/income/disposals/other-gains/$nino/2019-20"
+  }
+
+  private trait TysHipTest extends Test {
+    def taxYear: String       = "2023-24"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/other-gains/$nino"
   }
 
 }

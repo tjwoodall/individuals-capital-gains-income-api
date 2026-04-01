@@ -30,9 +30,6 @@ import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
 class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1886.enabled" -> false) ++ super.servicesConfig
-
   def validRequestJson(year: String = "2023"): JsValue = Json.parse(
     s"""
       |{
@@ -377,17 +374,6 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
 
   }
 
-  private trait TysIfsTest extends Test {
-
-    override val taxYear: String = "2023-24"
-
-    override def request: WSRequest =
-      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
-
-    def downstreamUrl: String = s"/income-tax/income/disposals/other-gains/23-24/$nino"
-
-  }
-
   "Calling the 'create and amend other CGT' endpoint" should {
     "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
@@ -401,16 +387,6 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
         verifyNrs(validRequestJson("2021"))
       }
 
-      "any valid request is made TYS" in new TysIfsTest {
-
-        override def setupStubs(): Unit = {
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUrl, NO_CONTENT, JsObject.empty)
-        }
-
-        val response: WSResponse = await(request.put(validRequestJson()))
-        response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson())
-      }
     }
 
     "return error according to spec" when {
@@ -457,13 +433,13 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
 
       "downstream service error" when {
         def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new TysIfsTest {
+          s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): Unit = {
               DownstreamStub.onError(DownstreamStub.PUT, downstreamUrl, downstreamStatus, errorBody(downstreamCode))
             }
 
-            val response: WSResponse = await(request.put(validRequestJson()))
+            val response: WSResponse = await(request.put(validRequestJson("2021")))
             response.status shouldBe expectedStatus
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
@@ -489,12 +465,7 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        val tysErrorInput = Seq(
-          (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
-        )
-        (errorInput ++ tysErrorInput).foreach(serviceErrorTest.tupled)
+        errorInput.foreach(serviceErrorTest.tupled)
       }
     }
   }
