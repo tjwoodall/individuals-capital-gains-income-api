@@ -16,7 +16,7 @@
 
 package v3.otherCgt.retrieve
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,11 +40,8 @@ class RetrieveOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig
     import request.*
     import schema.*
 
-    lazy val downstreamUri1951: DownstreamUri[DownstreamResp] = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1951")) {
+    lazy val downstreamUri1951: DownstreamUri[DownstreamResp] =
       HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/${nino.value}")
-    } else {
-      IfsUri(s"income-tax/income/disposals/other-gains/${taxYear.asTysDownstream}/${nino.value}")
-    }
 
     lazy val downstreamUri1737: DownstreamUri[DownstreamResp] = IfsUri(s"income-tax/income/disposals/other-gains/${nino.value}/${taxYear.asMtd}")
 

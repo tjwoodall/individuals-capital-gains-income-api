@@ -17,7 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import com.google.inject.Singleton
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,11 +38,8 @@ class CreateAmendCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val
     import request.*
     import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
-    lazy val downstream1946 = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1946")) {
+    lazy val downstream1946 =
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/ppd/${nino.value}")
-    } else {
-      IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino.value}")
-    }
 
     lazy val downstream1724 = IfsUri[Unit](s"income-tax/income/disposals/residential-property/ppd/$nino/${taxYear.asMtd}")
 

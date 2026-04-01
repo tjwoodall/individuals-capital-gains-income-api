@@ -55,14 +55,6 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
       ).returns(Future.successful(outcome))
     }
 
-    protected def stubTysIfsHttpResponse(outcome: DownstreamOutcome[RetrieveCgtPpdOverridesResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveCgtPpdOverridesResponse]]]#Derived = {
-      willGet(
-        url = url"$baseUrl/income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/$nino",
-        queryParams
-      ).returns(Future.successful(outcome))
-    }
-
     protected def stubTysHipHttpResponse(outcome: DownstreamOutcome[RetrieveCgtPpdOverridesResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveCgtPpdOverridesResponse]]]#Derived = {
       willGet(
@@ -93,22 +85,6 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
           result shouldBe outcome
         }
 
-        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is IFS" in new IfsTest with Test {
-          override def intent: Option[String] = intentValue
-
-          val outcome = Right(ResponseWrapper(correlationId, response))
-
-          MockedSharedAppConfig.featureSwitchConfig
-            .returns(
-              Configuration("ifs_hip_migration_1881.enabled" -> false, "passIntentHeader.enabled" -> passIntentHeaderFlag)
-            )
-            .twice()
-          stubTysIfsHttpResponse(outcome)
-
-          val result: DownstreamOutcome[RetrieveCgtPpdOverridesResponse] = await(connector.retrieve(request))
-          result shouldBe outcome
-        }
-
         s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is HIP" in new HipTest with Test {
           override def intent: Option[String] = intentValue
 
@@ -116,7 +92,7 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
           MockedSharedAppConfig.featureSwitchConfig
             .returns(
-              Configuration("ifs_hip_migration_1881.enabled" -> true, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+              Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag)
             )
             .twice()
           stubTysHipHttpResponse(outcome)

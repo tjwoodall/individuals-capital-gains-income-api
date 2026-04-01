@@ -17,13 +17,13 @@
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
 import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
-import shared.connectors.DownstreamUri.{DesUri, HipUri, IfsUri}
+import shared.connectors.DownstreamUri.{DesUri, HipUri}
+import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.model.request.RetrieveCgtPpdOverridesRequestData
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.model.response.RetrieveCgtPpdOverridesResponse
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,11 +44,7 @@ class RetrieveCgtPpdOverridesConnector @Inject() (val http: HttpClientV2, val ap
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>
-        if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1881")) {
-          HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/${nino.value}")
-        } else {
-          IfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
-        }
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/${nino.value}")
       case _ =>
         DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }

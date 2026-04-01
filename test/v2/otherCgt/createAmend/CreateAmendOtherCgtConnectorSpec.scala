@@ -17,7 +17,6 @@
 package v2.otherCgt.createAmend
 
 import config.MockAppConfig
-import play.api.Configuration
 import shared.connectors.ConnectorSpec
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
@@ -54,7 +53,6 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
   "createAndAmendOtherCgtConnector" should {
     "return the expected response for a non-TYS IFS request" when {
       "a valid request is made" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
@@ -77,34 +75,8 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
       }
     }
 
-    "return the expected response for a TYS IFS request" when {
-      "a valid request is made" in new IfsTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> false)
-
-        override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
-
-        val createAmendOtherCgtRequestData: CreateAmendOtherCgtRequestData =
-          Def1_CreateAmendOtherCgtRequestData(
-            nino = Nino(nino),
-            taxYear = taxYear,
-            body = mtdRequestBody
-          )
-
-        val outcome: Right[Nothing, ResponseWrapper[Unit]] =
-          Right(ResponseWrapper(correlationId, ()))
-
-        willPut(
-          url = url"$baseUrl/income-tax/income/disposals/other-gains/23-24/$nino",
-          body = mtdRequestBody
-        ).returns(Future.successful(outcome))
-
-        await(connector.createAndAmend(createAmendOtherCgtRequestData)) shouldBe outcome
-      }
-    }
-
     "return the expected response for a HIP request" when {
       "a valid request is made" in new HipTest with Test {
-        MockedSharedAppConfig.featureSwitchConfig returns Configuration("ifs_hip_migration_1886.enabled" -> true)
 
         override val taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 

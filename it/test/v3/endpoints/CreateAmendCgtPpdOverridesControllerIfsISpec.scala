@@ -31,9 +31,6 @@ import shared.support.{IntegrationBaseSpec, WireMockMethods}
 
 class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1946.enabled" -> false) ++ super.servicesConfig
-
   val validRequestBodyJson: JsValue = Json.parse(
     """
       |{
@@ -351,7 +348,7 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
     def nino: String = "AA123456A"
     def taxYear: String
     def downstreamUri: String
-    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
+    private def uri: String = s"/residential-property/$nino/$taxYear/ppd"
 
     def setupStubs(): StubMapping
 
@@ -376,15 +373,6 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
     def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/$nino/$taxYear"
   }
 
-  private trait TysIfsTest extends Test {
-    def taxYear               = "2023-24"
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/ppd/23-24/$nino"
-
-    override def request: WSRequest =
-      super.request.addHttpHeaders("suspend-temporal-validations" -> "true")
-
-  }
-
   "Calling Create and Amend 'Report and Pay Capital Gains Tax on Property' Overrides endpoint" should {
     "return a 204 status code" when {
       "any valid request is made" in new NonTysTest {
@@ -401,19 +389,6 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
         verifyNrs(validRequestBodyJson)
       }
 
-      "any valid request is made for a TYS tax year" in new TysIfsTest {
-
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.PUT, downstreamUri, NO_CONTENT)
-        }
-
-        val response: WSResponse = await(request.put(validRequestBodyJson))
-        response.status shouldBe NO_CONTENT
-
-        verifyNrs(validRequestBodyJson)
-      }
     }
 
     "return a 400 with multiple errors" when {
@@ -426,22 +401,6 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
                                 expectedErrors: Option[ErrorWrapper],
                                 scenario: Option[String]): Unit = {
           s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")}" in new NonTysTest {
-            override val nino: String    = requestNino
-            override val taxYear: String = requestTaxYear
-
-            override def setupStubs(): StubMapping = {
-              AuditStub.audit()
-              AuthStub.authorised()
-              MtdIdLookupStub.ninoFound(nino)
-            }
-
-            val response: WSResponse = await(request.put(requestBody))
-            response.status shouldBe expectedStatus
-            response.json shouldBe expectedErrors.fold(Json.toJson(expectedError))(errorWrapper => Json.toJson(errorWrapper))
-            response.header("Content-Type") shouldBe Some("application/json")
-          }
-
-          s"validation fails with ${expectedError.code} error${scenario.fold("")(scenario => s" for $scenario scenario")} for TYS tax year" in new TysIfsTest {
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
 
@@ -519,12 +478,7 @@ class CreateAmendCgtPpdOverridesControllerIfsISpec extends IntegrationBaseSpec w
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
-
-        val extraTysErrors = Seq(
-          (BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
-        )
-
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        errors.foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

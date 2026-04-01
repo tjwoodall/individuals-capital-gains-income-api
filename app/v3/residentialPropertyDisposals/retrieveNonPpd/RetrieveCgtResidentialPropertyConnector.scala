@@ -42,11 +42,7 @@ class RetrieveCgtResidentialPropertyConnector @Inject() (val http: HttpClientV2,
 
     val downstreamUri: DownstreamUri[DownstreamResp] = taxYear match {
       case ty if ty.useTaxYearSpecificApi =>
-        if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1881")) {
-          HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/${nino.value}")
-        } else {
-          IfsUri(s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/${nino.value}")
-        }
+        HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/${nino.value}")
       case _ =>
         DesUri(s"income-tax/income/disposals/residential-property/${nino.value}/${taxYear.asMtd}")
     }

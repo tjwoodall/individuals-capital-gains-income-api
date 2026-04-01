@@ -28,18 +28,15 @@ import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def1.fixture.Def1
 
 class RetrieveCgtPpdOverridesIfsISpec extends IntegrationBaseSpec {
 
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1881.enabled" -> false) ++ super.servicesConfig
-
   private trait Test {
 
     def nino: String = "AA123456A"
 
     def source: Option[String] = Some("latest")
 
-    def taxYear: String = "2023-24"
+    def taxYear: String = "2022-23"
 
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
+    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/$taxYear"
 
     val downstreamResponse: JsValue = Def1_RetrieveCgtPpdOverridesFixture.downstreamJson
 
@@ -69,21 +66,6 @@ class RetrieveCgtPpdOverridesIfsISpec extends IntegrationBaseSpec {
 
   "Calling the Retrieve 'Report and Pay Capital Gains Tax on Residential Property' Overrides (PPD) endpoint" should {
     "return a 200 status code" when {
-
-      "a valid request is made for Tax Year Specific (TYS)" in new Test {
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUri, Map("view" -> "LATEST"), OK, downstreamResponse)
-        }
-
-        val response: WSResponse = await(mtdRequest.get())
-        response.status shouldBe OK
-        response.json shouldBe mtdResponse
-        response.header("Content-Type") shouldBe Some("application/json")
-      }
 
       "a valid request is made pre-TYS" in new Test {
 

@@ -27,14 +27,11 @@ import shared.models.errors.*
 import shared.services.{AuthStub, DownstreamStub, MtdIdLookupStub}
 import shared.support.IntegrationBaseSpec
 
-class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
-
-  override def servicesConfig: Map[String, Any] =
-    Map("feature-switch.ifs_hip_migration_1875.enabled" -> false) ++ super.servicesConfig
+class DeleteCgtNonPpdControllerISpec extends IntegrationBaseSpec {
 
   "Calling the 'delete cgt non-ppd disposals' endpoint" should {
     "return a 204 status code" when {
-      "any valid request is made" in new NonTysTest {
+      "any valid request is made for a pre-TYS tax year" in new NonTysTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT)
@@ -47,7 +44,7 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
         response.header("X-CorrelationId").nonEmpty shouldBe true
       }
 
-      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysIfsTest {
+      "any valid request is made for a Tax Year Specific (TYS) tax year" in new TysHipTest {
 
         override def setupStubs(): Unit = {
           DownstreamStub.onSuccess(DownstreamStub.DELETE, downstreamUri, NO_CONTENT)
@@ -64,8 +61,16 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
     "return error according to spec" when {
 
       "validation error" when {
-        def validationErrorTest(requestNino: String, requestTaxYear: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
-          s"validation fails with ${expectedBody.code} error" in new NonTysTest {
+
+        val input = Seq(
+          ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
+          ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
+          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
+          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError)
+        )
+
+        input.foreach { case (requestNino, requestTaxYear, expectedStatus, expectedBody) =>
+          s"Non-Tys validation fails with ${expectedBody.code} error" in new NonTysTest {
 
             override val nino: String    = requestNino
             override val taxYear: String = requestTaxYear
@@ -79,17 +84,24 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
           }
         }
 
-        val input = Seq(
-          ("AA1123A", "2019-20", BAD_REQUEST, NinoFormatError),
-          ("AA123456A", "20199", BAD_REQUEST, TaxYearFormatError),
-          ("AA123456A", "2018-19", BAD_REQUEST, RuleTaxYearNotSupportedError),
-          ("AA123456A", "2019-21", BAD_REQUEST, RuleTaxYearRangeInvalidError)
-        )
-        input.foreach(args => validationErrorTest.tupled(args))
+        input.foreach { case (requestNino, requestTaxYear, expectedStatus, expectedBody) =>
+          s"Tys HIP validation fails with ${expectedBody.code} error" in new TysHipTest {
+
+            override val nino: String    = requestNino
+            override val taxYear: String = requestTaxYear
+
+            override def setupStubs(): Unit = {}
+
+            val response: WSResponse = await(request().delete())
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("Content-Type") shouldBe Some("application/json")
+          }
+        }
       }
 
       "downstream service error" when {
-        def serviceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+        def nonTysServiceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
           s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
 
             override def setupStubs(): Unit = {
@@ -103,15 +115,21 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
           }
         }
 
-        def errorBody(code: String): String =
-          s"""
-             |{
-             |   "code": "$code",
-             |   "reason": "downstream message"
-             |}
-            """.stripMargin
+        def tysHipServiceErrorTest(downstreamStatus: Int, downstreamCode: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+          s"Tys downstream returns an $downstreamCode error and status $downstreamStatus" in new TysHipTest {
 
-        val errors = List(
+            override def setupStubs(): Unit = {
+              DownstreamStub.onError(DownstreamStub.DELETE, downstreamUri, downstreamStatus, errorBody(downstreamCode))
+            }
+
+            val response: WSResponse = await(request().delete())
+            response.status shouldBe expectedStatus
+            response.json shouldBe Json.toJson(expectedBody)
+            response.header("Content-Type") shouldBe Some("application/json")
+          }
+        }
+
+        val nonTysErrors = List(
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
@@ -119,15 +137,19 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
           (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError)
         )
+        nonTysErrors.foreach(args => nonTysServiceErrorTest.tupled(args))
 
-        val extraTysErrors = List(
+        val tysHipErrors = List(
+          (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
+          (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATION_ID", INTERNAL_SERVER_ERROR, InternalError),
           (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),
+          (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),
+          (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, InternalError),
           (UNPROCESSABLE_ENTITY, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError)
         )
-
-        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
+        tysHipErrors.foreach(args => tysHipServiceErrorTest.tupled(args))
       }
     }
   }
@@ -154,6 +176,21 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
         )
     }
 
+    def errorBody(`type`: String): String =
+      s"""
+         |{
+         |  "origin": "HoD",
+         |  "response": {
+         |    "failures": [
+         |      {
+         |        "type": "${`type`}",
+         |        "reason": "downstream message"
+         |      }
+         |    ]
+         |  }
+         |}
+            """.stripMargin
+
   }
 
   private trait NonTysTest extends Test {
@@ -162,10 +199,10 @@ class DeleteCgtNonPpdControllerIfsISpec extends IntegrationBaseSpec {
     def downstreamUri: String = s"/income-tax/income/disposals/residential-property/$nino/$taxYear"
   }
 
-  private trait TysIfsTest extends Test {
+  private trait TysHipTest extends Test {
     def taxYear: String = "2023-24"
 
-    def downstreamUri: String = s"/income-tax/income/disposals/residential-property/23-24/$nino"
+    def downstreamUri: String = s"/itsa/income-tax/v1/23-24/income/disposals/residential-property/$nino"
   }
 
 }

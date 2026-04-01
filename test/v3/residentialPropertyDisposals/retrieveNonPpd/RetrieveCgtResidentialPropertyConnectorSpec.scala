@@ -54,13 +54,6 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
       ).returns(Future.successful(outcome))
     }
 
-    protected def stubTysIfsHttpResponse(outcome: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse])
-        : CallHandler[Future[DownstreamOutcome[RetrieveCgtResidentialPropertyResponse]]]#Derived = {
-      willGet(
-        url = url"$baseUrl/income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/$nino"
-      ).returns(Future.successful(outcome))
-    }
-
     protected def stubTysHipHttpResponse(outcome: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveCgtResidentialPropertyResponse]]]#Derived = {
       willGet(
@@ -90,22 +83,6 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
           result shouldBe outcome
         }
 
-        s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is IFS" in new IfsTest with Test {
-          override def intent: Option[String] = intentValue
-
-          val outcome = Right(ResponseWrapper(correlationId, response))
-
-          MockedSharedAppConfig.featureSwitchConfig
-            .returns(
-              Configuration("ifs_hip_migration_1881.enabled" -> false, "passIntentHeader.enabled" -> passIntentHeaderFlag)
-            )
-            .twice()
-          stubTysIfsHttpResponse(outcome)
-
-          val result: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse] = await(connector.retrieve(request))
-          result shouldBe outcome
-        }
-
         s"the request is for TYS tax years, passIntentHeader is set to $passIntentHeaderFlag and the downstream is HIP" in new HipTest with Test {
           override def intent: Option[String] = intentValue
 
@@ -113,7 +90,7 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
 
           MockedSharedAppConfig.featureSwitchConfig
             .returns(
-              Configuration("ifs_hip_migration_1881.enabled" -> true, "passIntentHeader.enabled" -> passIntentHeaderFlag)
+              Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag)
             )
             .twice()
           stubTysHipHttpResponse(outcome)

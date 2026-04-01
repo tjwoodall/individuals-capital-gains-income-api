@@ -17,11 +17,10 @@
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import common.connectors.CgtConnectorSpec
-import play.api.Configuration
 import shared.connectors.DownstreamOutcome
 import shared.models.domain.{Nino, TaxYear}
 import shared.models.outcomes.ResponseWrapper
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture.Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
@@ -52,7 +51,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
     "createAndAmend" must {
       "return a 204 status for a success scenario" in new Api1661Test with Test {
 
-        override def taxYear = TaxYear.fromMtd("2019-20")
+        override def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
@@ -68,24 +67,9 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
 
     "createAndAmend called for a Tax Year Specific tax year" must {
       "return a 200 status for a success scenario" when {
-        "the downstream request to IFS is successful" in new IfsTest with Test {
-
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1946.enabled" -> false))
-          implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-
-          val outcome = Right(ResponseWrapper(correlationId, ()))
-
-          willPut(
-            url"$baseUrl/income-tax/income/disposals/residential-property/ppd/${taxYear.asTysDownstream}/${nino}",
-            requestBodyModel) returns Future
-            .successful(outcome)
-
-          val result = await(connector.createAmend(request))
-          result shouldBe outcome
-        }
 
         "the downstream request to HIP is successful" in new HipTest with Test {
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("ifs_hip_migration_1946.enabled" -> true))
+
           val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))
 
           willPut(url"$baseUrl/itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/ppd/$nino", requestBodyModel)

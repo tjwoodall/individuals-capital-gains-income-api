@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.deleteNonPpd
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
+import shared.config.SharedAppConfig
 import shared.connectors.DownstreamUri.{HipUri, IfsUri}
 import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
@@ -37,15 +37,10 @@ class DeleteCgtNonPpdConnector @Inject() (val http: HttpClientV2, val appConfig:
 
     import request.*
 
-    lazy val downstreamUri1875: DownstreamUri[Unit] = if (ConfigFeatureSwitches().isEnabled("ifs_hip_migration_1875")) {
+    lazy val downstreamUri1875: DownstreamUri[Unit] =
       HipUri[Unit](
         s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino"
       )
-    } else {
-      IfsUri[Unit](
-        s"income-tax/income/disposals/residential-property/${taxYear.asTysDownstream}/$nino"
-      )
-    }
 
     lazy val downstreamUri1740: DownstreamUri[Unit] = IfsUri[Unit](
       s"income-tax/income/disposals/residential-property/$nino/${taxYear.asMtd}"
