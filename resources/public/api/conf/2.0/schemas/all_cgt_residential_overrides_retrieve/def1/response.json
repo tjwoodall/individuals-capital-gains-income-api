@@ -246,7 +246,7 @@
             "type": "object",
             "properties": {
               "customerReference": {
-                "description": "The unique reference for a residential property disposal supplied by the customer.",
+                "description": "The unique reference for a residential property disposal supplied by the customer. Must not be empty or contain only whitespace.",
                 "type": "string",
                 "example": "CGTDISPOSAL01",
                 "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"

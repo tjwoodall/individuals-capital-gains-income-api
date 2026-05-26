@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.errors.*
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.domain.TaxYear
 import shared.models.errors.{DateFormatError, MtdError}
 import v3.otherCgt.createAmend.def1.model.request.*
@@ -32,7 +32,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
   private val resolveParsedNumber            = ResolveParsedNumber(min = -99999999999.99)
-  private val regex                          = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
+  private val assetDescriptionRegex          = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
 
   def validateBusinessRules(parsed: Def1_CreateAmendOtherCgtRequestData): Validated[Seq[MtdError], Def1_CreateAmendOtherCgtRequestData] = {
 
@@ -105,7 +105,7 @@ object Def1_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def1_Create
     }
 
     val validatedAssetDescription: Validated[Seq[MtdError], String] =
-      ResolveAssetDescription(assetDescription, regex, AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription"))
+      ResolveStringPattern(assetDescription, assetDescriptionRegex, AssetDescriptionFormatError.withPath(s"/disposals/$index/assetDescription"))
 
     val validatedAssetType = ResolveAssetType(assetType, AssetTypeFormatError.withPath(s"/disposals/$index/assetType"))
 

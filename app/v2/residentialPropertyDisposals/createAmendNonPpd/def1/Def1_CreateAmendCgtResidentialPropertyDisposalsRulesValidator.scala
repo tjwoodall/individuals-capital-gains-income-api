@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
     extends RulesValidator[Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
-  private val regex                          = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
+  private val customerReferenceRegex         = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
 
   def validateBusinessRules(parsed: Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData)
       : Validated[Seq[MtdError], Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
@@ -76,12 +76,8 @@ object Def1_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
       resolveDate(value)
     }
 
-    val validatedCustomerRef = customerReference match {
-      case Some(value) =>
-        val resolveCustomerRef = new ResolveStringPattern(regex, CustomerRefFormatError.withPath(s"/disposals/$index/customerReference"))
-        resolveCustomerRef(value)
-      case None => valid
-    }
+    val validatedCustomerRef: Validated[Seq[MtdError], Option[String]] =
+      ResolveStringPattern(customerReference, customerReferenceRegex, CustomerRefFormatError.withPath(s"/disposals/$index/customerReference"))
 
     val validatedLossOrGains: Validated[Seq[MtdError], Unit] = if (disposal.gainAndLossAreBothSupplied) {
       Invalid(List(RuleAmountGainLossError.withPath(s"/disposals/$index")))

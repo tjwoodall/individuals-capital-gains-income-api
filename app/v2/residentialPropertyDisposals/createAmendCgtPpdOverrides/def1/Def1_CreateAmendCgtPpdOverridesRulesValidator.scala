@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,14 @@ import cats.data.Validated.*
 import cats.implicits.*
 import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
 import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.{DateFormatError, MtdError, RuleDateRangeInvalidError}
-import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  Def1_CreateAmendCgtPpdOverridesRequestData,
-  MultiplePropertyDisposals,
-  SinglePropertyDisposals
-}
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.*
 
 object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1_CreateAmendCgtPpdOverridesRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
-  private val ppdSubmissionIdRegex           = "^[A-Za-z0-9]{12}$"
+  private val ppdSubmissionIdRegex           = "^[A-Za-z0-9]{12}$".r
 
   def validateBusinessRules(
       parsed: Def1_CreateAmendCgtPpdOverridesRequestData): Validated[Seq[MtdError], Def1_CreateAmendCgtPpdOverridesRequestData] = {
@@ -81,14 +76,6 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
     }
   }
 
-  private def validatePpdSubmissionId(ppdSubmissionId: String, error: MtdError): Validated[Seq[MtdError], Unit] = {
-    if (ppdSubmissionId.matches(ppdSubmissionIdRegex)) {
-      valid
-    } else {
-      Invalid(List(error))
-    }
-  }
-
   private def validateSuppliedDisposals(requestBody: Def1_CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
     val multiplePropertyPpdValidation = requestBody.multiplePropertyDisposals.fold[Validated[Seq[MtdError], Unit]](Valid(())) { disposals =>
       disposals.zipWithIndex.traverse_ { case (multiplePropertyDisposals, index) =>
@@ -115,12 +102,12 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
   }
 
   private def validateMultiplePropertyDisposalsPpdId(multiplePropertyDisposals: MultiplePropertyDisposals,
-                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    validatePpdSubmissionId(
+                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] =
+    ResolveStringPattern(
       multiplePropertyDisposals.ppdSubmissionId,
-      PpdSubmissionIdFormatError.withPath(s"/multiplePropertyDisposals/$arrayIndex/ppdSubmissionId"))
-
-  }
+      ppdSubmissionIdRegex,
+      PpdSubmissionIdFormatError.withPath(s"/multiplePropertyDisposals/$arrayIndex/ppdSubmissionId")
+    ).toUnit
 
   private def validateMultiplePropertyDisposalsValues(multiplePropertyDisposals: MultiplePropertyDisposals,
                                                       arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
@@ -135,11 +122,12 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
   }
 
   private def validateSinglePropertyDisposalsPpdId(singlePropertyDisposals: SinglePropertyDisposals,
-                                                   arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    validatePpdSubmissionId(
+                                                   arrayIndex: Int): Validated[Seq[MtdError], Unit] =
+    ResolveStringPattern(
       singlePropertyDisposals.ppdSubmissionId,
-      PpdSubmissionIdFormatError.withPath(s"/singlePropertyDisposals/$arrayIndex/ppdSubmissionId"))
-  }
+      ppdSubmissionIdRegex,
+      PpdSubmissionIdFormatError.withPath(s"/singlePropertyDisposals/$arrayIndex/ppdSubmissionId")
+    ).toUnit
 
   private def validateSinglePropertyDisposalsValues(singlePropertyDisposals: SinglePropertyDisposals,
                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] = {

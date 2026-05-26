@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.toFoldableOps
 import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
-import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber}
+import shared.controllers.validators.resolvers.{ResolveIsoDate, ResolveParsedNumber, ResolveStringPattern}
 import shared.models.errors.{DateFormatError, RuleDateRangeInvalidError}
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request.{
   Def2_CreateAmendCgtPpdOverridesRequestBody,
@@ -34,7 +34,7 @@ import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.req
 object Def2_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def2_CreateAmendCgtPpdOverridesRequestData] {
 
   private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
-  private val ppdSubmissionIdRegex           = "^[A-Za-z0-9]{12}$"
+  private val ppdSubmissionIdRegex           = "^[A-Za-z0-9]{12}$".r
 
   def validateBusinessRules(
       parsed: Def2_CreateAmendCgtPpdOverridesRequestData): Validated[Seq[MtdError], Def2_CreateAmendCgtPpdOverridesRequestData] = {
@@ -83,14 +83,6 @@ object Def2_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def2
     }
   }
 
-  private def validatePpdSubmissionId(ppdSubmissionId: String, error: MtdError): Validated[Seq[MtdError], Unit] = {
-    if (ppdSubmissionId.matches(ppdSubmissionIdRegex)) {
-      valid
-    } else {
-      Invalid(List(error))
-    }
-  }
-
   private def validateSuppliedDisposals(requestBody: Def2_CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
     val multiplePropertyPpdValidation = requestBody.multiplePropertyDisposals.fold[Validated[Seq[MtdError], Unit]](Valid(())) { disposals =>
       disposals.zipWithIndex.traverse_ { case (multiplePropertyDisposals, index) =>
@@ -117,12 +109,12 @@ object Def2_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def2
   }
 
   private def validateMultiplePropertyDisposalsPpdId(multiplePropertyDisposals: MultiplePropertyDisposals,
-                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    validatePpdSubmissionId(
+                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] =
+    ResolveStringPattern(
       multiplePropertyDisposals.ppdSubmissionId,
-      PpdSubmissionIdFormatError.withPath(s"/multiplePropertyDisposals/$arrayIndex/ppdSubmissionId"))
-
-  }
+      ppdSubmissionIdRegex,
+      PpdSubmissionIdFormatError.withPath(s"/multiplePropertyDisposals/$arrayIndex/ppdSubmissionId")
+    ).toUnit
 
   private def validateMultiplePropertyDisposalsValues(multiplePropertyDisposals: MultiplePropertyDisposals,
                                                       arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
@@ -139,11 +131,11 @@ object Def2_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def2
   }
 
   private def validateSinglePropertyDisposalsPpdId(singlePropertyDisposals: SinglePropertyDisposals,
-                                                   arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    validatePpdSubmissionId(
-      singlePropertyDisposals.ppdSubmissionId,
-      PpdSubmissionIdFormatError.withPath(s"/singlePropertyDisposals/$arrayIndex/ppdSubmissionId"))
-  }
+                                                   arrayIndex: Int): Validated[Seq[MtdError], Unit] = ResolveStringPattern(
+    singlePropertyDisposals.ppdSubmissionId,
+    ppdSubmissionIdRegex,
+    PpdSubmissionIdFormatError.withPath(s"/singlePropertyDisposals/$arrayIndex/ppdSubmissionId")
+  ).toUnit
 
   private def validateSinglePropertyDisposalsValues(singlePropertyDisposals: SinglePropertyDisposals,
                                                     arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
