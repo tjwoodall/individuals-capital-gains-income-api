@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import play.api.Configuration
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.request.Def1_RetrieveCgtResidentialPropertyRequestData
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.response.Def1_RetrieveCgtResidentialPropertyResponse
@@ -45,7 +45,7 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
       Def1_RetrieveCgtResidentialPropertyRequestData(Nino(nino), taxYear)
 
     val connector: RetrieveCgtResidentialPropertyConnector =
-      new RetrieveCgtResidentialPropertyConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
+      new RetrieveCgtResidentialPropertyConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveCgtResidentialPropertyResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveCgtResidentialPropertyResponse]]]#Derived = {
@@ -75,7 +75,7 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
+          MockedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
 
           stubHttpResponse(outcome)
 
@@ -88,7 +88,7 @@ class RetrieveCgtResidentialPropertyConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 
-          MockedSharedAppConfig.featureSwitchConfig
+          MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag)
             )

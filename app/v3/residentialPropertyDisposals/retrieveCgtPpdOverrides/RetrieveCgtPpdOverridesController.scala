@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
+import api.config.AppConfig
+import api.controllers.*
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
 import play.api.mvc.*
-import shared.config.SharedAppConfig
-import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -30,7 +30,7 @@ class RetrieveCgtPpdOverridesController @Inject() (val authService: EnrolmentsAu
                                                    validatorFactory: RetrieveCgtPpdOverridesValidatorFactory,
                                                    cc: ControllerComponents,
                                                    service: RetrieveCgtPpdOverridesService,
-                                                   val idGenerator: IdGenerator)(implicit val appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                   val idGenerator: IdGenerator)(implicit val appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-cgt-ppd-overrides"

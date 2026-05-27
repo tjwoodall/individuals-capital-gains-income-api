@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def2
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
 import common.errors.*
 import config.MockAppConfig
 import play.api.libs.json.*
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsValidatorFactory
 import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.*

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v2.otherCgt.createAmend
 
+import api.connectors.ConnectorSpec
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import config.MockAppConfig
-import shared.connectors.ConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v2.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
@@ -45,7 +45,7 @@ class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig 
 
     val connector: CreateAmendOtherCgtConnector = new CreateAmendOtherCgtConnector(
       http = mockHttpClient,
-      appConfig = mockSharedAppConfig
+      appConfig = mockAppConfig
     )
 
   }

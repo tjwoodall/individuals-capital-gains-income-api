@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.fixture.Def1_RetrieveCgtResidentialPropertyControllerFixture
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.request.Def1_RetrieveCgtResidentialPropertyRequestData

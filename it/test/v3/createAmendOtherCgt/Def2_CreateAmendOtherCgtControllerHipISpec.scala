@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v3.createAmendOtherCgt
 
+import api.models.domain.TaxYear
+import api.models.errors.*
+import api.services.*
+import api.support.{IntegrationBaseSpec, WireMockMethods}
+import api.utils.DateUtils.getCurrentDate
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
-import shared.models.domain.TaxYear
-import shared.models.errors.*
-import shared.services.*
-import shared.support.{IntegrationBaseSpec, WireMockMethods}
-import shared.utils.DateUtils.getCurrentDate
 import v3.otherCgt.createAmend.def2.fixture.Def2_CreateAmendOtherCgtFixture.*
 
 class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {

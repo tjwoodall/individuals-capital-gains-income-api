@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package config
 
+import api.routing.{Version2, Version3}
+import api.support.IntegrationBaseSpec
 import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
 import play.api.http.Status.OK
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import shared.routing.{Version2, Version3}
-import shared.support.IntegrationBaseSpec
 
 import scala.util.Try
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,7 @@ package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.respo
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.fixture.Def2_RetrieveCgtPpdOverridesFixture.{
-  downstreamJson,
-  mtdJson,
-  responseModel
-}
+import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.fixture.Def2_RetrieveCgtPpdOverridesFixture.*
 
 class Def2_RetrieveCgtPpdOverridesResponseSpec extends UnitSpec {
 

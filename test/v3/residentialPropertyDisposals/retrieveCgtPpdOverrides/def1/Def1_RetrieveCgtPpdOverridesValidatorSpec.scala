@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def1
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
 import common.errors.SourceFormatError
 import config.MockAppConfig
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
 import support.UnitSpec
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.RetrieveCgtPpdOverridesValidatorFactory
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def1.model.request.Def1_RetrieveCgtPpdOverridesRequestData

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
+import api.config.AppConfig
+import api.controllers.*
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
 import play.api.mvc.*
-import shared.config.SharedAppConfig
-import shared.controllers.*
-import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
@@ -31,7 +31,7 @@ class RetrieveCgtResidentialPropertyController @Inject() (val authService: Enrol
                                                           validatorFactory: RetrieveCgtResidentialPropertyValidatorFactory,
                                                           service: RetrieveCgtResidentialPropertyService,
                                                           cc: ControllerComponents,
-                                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: SharedAppConfig)
+                                                          val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
 
   val endpointName = "retrieve-cgt-residential-property"

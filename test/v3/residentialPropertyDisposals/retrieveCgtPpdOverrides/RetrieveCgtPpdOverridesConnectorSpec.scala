@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
+import api.models.domain.{Nino, TaxYear}
+import api.models.outcomes.ResponseWrapper
 import org.scalamock.handlers.CallHandler
 import play.api.Configuration
-import shared.connectors.{ConnectorSpec, DownstreamOutcome}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.request.Def2_RetrieveCgtPpdOverridesRequestData
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.response.Def2_RetrieveCgtPpdOverridesResponse
@@ -45,7 +45,7 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
     val request: Def2_RetrieveCgtPpdOverridesRequestData = Def2_RetrieveCgtPpdOverridesRequestData(Nino(nino), taxYear, source)
 
-    val connector: RetrieveCgtPpdOverridesConnector = new RetrieveCgtPpdOverridesConnector(mockHttpClient, mockSharedAppConfig)
+    val connector: RetrieveCgtPpdOverridesConnector = new RetrieveCgtPpdOverridesConnector(mockHttpClient, mockAppConfig)
 
     protected def stubHttpResponse(outcome: DownstreamOutcome[RetrieveCgtPpdOverridesResponse])
         : CallHandler[Future[DownstreamOutcome[RetrieveCgtPpdOverridesResponse]]]#Derived = {
@@ -77,7 +77,7 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 
-          MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
+          MockedAppConfig.featureSwitchConfig.returns(Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag))
 
           stubHttpResponse(outcome)
 
@@ -90,7 +90,7 @@ class RetrieveCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
           val outcome = Right(ResponseWrapper(correlationId, response))
 
-          MockedSharedAppConfig.featureSwitchConfig
+          MockedAppConfig.featureSwitchConfig
             .returns(
               Configuration("passIntentHeader.enabled" -> passIntentHeaderFlag)
             )

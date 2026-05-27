@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
+import api.controllers.RequestContext
+import api.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.services.{BaseService, ServiceOutcome}
 import cats.syntax.either.*
-import common.errors.{RuleAcquisitionDateAfterDisposalDateError, RuleCompletionDateError, RuleDisposalDateErrorV1, RuleOutsideAmendmentWindowError}
-import shared.controllers.RequestContext
-import shared.models.errors.{InternalError, MtdError, NinoFormatError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import shared.services.{BaseService, ServiceOutcome}
+import common.errors.*
 import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import javax.inject.{Inject, Singleton}

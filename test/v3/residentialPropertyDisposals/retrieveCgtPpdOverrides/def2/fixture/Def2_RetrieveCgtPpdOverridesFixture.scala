@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.fixture
 
+import api.models.domain.Timestamp
 import play.api.libs.json.{JsValue, Json}
-import shared.models.domain.Timestamp
-import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.response.{
-  Def2_RetrieveCgtPpdOverridesResponse,
-  MultiplePropertyDisposals,
-  SinglePropertyDisposals
-}
+import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.response.*
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.model.MtdSourceEnum.`hmrc-held`
 
 object Def2_RetrieveCgtPpdOverridesFixture {

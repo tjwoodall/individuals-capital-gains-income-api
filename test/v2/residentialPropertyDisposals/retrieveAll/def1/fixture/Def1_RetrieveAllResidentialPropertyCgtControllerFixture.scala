@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v2.residentialPropertyDisposals.retrieveAll.def1.fixture
 
-import play.api.libs.json.{JsObject, JsValue, Json}
-import shared.models.domain.Timestamp
+import api.models.domain.Timestamp
+import play.api.libs.json.*
 import v2.residentialPropertyDisposals.retrieveAll.def1.model.MtdSourceEnum
 import v2.residentialPropertyDisposals.retrieveAll.def1.model.response.*
 

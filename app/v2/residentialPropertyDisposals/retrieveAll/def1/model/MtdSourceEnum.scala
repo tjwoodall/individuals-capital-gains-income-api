@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v2.residentialPropertyDisposals.retrieveAll.def1.model
 
+import api.utils.enums.Enums
 import play.api.libs.json.Format
-import shared.utils.enums.Enums
 
 enum MtdSourceEnum(val toDesViewString: String) {
   case `hmrc-held` extends MtdSourceEnum("HMRC-HELD")

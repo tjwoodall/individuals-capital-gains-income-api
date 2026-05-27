@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.model.request
 
 import play.api.libs.functional.syntax.*
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import play.api.libs.json.*
 import utils.JsonUtils
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestBody
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v3.otherCgt.createAmend
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import api.config.AppConfig
+import api.connectors.*
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
@@ -27,15 +27,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class CreateAmendOtherCgtConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def createAndAmend(request: CreateAmendOtherCgtRequestData)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    import api.connectors.httpparsers.StandardDownstreamHttpParser.*
     import request.*
-    import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
     lazy val downstreamUri1886 =
       HipUri[Unit](s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/other-gains/${nino.nino}")

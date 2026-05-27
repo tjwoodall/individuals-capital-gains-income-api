@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package routing
 
+import api.routing.{Version1, Versions}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.test.FakeRequest
-import shared.routing.{Version1, Versions}
 import support.UnitSpec
 
 class VersionSpec extends UnitSpec {

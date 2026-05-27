@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.*
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.*
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
 import v3.residentialPropertyDisposals.MockNrsProxyService
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.*
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
@@ -39,7 +39,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     with ControllerTestRunner
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
-    with MockSharedAppConfig
+    with MockAppConfig
     with MockCreateAmendCgtPpdOverridesService
     with MockAuditService
     with MockNrsProxyService
@@ -129,7 +129,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
     "return a successful response with status NO_CONTENT" when {
       "happy path" in new Test {
         willUseValidator(returningSuccess(requestData))
-        MockedSharedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+        MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
 
         MockNrsProxyService
           .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
@@ -179,11 +179,11 @@ class CreateAmendCgtPpdOverridesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.createAmendCgtPpdOverrides(validNino, taxYear)(fakePostRequest(validRequestJson))
 
@@ -202,7 +202,7 @@ class CreateAmendCgtPpdOverridesControllerSpec
         )
       )
 
-    MockedSharedAppConfig.featureSwitchConfig.returns(Configuration("allowTemporalValidationSuspension.enabled" -> true)).anyNumberOfTimes()
+    MockedAppConfig.featureSwitchConfig.returns(Configuration("allowTemporalValidationSuspension.enabled" -> true)).anyNumberOfTimes()
   }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package v3.otherCgt.createAmend.def2
 
+import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
+import api.models.errors.{DateFormatError, MtdError}
+import api.utils.DateUtils.getCurrentDate
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.errors.*
-import shared.controllers.validators.resolvers.*
-import shared.models.domain.TaxYear
-import shared.models.errors.{DateFormatError, MtdError}
-import shared.utils.DateUtils.getCurrentDate
 import v3.otherCgt.createAmend.def2.model.request.*
 
 import java.time.LocalDate

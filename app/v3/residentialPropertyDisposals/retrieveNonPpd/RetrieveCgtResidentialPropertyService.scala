@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
-import shared.controllers.RequestContext
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{BaseService, ServiceOutcome}
+import api.controllers.RequestContext
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{BaseService, ServiceOutcome}
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.response.Def1_RetrieveCgtResidentialPropertyResponse
 import v3.residentialPropertyDisposals.retrieveNonPpd.def2.model.response.Def2_RetrieveCgtResidentialPropertyResponse
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData

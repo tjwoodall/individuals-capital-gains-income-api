@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1
 
+import api.config.AppConfig
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.*
-import config.CgtAppConfig
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveNonEmptyJsonObject, ResolveTaxYearMinMax}
-import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesRulesValidator.validateBusinessRules
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
   Def1_CreateAmendCgtPpdOverridesRequestBody,
@@ -31,7 +31,7 @@ import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.req
 }
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)(appConfig: CgtAppConfig)
+class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
     extends Validator[CreateAmendCgtPpdOverridesRequestData] {
 
   private lazy val resolveTaxYear = ResolveTaxYearMinMax(

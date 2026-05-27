@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v2.residentialPropertyDisposals.retrieveAll
 
+import api.schema.DownstreamReadable
 import play.api.libs.json.Reads
-import shared.schema.DownstreamReadable
 import v2.residentialPropertyDisposals.retrieveAll.def1.model.response.Def1_RetrieveAllResidentialPropertyCgtResponse
 import v2.residentialPropertyDisposals.retrieveAll.model.response.RetrieveAllResidentialPropertyCgtResponse
 

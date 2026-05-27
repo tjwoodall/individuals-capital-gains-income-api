@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import api.config.AppConfig
+import api.connectors.*
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig)
+class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig)
     extends BaseDownstreamConnector {
 
   def createAndAmend(request: CreateAmendCgtResidentialPropertyDisposalsRequestData)(implicit
@@ -35,8 +35,8 @@ class CreateAmendCgtResidentialPropertyDisposalsConnector @Inject() (val http: H
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
+    import api.connectors.httpparsers.StandardDownstreamHttpParser.*
     import request.*
-    import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
 
     lazy val downstreamUri1952: DownstreamUri[Unit] =
       HipUri(s"itsa/income-tax/v1/${taxYear.asTysDownstream}/income/disposals/residential-property/$nino")

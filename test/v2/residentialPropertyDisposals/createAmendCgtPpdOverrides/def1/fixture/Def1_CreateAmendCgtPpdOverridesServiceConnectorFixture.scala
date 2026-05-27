@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,7 @@
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture
 
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request
-import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.{
-  Def1_CreateAmendCgtPpdOverridesRequestBody,
-  MultiplePropertyDisposals,
-  SinglePropertyDisposals
-}
+import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.*
 
 object Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture {
 

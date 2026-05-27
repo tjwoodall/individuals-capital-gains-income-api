@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v3
 
-import config.CgtAppConfig
+import api.config.AppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.writeableOf_JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsProxyConnector @Inject() (http: HttpClientV2, appConfig: CgtAppConfig)(implicit ec: ExecutionContext) {
+class NrsProxyConnector @Inject() (http: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   def submit(nino: String, notableEvent: String, body: JsValue)(implicit hc: HeaderCarrier): Future[Either[UpstreamErrorResponse, Unit]] = {
 

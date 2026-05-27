@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
-import shared.config.{ConfigFeatureSwitches, SharedAppConfig}
-import shared.connectors.DownstreamUri.*
-import shared.connectors.*
+import api.config.{AppConfig, ConfigFeatureSwitches}
+import api.connectors.*
+import api.connectors.DownstreamUri.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData
@@ -28,9 +28,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveCgtResidentialPropertyConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class RetrieveCgtResidentialPropertyConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
+  import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 
   def retrieve(request: RetrieveCgtResidentialPropertyRequestData)(implicit
       hc: HeaderCarrier,

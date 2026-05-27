@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v3.otherCgt.delete
 
-import config.CgtAppConfig
-import shared.controllers.validators.Validator
+import api.config.AppConfig
+import api.controllers.validators.Validator
 import v3.otherCgt.delete.DeleteOtherCgtSchema.Def1
 import v3.otherCgt.delete.def1.Def1_DeleteOtherCgtValidator
 import v3.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import javax.inject.Inject
 
-class DeleteOtherCgtValidatorFactory @Inject() (appConfig: CgtAppConfig) {
+class DeleteOtherCgtValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[DeleteOtherCgtRequestData] = {
 

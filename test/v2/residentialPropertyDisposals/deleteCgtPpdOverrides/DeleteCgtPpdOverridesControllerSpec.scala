@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package v2.residentialPropertyDisposals.deleteCgtPpdOverrides
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.audit.*
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.*
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.def1.model.request.Def1_DeleteCgtPpdOverridesRequestData
 import v2.residentialPropertyDisposals.deleteCgtPpdOverrides.model.request.DeleteCgtPpdOverridesRequestData
 
@@ -42,7 +42,7 @@ class DeleteCgtPpdOverridesControllerSpec
     with MockAuditService
     with MockDeleteCgtPpdOverridesValidatorFactory
     with MockIdGenerator
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   val taxYear: String = "2019-20"
 
@@ -95,11 +95,11 @@ class DeleteCgtPpdOverridesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.deleteCgtPpdOverrides(validNino, taxYear)(fakeRequest)
 

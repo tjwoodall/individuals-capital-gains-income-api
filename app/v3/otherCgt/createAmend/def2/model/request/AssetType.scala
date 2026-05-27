@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v3.otherCgt.createAmend.def2.model.request
 
-import shared.utils.enums.Enums
+import api.utils.enums.Enums
 
 enum AssetType(val toDownstream: String) {
   case `other-property`              extends AssetType("otherProperty")

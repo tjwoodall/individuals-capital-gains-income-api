@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.fixture.Def2_RetrieveCgtPpdOverridesFixture.{mtdJson, responseModel}
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.request.Def2_RetrieveCgtPpdOverridesRequestData
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.model.MtdSourceEnum
@@ -41,7 +41,7 @@ class RetrieveCgtPpdOverridesControllerSpec
     with MockRetrieveCgtPpdOverridesService
     with MockRetrieveCgtPpdOverridesValidatorFactory
     with MockIdGenerator
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   val taxYear: String        = "2025-26"
   val source: Option[String] = Some("latest")
@@ -98,11 +98,11 @@ class RetrieveCgtPpdOverridesControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.retrieveCgtPpdOverrides(validNino, taxYear, source)(fakeGetRequest)
 

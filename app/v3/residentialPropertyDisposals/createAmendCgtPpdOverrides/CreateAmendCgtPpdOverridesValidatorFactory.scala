@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
+import api.config.AppConfig
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import config.CgtAppConfig
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.CreateAmendCgtPpdOverridesSchema.{Def1, Def2}
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.Def2_CreateAmendCgtPpdOverridesValidator
@@ -27,7 +27,7 @@ import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.
 
 import javax.inject.Inject
 
-class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
+class CreateAmendCgtPpdOverridesValidatorFactory @Inject() (implicit appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtPpdOverridesRequestData] = {
 

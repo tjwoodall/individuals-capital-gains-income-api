@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
-import config.CgtAppConfig
+import api.config.AppConfig
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
-import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
+
 import scala.math.Ordering.Implicits.infixOrderingOps
 
 sealed trait CreateAmendCgtResidentialPropertyDisposalsSchema
@@ -33,7 +34,7 @@ object CreateAmendCgtResidentialPropertyDisposalsSchema {
 
   def schemaFor(
       taxYearString: String
-  )(implicit appConfig: CgtAppConfig): Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsSchema] =
+  )(implicit appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsSchema] =
     ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString)
       .andThen(schemaForValidated)
 

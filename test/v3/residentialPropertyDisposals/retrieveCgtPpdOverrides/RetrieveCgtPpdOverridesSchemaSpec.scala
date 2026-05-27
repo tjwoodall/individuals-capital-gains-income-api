@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
+import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
+import api.models.errors.*
+import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
 import config.MockAppConfig
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import shared.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
-import shared.models.errors.{RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, TaxYearFormatError}
-import shared.utils.UnitSpec
-import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.RetrieveCgtPpdOverridesSchema.{Def1, Def2, schemaFor}
+import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.RetrieveCgtPpdOverridesSchema.*
 
 class RetrieveCgtPpdOverridesSchemaSpec extends UnitSpec with MockAppConfig with ScalaCheckDrivenPropertyChecks with TaxYearPropertyCheckSupport {
 

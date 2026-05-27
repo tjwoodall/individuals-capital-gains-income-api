@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package v3.retrieveCgtPpdOverrides
 
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.SourceFormatError
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.*
-import shared.models.errors.*
-import shared.services.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import shared.support.IntegrationBaseSpec
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.fixture.Def2_RetrieveCgtPpdOverridesFixture
 
 class Def2_RetrieveCgtPpdOverridesControllerHipISpec extends IntegrationBaseSpec {

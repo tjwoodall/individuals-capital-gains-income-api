@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.deleteNonPpd
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.NinoFormatError
+import api.models.outcomes.ResponseWrapper
 import common.connectors.CgtConnectorSpec
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.NinoFormatError
-import shared.models.outcomes.ResponseWrapper
 import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 import v3.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
@@ -74,7 +74,7 @@ class DeleteCgtNonPpdConnectorSpec extends CgtConnectorSpec {
   trait Test { self: ConnectorTest =>
     def taxYear: TaxYear = TaxYear.fromMtd("2023-24")
 
-    protected val connector: DeleteCgtNonPpdConnector = new DeleteCgtNonPpdConnector(http = mockHttpClient, appConfig = mockSharedAppConfig)
+    protected val connector: DeleteCgtNonPpdConnector = new DeleteCgtNonPpdConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
     protected val request: DeleteCgtNonPpdRequestData = Def1_DeleteCgtNonPpdRequestData(Nino("AA111111A"), taxYear = taxYear)
 

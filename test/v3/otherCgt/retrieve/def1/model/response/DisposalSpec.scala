@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package v3.otherCgt.retrieve.def1.model.response
 
-import play.api.libs.json.{JsError, JsObject, JsValue, Json}
+import play.api.libs.json.*
 import support.UnitSpec
 import v3.otherCgt.retrieve.def1.model.response.AssetType.`other-property`
 import v3.otherCgt.retrieve.def1.model.response.DownstreamAssetType.`otherProperty`

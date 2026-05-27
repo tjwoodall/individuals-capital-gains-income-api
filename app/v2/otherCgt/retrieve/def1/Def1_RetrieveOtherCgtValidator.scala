@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,20 @@
 
 package v2.otherCgt.retrieve.def1
 
+import api.config.AppConfig
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.models.domain.TaxYear
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.*
-import config.CgtAppConfig
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
-import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v2.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: CgtAppConfig)
-    extends Validator[RetrieveOtherCgtRequestData] {
+class Def1_RetrieveOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: AppConfig) extends Validator[RetrieveOtherCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
 

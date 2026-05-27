@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
+import api.controllers.validators.{AlwaysErrorsValidator, Validator}
 import common.utils.JsonErrorValidators
 import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
-import shared.controllers.validators.{AlwaysErrorsValidator, Validator}
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.Def2_CreateAmendCgtPpdOverridesValidator

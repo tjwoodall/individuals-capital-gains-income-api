@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v3.otherCgt.retrieve.def2.response
 
-import shared.utils.UnitSpec
-import shared.utils.enums.EnumJsonSpecSupport
+import api.utils.UnitSpec
+import api.utils.enums.EnumJsonSpecSupport
 import v3.otherCgt.retrieve.def2.model.response.OtherGainsClaimOrElectionCodes
 import v3.otherCgt.retrieve.def2.model.response.OtherGainsClaimOrElectionCodes.*
 

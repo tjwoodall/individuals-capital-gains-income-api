@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v2.residentialPropertyDisposals.deleteNonPpd
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.{HipUri, IfsUri}
-import shared.connectors.httpparsers.StandardDownstreamHttpParser.*
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome, DownstreamUri}
+import api.config.AppConfig
+import api.connectors.*
+import api.connectors.DownstreamUri.{HipUri, IfsUri}
+import api.connectors.httpparsers.StandardDownstreamHttpParser.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v2.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
@@ -28,7 +28,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeleteCgtNonPpdConnector @Inject() (val http: HttpClientV2, val appConfig: SharedAppConfig) extends BaseDownstreamConnector {
+class DeleteCgtNonPpdConnector @Inject() (val http: HttpClientV2, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def deleteCgtNonPpd(request: DeleteCgtNonPpdRequestData)(implicit
       hc: HeaderCarrier,

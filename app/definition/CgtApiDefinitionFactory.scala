@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,15 @@
 
 package definition
 
-import shared.config.SharedAppConfig
-import shared.definition.*
-import shared.routing.*
+import api.config.AppConfig
+import api.definition.*
+import api.routing.*
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CgtApiDefinitionFactory @Inject() (sharedAppConfig: SharedAppConfig) extends ApiDefinitionFactory {
-
-  override protected val appConfig: SharedAppConfig = sharedAppConfig
+class CgtApiDefinitionFactory @Inject() (override protected val appConfig: AppConfig) extends ApiDefinitionFactory {
 
   lazy val confidenceLevel: ConfidenceLevel = {
     val clConfig = appConfig.confidenceLevelConfig

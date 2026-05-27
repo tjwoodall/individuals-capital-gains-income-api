@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v3.otherCgt.retrieve.def2.model.response
 
+import api.models.domain.Timestamp
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
-import shared.models.domain.Timestamp
+import play.api.libs.json.*
 import v3.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 case class Def2_RetrieveOtherCgtResponse(submittedOn: Timestamp,

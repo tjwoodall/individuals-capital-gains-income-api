@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package config
 
+import api.config.AppConfig
 import com.google.inject.ImplementedBy
 import org.apache.commons.lang3.BooleanUtils
 import play.api.Configuration
 import play.api.mvc.Request
-import shared.config.SharedAppConfig
 
 import javax.inject.{Inject, Singleton}
 
@@ -39,7 +39,7 @@ trait FeatureSwitches {
 class FeatureSwitchesImpl(featureSwitchConfig: Configuration) extends FeatureSwitches {
 
   @Inject
-  def this(appConfig: SharedAppConfig) = this(appConfig.featureSwitchConfig)
+  def this(appConfig: AppConfig) = this(appConfig.featureSwitchConfig)
 
   val isPostCessationReceiptsEnabled: Boolean = isEnabled("postCessationReceipts.enabled")
   val isPassDeleteIntentEnabled: Boolean      = isEnabled("passDeleteIntentHeader.enabled")

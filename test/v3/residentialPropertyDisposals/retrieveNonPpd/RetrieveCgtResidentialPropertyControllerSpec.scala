@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.fixture.Def1_RetrieveCgtResidentialPropertyControllerFixture.{mtdJson, responseModel}
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.request.Def1_RetrieveCgtResidentialPropertyRequestData
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData
@@ -40,7 +40,7 @@ class RetrieveCgtResidentialPropertyControllerSpec
     with MockRetrieveCgtResidentialPropertyService
     with MockRetrieveCgtResidentialPropertyValidatorFactory
     with MockIdGenerator
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   val taxYear: String = "2024-25"
 
@@ -95,11 +95,11 @@ class RetrieveCgtResidentialPropertyControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     protected def callController(): Future[Result] = controller.retrieve(validNino, taxYear)(fakeGetRequest)
 

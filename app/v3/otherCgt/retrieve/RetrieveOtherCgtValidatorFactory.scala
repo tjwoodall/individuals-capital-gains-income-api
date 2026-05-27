@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package v3.otherCgt.retrieve
 
-import config.CgtAppConfig
+import api.config.AppConfig
+import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
-import shared.controllers.validators.Validator
 import v3.otherCgt.retrieve.RetrieveOtherCgtSchema.{Def1, Def2}
 import v3.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
 import v3.otherCgt.retrieve.def2.Def2_RetrieveOtherCgtValidator
@@ -27,7 +27,7 @@ import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class RetrieveOtherCgtValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
+class RetrieveOtherCgtValidatorFactory @Inject() (implicit appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveOtherCgtRequestData] = {
     val schema = RetrieveOtherCgtSchema.schemaFor(taxYear)

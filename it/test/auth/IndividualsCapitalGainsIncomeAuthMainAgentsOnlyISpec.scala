@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package auth
 
+import api.auth.AuthMainAgentsOnlyISpec
+import api.models.domain.TaxYear
+import api.services.DownstreamStub
 import play.api.http.Status.NO_CONTENT
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
-import shared.auth.AuthMainAgentsOnlyISpec
-import shared.models.domain.TaxYear
-import shared.services.DownstreamStub
 
 class IndividualsCapitalGainsIncomeAuthMainAgentsOnlyISpec extends AuthMainAgentsOnlyISpec {
 

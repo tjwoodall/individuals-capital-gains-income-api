@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package common.connectors
 
-import shared.connectors.ConnectorSpec
+import api.connectors.ConnectorSpec
 
 trait CgtConnectorSpec extends ConnectorSpec {
 
@@ -43,7 +43,7 @@ trait CgtConnectorSpec extends ConnectorSpec {
   protected trait Api1661Test extends StandardConnectorTest {
     override val name = "api1661"
 
-    MockedSharedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
+    MockedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
   }
 
 }

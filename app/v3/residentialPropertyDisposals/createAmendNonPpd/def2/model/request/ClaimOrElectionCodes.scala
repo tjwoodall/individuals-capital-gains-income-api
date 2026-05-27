@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request
 
+import api.utils.enums.Enums
 import play.api.libs.json.Format
-import shared.utils.enums.Enums
 
 enum ClaimOrElectionCodes {
   case PRR, LET, GHO, ROR, PRO, BAD, NVC, OTH

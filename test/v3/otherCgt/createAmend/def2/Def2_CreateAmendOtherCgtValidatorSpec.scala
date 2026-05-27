@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v3.otherCgt.createAmend.def2
 
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.utils.JsonErrorValidators
+import api.utils.DateUtils.getCurrentDate
 import common.errors.*
 import play.api.libs.json.*
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.utils.JsonErrorValidators
-import shared.utils.DateUtils.getCurrentDate
 import support.UnitSpec
 import v3.otherCgt.createAmend.def2.fixture.Def2_CreateAmendOtherCgtFixture.*
 import v3.otherCgt.createAmend.def2.model.request.{Def2_CreateAmendOtherCgtRequestBody, Def2_CreateAmendOtherCgtRequestData}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package v3.otherCgt.retrieve
 
+import api.config.MockAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.*
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.utils.MockIdGenerator
 import play.api.Configuration
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.*
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear, Timestamp}
-import shared.models.errors.{ErrorWrapper, NinoFormatError, RuleTaxYearNotSupportedError}
-import shared.models.outcomes.ResponseWrapper
-import shared.services.{MockEnrolmentsAuthService, MockMtdIdLookupService}
-import shared.utils.MockIdGenerator
 import v3.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
+import v3.otherCgt.retrieve.def1.model.response.*
 import v3.otherCgt.retrieve.def1.model.response.DownstreamAssetType.`otherProperty`
-import v3.otherCgt.retrieve.def1.model.response.{Def1_RetrieveOtherCgtResponse, Disposal, Losses, NonStandardGains}
 import v3.otherCgt.retrieve.model.request.RetrieveOtherCgtRequestData
 import v3.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
@@ -43,7 +43,7 @@ class RetrieveOtherCgtControllerSpec
     with MockRetrieveOtherCgtService
     with MockRetrieveOtherCgtValidatorFactory
     with MockIdGenerator
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   val def1_responseModel: RetrieveOtherCgtResponse = Def1_RetrieveOtherCgtResponse(
     submittedOn = Timestamp("2021-05-07T16:18:44.403Z"),
@@ -177,11 +177,11 @@ class RetrieveOtherCgtControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 
-    MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+    MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
     override protected def callController(): Future[Result] = controller.retrieveOtherCgt(validNino, taxYear)(fakeGetRequest)
   }

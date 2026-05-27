@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd.def2
 
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.ResolveNino
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.ResolveNino
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 import v3.residentialPropertyDisposals.retrieveNonPpd.def2.model.request.Def2_RetrieveResidentialPropertyRequestData
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v2.residentialPropertyDisposals.deleteNonPpd
 
+import api.controllers.RequestContext
+import api.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.toBifunctorOps
-import shared.controllers.RequestContext
-import shared.models.errors.{InternalError, MtdError, NinoFormatError, NotFoundError, RuleTaxYearNotSupportedError, TaxYearFormatError}
-import shared.services.{BaseService, ServiceOutcome}
 import v2.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import javax.inject.{Inject, Singleton}

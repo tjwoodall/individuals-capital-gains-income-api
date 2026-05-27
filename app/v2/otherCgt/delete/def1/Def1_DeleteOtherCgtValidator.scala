@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package v2.otherCgt.delete.def1
 
+import api.config.AppConfig
+import api.controllers.validators.Validator
+import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.models.domain.TaxYear
+import api.models.errors.*
 import cats.data.Validated
 import cats.implicits.*
-import config.CgtAppConfig
-import shared.controllers.validators.Validator
-import shared.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
-import shared.models.domain.TaxYear
-import shared.models.errors.{MtdError, RuleTaxYearForVersionNotSupportedError, RuleTaxYearNotSupportedError}
 import v2.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v2.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import javax.inject.Inject
 
-class Def1_DeleteOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: CgtAppConfig) extends Validator[DeleteOtherCgtRequestData] {
+class Def1_DeleteOtherCgtValidator @Inject() (nino: String, taxYear: String)(appConfig: AppConfig) extends Validator[DeleteOtherCgtRequestData] {
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
 

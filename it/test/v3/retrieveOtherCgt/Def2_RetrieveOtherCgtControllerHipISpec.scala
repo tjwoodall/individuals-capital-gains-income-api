@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package v3.retrieveOtherCgt
 
+import api.models.errors.*
+import api.services.*
+import api.support.IntegrationBaseSpec
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
-import shared.models.errors.*
-import shared.services.*
-import shared.support.IntegrationBaseSpec
 import v3.otherCgt.retrieve.def2.fixture.Def2_RetrieveOtherCgtFixture.{fullValidDownstreamResponseJson, fullValidMtdResponseJson}
 
 class Def2_RetrieveOtherCgtControllerHipISpec extends IntegrationBaseSpec {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v2
 
+import api.support.{IntegrationBaseSpec, WireMockMethods}
 import common.fixtures.nrs.NrsFixture
 import org.scalatest.Inside
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.http.Status.*
 import play.api.test.Injecting
-import shared.support.{IntegrationBaseSpec, WireMockMethods}
 import uk.gov.hmrc.http.*
 
 class NrsProxyConnectorISpec

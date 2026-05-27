@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v3.otherCgt.createAmend
 
+import api.config.AppConfig
+import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.models.domain.TaxYear
+import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
-import config.CgtAppConfig
-import shared.controllers.validators.resolvers.ResolveTaxYearMinimum
-import shared.models.domain.TaxYear
-import shared.models.errors.MtdError
 
 import scala.math.Ordered.orderingToOrdered
 
@@ -32,7 +32,7 @@ object CreateAmendOtherCgtSchema {
   case object Def1 extends CreateAmendOtherCgtSchema
   case object Def2 extends CreateAmendOtherCgtSchema
 
-  def schemaFor(taxYearString: String)(implicit appConfig: CgtAppConfig): Validated[Seq[MtdError], CreateAmendOtherCgtSchema] =
+  def schemaFor(taxYearString: String)(implicit appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendOtherCgtSchema] =
     ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendOtherCgtSchema] =

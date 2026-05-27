@@ -16,13 +16,13 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def2
 
+import api.controllers.validators.RulesValidator
+import api.controllers.validators.resolvers.*
+import api.models.errors.{DateFormatError, MtdError}
 import cats.data.Validated
 import cats.data.Validated.Invalid
 import cats.implicits.*
 import common.errors.*
-import shared.controllers.validators.RulesValidator
-import shared.controllers.validators.resolvers.*
-import shared.models.errors.{DateFormatError, MtdError}
 import v3.residentialPropertyDisposals.createAmendNonPpd.def2.model.request.{Def2_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
 object Def2_CreateAmendCgtResidentialPropertyDisposalsRulesValidator

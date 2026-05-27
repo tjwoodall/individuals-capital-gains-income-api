@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import config.CgtAppConfig
+import api.config.AppConfig
+import api.controllers.validators.Validator
 import play.api.libs.json.JsValue
-import shared.controllers.validators.Validator
 import v2.residentialPropertyDisposals.createAmendNonPpd.CreateAmendCgtResidentialPropertyDisposalsSchema.Def1
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
 import v2.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import javax.inject.Inject
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: CgtAppConfig) {
+class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 

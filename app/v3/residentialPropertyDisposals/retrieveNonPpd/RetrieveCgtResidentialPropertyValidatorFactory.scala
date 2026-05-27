@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
+import api.config.AppConfig
+import api.controllers.validators.Validator
+import api.models.errors.MtdError
 import cats.data.Validated.{Invalid, Valid}
-import config.CgtAppConfig
-import shared.controllers.validators.Validator
-import shared.models.errors.MtdError
 import v3.residentialPropertyDisposals.retrieveNonPpd.RetrieveCgtResidentialPropertySchema.{Def1, Def2}
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.Def1_RetrieveCgtResidentialPropertyValidator
 import v3.residentialPropertyDisposals.retrieveNonPpd.def2.Def2_RetrieveCgtResidentialPropertyValidator
@@ -27,7 +27,7 @@ import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtR
 
 import javax.inject.Inject
 
-class RetrieveCgtResidentialPropertyValidatorFactory @Inject() (implicit appConfig: CgtAppConfig) {
+class RetrieveCgtResidentialPropertyValidatorFactory @Inject() (implicit appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String): Validator[RetrieveCgtResidentialPropertyRequestData] = {
     val schema = RetrieveCgtResidentialPropertySchema.schemaFor(taxYear)

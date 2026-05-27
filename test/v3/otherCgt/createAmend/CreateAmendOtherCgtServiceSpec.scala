@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package v3.otherCgt.createAmend
 
+import api.controllers.EndpointLogContext
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
+import api.services.ServiceSpec
 import common.errors.*
-import shared.controllers.EndpointLogContext
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors.*
-import shared.models.outcomes.ResponseWrapper
-import shared.services.ServiceSpec
 import v3.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v3.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
 import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
