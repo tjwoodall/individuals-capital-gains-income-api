@@ -19,7 +19,6 @@ package v3.createAmendOtherCgt
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
@@ -362,11 +361,6 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
         )
     }
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal-other"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   private trait NonTysTest extends Test {
@@ -384,7 +378,6 @@ class CreateAmendOtherCgtControllerIfsISpec extends IntegrationBaseSpec with Wir
 
         val response: WSResponse = await(request.put(validRequestJson("2021")))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson("2021"))
       }
 
     }

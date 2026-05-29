@@ -27,7 +27,6 @@ import api.utils.MockIdGenerator
 import play.api.Configuration
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsJson, Result}
-import v2.residentialPropertyDisposals.MockNrsProxyService
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.*
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
@@ -42,7 +41,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
     with MockAppConfig
     with MockCreateAmendCgtPpdOverridesService
     with MockAuditService
-    with MockNrsProxyService
     with MockCreateAmendCgtPpdOverridesValidatorFactory
     with MockIdGenerator {
 
@@ -131,10 +129,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
         willUseValidator(returningSuccess(requestData))
         MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
 
-        MockNrsProxyService
-          .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
-          .returns(())
-
         MockCreateAmendCgtPpdOverridesService
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
@@ -153,10 +147,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
       "service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockNrsProxyService
-          .submitAsync(validNino, "itsa-cgt-disposal-ppd", validRequestJson)
-          .returns(())
-
         MockCreateAmendCgtPpdOverridesService
           .createAmend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
@@ -174,7 +164,6 @@ class CreateAmendCgtPpdOverridesControllerSpec
       validatorFactory = mockCreateAmendCgtPpdOverridesValidatorFactory,
       service = mockCreateAmendCgtPpdOverridesService,
       auditService = mockAuditService,
-      nrsProxyService = mockNrsProxyService,
       cc = cc,
       idGenerator = mockIdGenerator
     )

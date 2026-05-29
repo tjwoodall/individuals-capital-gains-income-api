@@ -29,7 +29,6 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import v2.otherCgt.createAmend.def1.model.request.*
 import v2.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
-import v2.residentialPropertyDisposals.MockNrsProxyService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +40,6 @@ class CreateAmendOtherCgtControllerSpec
     with MockMtdIdLookupService
     with MockAppConfig
     with MockCreateAmendOtherCgtService
-    with MockNrsProxyService
     with MockAuditService
     with MockCreateAmendOtherCgtValidatorFactory
     with MockIdGenerator {
@@ -137,10 +135,6 @@ class CreateAmendOtherCgtControllerSpec
 
         willUseValidator(returningSuccess(requestData))
 
-        MockNrsProxyService
-          .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
-          .returns(())
-
         MockCreateAmendOtherCgtService
           .createAmend(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, ()))))
@@ -159,10 +153,6 @@ class CreateAmendOtherCgtControllerSpec
       "service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockNrsProxyService
-          .submitAsync(validNino, "itsa-cgt-disposal-other", validRequestJson)
-          .returns(())
-
         MockCreateAmendOtherCgtService
           .createAmend(requestData)
           .returns(Future.successful(Left(ErrorWrapper(correlationId, RuleTaxYearNotSupportedError))))
@@ -179,7 +169,6 @@ class CreateAmendOtherCgtControllerSpec
       lookupService = mockMtdIdLookupService,
       validatorFactory = mockCreateAmendOtherCgtValidatorFactory,
       service = mockCreateAmendOtherCgtService,
-      nrsProxyService = mockNrsProxyService,
       auditService = mockAuditService,
       cc = cc,
       idGenerator = mockIdGenerator

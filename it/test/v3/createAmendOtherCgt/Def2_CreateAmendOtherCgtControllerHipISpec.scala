@@ -21,7 +21,6 @@ import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
 import api.utils.DateUtils.getCurrentDate
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
 import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
@@ -429,11 +428,6 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         )
     }
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal-other"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   "Calling the 'Create and Amend Other Capital Gains and Disposals' endpoint" should {
@@ -448,7 +442,6 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
         val response: WSResponse = await(request.put(fullRequestBodyMtdJson))
         response.status shouldBe NO_CONTENT
-        verifyNrs(fullRequestBodyMtdJson)
       }
 
       "any valid request is made with future disposalDates within the current tax year and suspendTemporalValidations is true" in new Test {
@@ -469,7 +462,6 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
         val response: WSResponse = await(request.put(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate)))
         response.status shouldBe NO_CONTENT
-        verifyNrs(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate))
       }
 
       "any valid request is made with future disposalDates within a future tax year and suspendTemporalValidations is true" in new Test {
@@ -490,7 +482,6 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
         val response: WSResponse = await(request.put(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate)))
         response.status shouldBe NO_CONTENT
-        verifyNrs(futureDisposalDatesRequestBodyMtdJson(futureDisposalDate))
       }
     }
 

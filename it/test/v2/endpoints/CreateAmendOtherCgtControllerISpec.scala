@@ -19,7 +19,6 @@ package v2.endpoints
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
@@ -377,11 +376,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
          |}
                         """.stripMargin
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal-other"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   private trait NonTysTest extends Test {
@@ -410,7 +404,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
-        verifyNrs(validRequestJson)
       }
 
       "any valid request is made TYS to HIP" in new TysHipTest {
@@ -421,7 +414,6 @@ class CreateAmendOtherCgtControllerISpec extends IntegrationBaseSpec with WireMo
 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
-        verifyNrs(validRequestJson)
       }
     }
 

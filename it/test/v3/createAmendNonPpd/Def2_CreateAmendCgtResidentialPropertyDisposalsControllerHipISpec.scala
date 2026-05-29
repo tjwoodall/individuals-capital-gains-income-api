@@ -19,7 +19,6 @@ package v3.createAmendNonPpd
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
@@ -383,11 +382,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
         )
     }
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   "Calling the 'create and amend other CGT' endpoint" should {
@@ -404,7 +398,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe NO_CONTENT
 
-        verifyNrs(validRequestJson)
       }
     }
 
@@ -482,7 +475,6 @@ class Def2_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
 
-            verifyNrs(validRequestJson)
           }
         }
 

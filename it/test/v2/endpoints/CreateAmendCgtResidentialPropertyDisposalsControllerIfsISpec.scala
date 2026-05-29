@@ -19,7 +19,6 @@ package v2.endpoints
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
@@ -303,11 +302,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
          |}
          |""".stripMargin
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   trait NonTysTest extends Test {
@@ -339,7 +333,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
 
-        verifyNrs(validRequestJson)
       }
 
       "any valid request is made for a TYS tax year" in new TysHipTest {
@@ -354,7 +347,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
         val response: WSResponse = await(request.put(validRequestJson))
         response.status shouldBe OK
 
-        verifyNrs(validRequestJson)
       }
     }
 
@@ -439,7 +431,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
 
-            verifyNrs(validRequestJson)
           }
         }
 
@@ -458,7 +449,6 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
 
-            verifyNrs(validRequestJson)
           }
         }
 

@@ -19,7 +19,6 @@ package v2.endpoints
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.errors.*
 import play.api.http.HeaderNames.ACCEPT
@@ -376,11 +375,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
          |}
                 """.stripMargin
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal-ppd"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   private trait NonTysTest extends Test {
@@ -410,7 +404,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
         val response: WSResponse = await(request.put(validRequestBodyJson))
         response.status shouldBe OK
 
-        verifyNrs(validRequestBodyJson)
       }
 
       "any valid request is made for a TYS tax year" in new TysHipTest {
@@ -424,7 +417,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
         val response: WSResponse = await(request.put(validRequestBodyJson))
         response.status shouldBe OK
 
-        verifyNrs(validRequestBodyJson)
       }
     }
 
@@ -507,7 +499,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
 
-            verifyNrs(validRequestBodyJson)
           }
         }
 
@@ -526,7 +517,6 @@ class CreateAmendCgtPpdOverridesControllerISpec extends IntegrationBaseSpec with
             response.json shouldBe Json.toJson(expectedBody)
             response.header("Content-Type") shouldBe Some("application/json")
 
-            verifyNrs(validRequestBodyJson)
           }
         }
 

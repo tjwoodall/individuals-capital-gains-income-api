@@ -27,7 +27,6 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v3.NrsProxyService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +38,6 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
     validatorFactory: CreateAmendCgtResidentialPropertyDisposalsValidatorFactory,
     service: CreateAmendCgtResidentialPropertyDisposalsService,
     auditService: AuditService,
-    nrsProxyService: NrsProxyService,
     cc: ControllerComponents,
     val idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc) {
@@ -60,10 +58,7 @@ class CreateAmendCgtResidentialPropertyDisposalsController @Inject() (
 
       val requestHandler = RequestHandler
         .withValidator(validator)
-        .withService { req =>
-          nrsProxyService.submitAsync(nino, "itsa-cgt-disposal", request.body)
-          service.createAndAmend(req)
-        }
+        .withService(service.createAndAmend)
         .withAuditing(auditHandler(nino, taxYear, request))
 
       requestHandler.handleRequest()

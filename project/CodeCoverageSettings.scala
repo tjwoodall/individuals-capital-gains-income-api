@@ -31,14 +31,9 @@ object CodeCoverageSettings {
     "testOnlyDoNotUseInAppConf.*"
   )
 
-  private val excludedExtraPackages: Seq[String] = Seq(
-    "api.models.domain.ClaimOrElectionCodes",
-    "api.connectors.NrsProxyConnector"
-  )
-
   val settings: Seq[Setting[?]] = Seq(
     ScoverageKeys.coverageExcludedFiles := ".*\\$anon.*",
-    ScoverageKeys.coverageExcludedPackages := (excludedPackages ++ excludedExtraPackages).mkString(";"),
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true

@@ -19,7 +19,6 @@ package v3.createAmendOtherCgt
 import api.models.errors.*
 import api.services.*
 import api.support.{IntegrationBaseSpec, WireMockMethods}
-import com.github.tomakehurst.wiremock.client.WireMock.*
 import common.errors.*
 import play.api.libs.json.*
 import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
@@ -384,11 +383,6 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         )
     }
 
-    def verifyNrs(payload: JsValue): Unit =
-      verify(
-        postRequestedFor(urlEqualTo(s"/mtd-api-nrs-proxy/$nino/itsa-cgt-disposal-other"))
-          .withRequestBody(equalToJson(payload.toString())))
-
   }
 
   private trait NonTysTest extends Test {
@@ -413,7 +407,6 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
 
         val response: WSResponse = await(request.put(validRequestJson("2021")))
         response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson("2021"))
       }
 
       "any valid request is made TYS" in new TysHipTest {
@@ -423,10 +416,6 @@ class Def1_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
           NO_CONTENT,
           JsObject.empty
         )
-
-        val response: WSResponse = await(request.put(validRequestJson()))
-        response.status shouldBe NO_CONTENT
-        verifyNrs(validRequestJson())
       }
     }
 

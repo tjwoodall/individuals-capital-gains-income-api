@@ -50,9 +50,6 @@ class AppConfig @Inject() (val config: ServicesConfig, val configuration: Config
 
   def minimumPermittedTaxYear: Int = config.getInt("minimumPermittedTaxYear")
 
-  // NRS Config
-  def mtdNrsProxyBaseUrl: String = config.baseUrl("mtd-api-nrs-proxy")
-
   // API Config
   def apiGatewayContext: String                    = config.getString("api.gateway.context")
   def confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
