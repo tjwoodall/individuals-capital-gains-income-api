@@ -18,7 +18,7 @@
           },
           "assetDescription":{
             "type":"string",
-            "description":"A description of the asset being disposed of.",
+            "description":"A description of the asset being disposed of. Must not be empty or contain only whitespace.",
             "example":"Shares",
             "pattern":"^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
           },
