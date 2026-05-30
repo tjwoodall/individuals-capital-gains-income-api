@@ -154,7 +154,7 @@ paths:
                               properties: &ref_7
                                 customerReference:
                                   type: string
-                                  description: The unique reference for a residential property disposal supplied by the customer.
+                                  description: The unique reference for a residential property disposal supplied by the customer. Must not be empty or contain only whitespace.
                                   example: CGTDISPOSAL01
                                   pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                                 disposalDate:
@@ -283,7 +283,7 @@ paths:
                                   maximum: 9999
                                 customerReference:
                                   type: string
-                                  description: The unique reference for a residential property disposal supplied by the customer.
+                                  description: The unique reference for a residential property disposal supplied by the customer. Must not be empty or contain only whitespace.
                                   example: CGTDISPOSAL01
                                   pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                                 disposalDate:
@@ -2433,7 +2433,7 @@ paths:
                                 - other-asset
                             assetDescription:
                               type: string
-                              description: A description of the asset being disposed of.
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
                               example: Shares
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             acquisitionDate:
@@ -2634,13 +2634,13 @@ paths:
                               maximum: 99999999999
                             assetDescription:
                               type: string
-                              description: A description of the asset being disposed of.
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
                               example: Shares
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             tokenName:
                               type: string
-                              description: The name of the crypotasset token.
-                              example: ''
+                              description: The name of the crypotasset token. Must not be empty or contain only whitespace.
+                              example: Name of token
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             acquisitionDate:
                               type: string
@@ -2795,12 +2795,12 @@ paths:
                               maximum: 99999999999
                             assetDescription:
                               type: string
-                              description: A description of the asset being disposed of.
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
                               example: Shares
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             companyName:
                               type: string
-                              description: The name of the company.
+                              description: The name of the company. Must not be empty or contain only whitespace.
                               example: Company One
                               pattern: ^.{0,160}$
                             companyRegistrationNumber:
@@ -3053,12 +3053,12 @@ paths:
                               maximum: 99999999999
                             assetDescription:
                               type: string
-                              description: A description of the asset being disposed of.
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
                               example: Shares
                               pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
                             companyName:
                               type: string
-                              description: The name of the company.
+                              description: The name of the company. Must not be empty or contain only whitespace.
                               example: Company One
                               pattern: ^.{0,160}$
                             companyRegistrationNumber:
