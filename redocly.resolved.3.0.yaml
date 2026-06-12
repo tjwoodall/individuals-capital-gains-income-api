@@ -2624,11 +2624,8 @@ paths:
                           properties:
                             numberOfDisposals:
                               type: integer
-                              description: |-
-                                The total number of property disposals submitted.
-
-                                The value must be an integer between 1 and 99999999999.
-                              example: 3
+                              description: The total number of cryptoasset disposals submitted. The value must be an integer between 1 and 99999999999.
+                              example: 1
                               multipleOf: 1
                               minimum: 1
                               maximum: 99999999999
@@ -2785,11 +2782,8 @@ paths:
                                 - non-uk-residential-property
                             numberOfDisposals:
                               type: integer
-                              description: |-
-                                The total number of property disposals submitted.
-
-                                The value must be an integer between 1 and 99999999999.
-                              example: 3
+                              description: The total number of gains disposals submitted. The value must be an integer between 1 and 99999999999.
+                              example: 2
                               multipleOf: 1
                               minimum: 1
                               maximum: 99999999999
@@ -3043,10 +3037,7 @@ paths:
                           properties:
                             numberOfDisposals:
                               type: integer
-                              description: |-
-                                The total number of property disposals submitted.
-
-                                The value must be an integer between 1 and 99999999999.
+                              description: The total number of unlisted shares disposals submitted. The value must be an integer between 1 and 99999999999.
                               example: 3
                               multipleOf: 1
                               minimum: 1
