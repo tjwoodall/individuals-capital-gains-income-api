@@ -2,7 +2,8 @@ summary: Create and Amend 'Report and Pay Capital Gains Tax on Residential Prope
 description: |
   This endpoint enables you to override residential property disposals submissions previously submitted via the HMRC 
   'Report and pay Capital Gains Tax on UK property' service (payment for property disposal or PPD) for a given National 
-  Insurance number and tax year. This endpoint can only be used after the tax year has ended.
+  Insurance number and tax year. 
+  **This endpoint can only be used after the tax year has ended.**
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
