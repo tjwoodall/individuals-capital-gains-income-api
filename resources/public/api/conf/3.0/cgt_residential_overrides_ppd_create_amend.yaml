@@ -3,7 +3,7 @@ description: |
   This endpoint enables you to override residential property disposal submissions previously submitted via HMRC
   for payment for property disposal (PPD) (using the 'Report and pay Capital Gains Tax on UK property' service) for
   a given National Insurance number and tax year.
-  This endpoint can only be used after the tax year has ended. 
+  **This endpoint can only be used after the tax year has ended.**
   
   ### Test data
   Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
