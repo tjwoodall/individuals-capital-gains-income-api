@@ -16,8 +16,8 @@
 
 package v3.otherCgt.retrieve
 
+import api.config.MockAppConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
-import config.MockAppConfig
 import support.UnitSpec
 import v3.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
 import v3.otherCgt.retrieve.def2.Def2_RetrieveOtherCgtValidator

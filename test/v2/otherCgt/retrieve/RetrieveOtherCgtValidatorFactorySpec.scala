@@ -16,7 +16,7 @@
 
 package v2.otherCgt.retrieve
 
-import config.MockAppConfig
+import api.config.MockAppConfig
 import support.UnitSpec
 import v2.otherCgt.retrieve.def1.Def1_RetrieveOtherCgtValidator
 

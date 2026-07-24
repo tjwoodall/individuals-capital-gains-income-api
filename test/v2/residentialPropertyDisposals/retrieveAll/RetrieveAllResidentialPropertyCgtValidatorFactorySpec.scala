@@ -16,7 +16,7 @@
 
 package v2.residentialPropertyDisposals.retrieveAll
 
-import config.MockAppConfig
+import api.config.MockAppConfig
 import support.UnitSpec
 import v2.residentialPropertyDisposals.retrieveAll.def1.Def1_RetrieveAllResidentialPropertyCgtValidator
 

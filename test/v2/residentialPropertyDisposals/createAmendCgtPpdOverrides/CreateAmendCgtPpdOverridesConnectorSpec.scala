@@ -16,17 +16,16 @@
 
 package v2.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.connectors.DownstreamOutcome
+import api.connectors.{ConnectorSpec, DownstreamOutcome}
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import common.connectors.CgtConnectorSpec
 import uk.gov.hmrc.http.StringContextOps
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.fixture.Def1_CreateAmendCgtPpdOverridesServiceConnectorFixture.requestBodyModel
 import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.Def1_CreateAmendCgtPpdOverridesRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
+class CreateAmendCgtPpdOverridesConnectorSpec extends ConnectorSpec {
 
   trait Test {
     self: ConnectorTest =>
@@ -49,7 +48,7 @@ class CreateAmendCgtPpdOverridesConnectorSpec extends CgtConnectorSpec {
 
   "CreateAmendCgtPpdOverridesConnector" when {
     "createAndAmend" must {
-      "return a 204 status for a success scenario" in new Api1661Test with Test {
+      "return a 204 status for a success scenario" in new IfsTest with Test {
 
         override def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 

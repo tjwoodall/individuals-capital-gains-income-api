@@ -16,16 +16,15 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
+import api.config.MockAppConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
-import common.utils.JsonErrorValidators
-import config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.Def1_CreateAmendCgtPpdOverridesValidator
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def2.Def2_CreateAmendCgtPpdOverridesValidator
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.CreateAmendCgtPpdOverridesRequestData
 
-class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
   private trait Test {
 

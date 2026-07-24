@@ -16,13 +16,12 @@
 
 package v2.otherCgt.createAmend
 
-import common.utils.JsonErrorValidators
-import config.MockAppConfig
+import api.config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtValidator
 
-class CreateAmendOtherCgtValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class CreateAmendOtherCgtValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"

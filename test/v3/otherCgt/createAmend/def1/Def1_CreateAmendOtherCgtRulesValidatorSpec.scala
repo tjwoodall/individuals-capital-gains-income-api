@@ -18,8 +18,8 @@ package v3.otherCgt.createAmend.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
+import api.models.utils.JsonErrorValidators
 import common.errors.*
-import common.utils.JsonErrorValidators
 import play.api.libs.json.*
 import support.UnitSpec
 import v3.otherCgt.createAmend.def1.model.request.{Def1_CreateAmendOtherCgtRequestBody, Def1_CreateAmendOtherCgtRequestData}

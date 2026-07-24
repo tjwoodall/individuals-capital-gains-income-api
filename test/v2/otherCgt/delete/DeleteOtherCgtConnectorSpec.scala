@@ -16,20 +16,20 @@
 
 package v2.otherCgt.delete
 
+import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import common.connectors.CgtConnectorSpec
 import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.delete.def1.model.request.Def1_DeleteOtherCgtRequestData
 import v2.otherCgt.delete.model.request.DeleteOtherCgtRequestData
 
 import scala.concurrent.Future
 
-class DeleteOtherCgtConnectorSpec extends CgtConnectorSpec {
+class DeleteOtherCgtConnectorSpec extends ConnectorSpec {
 
   "DeleteOtherCgtConnector" should {
     "return the expected response for a non-TYS IFS request" when {
-      "a valid request is made" in new Api1661Test with Test {
+      "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
         val outcome          = Right(ResponseWrapper(correlationId, ()))
 

@@ -16,8 +16,8 @@
 
 package v2.otherCgt.delete
 
+import api.config.MockAppConfig
 import api.controllers.validators.Validator
-import config.MockAppConfig
 import support.UnitSpec
 import v2.otherCgt.delete.def1.Def1_DeleteOtherCgtValidator
 import v2.otherCgt.delete.model.request.DeleteOtherCgtRequestData

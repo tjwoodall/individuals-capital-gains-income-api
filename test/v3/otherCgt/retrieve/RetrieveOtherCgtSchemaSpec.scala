@@ -16,11 +16,11 @@
 
 package v3.otherCgt.retrieve
 
+import api.config.MockAppConfig
 import api.models.domain.{TaxYear, TaxYearPropertyCheckSupport}
 import api.models.errors.*
 import api.utils.UnitSpec
 import cats.data.Validated.{Invalid, Valid}
-import config.MockAppConfig
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import v3.otherCgt.retrieve.RetrieveOtherCgtSchema.*
 

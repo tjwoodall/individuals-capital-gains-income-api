@@ -16,10 +16,10 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2
 
+import api.config.MockAppConfig
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.{ErrorWrapper, NinoFormatError}
 import common.errors.SourceFormatError
-import config.MockAppConfig
 import support.UnitSpec
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.RetrieveCgtPpdOverridesValidatorFactory
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.model.request.Def2_RetrieveCgtPpdOverridesRequestData

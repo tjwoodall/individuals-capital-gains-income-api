@@ -16,16 +16,16 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
+import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import common.connectors.CgtConnectorSpec
 import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.fixture.Def1_CreateAmendCgtResidentialPropertyDisposalsServiceConnectorFixture.requestBody
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.model.request.Def1_CreateAmendCgtResidentialPropertyDisposalsRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnectorSpec {
+class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends ConnectorSpec {
 
   private val nino: String = "AA111111A"
 
@@ -49,7 +49,7 @@ class CreateAmendCgtResidentialPropertyDisposalsConnectorSpec extends CgtConnect
 
   "createAndAmend" should {
     "return a 204 status" when {
-      "a valid request is made" in new Api1661Test with Test {
+      "a valid request is made" in new IfsTest with Test {
         def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
 
         val outcome: Right[Nothing, ResponseWrapper[Unit]] = Right(ResponseWrapper(correlationId, ()))

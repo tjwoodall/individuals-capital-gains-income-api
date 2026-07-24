@@ -16,8 +16,8 @@
 
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
+import api.config.MockAppConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
-import config.MockAppConfig
 import support.UnitSpec
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def1.Def1_RetrieveCgtPpdOverridesValidator
 import v3.residentialPropertyDisposals.retrieveCgtPpdOverrides.def2.Def2_RetrieveCgtPpdOverridesValidator

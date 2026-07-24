@@ -16,23 +16,23 @@
 
 package v3.residentialPropertyDisposals.deleteNonPpd
 
+import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.NinoFormatError
 import api.models.outcomes.ResponseWrapper
-import common.connectors.CgtConnectorSpec
 import uk.gov.hmrc.http.StringContextOps
 import v3.residentialPropertyDisposals.deleteNonPpd.def1.model.request.Def1_DeleteCgtNonPpdRequestData
 import v3.residentialPropertyDisposals.deleteNonPpd.model.request.DeleteCgtNonPpdRequestData
 
 import scala.concurrent.Future
 
-class DeleteCgtNonPpdConnectorSpec extends CgtConnectorSpec {
+class DeleteCgtNonPpdConnectorSpec extends ConnectorSpec {
 
   val nino: String = "AA111111A"
 
   "deleteCgtNonPpd" when {
     "given a valid request (NON-TYS)" must {
-      "return a success response" in new Api1661Test with Test {
+      "return a success response" in new IfsTest with Test {
         override def taxYear: TaxYear = TaxYear.fromMtd("2018-19")
 
         val outcome = Right(ResponseWrapper(correlationId, ()))

@@ -28,6 +28,7 @@ trait MockAppConfig extends TestSuite with MockFactory {
   implicit val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockedAppConfig {
+
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdIdBaseUrl: String).expects()
 
@@ -38,6 +39,7 @@ trait MockAppConfig extends TestSuite with MockFactory {
       (() => mockAppConfig.hipDownstreamConfig: BasicAuthDownstreamConfig).expects()
 
     // API Config
+    def minimumPermittedTaxYear: CallHandler[Int]                = (() => mockAppConfig.minimumPermittedTaxYear).expects()
     def featureSwitchConfig: CallHandler0[Configuration]         = (() => mockAppConfig.featureSwitchConfig: Configuration).expects()
     def apiGatewayContext: CallHandler0[String]                  = (() => mockAppConfig.apiGatewayContext: String).expects()
     def apiStatus(version: Version): CallHandler[String]         = (mockAppConfig.apiStatus: Version => String).expects(version)

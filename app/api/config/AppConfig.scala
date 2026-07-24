@@ -42,16 +42,11 @@ class AppConfig @Inject() (val config: ServicesConfig, val configuration: Config
   def ifsDownstreamConfig: DownstreamConfig          = downstreamConfig("ifs")
   def hipDownstreamConfig: BasicAuthDownstreamConfig = basicAuthDownstreamConfig("hip")
 
-  // API1661 Config
-  def api1661BaseUrl: String                         = config.baseUrl("api1661")
-  def api1661Env: String                             = config.getString("microservice.services.api1661.env")
-  def api1661Token: String                           = config.getString("microservice.services.api1661.token")
-  def api1661EnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.api1661.environmentHeaders")
-
+  // API Config
   def minimumPermittedTaxYear: Int = config.getInt("minimumPermittedTaxYear")
 
-  // API Config
-  def apiGatewayContext: String                    = config.getString("api.gateway.context")
+  def apiGatewayContext: String = config.getString("api.gateway.context")
+
   def confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 
   def apiStatus(version: Version): String = config.getString(s"api.$version.status")

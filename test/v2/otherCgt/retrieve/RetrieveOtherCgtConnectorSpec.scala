@@ -16,10 +16,10 @@
 
 package v2.otherCgt.retrieve
 
+import api.connectors.ConnectorSpec
 import api.models.domain.*
 import api.models.errors.NinoFormatError
 import api.models.outcomes.ResponseWrapper
-import common.connectors.CgtConnectorSpec
 import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.retrieve.def1.model.request.Def1_RetrieveOtherCgtRequestData
 import v2.otherCgt.retrieve.def1.model.response.Def1_RetrieveOtherCgtResponse
@@ -28,11 +28,11 @@ import v2.otherCgt.retrieve.model.response.RetrieveOtherCgtResponse
 
 import scala.concurrent.Future
 
-class RetrieveOtherCgtConnectorSpec extends CgtConnectorSpec {
+class RetrieveOtherCgtConnectorSpec extends ConnectorSpec {
 
   "RetrieveOtherCgtConnector" should {
     "return the expected response for a non-TYS request" when {
-      "a valid request is made" in new Api1661Test with Test {
+      "a valid request is made" in new IfsTest with Test {
         override def taxYear: TaxYear = TaxYear.fromMtd("2019-20")
         val outcome                   = Right(ResponseWrapper(correlationId, response))
 

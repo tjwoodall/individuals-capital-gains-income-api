@@ -18,13 +18,11 @@ package v3.residentialPropertyDisposals.retrieveNonPpd.def1
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
-import config.MockAppConfig
 import support.UnitSpec
-import v3.residentialPropertyDisposals.retrieveNonPpd.RetrieveCgtResidentialPropertyValidatorFactory
 import v3.residentialPropertyDisposals.retrieveNonPpd.def1.model.request.Def1_RetrieveCgtResidentialPropertyRequestData
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData
 
-class Def1_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec with MockAppConfig {
+class Def1_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
   private val validNino                      = "AA123456A"
   private val validTaxYear                   = "2024-25"
@@ -32,20 +30,11 @@ class Def1_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec with Moc
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private val validatorFactory                         = new RetrieveCgtResidentialPropertyValidatorFactory
-  private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
-
-  private trait Test {
-
-    MockedAppConfig.minimumPermittedTaxYear
-      .returns(2021)
-      .anyNumberOfTimes()
-
-  }
+  private def validator(nino: String, taxYear: String) = new Def1_RetrieveCgtResidentialPropertyValidator(nino, taxYear)
 
   "running a validation" should {
     "return no errors" when {
-      "a valid request is supplied" in new Test {
+      "a valid request is supplied" in {
         val result: Either[ErrorWrapper, RetrieveCgtResidentialPropertyRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
@@ -54,7 +43,7 @@ class Def1_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec with Moc
     }
 
     "return NinoFormatError error" when {
-      "an invalid nino is supplied" in new Test {
+      "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, RetrieveCgtResidentialPropertyRequestData] =
           validator("A12344A", validTaxYear).validateAndWrapResult()
 

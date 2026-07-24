@@ -19,7 +19,6 @@ package v2.otherCgt.createAmend
 import api.connectors.ConnectorSpec
 import api.models.domain.{Nino, TaxYear}
 import api.models.outcomes.ResponseWrapper
-import config.MockAppConfig
 import uk.gov.hmrc.http.StringContextOps
 import v2.otherCgt.createAmend.def1.fixture.Def1_CreateAmendOtherCgtConnectorServiceFixture.mtdRequestBody
 import v2.otherCgt.createAmend.def1.model.request.Def1_CreateAmendOtherCgtRequestData
@@ -27,7 +26,7 @@ import v2.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 import scala.concurrent.Future
 
-class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec with MockAppConfig {
+class CreateAmendOtherCgtConnectorSpec extends ConnectorSpec {
 
   private val nino: String = "AA111111A"
 

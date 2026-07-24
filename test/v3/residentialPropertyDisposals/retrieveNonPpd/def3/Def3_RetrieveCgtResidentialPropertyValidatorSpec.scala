@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package v3.residentialPropertyDisposals.retrieveNonPpd.def2
+package v3.residentialPropertyDisposals.retrieveNonPpd.def3
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import support.UnitSpec
-import v3.residentialPropertyDisposals.retrieveNonPpd.def2.model.request.Def2_RetrieveResidentialPropertyRequestData
+import v3.residentialPropertyDisposals.retrieveNonPpd.def3.model.request.Def3_RetrieveResidentialPropertyRequestData
 import v3.residentialPropertyDisposals.retrieveNonPpd.model.request.RetrieveCgtResidentialPropertyRequestData
 
-class Def2_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec {
+class Def3_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec {
   private implicit val correlationId: String = "1234"
   private val validNino                      = "AA123456A"
-  private val validTaxYear                   = "2025-26"
+  private val validTaxYear                   = "2026-27"
 
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String, taxYear: String) = new Def2_RetrieveCgtResidentialPropertyValidator(nino, taxYear)
+  private def validator(nino: String, taxYear: String) = new Def3_RetrieveCgtResidentialPropertyValidator(nino, taxYear)
 
   "running a validation" should {
     "return no errors" when {
@@ -38,7 +38,7 @@ class Def2_RetrieveCgtResidentialPropertyValidatorSpec extends UnitSpec {
         val result: Either[ErrorWrapper, RetrieveCgtResidentialPropertyRequestData] =
           validator(validNino, validTaxYear).validateAndWrapResult()
 
-        result shouldBe Right(Def2_RetrieveResidentialPropertyRequestData(parsedNino, parsedTaxYear))
+        result shouldBe Right(Def3_RetrieveResidentialPropertyRequestData(parsedNino, parsedTaxYear))
       }
     }
 

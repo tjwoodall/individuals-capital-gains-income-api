@@ -16,8 +16,8 @@
 
 package v3.otherCgt.createAmend
 
+import api.config.MockAppConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
-import config.MockAppConfig
 import play.api.libs.json.JsObject
 import support.UnitSpec
 import v3.otherCgt.createAmend.def1.Def1_CreateAmendOtherCgtValidator

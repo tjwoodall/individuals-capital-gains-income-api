@@ -16,13 +16,12 @@
 
 package v2.residentialPropertyDisposals.createAmendNonPpd
 
-import common.utils.JsonErrorValidators
-import config.MockAppConfig
+import api.config.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v2.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
 
-class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends UnitSpec with JsonErrorValidators with MockAppConfig {
+class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends UnitSpec with MockAppConfig {
 
   private val validNino    = "AA123456A"
   private val validTaxYear = "2021-22"
