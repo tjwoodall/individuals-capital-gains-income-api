@@ -48,19 +48,16 @@ requestBody:
           {{/if}}
       examples:
         TY 2024-25 or before:
-          value:
-            $ref: './examples/cgt_residential_non_ppd_create_amend/def1/request.json'
+          externalValue: './examples/cgt_residential_non_ppd_create_amend/def1/request.json'
         {{#if (enabled 'r22_cgt_docs')}}
         TY 2025-26:
         {{else}}
         TY 2025-26 onwards:
         {{/if}}
-          value:
-            $ref: './examples/cgt_residential_non_ppd_create_amend/def2/request.json'
+          externalValue: './examples/cgt_residential_non_ppd_create_amend/def2/request.json'
         {{#if (enabled 'r22_cgt_docs')}}
         TY 2026-27 onwards:
-          value:
-            $ref: './examples/cgt_residential_non_ppd_create_amend/def3/request.json'
+          externalValue: './examples/cgt_residential_non_ppd_create_amend/def3/request.json'
         {{/if}}
 
 responses:
