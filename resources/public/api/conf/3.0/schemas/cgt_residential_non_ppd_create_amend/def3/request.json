@@ -6,7 +6,7 @@
     "disposals": {
       "type": "array",
       "description": "An array of residential property disposals.",
-      "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals2526"}
+      "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals2627"}
     }
   },
   "required": [
