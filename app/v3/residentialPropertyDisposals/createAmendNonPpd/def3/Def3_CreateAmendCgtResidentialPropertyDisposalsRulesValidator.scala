@@ -16,35 +16,37 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd.def3
 
-import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.*
 import api.models.errors.{DateFormatError, MtdError}
 import cats.data.Validated
-import cats.data.Validated.Invalid
+import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.errors.*
 import v3.residentialPropertyDisposals.createAmendNonPpd.def3.model.request.{Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
 
-object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
-    extends RulesValidator[Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData] {
+object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator {
 
-  private val resolveNonNegativeParsedNumber = ResolveParsedNumber()
-  private val resolveInteger                 = ResolveInteger(1, 9999)
-  private val customerReferenceRegex         = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
+  private val resolveNonNegativeParsedNumber        = ResolveParsedNumber()
+  private val resolveInteger                        = ResolveInteger(1, 9999)
+  private val customerReferenceRegex                = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
+  private val valid: Validated[Seq[MtdError], Unit] = Valid(())
 
-  def validateBusinessRules(parsed: Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData)
-      : Validated[Seq[MtdError], Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
+  private def combine(results: Validated[Seq[MtdError], ?]*): Validated[Seq[MtdError], Unit] =
+    results.traverse_(identity)
+
+  def validateBusinessRules(parsed: Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData,
+                            r22CgtEnabled: Boolean): Validated[Seq[MtdError], Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
     import parsed.body.*
 
     combine(
       disposals.zipWithIndex.traverse_ { case (disposal, index) =>
-        validateDisposal(disposal, index)
+        validateDisposal(disposal, index, r22CgtEnabled)
       }
-    ).onSuccess(parsed)
+    ).map(_ => parsed)
   }
 
-  private def validateDisposal(disposal: Disposal, index: Int): Validated[Seq[MtdError], Unit] = {
+  private def validateDisposal(disposal: Disposal, index: Int, r22CgtEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
     import disposal.*
 
     val validatedMandatoryDecimalNumbers = List(
@@ -94,7 +96,10 @@ object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator
       case Some(values: Seq[String]) =>
         combine(
           values.zipWithIndex.traverse_ { case (value, subIndex) =>
-            ResolveClaimOrElectionCodes.resolver(ClaimOrElectionCodesFormatError.withPath(s"/disposals/$index/claimOrElectionCodes/$subIndex"))(value)
+            ResolveClaimOrElectionCodes.resolver(
+              ClaimOrElectionCodesFormatError.withPath(s"/disposals/$index/claimOrElectionCodes/$subIndex"),
+              r22CgtEnabled
+            )(value)
           }
         )
       case None => valid

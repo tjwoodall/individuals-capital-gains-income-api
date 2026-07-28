@@ -22,6 +22,7 @@ import v3.residentialPropertyDisposals.createAmendNonPpd.def3.model.request.Clai
 
 object ResolveClaimOrElectionCodes extends ResolverSupport {
 
-  def resolver(error: => MtdError): Resolver[String, ClaimOrElectionCodes] = resolvePartialFunction(error)(ClaimOrElectionCodes.parser)
+  def resolver(error: => MtdError, r22CgtEnabled: Boolean): Resolver[String, ClaimOrElectionCodes] =
+    resolvePartialFunction(error)(ClaimOrElectionCodes.parserFor(r22CgtEnabled))
 
 }

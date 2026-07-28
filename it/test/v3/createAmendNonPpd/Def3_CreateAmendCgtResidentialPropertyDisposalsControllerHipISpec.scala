@@ -53,7 +53,7 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |         "gainsWithBadr": 99999999999.99,
       |         "gainsBeforeLosses": 99999999999.99,
       |         "lossesFromThisYear": 1999.99,  
-      |         "claimOrElectionCodes": ["PRR"],
+      |         "claimOrElectionCodes": ["PRR", "INC"],
       |         "amountOfNetGain": 1999.99
       |      }
       |   ]

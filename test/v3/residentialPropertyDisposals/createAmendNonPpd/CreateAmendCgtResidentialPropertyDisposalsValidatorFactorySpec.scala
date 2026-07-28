@@ -18,6 +18,7 @@ package v3.residentialPropertyDisposals.createAmendNonPpd
 
 import api.config.MockAppConfig
 import api.controllers.validators.{AlwaysErrorsValidator, Validator}
+import play.api.Configuration
 import play.api.libs.json.JsObject
 import support.UnitSpec
 import v3.residentialPropertyDisposals.createAmendNonPpd.def1.Def1_CreateAmendCgtResidentialPropertyDisposalsValidator
@@ -32,6 +33,9 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends Uni
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2021)
       .anyNumberOfTimes()
+
+    MockedAppConfig.featureSwitchConfig
+      .returns(Configuration("r22CgtEnabled" -> true))
 
   }
 

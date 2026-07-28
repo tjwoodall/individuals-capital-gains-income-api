@@ -16,7 +16,7 @@
 
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
-import api.config.AppConfig
+import api.config.{AppConfig, ConfigFeatureSwitches}
 import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
@@ -32,12 +32,13 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactory @Inject() (impl
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] = {
 
-    val schema = CreateAmendCgtResidentialPropertyDisposalsSchema.schemaFor(taxYear)
+    val schema        = CreateAmendCgtResidentialPropertyDisposalsSchema.schemaFor(taxYear)
+    val r22CgtEnabled = ConfigFeatureSwitches().isEnabled("r22_cgt")
 
     schema match {
       case Valid(Def1)     => new Def1_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)
       case Valid(Def2)     => new Def2_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)
-      case Valid(Def3)     => new Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body)
+      case Valid(Def3)     => new Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, taxYear, body, r22CgtEnabled)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

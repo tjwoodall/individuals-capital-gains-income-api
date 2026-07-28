@@ -30,7 +30,7 @@ import v3.residentialPropertyDisposals.createAmendNonPpd.def3.model.request.{
 }
 import v3.residentialPropertyDisposals.createAmendNonPpd.model.request.CreateAmendCgtResidentialPropertyDisposalsRequestData
 
-class Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue)
+class Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, taxYear: String, body: JsValue, r22CgtEnabled: Boolean)
     extends Validator[CreateAmendCgtResidentialPropertyDisposalsRequestData] {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def3_CreateAmendCgtResidentialPropertyDisposalsRequestBody]()
@@ -46,7 +46,7 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino: String, tax
         taxYear = TaxYear.fromMtd(taxYear),
         body = requestBody
       )
-    }.andThen(validateBusinessRules)
+    }.andThen(parsed => validateBusinessRules(parsed, r22CgtEnabled))
   }
 
 }

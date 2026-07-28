@@ -389,6 +389,32 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
        |""".stripMargin
   )
 
+  private val incClaimOrElectionCodeJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "disposals":[
+       |    {
+       |      "customerReference":"$validCustomerReference",
+       |      "disposalDate":"$validDisposalDate",
+       |      "completionDate":"$validCompletionDate",
+       |      "disposalProceeds":$validValue,
+       |      "acquisitionDate":"$validAcquisitionDate",
+       |      "acquisitionAmount":$validValue,
+       |      "improvementCosts":$validValue,
+       |      "additionalCosts":$validValue,
+       |      "prfAmount":$validValue,
+       |      "otherReliefAmount":$validValue,
+       |      "amountOfNetLoss":$validValue,
+       |      "numberOfDisposals": 2,
+       |      "gainsWithBadr":$validValue,
+       |      "gainsBeforeLosses":1000.12,
+       |      "claimOrElectionCodes": ["INC"]
+       |    }
+       |  ]
+       |}
+       |""".stripMargin
+  )
+
   val numberOfDisposalsJson: JsValue = Json.parse(
     s"""
        |{
@@ -417,8 +443,8 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  private def validator(nino: String, body: JsValue) =
-    new Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, validTaxYear, body)
+  private def validator(nino: String, body: JsValue, r22CgtEnabled: Boolean = true) =
+    new Def3_CreateAmendCgtResidentialPropertyDisposalsValidator(nino, validTaxYear, body, r22CgtEnabled)
 
   "validator" should {
     "return the parsed domain object" when {
@@ -440,6 +466,19 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
             parsedNino,
             parsedTaxYear,
             requestBodyJson.as[Def3_CreateAmendCgtResidentialPropertyDisposalsRequestBody]
+          )
+        )
+      }
+
+      "a valid request with INC claimOrElectionCode is supplied when r22 cgt feature switch is enabled" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, incClaimOrElectionCodeJson).validateAndWrapResult()
+
+        result shouldBe Right(
+          Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData(
+            parsedNino,
+            parsedTaxYear,
+            incClaimOrElectionCodeJson.as[Def3_CreateAmendCgtResidentialPropertyDisposalsRequestBody]
           )
         )
       }
@@ -704,7 +743,22 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
             correlationId,
             ClaimOrElectionCodesFormatError.withPath(
               "/disposals/0/claimOrElectionCodes/1"
-            ))
+            )
+          )
+        )
+      }
+
+      "INC claimOrElectionCode is invalid when r22 cgt feature switch is disabled" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, incClaimOrElectionCodeJson, false).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(
+            correlationId,
+            ClaimOrElectionCodesFormatError.withPath(
+              "/disposals/0/claimOrElectionCodes/0"
+            )
+          )
         )
       }
     }

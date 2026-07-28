@@ -19,9 +19,12 @@ package v3.residentialPropertyDisposals.createAmendNonPpd.def3.model.request
 import api.utils.enums.Enums
 
 enum ClaimOrElectionCodes {
-  case PRR, LET, GHO, ROR, PRO, BAD, NVC, OTH
+  case PRR, LET, GHO, ROR, PRO, BAD, NVC, OTH, INC
 }
 
 object ClaimOrElectionCodes {
-  val parser: PartialFunction[String, ClaimOrElectionCodes] = Enums.parser(values)
+  val parser: PartialFunction[String, ClaimOrElectionCodes]           = Enums.parser(values)
+  val parserWithoutInc: PartialFunction[String, ClaimOrElectionCodes] = Enums.parser(values.filterNot(_ == INC))
+
+  def parserFor(r22CgtEnabled: Boolean): PartialFunction[String, ClaimOrElectionCodes] = if (r22CgtEnabled) parser else parserWithoutInc
 }
