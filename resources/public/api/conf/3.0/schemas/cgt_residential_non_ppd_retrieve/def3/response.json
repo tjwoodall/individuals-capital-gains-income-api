@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "TY 2026-27 Onwards {{#unless (releasedInProduction 'r22_cgt_docs')}}[Test Only]{{/unless}}",
+  "title": "TY 2026-27 onwards {{#unless (releasedInProduction 'r22_cgt_docs')}}[Test Only]{{/unless}}",
   "type": "object",
   "properties": {
     "customerAddedDisposals": {
