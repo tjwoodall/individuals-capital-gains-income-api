@@ -20,7 +20,7 @@ import api.utils.enums.Enums
 import play.api.libs.json.Format
 
 enum OtherGainsClaimOrElectionCodes {
-  case GHO, ROR, PRO, ESH, NVC, OTH, BAD, INV, EOT, PRR, LET
+  case GHO, ROR, PRO, ESH, NVC, OTH, BAD, INV, EOT, PRR, LET, INC
 }
 
 object OtherGainsClaimOrElectionCodes {

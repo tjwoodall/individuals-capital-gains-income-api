@@ -27,7 +27,6 @@ case class Def3_RetrieveOtherCgtResponse(submittedOn: Timestamp,
                                          unlistedShares: Option[Seq[UnlistedShares]],
                                          gainExcludedIndexedSecurities: Option[GainExcludedIndexedSecurities],
                                          qualifyingAssetHoldingCompany: Option[QualifyingAssetHoldingCompany],
-                                         nonStandardGains: Option[NonStandardGains],
                                          losses: Option[Losses],
                                          adjustments: Option[Adjustments],
                                          lifetimeAllowance: Option[LifetimeAllowance])
@@ -42,7 +41,6 @@ object Def3_RetrieveOtherCgtResponse {
       (JsPath \ "unlistedShares").readNullable[Seq[UnlistedShares]] and
       (JsPath \ "gainExcludedIndexedSecurities").readNullable[GainExcludedIndexedSecurities] and
       (JsPath \ "qualifyingAssetHoldingCompany").readNullable[QualifyingAssetHoldingCompany] and
-      (JsPath \ "nonStandardGains").readNullable[NonStandardGains] and
       (JsPath \ "losses").readNullable[Losses] and
       (JsPath \ "adjustments").readNullable[Adjustments] and
       (JsPath \ "lifeTimeAllowance").readNullable[LifetimeAllowance]

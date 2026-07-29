@@ -34,7 +34,7 @@ object Def3_RetrieveOtherCgtFixture {
     gainsWithBadr = Some(99999999999.99),
     gainsBeforeLosses = 99999999999.99,
     losses = Some(99999999999.99),
-    claimOrElectionCodes = Some(Seq(CryptoassetsClaimOrElectionCodes.GHO)),
+    claimOrElectionCodes = Some(Seq(CryptoassetsClaimOrElectionCodes.GHO, CryptoassetsClaimOrElectionCodes.INC)),
     amountOfNetGain = Some(99999999999.99),
     amountOfNetLoss = Some(99999999999.99),
     rttTaxPaid = Some(99999999999.99)
@@ -54,7 +54,7 @@ object Def3_RetrieveOtherCgtFixture {
     gainsWithInv = Some(99999999999.99),
     gainsBeforeLosses = 99999999999.99,
     losses = Some(99999999999.99),
-    claimOrElectionCodes = Some(Seq(OtherGainsClaimOrElectionCodes.GHO)),
+    claimOrElectionCodes = Some(Seq(OtherGainsClaimOrElectionCodes.GHO, OtherGainsClaimOrElectionCodes.INC)),
     amountOfNetGain = Some(99999999999.99),
     amountOfNetLoss = Some(99999999999.99),
     rttTaxPaid = Some(99999999999.99)
@@ -73,7 +73,7 @@ object Def3_RetrieveOtherCgtFixture {
     gainsWithInv = Some(99999999999.99),
     gainsBeforeLosses = 99999999999.99,
     losses = Some(99999999999.99),
-    claimOrElectionCodes = Some(Seq(UnlistedSharesClaimOrElectionCodes.GHO)),
+    claimOrElectionCodes = Some(Seq(UnlistedSharesClaimOrElectionCodes.GHO, UnlistedSharesClaimOrElectionCodes.INC)),
     gainsReportedOnRtt = Some(99999999999.99),
     gainsExceedingLifetimeLimit = Some(99999999999.99),
     gainsUnderSeis = Some(99999999999.99),
@@ -93,13 +93,6 @@ object Def3_RetrieveOtherCgtFixture {
     lossesFromQahc = Some(99999999999.99)
   )
 
-  val nonStandardGainsResponseModel: NonStandardGains = NonStandardGains(
-    attributedGains = Some(99999999999.99),
-    attributedGainsRttTaxPaid = Some(99999999999.99),
-    otherGains = Some(99999999999.99),
-    otherGainsRttTaxPaid = Some(99999999999.99)
-  )
-
   val lossesResponseModel: Losses = Losses(
     broughtForwardLossesUsedInCurrentYear = Some(99999999999.99),
     setAgainstInYearGains = Some(99999999999.99),
@@ -108,7 +101,7 @@ object Def3_RetrieveOtherCgtFixture {
   )
 
   val adjustmentsResponseModel: Adjustments = Adjustments(
-    adjustmentAmount = Some(99999999999.99)
+    adjustmentAmount = Some(-99999999999.99)
   )
 
   val lifetimeAllowanceResponseModel: LifetimeAllowance = LifetimeAllowance(
@@ -123,7 +116,6 @@ object Def3_RetrieveOtherCgtFixture {
     unlistedShares = Some(Seq(unlistedSharesResponseModel)),
     gainExcludedIndexedSecurities = Some(gainExcludedIndexedSecuritiesResponseModel),
     qualifyingAssetHoldingCompany = Some(qualifyingAssetHoldingCompanyResponseModel),
-    nonStandardGains = Some(nonStandardGainsResponseModel),
     losses = Some(lossesResponseModel),
     adjustments = Some(adjustmentsResponseModel),
     lifetimeAllowance = Some(lifetimeAllowanceResponseModel)
@@ -132,80 +124,74 @@ object Def3_RetrieveOtherCgtFixture {
   val cryptoassetsValidMtdResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "description string",
-      |     "tokenName": "Name of token",
-      |     "acquisitionDate": "2026-08-04",
-      |     "disposalDate": "2026-09-04",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBadr": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "amountOfNetGain": 99999999999.99,
-      |     "amountOfNetLoss": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "description string",
+      |  "tokenName": "Name of token",
+      |  "acquisitionDate": "2026-08-04",
+      |  "disposalDate": "2026-09-04",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBadr": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "amountOfNetGain": 99999999999.99,
+      |  "amountOfNetLoss": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-      """.stripMargin
+    """.stripMargin
   )
 
   val otherGainsValidMtdResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "assetType": "other-property",
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "example of this asset",
-      |     "companyName": "Bob the Builder",
-      |     "companyRegistrationNumber": "11111111",
-      |     "acquisitionDate": "2026-04-07",
-      |     "disposalDate": "2026-07-10",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBadr": 99999999999.99,
-      |     "gainsWithInv": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "amountOfNetGain": 99999999999.99,
-      |     "amountOfNetLoss": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "assetType": "other-property",
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "example of this asset",
+      |  "companyName": "Bob the Builder",
+      |  "companyRegistrationNumber": "11111111",
+      |  "acquisitionDate": "2026-04-07",
+      |  "disposalDate": "2026-07-10",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBadr": 99999999999.99,
+      |  "gainsWithInv": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "amountOfNetGain": 99999999999.99,
+      |  "amountOfNetLoss": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val unlistedSharesValidMtdResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "My asset",
-      |     "companyName": "Bob the Builder",
-      |     "companyRegistrationNumber": "11111111",
-      |     "acquisitionDate": "2026-04-10",
-      |     "disposalDate": "2026-04-12",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBadr": 99999999999.99,
-      |     "gainsWithInv": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "gainsReportedOnRtt": 99999999999.99,
-      |     "gainsExceedingLifetimeLimit": 99999999999.99,
-      |     "gainsUnderSeis": 99999999999.99,
-      |     "lossUsedAgainstGeneralIncome": 99999999999.99,
-      |     "eisOrSeisReliefDueCurrentYear": 99999999999.99,
-      |     "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
-      |     "eisOrSeisReliefDuePreviousYear": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "My asset",
+      |  "companyName": "Bob the Builder",
+      |  "companyRegistrationNumber": "11111111",
+      |  "acquisitionDate": "2026-04-10",
+      |  "disposalDate": "2026-04-12",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBadr": 99999999999.99,
+      |  "gainsWithInv": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "gainsReportedOnRtt": 99999999999.99,
+      |  "gainsExceedingLifetimeLimit": 99999999999.99,
+      |  "gainsUnderSeis": 99999999999.99,
+      |  "lossUsedAgainstGeneralIncome": 99999999999.99,
+      |  "eisOrSeisReliefDueCurrentYear": 99999999999.99,
+      |  "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
+      |  "eisOrSeisReliefDuePreviousYear": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-       """.stripMargin
+    """.stripMargin
   )
 
   val gainExcludedIndexedSecuritiesValidResponseJson: JsValue = Json.parse(
@@ -213,7 +199,7 @@ object Def3_RetrieveOtherCgtFixture {
       |{
       |   "gainsFromExcludedSecurities": 99999999999.99
       |}
-       """.stripMargin
+    """.stripMargin
   )
 
   val qualifyingAssetHoldingCompanyValidMtdResponseJson: JsValue = Json.parse(
@@ -222,351 +208,158 @@ object Def3_RetrieveOtherCgtFixture {
       |     "gainsFromQahcBeforeLosses": 99999999999.99,
       |     "lossesFromQahc": 99999999999.99
       |}
-     """.stripMargin
-  )
-
-  val nonStandardGainsValidResponseJson: JsValue = Json.parse(
-    """
-      |{
-      |     "attributedGains": 99999999999.99,
-      |     "attributedGainsRttTaxPaid": 99999999999.99,
-      |     "otherGains": 99999999999.99,
-      |     "otherGainsRttTaxPaid": 99999999999.99
-      |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val lossesValidResponseJson: JsValue = Json.parse(
     """
       |{
-      |   "broughtForwardLossesUsedInCurrentYear":99999999999.99,
-      |   "setAgainstInYearGains":99999999999.99,
-      |   "setAgainstEarlierYear":99999999999.99,
-      |   "lossesToCarryForward":99999999999.99
+      |  "broughtForwardLossesUsedInCurrentYear": 99999999999.99,
+      |  "setAgainstInYearGains": 99999999999.99,
+      |  "setAgainstEarlierYear": 99999999999.99,
+      |  "lossesToCarryForward": 99999999999.99
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val adjustmentsValidResponseJson: JsValue = Json.parse(
     """
       |{
-      |   "adjustmentAmount": 99999999999.99
+      |  "adjustmentAmount": -99999999999.99
       |}
-      """.stripMargin
+    """.stripMargin
   )
 
   val lifetimeAllowanceValidMtdResponseJson: JsValue = Json.parse(
     """
       |{
-      |   "lifetimeAllowanceBadr": 99999999999.99,
-      |   "lifetimeAllowanceInv": 99999999999.99
+      |  "lifetimeAllowanceBadr": 99999999999.99,
+      |  "lifetimeAllowanceInv": 99999999999.99
       |}
-      """.stripMargin
+    """.stripMargin
   )
 
   val fullValidMtdResponseJson: JsValue = Json.parse(
     s"""
-      {
-      |    "submittedOn": "2027-02-07T16:18:44.403Z",
-      |    "cryptoassets": [
-      |         {
-      |             "numberOfDisposals": 1,
-      |             "assetDescription": "description string",
-      |             "tokenName": "Name of token",
-      |             "acquisitionDate": "2026-08-04",
-      |             "disposalDate": "2026-09-04",
-      |             "disposalProceeds": 99999999999.99,
-      |             "allowableCosts": 99999999999.99,
-      |             "gainsWithBadr": 99999999999.99,
-      |             "gainsBeforeLosses": 99999999999.99,
-      |             "losses": 99999999999.99,
-      |             "claimOrElectionCodes": [
-      |                 "GHO"
-      |             ],
-      |             "amountOfNetGain": 99999999999.99,
-      |             "amountOfNetLoss": 99999999999.99,
-      |             "rttTaxPaid": 99999999999.99
-      |         }
-      |    ],
-      |    "otherGains": [
-      |         {
-      |             "assetType": "other-property",
-      |             "numberOfDisposals": 1,
-      |             "assetDescription": "example of this asset",
-      |             "companyName": "Bob the Builder",
-      |             "companyRegistrationNumber": "11111111",
-      |             "acquisitionDate": "2026-04-07",
-      |             "disposalDate": "2026-07-10",
-      |             "disposalProceeds": 99999999999.99,
-      |             "allowableCosts": 99999999999.99,
-      |             "gainsWithBadr": 99999999999.99,
-      |             "gainsWithInv": 99999999999.99,
-      |             "gainsBeforeLosses": 99999999999.99,
-      |             "losses": 99999999999.99,
-      |             "claimOrElectionCodes": [
-      |                 "GHO"
-      |             ],
-      |             "amountOfNetGain": 99999999999.99,
-      |             "amountOfNetLoss": 99999999999.99,
-      |             "rttTaxPaid": 99999999999.99
-      |         }
-      |    ],
-      |    "unlistedShares": [
-      |        {
-      |            "numberOfDisposals": 1,
-      |            "assetDescription": "My asset",
-      |            "companyName": "Bob the Builder",
-      |            "companyRegistrationNumber": "11111111",
-      |            "acquisitionDate": "2026-04-10",
-      |            "disposalDate": "2026-04-12",
-      |            "disposalProceeds": 99999999999.99,
-      |            "allowableCosts": 99999999999.99,
-      |            "gainsWithBadr": 99999999999.99,
-      |            "gainsWithInv": 99999999999.99,
-      |            "gainsBeforeLosses": 99999999999.99,
-      |            "losses": 99999999999.99,
-      |            "claimOrElectionCodes": [
-      |                "GHO"
-      |            ],
-      |            "gainsReportedOnRtt": 99999999999.99,
-      |            "gainsExceedingLifetimeLimit": 99999999999.99,
-      |            "gainsUnderSeis": 99999999999.99,
-      |            "lossUsedAgainstGeneralIncome": 99999999999.99,
-      |            "eisOrSeisReliefDueCurrentYear": 99999999999.99,
-      |            "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
-      |            "eisOrSeisReliefDuePreviousYear": 99999999999.99,
-      |            "rttTaxPaid": 99999999999.99
-      |        }
-      |    ],
-      |    "gainExcludedIndexedSecurities": {
-      |        "gainsFromExcludedSecurities": 99999999999.99
-      |    },
-      |    "qualifyingAssetHoldingCompany": {
-      |        "gainsFromQahcBeforeLosses": 99999999999.99,
-      |        "lossesFromQahc": 99999999999.99
-      |    },
-      |    "nonStandardGains": {
-      |        "attributedGains": 99999999999.99,
-      |        "attributedGainsRttTaxPaid": 99999999999.99,
-      |        "otherGains": 99999999999.99,
-      |        "otherGainsRttTaxPaid": 99999999999.99
-      |    },
-      |    "losses": {
-      |        "broughtForwardLossesUsedInCurrentYear": 99999999999.99,
-      |        "setAgainstInYearGains": 99999999999.99,
-      |        "setAgainstEarlierYear": 99999999999.99,
-      |        "lossesToCarryForward": 99999999999.99
-      |    },
-      |    "adjustments": {
-      |        "adjustmentAmount": 99999999999.99
-      |    },
-      |    "lifetimeAllowance": {
-      |        "lifetimeAllowanceBadr": 99999999999.99,
-      |        "lifetimeAllowanceInv": 99999999999.99
-      |    }
+      |{
+      |  "submittedOn": "2027-02-07T16:18:44.403Z",
+      |  "cryptoassets": [$cryptoassetsValidMtdResponseJson],
+      |  "otherGains": [$otherGainsValidMtdResponseJson],
+      |  "unlistedShares": [$unlistedSharesValidMtdResponseJson],
+      |  "gainExcludedIndexedSecurities": $gainExcludedIndexedSecuritiesValidResponseJson,
+      |  "qualifyingAssetHoldingCompany": $qualifyingAssetHoldingCompanyValidMtdResponseJson,
+      |  "losses": $lossesValidResponseJson,
+      |  "adjustments": $adjustmentsValidResponseJson,
+      |  "lifetimeAllowance": $lifetimeAllowanceValidMtdResponseJson
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val cryptoassetsValidDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "description string",
-      |     "tokenName": "Name of token",
-      |     "acquisitionDate": "2026-08-04",
-      |     "disposalDate": "2026-09-04",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBADR": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "amountOfNetGain": 99999999999.99,
-      |     "amountOfNetLoss": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "description string",
+      |  "tokenName": "Name of token",
+      |  "acquisitionDate": "2026-08-04",
+      |  "disposalDate": "2026-09-04",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBADR": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "amountOfNetGain": 99999999999.99,
+      |  "amountOfNetLoss": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-       """.stripMargin
+    """.stripMargin
   )
 
   val otherGainsValidDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "assetType": "otherProperty",
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "example of this asset",
-      |     "companyName": "Bob the Builder",
-      |     "companyRegistrationNumber": "11111111",
-      |     "acquisitionDate": "2026-04-07",
-      |     "disposalDate": "2026-07-10",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBADR": 99999999999.99,
-      |     "gainsWithINV": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "amountOfNetGain": 99999999999.99,
-      |     "amountOfNetLoss": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "assetType": "otherProperty",
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "example of this asset",
+      |  "companyName": "Bob the Builder",
+      |  "companyRegistrationNumber": "11111111",
+      |  "acquisitionDate": "2026-04-07",
+      |  "disposalDate": "2026-07-10",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBADR": 99999999999.99,
+      |  "gainsWithINV": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "amountOfNetGain": 99999999999.99,
+      |  "amountOfNetLoss": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val unlistedSharesValidDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "numberOfDisposals": 1,
-      |     "assetDescription": "My asset",
-      |     "companyName": "Bob the Builder",
-      |     "companyRegistrationNumber": "11111111",
-      |     "acquisitionDate": "2026-04-10",
-      |     "disposalDate": "2026-04-12",
-      |     "disposalProceeds": 99999999999.99,
-      |     "allowableCosts": 99999999999.99,
-      |     "gainsWithBADR": 99999999999.99,
-      |     "gainsWithINV": 99999999999.99,
-      |     "gainsBeforeLosses": 99999999999.99,
-      |     "losses": 99999999999.99,
-      |     "claimOrElectionCodes": [
-      |          "GHO"
-      |     ],
-      |     "gainsReportedOnRtt": 99999999999.99,
-      |     "gainsExceedingLifetimeLimit": 99999999999.99,
-      |     "gainsUnderSEIS": 99999999999.99,
-      |     "lossUsedAgainstGeneralIncome": 99999999999.99,
-      |     "eisOrSeisReliefDueCurrentYear": 99999999999.99,
-      |     "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
-      |     "eisOrSeisReliefDuePreviousYear": 99999999999.99,
-      |     "rttTaxPaid": 99999999999.99
+      |  "numberOfDisposals": 1,
+      |  "assetDescription": "My asset",
+      |  "companyName": "Bob the Builder",
+      |  "companyRegistrationNumber": "11111111",
+      |  "acquisitionDate": "2026-04-10",
+      |  "disposalDate": "2026-04-12",
+      |  "disposalProceeds": 99999999999.99,
+      |  "allowableCosts": 99999999999.99,
+      |  "gainsWithBADR": 99999999999.99,
+      |  "gainsWithINV": 99999999999.99,
+      |  "gainsBeforeLosses": 99999999999.99,
+      |  "losses": 99999999999.99,
+      |  "claimOrElectionCodes": ["GHO", "INC"],
+      |  "gainsReportedOnRtt": 99999999999.99,
+      |  "gainsExceedingLifetimeLimit": 99999999999.99,
+      |  "gainsUnderSEIS": 99999999999.99,
+      |  "lossUsedAgainstGeneralIncome": 99999999999.99,
+      |  "eisOrSeisReliefDueCurrentYear": 99999999999.99,
+      |  "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
+      |  "eisOrSeisReliefDuePreviousYear": 99999999999.99,
+      |  "rttTaxPaid": 99999999999.99
       |}
-       """.stripMargin
+    """.stripMargin
   )
 
   val qualifyingAssetHoldingCompanyValidDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
-      |     "gainsFromQAHCBeforeLosses": 99999999999.99,
-      |     "lossesFromQAHC": 99999999999.99
+      |  "gainsFromQAHCBeforeLosses": 99999999999.99,
+      |  "lossesFromQAHC": 99999999999.99
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
   val lifetimeAllowanceValidDownstreamResponseJson: JsValue = Json.parse(
     """
       |{
-      |   "lifetimeAllowanceBADR": 99999999999.99,
-      |   "lifetimeAllowanceINV": 99999999999.99
+      |  "lifetimeAllowanceBADR": 99999999999.99,
+      |  "lifetimeAllowanceINV": 99999999999.99
       |}
-      """.stripMargin
+    """.stripMargin
   )
 
   val fullValidDownstreamResponseJson: JsValue = Json.parse(
-    """
-       {
-      |    "submittedOn": "2027-02-07T16:18:44.403Z",
-      |    "cryptoassets": [
-      |        {
-      |            "numberOfDisposals": 1,
-      |            "assetDescription": "description string",
-      |            "tokenName": "Name of token",
-      |            "acquisitionDate": "2026-08-04",
-      |            "disposalDate": "2026-09-04",
-      |            "disposalProceeds": 99999999999.99,
-      |            "allowableCosts": 99999999999.99,
-      |            "gainsWithBADR": 99999999999.99,
-      |            "gainsBeforeLosses": 99999999999.99,
-      |            "losses": 99999999999.99,
-      |            "claimOrElectionCodes": [
-      |                "GHO"
-      |            ],
-      |            "amountOfNetGain": 99999999999.99,
-      |            "amountOfNetLoss": 99999999999.99,
-      |            "rttTaxPaid": 99999999999.99
-      |        }
-      |    ],
-      |    "otherGains": [
-      |        {
-      |            "assetType": "otherProperty",
-      |            "numberOfDisposals": 1,
-      |            "assetDescription": "example of this asset",
-      |            "companyName": "Bob the Builder",
-      |            "companyRegistrationNumber": "11111111",
-      |            "acquisitionDate": "2026-04-07",
-      |            "disposalDate": "2026-07-10",
-      |            "disposalProceeds": 99999999999.99,
-      |            "allowableCosts": 99999999999.99,
-      |            "gainsWithBADR": 99999999999.99,
-      |            "gainsWithINV": 99999999999.99,
-      |            "gainsBeforeLosses": 99999999999.99,
-      |            "losses": 99999999999.99,
-      |            "claimOrElectionCodes": [
-      |                "GHO"
-      |            ],
-      |            "amountOfNetGain": 99999999999.99,
-      |            "amountOfNetLoss": 99999999999.99,
-      |            "rttTaxPaid": 99999999999.99
-      |        }
-      |    ],
-      |    "unlistedShares": [
-      |        {
-      |            "numberOfDisposals": 1,
-      |            "assetDescription": "My asset",
-      |            "companyName": "Bob the Builder",
-      |            "companyRegistrationNumber": "11111111",
-      |            "acquisitionDate": "2026-04-10",
-      |            "disposalDate": "2026-04-12",
-      |            "disposalProceeds": 99999999999.99,
-      |            "allowableCosts": 99999999999.99,
-      |            "gainsWithBADR": 99999999999.99,
-      |            "gainsWithINV": 99999999999.99,
-      |            "gainsBeforeLosses": 99999999999.99,
-      |            "losses": 99999999999.99,
-      |            "claimOrElectionCodes": [
-      |                "GHO"
-      |            ],
-      |            "gainsReportedOnRtt": 99999999999.99,
-      |            "gainsExceedingLifetimeLimit": 99999999999.99,
-      |            "gainsUnderSEIS": 99999999999.99,
-      |            "lossUsedAgainstGeneralIncome": 99999999999.99,
-      |            "eisOrSeisReliefDueCurrentYear": 99999999999.99,
-      |            "lossesUsedAgainstGeneralIncomePreviousYear": 99999999999.99,
-      |            "eisOrSeisReliefDuePreviousYear": 99999999999.99,
-      |            "rttTaxPaid": 99999999999.99
-      |        }
-      |    ],
-      |    "gainExcludedIndexedSecurities": {
-      |        "gainsFromExcludedSecurities": 99999999999.99
-      |    },
-      |    "qualifyingAssetHoldingCompany": {
-      |        "gainsFromQAHCBeforeLosses": 99999999999.99,
-      |        "lossesFromQAHC": 99999999999.99
-      |    },
-      |    "nonStandardGains": {
-      |        "attributedGains": 99999999999.99,
-      |        "attributedGainsRttTaxPaid": 99999999999.99,
-      |        "otherGains": 99999999999.99,
-      |        "otherGainsRttTaxPaid": 99999999999.99
-      |    },
-      |    "losses": {
-      |        "broughtForwardLossesUsedInCurrentYear": 99999999999.99,
-      |        "setAgainstInYearGains": 99999999999.99,
-      |        "setAgainstEarlierYear": 99999999999.99,
-      |        "lossesToCarryForward": 99999999999.99
-      |    },
-      |    "adjustments": {
-      |        "adjustmentAmount": 99999999999.99
-      |    },
-      |    "lifeTimeAllowance": {
-      |        "lifetimeAllowanceBADR": 99999999999.99,
-      |        "lifetimeAllowanceINV": 99999999999.99
-      |    }
+    s"""
+      |{
+      |  "submittedOn": "2027-02-07T16:18:44.403Z",
+      |  "cryptoassets": [$cryptoassetsValidDownstreamResponseJson],
+      |  "otherGains": [$otherGainsValidDownstreamResponseJson],
+      |  "unlistedShares": [$unlistedSharesValidDownstreamResponseJson],
+      |  "gainExcludedIndexedSecurities": $gainExcludedIndexedSecuritiesValidResponseJson,
+      |  "qualifyingAssetHoldingCompany": $qualifyingAssetHoldingCompanyValidDownstreamResponseJson,
+      |  "losses": $lossesValidResponseJson,
+      |  "adjustments": $adjustmentsValidResponseJson,
+      |  "lifeTimeAllowance": $lifetimeAllowanceValidDownstreamResponseJson
       |}
-       """.stripMargin
+    """.stripMargin
   )
 
   val minimumResponseModel: Def3_RetrieveOtherCgtResponse = Def3_RetrieveOtherCgtResponse(
@@ -576,7 +369,6 @@ object Def3_RetrieveOtherCgtFixture {
     unlistedShares = None,
     gainExcludedIndexedSecurities = None,
     qualifyingAssetHoldingCompany = None,
-    nonStandardGains = None,
     losses = None,
     adjustments = None,
     lifetimeAllowance = None
@@ -585,9 +377,9 @@ object Def3_RetrieveOtherCgtFixture {
   val minimumValidResponseJson: JsValue = Json.parse(
     """
       |{
-      |    "submittedOn": "2027-02-07T16:18:44.403Z"
+      |  "submittedOn": "2027-02-07T16:18:44.403Z"
       |}
-     """.stripMargin
+    """.stripMargin
   )
 
 }

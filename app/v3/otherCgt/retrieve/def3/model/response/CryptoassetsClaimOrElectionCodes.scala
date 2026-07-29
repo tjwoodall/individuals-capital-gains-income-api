@@ -20,7 +20,7 @@ import api.utils.enums.Enums
 import play.api.libs.json.Format
 
 enum CryptoassetsClaimOrElectionCodes {
-  case GHO, ROR, PRO, NVC, OTH, BAD
+  case GHO, ROR, PRO, NVC, OTH, BAD, INC
 }
 
 object CryptoassetsClaimOrElectionCodes {

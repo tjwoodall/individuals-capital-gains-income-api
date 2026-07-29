@@ -28,7 +28,8 @@ class CryptoassetsClaimOrElectionCodesSpec extends UnitSpec with EnumJsonSpecSup
     ("PRO", PRO),
     ("NVC", NVC),
     ("OTH", OTH),
-    ("BAD", BAD)
+    ("BAD", BAD),
+    ("INC", INC)
   )
 
 }

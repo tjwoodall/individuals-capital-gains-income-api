@@ -20,7 +20,7 @@ import api.utils.enums.Enums
 import play.api.libs.json.Format
 
 enum UnlistedSharesClaimOrElectionCodes {
-  case GHO, ROR, PRO, NVC, ESH, OTH, BAD, INV, EOT
+  case GHO, ROR, PRO, NVC, ESH, OTH, BAD, INV, EOT, INC
 }
 
 object UnlistedSharesClaimOrElectionCodes {

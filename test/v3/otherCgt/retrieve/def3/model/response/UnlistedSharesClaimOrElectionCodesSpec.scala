@@ -31,7 +31,8 @@ class UnlistedSharesClaimOrElectionCodesSpec extends UnitSpec with EnumJsonSpecS
     ("OTH", OTH),
     ("BAD", BAD),
     ("INV", INV),
-    ("EOT", EOT)
+    ("EOT", EOT),
+    ("INC", INC)
   )
 
 }
