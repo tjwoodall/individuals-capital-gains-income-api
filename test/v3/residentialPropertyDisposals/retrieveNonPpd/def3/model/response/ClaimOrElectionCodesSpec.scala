@@ -30,7 +30,8 @@ class ClaimOrElectionCodesSpec extends UnitSpec with EnumJsonSpecSupport {
     ("PRO", PRO),
     ("BAD", BAD),
     ("NVC", NVC),
-    ("OTH", OTH)
+    ("OTH", OTH),
+    ("INC", INC)
   )
 
 }

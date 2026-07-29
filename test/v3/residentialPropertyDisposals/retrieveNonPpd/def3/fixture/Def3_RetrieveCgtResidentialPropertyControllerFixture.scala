@@ -19,7 +19,7 @@ package v3.residentialPropertyDisposals.retrieveNonPpd.def3.fixture
 import api.models.domain.Timestamp
 import play.api.libs.json.*
 import v3.residentialPropertyDisposals.retrieveNonPpd.def3.model.response.*
-import v3.residentialPropertyDisposals.retrieveNonPpd.def3.model.response.ClaimOrElectionCodes.{BAD, GHO}
+import v3.residentialPropertyDisposals.retrieveNonPpd.def3.model.response.ClaimOrElectionCodes.{BAD, GHO, INC}
 
 object Def3_RetrieveCgtResidentialPropertyControllerFixture {
 
@@ -38,7 +38,7 @@ object Def3_RetrieveCgtResidentialPropertyControllerFixture {
     Some(1999.99),
     1999.99,
     Some(1999.99),
-    Some(Seq(GHO, BAD)),
+    Some(Seq(GHO, BAD, INC)),
     None,
     Some(1999.99)
   )
@@ -76,7 +76,7 @@ object Def3_RetrieveCgtResidentialPropertyControllerFixture {
       |        "gainsWithBadr": 1999.99,
       |        "gainsBeforeLosses": 1999.99,
       |        "lossesFromThisYear": 1999.99,
-      |        "claimOrElectionCodes": ["GHO", "BAD"],
+      |        "claimOrElectionCodes": ["GHO", "BAD", "INC"],
       |        "amountOfNetLoss": 1999.99
       |     }
       |    ]
@@ -142,7 +142,7 @@ object Def3_RetrieveCgtResidentialPropertyControllerFixture {
       |        "gainsWithBADR": 1999.99,
       |        "gainsBeforeLosses": 1999.99,
       |        "lossesFromThisYear": 1999.99,
-      |        "claimOrElectionCodes": ["GHO", "BAD"],
+      |        "claimOrElectionCodes": ["GHO", "BAD", "INC"],
       |        "amountOfNetLoss": 1999.99
       |      }
       |    ]

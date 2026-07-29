@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ class CustomerAddedDisposalsSpec extends UnitSpec {
       |        "gainsWithBadr": 1999.99,
       |        "gainsBeforeLosses": 1999.99,
       |        "lossesFromThisYear": 1999.99,
-      |        "claimOrElectionCodes": ["GHO", "BAD"],
+      |        "claimOrElectionCodes": ["GHO", "BAD", "INC"],
       |        "amountOfNetLoss": 1999.99
       |      }
       |    ]
@@ -70,7 +70,7 @@ class CustomerAddedDisposalsSpec extends UnitSpec {
       |        "gainsWithBADR": 1999.99,
       |        "gainsBeforeLosses": 1999.99,
       |        "lossesFromThisYear": 1999.99,
-      |        "claimOrElectionCodes": ["GHO", "BAD"],
+      |        "claimOrElectionCodes": ["GHO", "BAD", "INC"],
       |        "amountOfNetLoss": 1999.99
       |     }
       |    ]
