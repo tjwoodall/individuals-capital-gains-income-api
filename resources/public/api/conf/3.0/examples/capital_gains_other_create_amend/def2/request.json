@@ -87,7 +87,7 @@
     "lossesToCarryForward": 99999999999.99
   },
   "adjustments": {
-    "adjustmentAmount": 99999999999.99
+    "adjustmentAmount": {{#if (enabled 'r22_cgt_docs')}}-99999999999.99{{else}}99999999999.99{{/if}}
   },
   "lifetimeAllowance": {
     "lifetimeAllowanceBadr": 99999999999.99,

@@ -1,5 +1,5 @@
-
-# individuals-capital-gains-income-api
+Individuals Capital Gains Income API
+========================
 
 [![Apache-2.0 license](http://img.shields.io/badge/license-Apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
@@ -14,12 +14,12 @@ The Individuals Capital Gains Income API allows a developer to create, amend, re
 
 ## Development Setup
 
-Run the microservice from the console using: `sbt run` (starts on port 7797 by default)
+Run the microservice from the console using: `sbt run` (starts on port 7764 by default)
 
 Start the service manager profile:
 
 ```bash
-sm2 --start MTDFB_INDIVIDUALS_CAPITAL_GAINS_INCOME
+sm2 -start MTDFB_INDIVIDUALS_CAPITAL_GAINS_INCOME
 ```
 
 ## Run Tests
