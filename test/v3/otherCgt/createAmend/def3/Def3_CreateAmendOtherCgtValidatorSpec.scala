@@ -72,12 +72,14 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
   private def validator(nino: String = validNino,
                         taxYear: String = validTaxYear,
                         body: JsValue = fullRequestBodyMtdJson,
-                        temporalValidationEnabled: Boolean = true) =
+                        temporalValidationEnabled: Boolean = true,
+                        r22CgtEnabled: Boolean = true) =
     new Def3_CreateAmendOtherCgtValidator(
       nino = nino,
       taxYear = taxYear,
       body = body,
-      temporalValidationEnabled = temporalValidationEnabled
+      temporalValidationEnabled = temporalValidationEnabled,
+      r22CgtEnabled = r22CgtEnabled
     )
 
   "validator" should {
@@ -130,6 +132,35 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
 
         result shouldBe Right(Def3_CreateAmendOtherCgtRequestData(parsedNino, futureTaxYear, requestBodyModel))
       }
+
+      "a valid request with INC claimOrElectionCode is supplied when r22 cgt feature switch is enabled" in {
+        val requestBodyJson: JsValue = Seq("cryptoassets", "otherGains", "unlistedShares")
+          .foldLeft(fullRequestBodyMtdJson) { case (updatedJson, arrayField) =>
+            updateArrayField(arrayField, "claimOrElectionCodes", Json.arr("INC"), json = updatedJson)
+          }
+
+        val requestBodyModel: Def3_CreateAmendOtherCgtRequestBody = fullRequestBodyModel.copy(
+          cryptoassets = fullRequestBodyModel.cryptoassets.map(_.map(_.copy(claimOrElectionCodes = Some(Seq("INC"))))),
+          otherGains = fullRequestBodyModel.otherGains.map(_.map(_.copy(claimOrElectionCodes = Some(Seq("INC"))))),
+          unlistedShares = fullRequestBodyModel.unlistedShares.map(_.map(_.copy(claimOrElectionCodes = Some(Seq("INC")))))
+        )
+
+        val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(body = requestBodyJson).validateAndWrapResult()
+
+        result shouldBe Right(Def3_CreateAmendOtherCgtRequestData(parsedNino, parsedTaxYear, requestBodyModel))
+      }
+
+      "a valid request with a negative adjustmentAmount is supplied when r22 cgt feature switch is enabled" in {
+        val requestBodyJson: JsValue = updateArrayOrObjectField("/adjustments/adjustmentAmount", JsNumber(-1.99))
+
+        val requestBodyModel: Def3_CreateAmendOtherCgtRequestBody = fullRequestBodyModel.copy(
+          adjustments = fullRequestBodyModel.adjustments.map(_.copy(adjustmentAmount = Some(-1.99)))
+        )
+
+        val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(body = requestBodyJson).validateAndWrapResult()
+
+        result shouldBe Right(Def3_CreateAmendOtherCgtRequestData(parsedNino, parsedTaxYear, requestBodyModel))
+      }
     }
 
     "return NinoFormatError error" when {
@@ -162,7 +193,6 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
                 "/unlistedShares",
                 "/gainExcludedIndexedSecurities",
                 "/qualifyingAssetHoldingCompany",
-                "/nonStandardGains",
                 "/losses",
                 "/adjustments",
                 "/lifetimeAllowance"
@@ -304,6 +334,17 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
 
           result shouldBe Left(ErrorWrapper(correlationId, ClaimOrElectionCodesFormatError.withPath(s"/$arrayField/0/claimOrElectionCodes/1")))
         }
+
+        s"passed a body with INC claimOrElectionCode for $arrayField when r22 cgt feature switch is disabled" in {
+          val invalidJson: JsValue = updateArrayField(arrayField, "claimOrElectionCodes", Json.arr("INC"))
+
+          val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(
+            body = invalidJson,
+            r22CgtEnabled = false
+          ).validateAndWrapResult()
+
+          result shouldBe Left(ErrorWrapper(correlationId, ClaimOrElectionCodesFormatError.withPath(s"/$arrayField/0/claimOrElectionCodes/0")))
+        }
       }
     }
 
@@ -345,15 +386,10 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
         ("/gainExcludedIndexedSecurities/gainsFromExcludedSecurities", "decimal"),
         ("/qualifyingAssetHoldingCompany/gainsFromQahcBeforeLosses", "decimal"),
         ("/qualifyingAssetHoldingCompany/lossesFromQahc", "decimal"),
-        ("/nonStandardGains/attributedGains", "decimal"),
-        ("/nonStandardGains/attributedGainsRttTaxPaid", "decimal"),
-        ("/nonStandardGains/otherGains", "decimal"),
-        ("/nonStandardGains/otherGainsRttTaxPaid", "decimal"),
         ("/losses/broughtForwardLossesUsedInCurrentYear", "decimal"),
         ("/losses/setAgainstInYearGains", "decimal"),
         ("/losses/setAgainstEarlierYear", "decimal"),
         ("/losses/lossesToCarryForward", "decimal"),
-        ("/adjustments/adjustmentAmount", "decimal"),
         ("/lifetimeAllowance/lifetimeAllowanceBadr", "decimal"),
         ("/lifetimeAllowance/lifetimeAllowanceInv", "decimal")
       ).foreach { case (fieldPath, fieldType) =>
@@ -375,6 +411,17 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
 
           result shouldBe Left(ErrorWrapper(correlationId, expectedError))
         }
+      }
+
+      "passed a body with a negative adjustmentAmount when r22 cgt feature switch is disabled" in {
+        val invalidJson: JsValue = updateArrayOrObjectField("/adjustments/adjustmentAmount", JsNumber(-1.99))
+
+        val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(
+          body = invalidJson,
+          r22CgtEnabled = false
+        ).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath("/adjustments/adjustmentAmount")))
       }
     }
 

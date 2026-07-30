@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,12 +99,6 @@ class Def3_CreateAmendOtherCgtRequestBodySpec extends UnitSpec {
       |  "qualifyingAssetHoldingCompany": {
       |    "gainsFromQAHCBeforeLosses": 99999999999.99,
       |    "lossesFromQAHC": 99999999999.99
-      |  },
-      |  "nonStandardGains": {
-      |    "attributedGains": 99999999999.99,
-      |    "attributedGainsRttTaxPaid": 99999999999.99,
-      |    "otherGains": 99999999999.99,
-      |    "otherGainsRttTaxPaid": 99999999999.99
       |  },
       |  "losses": {
       |    "broughtForwardLossesUsedInCurrentYear": 99999999999.99,

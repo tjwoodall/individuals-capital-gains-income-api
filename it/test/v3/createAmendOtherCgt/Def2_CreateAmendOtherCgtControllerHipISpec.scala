@@ -184,7 +184,7 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |    "lossesToCarryForward": -99999999999.99
       |  },
       |  "adjustments": {
-      |    "adjustmentAmount": -99999999999.99
+      |    "adjustmentAmount": -99999999999.999
       |  },
       |  "lifetimeAllowance": {
       |    "lifetimeAllowanceBadr": -99999999999.99,
@@ -225,6 +225,11 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       )
     ),
     TokenNameFormatError.withPath("/cryptoassets/0/tokenName"),
+    ValueFormatError.forPathAndRange(
+      path = "/adjustments/adjustmentAmount",
+      min = "-99999999999.99",
+      max = "99999999999.99"
+    ),
     ValueFormatError.copy(
       message = "The value must be an integer between 1 and 99999999999",
       paths = Some(
@@ -279,7 +284,6 @@ class Def2_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         "/losses/setAgainstInYearGains",
         "/losses/setAgainstEarlierYear",
         "/losses/lossesToCarryForward",
-        "/adjustments/adjustmentAmount",
         "/lifetimeAllowance/lifetimeAllowanceBadr",
         "/lifetimeAllowance/lifetimeAllowanceInv"
       )

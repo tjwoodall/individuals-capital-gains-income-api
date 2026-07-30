@@ -23,7 +23,7 @@ import common.errors.*
 import play.api.libs.json.*
 import support.UnitSpec
 import v3.otherCgt.createAmend.def2.fixture.Def2_CreateAmendOtherCgtFixture.*
-import v3.otherCgt.createAmend.def2.model.request.Def2_CreateAmendOtherCgtRequestData
+import v3.otherCgt.createAmend.def2.model.request.{Def2_CreateAmendOtherCgtRequestBody, Def2_CreateAmendOtherCgtRequestData}
 import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
 class Def2_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValidators {
@@ -68,19 +68,35 @@ class Def2_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
     updateArrayOrObjectField(gainPath, JsNull, json)
   }
 
-  private def validator(nino: String = validNino, taxYear: String = validTaxYear, body: JsValue = fullRequestBodyMtdJson) =
+  private def validator(nino: String = validNino,
+                        taxYear: String = validTaxYear,
+                        body: JsValue = fullRequestBodyMtdJson,
+                        r22CgtEnabled: Boolean = true) =
     new Def2_CreateAmendOtherCgtValidator(
       nino = nino,
       taxYear = taxYear,
-      body = body
+      body = body,
+      r22CgtEnabled = r22CgtEnabled
     )
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request with past disposalDates within a non-future tax year" in {
+      "a valid request is supplied" in {
         val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator().validateAndWrapResult()
 
         result shouldBe Right(Def2_CreateAmendOtherCgtRequestData(parsedNino, parsedTaxYear, fullRequestBodyModel))
+      }
+
+      "a valid request with a negative adjustmentAmount is supplied when r22 cgt feature switch is enabled" in {
+        val requestBodyJson: JsValue = updateArrayOrObjectField("/adjustments/adjustmentAmount", JsNumber(-1.99))
+
+        val requestBodyModel: Def2_CreateAmendOtherCgtRequestBody = fullRequestBodyModel.copy(
+          adjustments = fullRequestBodyModel.adjustments.map(_.copy(adjustmentAmount = Some(-1.99)))
+        )
+
+        val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(body = requestBodyJson).validateAndWrapResult()
+
+        result shouldBe Right(Def2_CreateAmendOtherCgtRequestData(parsedNino, parsedTaxYear, requestBodyModel))
       }
     }
 
@@ -305,7 +321,6 @@ class Def2_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
         ("/losses/setAgainstInYearGains", "decimal"),
         ("/losses/setAgainstEarlierYear", "decimal"),
         ("/losses/lossesToCarryForward", "decimal"),
-        ("/adjustments/adjustmentAmount", "decimal"),
         ("/lifetimeAllowance/lifetimeAllowanceBadr", "decimal"),
         ("/lifetimeAllowance/lifetimeAllowanceInv", "decimal")
       ).foreach { case (fieldPath, fieldType) =>
@@ -327,6 +342,17 @@ class Def2_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
 
           result shouldBe Left(ErrorWrapper(correlationId, expectedError))
         }
+      }
+
+      "passed a body with a negative adjustmentAmount when r22 cgt feature switch is disabled" in {
+        val invalidJson: JsValue = updateArrayOrObjectField("/adjustments/adjustmentAmount", JsNumber(-1.99))
+
+        val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(
+          body = invalidJson,
+          r22CgtEnabled = false
+        ).validateAndWrapResult()
+
+        result shouldBe Left(ErrorWrapper(correlationId, ValueFormatError.withPath("/adjustments/adjustmentAmount")))
       }
     }
 

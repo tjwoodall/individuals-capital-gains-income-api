@@ -25,7 +25,6 @@ case class Def3_CreateAmendOtherCgtRequestBody(cryptoassets: Option[Seq[Cryptoas
                                                unlistedShares: Option[Seq[UnlistedShares]],
                                                gainExcludedIndexedSecurities: Option[GainExcludedIndexedSecurities],
                                                qualifyingAssetHoldingCompany: Option[QualifyingAssetHoldingCompany],
-                                               nonStandardGains: Option[NonStandardGains],
                                                losses: Option[Losses],
                                                adjustments: Option[Adjustments],
                                                lifetimeAllowance: Option[LifetimeAllowance])
@@ -40,7 +39,6 @@ object Def3_CreateAmendOtherCgtRequestBody {
       (JsPath \ "unlistedShares").writeNullable[Seq[UnlistedShares]] and
       (JsPath \ "gainExcludedIndexedSecurities").writeNullable[GainExcludedIndexedSecurities] and
       (JsPath \ "qualifyingAssetHoldingCompany").writeNullable[QualifyingAssetHoldingCompany] and
-      (JsPath \ "nonStandardGains").writeNullable[NonStandardGains] and
       (JsPath \ "losses").writeNullable[Losses] and
       (JsPath \ "adjustments").writeNullable[Adjustments] and
       (JsPath \ "lifeTimeAllowance").writeNullable[LifetimeAllowance]

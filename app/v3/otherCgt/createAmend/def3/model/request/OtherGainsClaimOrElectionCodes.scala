@@ -19,9 +19,12 @@ package v3.otherCgt.createAmend.def3.model.request
 import api.utils.enums.Enums
 
 enum OtherGainsClaimOrElectionCodes {
-  case GHO, ROR, PRO, ESH, NVC, OTH, BAD, INV, EOT, PRR, LET
+  case GHO, ROR, PRO, ESH, NVC, OTH, BAD, INV, EOT, PRR, LET, INC
 }
 
 object OtherGainsClaimOrElectionCodes {
-  val parser: PartialFunction[String, OtherGainsClaimOrElectionCodes] = Enums.parser(values)
+  val parser: PartialFunction[String, OtherGainsClaimOrElectionCodes]           = Enums.parser(values)
+  val parserWithoutInc: PartialFunction[String, OtherGainsClaimOrElectionCodes] = Enums.parser(values.filterNot(_ == INC))
+
+  def parserFor(r22CgtEnabled: Boolean): PartialFunction[String, OtherGainsClaimOrElectionCodes] = if (r22CgtEnabled) parser else parserWithoutInc
 }

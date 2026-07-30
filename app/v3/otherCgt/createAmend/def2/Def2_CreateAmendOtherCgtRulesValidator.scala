@@ -16,7 +16,6 @@
 
 package v3.otherCgt.createAmend.def2
 
-import api.controllers.validators.RulesValidator
 import api.controllers.validators.resolvers.*
 import api.models.domain.TaxYear
 import api.models.errors.{DateFormatError, MtdError}
@@ -29,15 +28,23 @@ import v3.otherCgt.createAmend.def2.model.request.*
 
 import java.time.LocalDate
 
-object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_CreateAmendOtherCgtRequestData] {
+object Def2_CreateAmendOtherCgtRulesValidator extends ResolverSupport {
 
   private val assetDescriptionAndTokenNameRegex = "^[0-9a-zA-Z{À-˿'}\\- _&`():.'^]{1,90}$".r
   private val companyNameRegex                  = "^.{0,160}$".r
   private val companyRegistrationNumberRegex    = "^(?:\\d{8}|[A-Za-z]{2}\\d{6})$".r
   private val resolveParsedNumber               = ResolveParsedNumber()
+  private val resolveMaybeNegativeParsedNumber  = ResolveParsedNumber(min = -99999999999.99)
   private val resolveBigInteger                 = ResolveBigInteger(1, 99999999999L)
 
-  def validateBusinessRules(parsed: Def2_CreateAmendOtherCgtRequestData): Validated[Seq[MtdError], Def2_CreateAmendOtherCgtRequestData] = {
+  private def combine(results: Validated[Seq[MtdError], ?]*): Validated[Seq[MtdError], Unit] =
+    results.traverse_(identity)
+
+  private def resolveEnum[A](parser: PartialFunction[String, A], error: => MtdError): Resolver[String, A] =
+    resolvePartialFunction(error)(parser)
+
+  def validateBusinessRules(parsed: Def2_CreateAmendOtherCgtRequestData,
+                            r22CgtEnabled: Boolean): Validated[Seq[MtdError], Def2_CreateAmendOtherCgtRequestData] = {
     import parsed.body.*
 
     combine(
@@ -48,7 +55,7 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
       validateQualifyingAssetHoldingCompany(qualifyingAssetHoldingCompany),
       validateNonStandardGains(nonStandardGains),
       validateLosses(losses),
-      validateAdjustments(adjustments),
+      validateAdjustments(adjustments, r22CgtEnabled),
       validateLifetimeAllowance(lifetimeAllowance)
     ).map(_ => parsed)
   }
@@ -415,9 +422,11 @@ object Def2_CreateAmendOtherCgtRulesValidator extends RulesValidator[Def2_Create
     }
   }
 
-  private def validateAdjustments(adjustments: Option[Adjustments]): Validated[Seq[MtdError], Unit] = {
+  private def validateAdjustments(adjustments: Option[Adjustments], r22CgtEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
     adjustments.fold(Valid(())) { adjustments =>
-      resolveParsedNumber(adjustments.adjustmentAmount, "/adjustments/adjustmentAmount").map(_ => ())
+      val resolver: ResolveParsedNumber = if (r22CgtEnabled) resolveMaybeNegativeParsedNumber else resolveParsedNumber
+
+      resolver(adjustments.adjustmentAmount, "/adjustments/adjustmentAmount").map(_ => ())
     }
   }
 

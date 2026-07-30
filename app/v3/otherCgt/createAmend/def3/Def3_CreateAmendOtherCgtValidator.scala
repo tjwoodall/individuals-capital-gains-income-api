@@ -27,7 +27,7 @@ import v3.otherCgt.createAmend.def3.Def3_CreateAmendOtherCgtRulesValidator.valid
 import v3.otherCgt.createAmend.def3.model.request.{Def3_CreateAmendOtherCgtRequestBody, Def3_CreateAmendOtherCgtRequestData}
 import v3.otherCgt.createAmend.model.request.CreateAmendOtherCgtRequestData
 
-class Def3_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsValue, temporalValidationEnabled: Boolean)
+class Def3_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsValue, temporalValidationEnabled: Boolean, r22CgtEnabled: Boolean)
     extends Validator[CreateAmendOtherCgtRequestData] {
 
   private lazy val resolveJson = new ResolveNonEmptyJsonObject[Def3_CreateAmendOtherCgtRequestBody]()
@@ -38,7 +38,7 @@ class Def3_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsV
       resolveJson(body)
     ).mapN((validNino, validBody) => Def3_CreateAmendOtherCgtRequestData(validNino, TaxYear.fromMtd(taxYear), validBody))
       .andThen { (parsed: Def3_CreateAmendOtherCgtRequestData) =>
-        validateBusinessRules(parsed, temporalValidationEnabled)
+        validateBusinessRules(parsed, temporalValidationEnabled, r22CgtEnabled)
       }
 
 }

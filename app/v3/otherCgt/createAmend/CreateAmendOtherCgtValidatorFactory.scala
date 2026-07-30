@@ -16,7 +16,7 @@
 
 package v3.otherCgt.createAmend
 
-import api.config.AppConfig
+import api.config.{AppConfig, ConfigFeatureSwitches}
 import api.controllers.validators.Validator
 import cats.data.Validated.{Invalid, Valid}
 import play.api.libs.json.JsValue
@@ -32,12 +32,13 @@ import javax.inject.{Inject, Singleton}
 class CreateAmendOtherCgtValidatorFactory @Inject() (implicit appConfig: AppConfig) {
 
   def validator(nino: String, taxYear: String, body: JsValue, temporalValidationEnabled: Boolean): Validator[CreateAmendOtherCgtRequestData] = {
-    val schema = CreateAmendOtherCgtSchema.schemaFor(taxYear)
+    val schema        = CreateAmendOtherCgtSchema.schemaFor(taxYear)
+    val r22CgtEnabled = ConfigFeatureSwitches().isEnabled("r22_cgt")
 
     schema match {
       case Valid(Def1)     => new Def1_CreateAmendOtherCgtValidator(nino, taxYear, body)
-      case Valid(Def2)     => new Def2_CreateAmendOtherCgtValidator(nino, taxYear, body)
-      case Valid(Def3)     => new Def3_CreateAmendOtherCgtValidator(nino, taxYear, body, temporalValidationEnabled)
+      case Valid(Def2)     => new Def2_CreateAmendOtherCgtValidator(nino, taxYear, body, r22CgtEnabled)
+      case Valid(Def3)     => new Def3_CreateAmendOtherCgtValidator(nino, taxYear, body, temporalValidationEnabled, r22CgtEnabled)
       case Invalid(errors) => Validator.returningErrors(errors)
     }
   }

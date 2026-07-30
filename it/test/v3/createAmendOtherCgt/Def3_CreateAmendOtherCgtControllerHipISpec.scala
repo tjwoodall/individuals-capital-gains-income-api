@@ -218,12 +218,6 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |    "gainsFromQahcBeforeLosses": 99999999999.999,
       |    "lossesFromQahc": -99999999999.99
       |  },
-      |  "nonStandardGains": {
-      |    "attributedGains": 99999999999.999,
-      |    "attributedGainsRttTaxPaid": -99999999999.99,
-      |    "otherGains": 99999999999.999,
-      |    "otherGainsRttTaxPaid": -99999999999.99
-      |  },
       |  "losses": {
       |    "broughtForwardLossesUsedInCurrentYear": 99999999999.999,
       |    "setAgainstInYearGains": -99999999999.99,
@@ -231,7 +225,7 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       |    "lossesToCarryForward": -99999999999.99
       |  },
       |  "adjustments": {
-      |    "adjustmentAmount": -99999999999.99
+      |    "adjustmentAmount": -99999999999.999
       |  },
       |  "lifetimeAllowance": {
       |    "lifetimeAllowanceBadr": -99999999999.99,
@@ -272,6 +266,11 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       )
     ),
     TokenNameFormatError.withPath("/cryptoassets/0/tokenName"),
+    ValueFormatError.forPathAndRange(
+      path = "/adjustments/adjustmentAmount",
+      min = "-99999999999.99",
+      max = "99999999999.99"
+    ),
     ValueFormatError.copy(
       message = "The value must be an integer between 1 and 99999999999",
       paths = Some(
@@ -318,15 +317,10 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         "/gainExcludedIndexedSecurities/gainsFromExcludedSecurities",
         "/qualifyingAssetHoldingCompany/gainsFromQahcBeforeLosses",
         "/qualifyingAssetHoldingCompany/lossesFromQahc",
-        "/nonStandardGains/attributedGains",
-        "/nonStandardGains/attributedGainsRttTaxPaid",
-        "/nonStandardGains/otherGains",
-        "/nonStandardGains/otherGainsRttTaxPaid",
         "/losses/broughtForwardLossesUsedInCurrentYear",
         "/losses/setAgainstInYearGains",
         "/losses/setAgainstEarlierYear",
         "/losses/lossesToCarryForward",
-        "/adjustments/adjustmentAmount",
         "/lifetimeAllowance/lifetimeAllowanceBadr",
         "/lifetimeAllowance/lifetimeAllowanceInv"
       )
@@ -367,7 +361,6 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
       "/unlistedShares",
       "/gainExcludedIndexedSecurities",
       "/qualifyingAssetHoldingCompany",
-      "/nonStandardGains",
       "/losses",
       "/adjustments",
       "/lifetimeAllowance"
@@ -441,7 +434,6 @@ class Def3_CreateAmendOtherCgtControllerHipISpec extends IntegrationBaseSpec wit
         )
 
         val response: WSResponse = await(request.put(fullRequestBodyMtdJson))
-        println(Json.prettyPrint(fullRequestBodyMtdJson))
         response.status shouldBe NO_CONTENT
       }
 

@@ -19,9 +19,12 @@ package v3.otherCgt.createAmend.def3.model.request
 import api.utils.enums.Enums
 
 enum UnlistedSharesClaimOrElectionCodes {
-  case GHO, ROR, PRO, NVC, ESH, OTH, BAD, INV, EOT
+  case GHO, ROR, PRO, NVC, ESH, OTH, BAD, INV, EOT, INC
 }
 
 object UnlistedSharesClaimOrElectionCodes {
-  val parser: PartialFunction[String, UnlistedSharesClaimOrElectionCodes] = Enums.parser(values)
+  val parser: PartialFunction[String, UnlistedSharesClaimOrElectionCodes]           = Enums.parser(values)
+  val parserWithoutInc: PartialFunction[String, UnlistedSharesClaimOrElectionCodes] = Enums.parser(values.filterNot(_ == INC))
+
+  def parserFor(r22CgtEnabled: Boolean): PartialFunction[String, UnlistedSharesClaimOrElectionCodes] = if (r22CgtEnabled) parser else parserWithoutInc
 }

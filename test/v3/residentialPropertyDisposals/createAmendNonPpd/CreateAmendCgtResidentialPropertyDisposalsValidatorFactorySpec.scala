@@ -35,7 +35,7 @@ class CreateAmendCgtResidentialPropertyDisposalsValidatorFactorySpec extends Uni
       .anyNumberOfTimes()
 
     MockedAppConfig.featureSwitchConfig
-      .returns(Configuration("r22CgtEnabled" -> true))
+      .returns(Configuration("r22_cgt.enabled" -> true))
 
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,13 +91,6 @@ object Def3_CreateAmendOtherCgtFixture {
     lossesFromQahc = Some(99999999999.99)
   )
 
-  val nonStandardGainsModel: NonStandardGains = NonStandardGains(
-    attributedGains = Some(99999999999.99),
-    attributedGainsRttTaxPaid = Some(99999999999.99),
-    otherGains = Some(99999999999.99),
-    otherGainsRttTaxPaid = Some(99999999999.99)
-  )
-
   val lossesModel: Losses = Losses(
     broughtForwardLossesUsedInCurrentYear = Some(99999999999.99),
     setAgainstInYearGains = Some(99999999999.99),
@@ -120,7 +113,6 @@ object Def3_CreateAmendOtherCgtFixture {
     unlistedShares = Some(Seq(unlistedSharesModel)),
     gainExcludedIndexedSecurities = Some(gainExcludedIndexedSecuritiesModel),
     qualifyingAssetHoldingCompany = Some(qualifyingAssetHoldingCompanyModel),
-    nonStandardGains = Some(nonStandardGainsModel),
     losses = Some(lossesModel),
     adjustments = Some(adjustmentsModel),
     lifetimeAllowance = Some(lifetimeAllowanceModel)
@@ -214,17 +206,6 @@ object Def3_CreateAmendOtherCgtFixture {
     """.stripMargin
   )
 
-  val nonStandardGainsJson: JsValue = Json.parse(
-    """
-      |{
-      |  "attributedGains": 99999999999.99,
-      |  "attributedGainsRttTaxPaid": 99999999999.99,
-      |  "otherGains": 99999999999.99,
-      |  "otherGainsRttTaxPaid": 99999999999.99
-      |}
-    """.stripMargin
-  )
-
   val lossesJson: JsValue = Json.parse(
     """
       |{
@@ -261,7 +242,6 @@ object Def3_CreateAmendOtherCgtFixture {
       |  "unlistedShares": [$unlistedSharesMtdJson],
       |  "gainExcludedIndexedSecurities": $gainExcludedIndexedSecuritiesJson,
       |  "qualifyingAssetHoldingCompany": $qualifyingAssetHoldingCompanyMtdJson,
-      |  "nonStandardGains": $nonStandardGainsJson,
       |  "losses": $lossesJson,
       |  "adjustments": $adjustmentsJson,
       |  "lifetimeAllowance": $lifetimeAllowanceMtdJson
@@ -277,7 +257,6 @@ object Def3_CreateAmendOtherCgtFixture {
       |  "unlistedShares": [],
       |  "gainExcludedIndexedSecurities": {},
       |  "qualifyingAssetHoldingCompany": {},
-      |  "nonStandardGains": {},
       |  "losses": {},
       |  "adjustments": {},
       |  "lifetimeAllowance": {}
