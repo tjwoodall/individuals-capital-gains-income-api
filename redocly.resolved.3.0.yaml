@@ -256,7 +256,7 @@ paths:
                       - customerAddedDisposals
                     additionalProperties: false
                   - $schema: http://json-schema.org/draft-04/schema#
-                    title: TY 2025-26 onwards
+                    title: TY 2025-26  onwards
                     type: object
                     properties:
                       customerAddedDisposals:
@@ -267,7 +267,7 @@ paths:
                             description: The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`
                             type: string
                             format: date-time
-                            example: '2020-07-07T10:59:47.544Z'
+                            example: '2025-07-07T10:59:47.544Z'
                           disposals:
                             type: array
                             description: An array of residential property disposals.
@@ -649,7 +649,7 @@ paths:
                   required:
                     - disposals
                 - $schema: http://json-schema.org/draft-04/schema#
-                  title: TY 2025-26 onwards
+                  title: TY 2025-26  onwards
                   type: object
                   properties:
                     disposals:
@@ -2615,7 +2615,7 @@ paths:
                         type: string
                         description: The date the disposals were submitted to the 'Report and pay Capital Gains Tax on UK property' service. It is in the format `YYYY-MM-DDThh:mm:ssZ`.
                         format: date-time
-                        example: '2020-07-06T09:37:17Z'
+                        example: '2026-02-07T16:18:44.403Z'
                       cryptoassets:
                         type: array
                         description: An array of cryptoassets entries.
