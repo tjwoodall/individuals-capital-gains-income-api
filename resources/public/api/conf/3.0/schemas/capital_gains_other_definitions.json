@@ -104,6 +104,23 @@
         ]
       }
     },
+    "claimOrElectionCodesCryptoassets2627": {
+      "type": "array",
+      "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INC** - Incorporation Relief",
+      "items":{
+        "type": "string",
+        "example": "[\"BAD\",\"OTH\",\"INC\"]",
+        "enum":[
+          "GHO",
+          "ROR",
+          "PRO",
+          "NVC",
+          "OTH",
+          "BAD",
+          "INC"
+        ]
+      }
+    },
     "claimOrElectionCodesUnlistedShares": {
       "type": "array",
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **ESH** - Employee Shares\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust",
@@ -120,6 +137,26 @@
           "BAD",
           "INV",
           "EOT"
+        ]
+      }
+    },
+    "claimOrElectionCodesUnlistedShares2627": {
+      "type": "array",
+      "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **ESH** - Employee Shares\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust\n\n* **INC** - Incorporation Relief",
+      "items":{
+        "type": "string",
+        "example": "[\"BAD\",\"OTH\",\"INC\"]",
+        "enum":[
+          "GHO",
+          "ROR",
+          "PRO",
+          "NVC",
+          "ESH",
+          "OTH",
+          "BAD",
+          "INV",
+          "EOT",
+          "INC"
         ]
       }
     },
@@ -237,6 +274,74 @@
               "BAD",
               "INV",
               "EOT"
+            ]
+          }
+        }
+      ]
+    },
+    "claimOrElectionCodesOtherGains2627": {
+      "description": "The claim, election or notice codes related to the disposal. \n\nPossible values for listed shares are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust\n\n* **INC** - Incorporation Relief\n\nPossible values for non-uk residential property are:\n\n* **PRR** - Private Residence Relief where Letting Relief does not apply\n\n* **LET** - Private Residence Relief where Letting Relief applies\n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **EOT** - Employee Ownership Trust\n\n* **INC** - Incorporation Relief\n\nPossible values for other property and other assets are:\n\n* **PRR** - Private Residence Relief where Letting Relief does not apply\n\n* **LET** - Private Residence Relief where Letting Relief applies\n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **ESH** - Employee Shares\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust\n\n* **INC** - Incorporation Relief",
+      "anyOf": [
+        {
+          "type": "array",
+          "title": "For listed shares",
+          "items": {
+            "type": "string",
+            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "enum": [
+              "GHO",
+              "ROR",
+              "PRO",
+              "ESH",
+              "NVC",
+              "OTH",
+              "BAD",
+              "INV",
+              "EOT",
+              "INC"
+            ]
+          }
+        },
+        {
+          "type": "array",
+          "title": "For non-uk residential property",
+          "items": {
+            "type": "string",
+            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "enum": [
+              "PRR",
+              "LET",
+              "GHO",
+              "ROR",
+              "PRO",
+              "ESH",
+              "NVC",
+              "OTH",
+              "BAD",
+              "EOT",
+              "INC"
+            ]
+          }
+        },
+        {
+          "type": "array",
+          "title": "For other property and other assets",
+          "items": {
+            "type": "string",
+            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "enum": [
+              "PRR",
+              "LET",
+              "GHO",
+              "ROR",
+              "PRO",
+              "ESH",
+              "NVC",
+              "OTH",
+              "BAD",
+              "INV",
+              "EOT",
+              "INC"
             ]
           }
         }
@@ -386,12 +491,20 @@
       "minimum": 0,
       "maximum": 99999999999.99
     },
-    "adjustmentAmount": {
+    "adjustmentAmount2526": {
       "type": "number",
       "description": "The amount of included adjustments to increase the Capital Gains Tax payable.\n\nThe value must be between 0 and 99999999999.99 up to 2 decimal places.",
       "example": 1999.99,
       "multipleOf": 0.01,
       "minimum": 0,
+      "maximum": 99999999999.99
+    },
+    "adjustmentAmount": {
+      "type": "number",
+      "description": "The amount of included adjustments to increase the Capital Gains Tax payable.\n\nThe value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.",
+      "example": 1999.99,
+      "multipleOf": 0.01,
+      "minimum": -99999999999.99,
       "maximum": 99999999999.99
     },
     "lifetimeAllowanceBadr": {
@@ -427,6 +540,39 @@
           "gainsBeforeLosses" : {"$ref": "#/definitions/gainsBeforeLosses"},
           "losses" : {"$ref": "#/definitions/lossesField"},
           "claimOrElectionCodes" : {"$ref": "#/definitions/claimOrElectionCodesCryptoassets"},
+          "amountOfNetGain" : {"$ref": "#/definitions/amountOfNetGain"},
+          "amountOfNetLoss" : {"$ref": "#/definitions/amountOfNetLoss"},
+          "rttTaxPaid" : {"$ref": "#/definitions/rttTaxPaid"}
+        },
+        "required": [
+          "numberOfDisposals",
+          "assetDescription",
+          "tokenName",
+          "acquisitionDate",
+          "disposalDate",
+          "disposalProceeds",
+          "allowableCosts",
+          "gainsBeforeLosses"
+        ]
+      }
+    },
+    "cryptoassets2627": {
+      "type": "array",
+      "description": "An array of cryptoassets entries.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "numberOfDisposals" : {"$ref": "#/definitions/cryptoNumberOfDisposals"},
+          "assetDescription" : {"$ref": "#/definitions/assetDescription"},
+          "tokenName" : {"$ref": "#/definitions/tokenName"},
+          "acquisitionDate" : {"$ref": "#/definitions/acquisitionDate"},
+          "disposalDate" : {"$ref": "#/definitions/disposalDate"},
+          "disposalProceeds" : {"$ref": "#/definitions/disposalProceeds"},
+          "allowableCosts" : {"$ref": "#/definitions/allowableCosts"},
+          "gainsWithBadr" : {"$ref": "#/definitions/gainsWithBadr"},
+          "gainsBeforeLosses" : {"$ref": "#/definitions/gainsBeforeLosses"},
+          "losses" : {"$ref": "#/definitions/lossesField"},
+          "claimOrElectionCodes" : {"$ref": "#/definitions/claimOrElectionCodesCryptoassets2627"},
           "amountOfNetGain" : {"$ref": "#/definitions/amountOfNetGain"},
           "amountOfNetLoss" : {"$ref": "#/definitions/amountOfNetLoss"},
           "rttTaxPaid" : {"$ref": "#/definitions/rttTaxPaid"}
@@ -479,6 +625,42 @@
         ]
       }
     },
+    "otherGains2627": {
+      "type": "array",
+      "description": "An array of other gains entries.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "assetType" : {"$ref": "#/definitions/assetType"},
+          "numberOfDisposals" : {"$ref": "#/definitions/otherGainsNumberOfDisposals"},
+          "assetDescription" : {"$ref": "#/definitions/assetDescription"},
+          "companyName" : {"$ref": "#/definitions/companyName"},
+          "companyRegistrationNumber" : {"$ref": "#/definitions/companyRegistrationNumber"},
+          "acquisitionDate" : {"$ref": "#/definitions/acquisitionDate"},
+          "disposalDate" : {"$ref": "#/definitions/disposalDate"},
+          "disposalProceeds" : {"$ref": "#/definitions/disposalProceeds"},
+          "allowableCosts" : {"$ref": "#/definitions/allowableCosts"},
+          "gainsWithBadr" : {"$ref": "#/definitions/gainsWithBadr"},
+          "gainsWithInv" : {"$ref": "#/definitions/gainsWithInv"},
+          "gainsBeforeLosses" : {"$ref": "#/definitions/gainsBeforeLosses"},
+          "losses" : {"$ref": "#/definitions/lossesField"},
+          "claimOrElectionCodes" : {"$ref": "#/definitions/claimOrElectionCodesOtherGains2627"},
+          "amountOfNetGain" : {"$ref": "#/definitions/amountOfNetGain"},
+          "amountOfNetLoss" : {"$ref": "#/definitions/amountOfNetLoss"},
+          "rttTaxPaid" : {"$ref": "#/definitions/rttTaxPaid"}
+        },
+        "required": [
+          "assetType",
+          "numberOfDisposals",
+          "assetDescription",
+          "acquisitionDate",
+          "disposalDate",
+          "disposalProceeds",
+          "allowableCosts",
+          "gainsBeforeLosses"
+        ]
+      }
+    },
     "unlistedShares": {
       "type": "array",
       "description": "An array of unlisted shares entries.",
@@ -498,6 +680,46 @@
           "gainsBeforeLosses" : {"$ref": "#/definitions/gainsBeforeLosses"},
           "losses" : {"$ref": "#/definitions/lossesField"},
           "claimOrElectionCodes" : {"$ref": "#/definitions/claimOrElectionCodesUnlistedShares"},
+          "gainsReportedOnRtt" : {"$ref": "#/definitions/gainsReportedOnRtt"},
+          "gainsExceedingLifetimeLimit" : {"$ref": "#/definitions/gainsExceedingLifetimeLimit"},
+          "gainsUnderSeis" : {"$ref": "#/definitions/gainsUnderSeis"},
+          "lossUsedAgainstGeneralIncome" : {"$ref": "#/definitions/lossUsedAgainstGeneralIncome"},
+          "eisOrSeisReliefDueCurrentYear" : {"$ref": "#/definitions/eisOrSeisReliefDueCurrentYear"},
+          "lossesUsedAgainstGeneralIncomePreviousYear" : {"$ref": "#/definitions/lossesUsedAgainstGeneralIncomePreviousYear"},
+          "eisOrSeisReliefDuePreviousYear" : {"$ref": "#/definitions/eisOrSeisReliefDuePreviousYear"},
+          "rttTaxPaid" : {"$ref": "#/definitions/rttTaxPaid"}
+        },
+        "required": [
+          "numberOfDisposals",
+          "assetDescription",
+          "companyName",
+          "acquisitionDate",
+          "disposalDate",
+          "disposalProceeds",
+          "allowableCosts",
+          "gainsBeforeLosses"
+        ]
+      }
+    },
+    "unlistedShares2627": {
+      "type": "array",
+      "description": "An array of unlisted shares entries.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "numberOfDisposals" : {"$ref": "#/definitions/unlistedNumberOfDisposals"},
+          "assetDescription" : {"$ref": "#/definitions/assetDescription"},
+          "companyName" : {"$ref": "#/definitions/companyName"},
+          "companyRegistrationNumber" : {"$ref": "#/definitions/companyRegistrationNumber"},
+          "acquisitionDate" : {"$ref": "#/definitions/acquisitionDate"},
+          "disposalDate" : {"$ref": "#/definitions/disposalDate"},
+          "disposalProceeds" : {"$ref": "#/definitions/disposalProceeds"},
+          "allowableCosts" : {"$ref": "#/definitions/allowableCosts"},
+          "gainsWithBadr" : {"$ref": "#/definitions/gainsWithBadr"},
+          "gainsWithInv" : {"$ref": "#/definitions/gainsWithInv"},
+          "gainsBeforeLosses" : {"$ref": "#/definitions/gainsBeforeLosses"},
+          "losses" : {"$ref": "#/definitions/lossesField"},
+          "claimOrElectionCodes" : {"$ref": "#/definitions/claimOrElectionCodesUnlistedShares2627"},
           "gainsReportedOnRtt" : {"$ref": "#/definitions/gainsReportedOnRtt"},
           "gainsExceedingLifetimeLimit" : {"$ref": "#/definitions/gainsExceedingLifetimeLimit"},
           "gainsUnderSeis" : {"$ref": "#/definitions/gainsUnderSeis"},
@@ -555,6 +777,13 @@
       }
     },
     "adjustments2526": {
+      "type": "object",
+      "description": "Object containing details of Capital Gains Tax adjustment amounts.",
+      "properties": {
+        "adjustmentAmount" : {"$ref": "#/definitions/adjustmentAmount2526"}
+      }
+    },
+    "adjustments2627": {
       "type": "object",
       "description": "Object containing details of Capital Gains Tax adjustment amounts.",
       "properties": {

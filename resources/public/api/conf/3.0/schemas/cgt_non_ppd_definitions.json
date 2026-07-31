@@ -146,6 +146,26 @@
         ]
       }
     },
+    "claimOrElectionCodes2627": {
+      "type": "array",
+      "description": "The claim, election or notice codes related to the disposal.\n\nPossible values are: \n\n* **PRR**: Private Residence Relief where Letting Relief does not apply \n\n* **LET**: Private Residence Relief where Letting Relief applies\n\n* **GHO**: Gift Hold-Over Relief\n\n* **ROR**: Rollover Relief \n\n* **PRO**: Provisional Rollover Relief\n\n* **BAD**: Business Asset Disposal Relief \n\n* **NVC**: Negligible Value Claims\n\n* **OTH**: Other claims\n\n* **INC**: Incorporation Relief",
+      "items":{
+        "type": "string",
+        "example": "[\"BAD\",\"OTH\",\"INC\"]",
+        "enum":[
+          "INC",
+          "PRR",
+          "LET",
+          "GHO",
+          "ROR",
+          "PRO",
+          "BAD",
+          "NVC",
+          "OTH",
+          "INC"
+        ]
+      }
+    },
     "disposals": {
       "type": "object",
       "properties": {
@@ -190,6 +210,37 @@
         "gainsBeforeLosses": {"$ref": "#/definitions/gainsBeforeLosses"},
         "lossesFromThisYear": {"$ref": "#/definitions/lossesFromThisYear"},
         "claimOrElectionCodes": {"$ref": "#/definitions/claimOrElectionCodes"},
+        "amountOfNetGain": {"$ref": "#/definitions/amountOfNetGain"},
+        "amountOfNetLoss": {"$ref": "#/definitions/amountOfNetLoss"}
+      },
+      "required": [
+        "numberOfDisposals",
+        "disposalDate",
+        "completionDate",
+        "disposalProceeds",
+        "acquisitionDate",
+        "acquisitionAmount",
+        "gainsBeforeLosses"
+      ]
+    },
+    "disposals2627": {
+      "type": "object",
+      "properties": {
+        "numberOfDisposals": {"$ref": "#/definitions/numberOfDisposals"},
+        "customerReference": {"$ref": "#/definitions/customerReference"},
+        "disposalDate": {"$ref": "#/definitions/disposalDate"},
+        "completionDate": {"$ref": "#/definitions/completionDate"},
+        "disposalProceeds": {"$ref": "#/definitions/disposalProceeds"},
+        "acquisitionDate": {"$ref": "#/definitions/acquisitionDate"},
+        "acquisitionAmount": {"$ref": "#/definitions/acquisitionAmount"},
+        "improvementCosts": {"$ref": "#/definitions/improvementCosts"},
+        "additionalCosts": {"$ref": "#/definitions/additionalCosts"},
+        "prfAmount": {"$ref": "#/definitions/prfAmount"},
+        "otherReliefAmount": {"$ref": "#/definitions/otherReliefAmount"},
+        "gainsWithBadr": {"$ref": "#/definitions/gainsWithBadr"},
+        "gainsBeforeLosses": {"$ref": "#/definitions/gainsBeforeLosses"},
+        "lossesFromThisYear": {"$ref": "#/definitions/lossesFromThisYear"},
+        "claimOrElectionCodes": {"$ref": "#/definitions/claimOrElectionCodes2627"},
         "amountOfNetGain": {"$ref": "#/definitions/amountOfNetGain"},
         "amountOfNetLoss": {"$ref": "#/definitions/amountOfNetLoss"}
       },

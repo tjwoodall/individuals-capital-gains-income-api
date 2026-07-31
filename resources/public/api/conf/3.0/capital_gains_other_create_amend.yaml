@@ -37,13 +37,17 @@ requestBody:
         oneOf:
           - $ref: './schemas/capital_gains_other_create_amend/def1/request.json'
           - $ref: './schemas/capital_gains_other_create_amend/def2/request.json'
+          
       examples:
         TY 2024-25 or before:
           value:
             $ref: './examples/capital_gains_other_create_amend/def1/request.json'
+        
         TY 2025-26 onwards:
+        
           value:
             $ref: './examples/capital_gains_other_create_amend/def2/request.json'
+        
 
 responses:
   "204":

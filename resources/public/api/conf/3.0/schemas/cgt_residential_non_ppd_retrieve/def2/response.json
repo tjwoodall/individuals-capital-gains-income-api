@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "TY 2025-26 onwards",
+  "title": "TY 2025-26  onwards",
   "type": "object",
   "properties": {
     "customerAddedDisposals": {
@@ -11,7 +11,7 @@
           "description": "The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
           "type": "string",
           "format": "date-time",
-          "example": "2020-07-07T10:59:47.544Z"
+          "example": "2025-07-07T10:59:47.544Z"
         },
         "disposals": {
           "type": "array",
