@@ -20,6 +20,7 @@ import api.config.AppConfig
 import api.definition.*
 import api.routing.*
 import uk.gov.hmrc.auth.core.ConfidenceLevel
+import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 
 import javax.inject.{Inject, Singleton}
 
@@ -43,11 +44,13 @@ class CgtApiDefinitionFactory @Inject() (override protected val appConfig: AppCo
           APIVersion(
             version = Version2,
             status = buildAPIStatus(Version2),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version2)
           ),
           APIVersion(
             version = Version3,
             status = buildAPIStatus(Version3),
+            access = if (appConfig.controlledAccessEnabled) CONTROLLED else PUBLIC,
             endpointsEnabled = appConfig.endpointsEnabled(Version3)
           )
         ),

@@ -22,6 +22,7 @@ import api.definition.APIStatus.{ALPHA, BETA}
 import api.routing.*
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
+import api.definition.APIAccessType
 
 class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
 
@@ -34,6 +35,7 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
           MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
           MockedAppConfig.apiStatus(version) returns "BETA"
           MockedAppConfig.endpointsEnabled(version) returns true
+          MockedAppConfig.controlledAccessEnabled returns false
           MockedAppConfig.confidenceLevelConfig
             .returns(ConfidenceLevelConfig(confidenceLevel = confidenceLevel, definitionEnabled = true, authValidationEnabled = true))
             .anyNumberOfTimes()
@@ -52,11 +54,13 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
                 APIVersion(
                   version = Version2,
                   status = BETA,
+                  access = APIAccessType.PUBLIC,
                   endpointsEnabled = true
                 ),
                 APIVersion(
                   version = Version3,
                   status = BETA,
+                  access = APIAccessType.PUBLIC,
                   endpointsEnabled = true
                 )
               ),
@@ -82,6 +86,7 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
           MockedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
           MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
           MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+          MockedAppConfig.controlledAccessEnabled.returns(false).anyNumberOfTimes()
           MockedAppConfig.confidenceLevelConfig
             .returns(ConfidenceLevelConfig(confidenceLevel = configCL, definitionEnabled = definitionEnabled, authValidationEnabled = true))
             .anyNumberOfTimes()
@@ -104,6 +109,7 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
         MockedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled.returns(false).anyNumberOfTimes()
 
         val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockAppConfig)
 
@@ -120,10 +126,41 @@ class CgtApiDefinitionFactorySpec extends UnitSpec with MockAppConfig {
         MockedAppConfig.endpointsEnabled(Version1).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
         MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled.returns(false).anyNumberOfTimes()
 
         val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockAppConfig)
 
         apiDefinitionFactory.buildAPIStatus(Version1) shouldBe ALPHA
+      }
+    }
+  }
+
+  "set the access level" when {
+    "the controlled access flag is enabled" should {
+      "to be CONTROLLED" in {
+        MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version3).returns("BETA").anyNumberOfTimes()
+        MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+        MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled.returns(true).anyNumberOfTimes()
+
+        val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockAppConfig)
+        apiDefinitionFactory.definition.api.versions.head.access shouldBe APIAccessType.CONTROLLED
+      }
+    }
+
+    "the controlled access flag is disabled" should {
+      "return PUBLIC" in {
+        MockedAppConfig.apiGatewayContext.returns("individuals/disposals-income").anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version2).returns("BETA").anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version3).returns("BETA").anyNumberOfTimes()
+        MockedAppConfig.endpointsEnabled(Version2).returns(true).anyNumberOfTimes()
+        MockedAppConfig.endpointsEnabled(Version3).returns(true).anyNumberOfTimes()
+        MockedAppConfig.controlledAccessEnabled.returns(false).anyNumberOfTimes()
+
+        val apiDefinitionFactory: CgtApiDefinitionFactory = new CgtApiDefinitionFactory(mockAppConfig)
+        apiDefinitionFactory.definition.api.versions.head.access shouldBe APIAccessType.PUBLIC
       }
     }
   }

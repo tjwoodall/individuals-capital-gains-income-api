@@ -18,10 +18,11 @@ package api.definition
 
 import api.routing.Version3
 import api.utils.UnitSpec
+import api.definition.APIAccessType.PUBLIC
 
 class ApiDefinitionSpec extends UnitSpec {
 
-  private val apiVersion: APIVersion       = APIVersion(Version3, APIStatus.ALPHA, endpointsEnabled = true)
+  private val apiVersion: APIVersion       = APIVersion(Version3, APIStatus.ALPHA, PUBLIC, endpointsEnabled = true)
   private val apiDefinition: APIDefinition = APIDefinition("b", "c", "d", List("category"), List(apiVersion), Some(false))
 
   "APIDefinition" when {
