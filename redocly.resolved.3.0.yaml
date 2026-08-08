@@ -104,7 +104,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *read:self-assessment* scope.
-          schema: &ref_21
+          schema: &ref_23
             type: string
             example: Bearer bb7fed3fe10dd235a2ccda3d50fb
           required: true
@@ -256,7 +256,7 @@ paths:
                       - customerAddedDisposals
                     additionalProperties: false
                   - $schema: http://json-schema.org/draft-04/schema#
-                    title: TY 2025-26  onwards
+                    title: 'TY 2025-26 '
                     type: object
                     properties:
                       customerAddedDisposals:
@@ -426,13 +426,191 @@ paths:
                     required:
                       - customerAddedDisposals
                     additionalProperties: false
+                  - $schema: http://json-schema.org/draft-04/schema#
+                    title: TY 2026-27 onwards [Test Only]
+                    type: object
+                    properties:
+                      customerAddedDisposals:
+                        type: object
+                        description: Residential property disposals that weren't reported via the 'Report and pay Capital Gains Tax on UK property' service and submitted by the customer into ITSA.
+                        properties:
+                          submittedOn:
+                            description: The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`
+                            type: string
+                            format: date-time
+                            example: '2026-07-07T10:59:47.544Z'
+                          disposals:
+                            type: array
+                            description: An array of residential property disposals.
+                            items:
+                              type: object
+                              properties: &ref_11
+                                numberOfDisposals:
+                                  type: integer
+                                  description: The total number of property disposals submitted. The value must be an integer between 1 and 9999.
+                                  example: 199
+                                  multipleOf: 1
+                                  minimum: 1
+                                  maximum: 9999
+                                customerReference:
+                                  type: string
+                                  description: The unique reference for a residential property disposal supplied by the customer. Must not be empty or contain only whitespace.
+                                  example: CGTDISPOSAL01
+                                  pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
+                                disposalDate:
+                                  type: string
+                                  description: The date that contracts were exchanged between the owner and the recipient in the format `YYYY-MM-DD`. The date must fall within the specified taxYear. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last property was disposed of.
+                                  format: date
+                                  example: '2022-02-04'
+                                completionDate:
+                                  type: string
+                                  description: The completion date of the sale or disposal of the property, in the format `YYYY-MM-DD`. The completion date must be within the specific tax year and not in the future. If the specified tax year has not ended, the completion date must be between 7th March and 5th April.
+                                  format: date
+                                  example: '2022-03-08'
+                                disposalProceeds:
+                                  type: number
+                                  description: The total disposal proceeds from the sale of the residential property. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                acquisitionDate:
+                                  type: string
+                                  description: The date the disposed property was acquired, in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first property was acquired.
+                                  format: date
+                                  example: '2018-04-06'
+                                acquisitionAmount:
+                                  type: number
+                                  description: The total amount paid to acquire the property. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                improvementCosts:
+                                  type: number
+                                  description: The total costs to improve the property. Only relates to costs that added value to the property. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                additionalCosts:
+                                  type: number
+                                  description: The total amount of additional costs when the property was acquired (Acquisition Fees) or disposed of (Disposal Fees). It may include fees for surveyors, estate agents and solicitors. If the costs were shared, enter only the amount of that particular owner's share. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 5000.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                prfAmount:
+                                  type: number
+                                  description: The total amount of Private Residence Relief claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                otherReliefAmount:
+                                  type: number
+                                  description: The total amount of other reliefs claimed. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                gainsWithBadr:
+                                  type: number
+                                  description: The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                gainsBeforeLosses:
+                                  type: number
+                                  description: The total amount of gains before losses have been deducted. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                lossesFromThisYear:
+                                  type: number
+                                  description: The amount of Capital Gains Tax losses from other disposals in the current tax year that reduce the overall gain of this disposal. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                claimOrElectionCodes:
+                                  type: array
+                                  description: |-
+                                    The claim, election or notice codes related to the disposal.
+
+                                    Possible values are: 
+
+                                    * **PRR**: Private Residence Relief where Letting Relief does not apply 
+
+                                    * **LET**: Private Residence Relief where Letting Relief applies
+
+                                    * **GHO**: Gift Hold-Over Relief
+
+                                    * **ROR**: Rollover Relief 
+
+                                    * **PRO**: Provisional Rollover Relief
+
+                                    * **BAD**: Business Asset Disposal Relief 
+
+                                    * **NVC**: Negligible Value Claims
+
+                                    * **OTH**: Other claims
+
+                                    * **INC**: Incorporation Relief
+                                  items:
+                                    type: string
+                                    example: '["BAD","OTH","INC"]'
+                                    enum:
+                                      - INC
+                                      - PRR
+                                      - LET
+                                      - GHO
+                                      - ROR
+                                      - PRO
+                                      - BAD
+                                      - NVC
+                                      - OTH
+                                      - INC
+                                amountOfNetGain:
+                                  type: number
+                                  description: The total amount of net gain from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                                amountOfNetLoss:
+                                  type: number
+                                  description: The total amount of net loss from the disposal. Either gain or loss must be populated but not both. The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                                  example: 1999.99
+                                  multipleOf: 0.01
+                                  minimum: 0
+                                  maximum: 99999999999.99
+                              required: &ref_12
+                                - numberOfDisposals
+                                - disposalDate
+                                - completionDate
+                                - disposalProceeds
+                                - acquisitionDate
+                                - acquisitionAmount
+                                - gainsBeforeLosses
+                        required:
+                          - submittedOn
+                          - disposals
+                    required:
+                      - customerAddedDisposals
+                    additionalProperties: false
               examples:
                 TY 2024-25 or before:
                   value:
                     $ref: ./examples/cgt_residential_non_ppd_retrieve/def1/response.json
-                TY 2025-26 onwards:
+                TY 2025-26:
                   value:
                     $ref: ./examples/cgt_residential_non_ppd_retrieve/def2/response.json
+                TY 2026-27 onwards:
+                  value:
+                    $ref: ./examples/cgt_residential_non_ppd_retrieve/def3/response.json
         '400':
           description: Bad request
           headers:
@@ -461,27 +639,27 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: &ref_11
+                  value: &ref_13
                     code: FORMAT_NINO
                     message: The provided NINO is invalid
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: &ref_12
+                  value: &ref_14
                     code: FORMAT_TAX_YEAR
                     message: The provided tax year is invalid
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: &ref_13
+                  value: &ref_15
                     code: RULE_TAX_YEAR_NOT_SUPPORTED
                     message: The tax year specified does not lie within the supported range
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: &ref_14
+                  value: &ref_16
                     code: RULE_TAX_YEAR_RANGE_INVALID
                     message: Tax year range invalid. A tax year range of one year is required
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: &ref_15
+                  value: &ref_17
                     code: RULE_INCORRECT_GOV_TEST_SCENARIO
                     message: The supplied Gov-Test-Scenario is not valid
         '403':
@@ -507,7 +685,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: &ref_16
+                  value: &ref_18
                     code: CLIENT_OR_AGENT_NOT_AUTHORISED
                     message: The client and/or agent is not authorised
         '404':
@@ -531,7 +709,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: &ref_20
+                  value: &ref_22
                     code: MATCHING_RESOURCE_NOT_FOUND
                     message: Matching resource not found
         '422':
@@ -555,7 +733,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: &ref_17
+                  value: &ref_19
                     code: RULE_REQUEST_CANNOT_BE_FULFILLED
                     message: Custom (will vary in production depending on the actual error)
     put:
@@ -611,7 +789,7 @@ paths:
           in: header
           description: |
             Specifies the format of the request body, which must be JSON.
-          schema: &ref_22
+          schema: &ref_24
             type: string
             enum:
               - application/json
@@ -620,7 +798,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: &ref_18
+          schema: &ref_20
             type: string
             example: Bearer bb7fed3fe10dd235a2ccda3d50fb
           required: true
@@ -649,7 +827,7 @@ paths:
                   required:
                     - disposals
                 - $schema: http://json-schema.org/draft-04/schema#
-                  title: TY 2025-26  onwards
+                  title: 'TY 2025-26 '
                   type: object
                   properties:
                     disposals:
@@ -661,13 +839,29 @@ paths:
                         required: *ref_10
                   required:
                     - disposals
+                - $schema: http://json-schema.org/draft-04/schema#
+                  title: TY 2026-27 onwards [Test Only]
+                  type: object
+                  properties:
+                    disposals:
+                      type: array
+                      description: An array of residential property disposals.
+                      items:
+                        type: object
+                        properties: *ref_11
+                        required: *ref_12
+                  required:
+                    - disposals
             examples:
               TY 2024-25 or before:
                 value:
                   $ref: ./examples/cgt_residential_non_ppd_create_amend/def1/request.json
-              TY 2025-26 onwards:
+              TY 2025-26:
                 value:
                   $ref: ./examples/cgt_residential_non_ppd_create_amend/def2/request.json
+              TY 2026-27 onwards:
+                value:
+                  $ref: ./examples/cgt_residential_non_ppd_create_amend/def3/request.json
       responses:
         '204':
           description: No Content
@@ -701,18 +895,18 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 FORMAT_VALUE:
                   description: One or more values have been added with the incorrect format.
-                  value: &ref_23
+                  value: &ref_25
                     code: FORMAT_VALUE
                     message: The value must be between 0 and 99999999999.99
                 FORMAT_DATE:
                   description: The supplied date format is invalid.
-                  value: &ref_24
+                  value: &ref_26
                     code: FORMAT_DATE
                     message: The value must be in the format YYYY-MM-DD
                 FORMAT_CUSTOMER_REF:
@@ -722,15 +916,15 @@ paths:
                     message: The provided customer reference is invalid
                 FORMAT_CLAIM_OR_ELECTION_CODES:
                   description: The format of the supplied claimOrElectionCodes value is invalid.
-                  value: &ref_39
+                  value: &ref_46
                     code: FORMAT_CLAIM_OR_ELECTION_CODES
                     message: The format of the claimOrElectionCodes value is invalid
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_ACQUISITION_DATE_AFTER_DISPOSAL_DATE:
                   description: The acquisitionDate must not be later than disposalDate.
                   value:
@@ -748,20 +942,20 @@ paths:
                     message: The disposalDate must be in the specified tax year
                 RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
                   description: An empty or non-matching body was submitted.
-                  value: &ref_26
+                  value: &ref_28
                     code: RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED
                     message: An empty or non-matching body was submitted
                 RULE_AMOUNT_GAIN_LOSS:
                   description: Either amountOfNetGain or amountOfNetLoss, must be provided but not both.
-                  value: &ref_25
+                  value: &ref_27
                     code: RULE_AMOUNT_GAIN_LOSS
                     message: Either amountOfNetGain or amountOfNetLoss, must be provided but not both
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: &ref_19
+                  value: &ref_21
                     code: RULE_OUTSIDE_AMENDMENT_WINDOW
                     message: You are outside the amendment window
                 RULE_INCORRECT_LOSSES_SUBMITTED:
@@ -792,7 +986,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '422':
           description: Unprocessable Entity
           headers:
@@ -814,7 +1008,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
     delete:
       security:
         - User-Restricted:
@@ -861,7 +1055,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_18
+          schema: *ref_20
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -902,22 +1096,22 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_19
+                  value: *ref_21
         '403':
           description: Forbidden
           headers:
@@ -941,7 +1135,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -963,7 +1157,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: *ref_20
+                  value: *ref_22
         '422':
           description: Unprocessable Entity
           headers:
@@ -985,7 +1179,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
   /individuals/disposals-income/residential-property/{nino}/{taxYear}/ppd:
     get:
       security:
@@ -1051,7 +1245,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *read:self-assessment* scope.
-          schema: *ref_21
+          schema: *ref_23
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -1514,10 +1708,10 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 FORMAT_SOURCE:
                   description: The format of the supplied source is not valid.
                   value:
@@ -1525,13 +1719,13 @@ paths:
                     message: The format of the supplied source is not valid
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
         '403':
           description: Forbidden
           headers:
@@ -1555,7 +1749,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -1577,7 +1771,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: *ref_20
+                  value: *ref_22
         '422':
           description: Unprocessable Entity
           headers:
@@ -1599,7 +1793,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
     put:
       security:
         - User-Restricted:
@@ -1652,13 +1846,13 @@ paths:
           in: header
           description: |
             Specifies the format of the request body, which must be JSON.
-          schema: *ref_22
+          schema: *ref_24
           required: true
         - name: Authorization
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_18
+          schema: *ref_20
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -2038,16 +2232,16 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 FORMAT_VALUE:
                   description: One or more values have been added with the incorrect format.
-                  value: *ref_23
+                  value: *ref_25
                 FORMAT_DATE:
                   description: The supplied date format is invalid.
-                  value: *ref_24
+                  value: *ref_26
                 FORMAT_PPD_SUBMISSION_ID:
                   description: The format of the supplied PPD submission ID is invalid.
                   value:
@@ -2055,13 +2249,13 @@ paths:
                     message: The provided ppdSubmissionId is invalid
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_AMOUNT_GAIN_LOSS:
                   description: Either amountOfNetGain or amountOfNetLoss, must be provided but not both.
-                  value: *ref_25
+                  value: *ref_27
                 RULE_TAX_YEAR_NOT_ENDED:
                   description: The submission has been made before the taxYear it relates to has ended.
                   value:
@@ -2069,7 +2263,7 @@ paths:
                     message: Tax year not ended
                 RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
                   description: An empty or non-matching body was submitted.
-                  value: *ref_26
+                  value: *ref_28
                 RULE_DUPLICATED_PPD_SUBMISSION_ID:
                   description: A PPD submission ID must only be used once.
                   value:
@@ -2082,7 +2276,7 @@ paths:
                     message: A provided ppdSubmissionId is being used for the incorrect disposal type
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_DATE_RANGE_INVALID:
                   description: The date provide is outside of the range 1900-01-01 to 2100-01-01
                   value:
@@ -2090,7 +2284,7 @@ paths:
                     message: The date specified does not lie within the supported range
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_19
+                  value: *ref_21
         '403':
           description: Forbidden
           headers:
@@ -2114,7 +2308,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -2165,7 +2359,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
     delete:
       security:
         - User-Restricted:
@@ -2212,7 +2406,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_18
+          schema: *ref_20
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -2253,22 +2447,22 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_19
+                  value: *ref_21
         '403':
           description: Forbidden
           headers:
@@ -2292,7 +2486,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -2314,7 +2508,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: *ref_20
+                  value: *ref_22
         '422':
           description: Unprocessable Entity
           headers:
@@ -2336,7 +2530,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
   /individuals/disposals-income/other-gains/{nino}/{taxYear}:
     get:
       security:
@@ -2384,7 +2578,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *read:self-assessment* scope.
-          schema: *ref_21
+          schema: *ref_23
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -2420,7 +2614,7 @@ paths:
                       disposals:
                         type: array
                         description: An array of other Capital Gains disposals.
-                        items: &ref_27
+                        items: &ref_34
                           type: object
                           properties:
                             assetType:
@@ -2523,7 +2717,7 @@ paths:
                       nonStandardGains:
                         type: object
                         description: 'One of these fields must be provided: carriedInterestGain, attributedGains or otherGains'
-                        properties: &ref_28
+                        properties: &ref_35
                           carriedInterestGain:
                             type: number
                             description: The total amount of all the carried interest gains. The value must be between 0 and 99999999999.99 up to 2 decimal places.
@@ -2569,7 +2763,7 @@ paths:
                       losses:
                         type: object
                         description: 'Details Capital Gains Tax losses relating to other disposals and non-standard gains. One of these fields must be provided: broughtForwardLossesUsedInCurrentYear, setAgainstInYearGains, setAgainstInYearGeneralIncome or setAgainstEarlierYear'
-                        properties: &ref_29
+                        properties: &ref_36
                           broughtForwardLossesUsedInCurrentYear:
                             type: number
                             description: The total amount of brought forward losses used for the specified tax year. The value must be between 0 and 99999999999.99 up to 2 decimal places.
@@ -2608,7 +2802,7 @@ paths:
                     required:
                       - submittedOn
                   - $schema: http://json-schema.org/draft-04/schema#
-                    title: TY 2025-26 onwards
+                    title: TY 2025-26
                     type: object
                     properties:
                       submittedOn:
@@ -2619,7 +2813,7 @@ paths:
                       cryptoassets:
                         type: array
                         description: An array of cryptoassets entries.
-                        items: &ref_30
+                        items: &ref_37
                           type: object
                           properties:
                             numberOfDisposals:
@@ -2769,13 +2963,13 @@ paths:
                       otherGains:
                         type: array
                         description: An array of other gains entries.
-                        items: &ref_31
+                        items: &ref_38
                           type: object
                           properties:
                             assetType:
                               type: string
                               description: The type of asset being disposed of.
-                              enum:
+                              enum: &ref_29
                                 - other-property
                                 - listed-shares
                                 - other-assets
@@ -3032,7 +3226,7 @@ paths:
                       unlistedShares:
                         type: array
                         description: An array of unlisted shares entries.
-                        items: &ref_32
+                        items: &ref_39
                           type: object
                           properties:
                             numberOfDisposals:
@@ -3256,7 +3450,7 @@ paths:
                       gainExcludedIndexedSecurities:
                         type: object
                         description: Object containing details of gains from excluded indexed securities.
-                        properties: &ref_33
+                        properties: &ref_30
                           gainsFromExcludedSecurities:
                             type: number
                             description: |-
@@ -3270,7 +3464,7 @@ paths:
                       qualifyingAssetHoldingCompany:
                         type: object
                         description: Object containing details of gains and losses from Qualifying Asset Holding Company (QAHC) disposals.
-                        properties: &ref_34
+                        properties: &ref_31
                           gainsFromQahcBeforeLosses:
                             type: number
                             description: |-
@@ -3294,7 +3488,7 @@ paths:
                       nonStandardGains:
                         description: Object containing details of non-standard gains.
                         type: object
-                        properties: &ref_35
+                        properties: &ref_40
                           attributedGains:
                             type: number
                             description: |-
@@ -3338,7 +3532,7 @@ paths:
                       losses:
                         type: object
                         description: Object containing details of Capital Gains Tax losses relating to other disposals and non-standard gains.
-                        properties: &ref_36
+                        properties: &ref_32
                           broughtForwardLossesUsedInCurrentYear:
                             type: number
                             description: |-
@@ -3382,21 +3576,21 @@ paths:
                       adjustments:
                         type: object
                         description: Object containing details of Capital Gains Tax adjustment amounts.
-                        properties: &ref_37
+                        properties: &ref_41
                           adjustmentAmount:
                             type: number
                             description: |-
-                              The amount of included adjustments to increase the Capital Gains Tax payable.
+                              The amount of included adjustments to increase the Capital Gains Tax payable. [Test Only] Negative values are not supported in production.
 
-                              The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.
                             example: 1999.99
                             multipleOf: 0.01
-                            minimum: 0
+                            minimum: -99999999999.99
                             maximum: 99999999999.99
                       lifetimeAllowance:
                         type: object
                         description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
-                        properties: &ref_38
+                        properties: &ref_33
                           lifetimeAllowanceBadr:
                             type: number
                             description: |-
@@ -3419,13 +3613,705 @@ paths:
                             maximum: 99999999999.99
                     required:
                       - submittedOn
+                  - $schema: http://json-schema.org/draft-04/schema#
+                    title: TY 2026-27 onwards [Test Only]
+                    type: object
+                    properties:
+                      submittedOn:
+                        type: string
+                        description: The date the disposals were submitted to the 'Report and pay Capital Gains Tax on UK property' service. It is in the format `YYYY-MM-DDThh:mm:ssZ`.
+                        format: date-time
+                        example: '2027-02-07T16:18:44.403Z'
+                      cryptoassets:
+                        type: array
+                        description: An array of cryptoassets entries.
+                        items: &ref_42
+                          type: object
+                          properties:
+                            numberOfDisposals:
+                              type: integer
+                              description: The total number of cryptoasset disposals submitted. The value must be an integer between 1 and 99999999999.
+                              example: 1
+                              multipleOf: 1
+                              minimum: 1
+                              maximum: 99999999999
+                            assetDescription:
+                              type: string
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
+                              example: Shares
+                              pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
+                            tokenName:
+                              type: string
+                              description: The name of the crypotasset token. Must not be empty or contain only whitespace.
+                              example: Name of token
+                              pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
+                            acquisitionDate:
+                              type: string
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
+                              format: date
+                              example: '2022-03-04'
+                            disposalDate:
+                              type: string
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
+                              format: date
+                              example: '2022-03-04'
+                            disposalProceeds:
+                              type: number
+                              description: |-
+                                The total proceeds from the disposal of the asset.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            allowableCosts:
+                              type: number
+                              description: |-
+                                The total amount of allowable costs that can be deducted from the disposal proceeds.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsWithBadr:
+                              type: number
+                              description: |-
+                                The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsBeforeLosses:
+                              type: number
+                              description: |-
+                                The total amount of gains before losses have been deducted. 
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            losses:
+                              type: number
+                              description: |-
+                                The total allowable losses from the disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            claimOrElectionCodes:
+                              type: array
+                              description: |-
+                                The claim, election or notice codes related to the disposal. 
+
+                                Possible values are: 
+
+                                * **GHO** - Gift Hold-Over Relief
+
+                                * **ROR** - Rollover Relief
+
+                                * **PRO** - Provisional Rollover Relief
+
+                                * **NVC** - Negligible Value Claims
+
+                                * **OTH** - Other claims
+
+                                * **BAD** - Business Asset Disposal Relief
+
+                                * **INC** - Incorporation Relief
+                              items:
+                                type: string
+                                example: '["BAD","OTH","INC"]'
+                                enum:
+                                  - GHO
+                                  - ROR
+                                  - PRO
+                                  - NVC
+                                  - OTH
+                                  - BAD
+                                  - INC
+                            amountOfNetGain:
+                              type: number
+                              description: |-
+                                The total amount of net gain from the disposal. Either gain or loss must be populated but not both.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            amountOfNetLoss:
+                              type: number
+                              description: |-
+                                The total amount of net loss from the disposal. Either gain or loss must be populated but not both.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            rttTaxPaid:
+                              type: number
+                              description: |-
+                                The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for this disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                          required:
+                            - numberOfDisposals
+                            - assetDescription
+                            - tokenName
+                            - acquisitionDate
+                            - disposalDate
+                            - disposalProceeds
+                            - allowableCosts
+                            - gainsBeforeLosses
+                      otherGains:
+                        type: array
+                        description: An array of other gains entries.
+                        items: &ref_43
+                          type: object
+                          properties:
+                            assetType:
+                              type: string
+                              description: The type of asset being disposed of.
+                              enum: *ref_29
+                            numberOfDisposals:
+                              type: integer
+                              description: The total number of gains disposals submitted. The value must be an integer between 1 and 99999999999.
+                              example: 2
+                              multipleOf: 1
+                              minimum: 1
+                              maximum: 99999999999
+                            assetDescription:
+                              type: string
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
+                              example: Shares
+                              pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
+                            companyName:
+                              type: string
+                              description: The name of the company. Must not be empty or contain only whitespace.
+                              example: Company One
+                              pattern: ^.{0,160}$
+                            companyRegistrationNumber:
+                              type: string
+                              description: The registration number of the company.
+                              example: '11111111'
+                              pattern: ^(?:\d{8}|[A-Za-z]{2}\d{6})$
+                            acquisitionDate:
+                              type: string
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
+                              format: date
+                              example: '2022-03-04'
+                            disposalDate:
+                              type: string
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
+                              format: date
+                              example: '2022-03-04'
+                            disposalProceeds:
+                              type: number
+                              description: |-
+                                The total proceeds from the disposal of the asset.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            allowableCosts:
+                              type: number
+                              description: |-
+                                The total amount of allowable costs that can be deducted from the disposal proceeds.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsWithBadr:
+                              type: number
+                              description: |-
+                                The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsWithInv:
+                              type: number
+                              description: |-
+                                The total amount of gains eligible for Investor's Relief (INV) before losses have been deducted.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsBeforeLosses:
+                              type: number
+                              description: |-
+                                The total amount of gains before losses have been deducted. 
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            losses:
+                              type: number
+                              description: |-
+                                The total allowable losses from the disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            claimOrElectionCodes:
+                              description: |-
+                                The claim, election or notice codes related to the disposal. 
+
+                                Possible values for listed shares are: 
+
+                                * **GHO** - Gift Hold-Over Relief
+
+                                * **ROR** - Rollover Relief
+
+                                * **PRO** - Provisional Rollover Relief
+
+                                * **ESH** - Employee Shares
+
+                                * **NVC** - Negligible Value Claims
+
+                                * **OTH** - Other claims
+
+                                * **BAD** - Business Asset Disposal Relief
+
+                                * **INV** - Investors' Relief
+
+                                * **EOT** - Employee Ownership Trust
+
+                                * **INC** - Incorporation Relief
+
+                                Possible values for non-uk residential property are:
+
+                                * **PRR** - Private Residence Relief where Letting Relief does not apply
+
+                                * **LET** - Private Residence Relief where Letting Relief applies
+
+                                * **GHO** - Gift Hold-Over Relief
+
+                                * **ROR** - Rollover Relief
+
+                                * **PRO** - Provisional Rollover Relief
+
+                                * **ESH** - Employee Shares
+
+                                * **NVC** - Negligible Value Claims
+
+                                * **OTH** - Other claims
+
+                                * **BAD** - Business Asset Disposal Relief
+
+                                * **EOT** - Employee Ownership Trust
+
+                                * **INC** - Incorporation Relief
+
+                                Possible values for other property and other assets are:
+
+                                * **PRR** - Private Residence Relief where Letting Relief does not apply
+
+                                * **LET** - Private Residence Relief where Letting Relief applies
+
+                                * **GHO** - Gift Hold-Over Relief
+
+                                * **ROR** - Rollover Relief
+
+                                * **PRO** - Provisional Rollover Relief
+
+                                * **ESH** - Employee Shares
+
+                                * **NVC** - Negligible Value Claims
+
+                                * **OTH** - Other claims
+
+                                * **BAD** - Business Asset Disposal Relief
+
+                                * **INV** - Investors' Relief
+
+                                * **EOT** - Employee Ownership Trust
+
+                                * **INC** - Incorporation Relief
+                              anyOf:
+                                - type: array
+                                  title: For listed shares
+                                  items:
+                                    type: string
+                                    example: '["BAD","OTH","INC"]'
+                                    enum:
+                                      - GHO
+                                      - ROR
+                                      - PRO
+                                      - ESH
+                                      - NVC
+                                      - OTH
+                                      - BAD
+                                      - INV
+                                      - EOT
+                                      - INC
+                                - type: array
+                                  title: For non-uk residential property
+                                  items:
+                                    type: string
+                                    example: '["BAD","OTH","INC"]'
+                                    enum:
+                                      - PRR
+                                      - LET
+                                      - GHO
+                                      - ROR
+                                      - PRO
+                                      - ESH
+                                      - NVC
+                                      - OTH
+                                      - BAD
+                                      - EOT
+                                      - INC
+                                - type: array
+                                  title: For other property and other assets
+                                  items:
+                                    type: string
+                                    example: '["BAD","OTH","INC"]'
+                                    enum:
+                                      - PRR
+                                      - LET
+                                      - GHO
+                                      - ROR
+                                      - PRO
+                                      - ESH
+                                      - NVC
+                                      - OTH
+                                      - BAD
+                                      - INV
+                                      - EOT
+                                      - INC
+                            amountOfNetGain:
+                              type: number
+                              description: |-
+                                The total amount of net gain from the disposal. Either gain or loss must be populated but not both.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            amountOfNetLoss:
+                              type: number
+                              description: |-
+                                The total amount of net loss from the disposal. Either gain or loss must be populated but not both.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            rttTaxPaid:
+                              type: number
+                              description: |-
+                                The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for this disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                          required:
+                            - assetType
+                            - numberOfDisposals
+                            - assetDescription
+                            - acquisitionDate
+                            - disposalDate
+                            - disposalProceeds
+                            - allowableCosts
+                            - gainsBeforeLosses
+                      unlistedShares:
+                        type: array
+                        description: An array of unlisted shares entries.
+                        items: &ref_44
+                          type: object
+                          properties:
+                            numberOfDisposals:
+                              type: integer
+                              description: The total number of unlisted shares disposals submitted. The value must be an integer between 1 and 99999999999.
+                              example: 3
+                              multipleOf: 1
+                              minimum: 1
+                              maximum: 99999999999
+                            assetDescription:
+                              type: string
+                              description: A description of the asset being disposed of. Must not be empty or contain only whitespace.
+                              example: Shares
+                              pattern: ^[0-9a-zA-Z{À-˿’}\- _&`():.'^]{1,90}$
+                            companyName:
+                              type: string
+                              description: The name of the company. Must not be empty or contain only whitespace.
+                              example: Company One
+                              pattern: ^.{0,160}$
+                            companyRegistrationNumber:
+                              type: string
+                              description: The registration number of the company.
+                              example: '11111111'
+                              pattern: ^(?:\d{8}|[A-Za-z]{2}\d{6})$
+                            acquisitionDate:
+                              type: string
+                              description: The date the asset was acquired in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the first asset was acquired.
+                              format: date
+                              example: '2022-03-04'
+                            disposalDate:
+                              type: string
+                              description: The date that the asset was disposed of in the format `YYYY-MM-DD`. For brokers' schedules where gains from several disposals are entered as one, this should be the date on which the last asset was disposed of.
+                              format: date
+                              example: '2022-03-04'
+                            disposalProceeds:
+                              type: number
+                              description: |-
+                                The total proceeds from the disposal of the asset.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            allowableCosts:
+                              type: number
+                              description: |-
+                                The total amount of allowable costs that can be deducted from the disposal proceeds.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsWithBadr:
+                              type: number
+                              description: |-
+                                The total amount of gains eligible for Business Asset Disposal Relief (BADR) before losses have been deducted.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsWithInv:
+                              type: number
+                              description: |-
+                                The total amount of gains eligible for Investor's Relief (INV) before losses have been deducted.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsBeforeLosses:
+                              type: number
+                              description: |-
+                                The total amount of gains before losses have been deducted. 
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            losses:
+                              type: number
+                              description: |-
+                                The total allowable losses from the disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            claimOrElectionCodes:
+                              type: array
+                              description: |-
+                                The claim, election or notice codes related to the disposal. 
+
+                                Possible values are: 
+
+                                * **GHO** - Gift Hold-Over Relief
+
+                                * **ROR** - Rollover Relief
+
+                                * **PRO** - Provisional Rollover Relief
+
+                                * **NVC** - Negligible Value Claims
+
+                                * **ESH** - Employee Shares
+
+                                * **OTH** - Other claims
+
+                                * **BAD** - Business Asset Disposal Relief
+
+                                * **INV** - Investors' Relief
+
+                                * **EOT** - Employee Ownership Trust
+
+                                * **INC** - Incorporation Relief
+                              items:
+                                type: string
+                                example: '["BAD","OTH","INC"]'
+                                enum:
+                                  - GHO
+                                  - ROR
+                                  - PRO
+                                  - NVC
+                                  - ESH
+                                  - OTH
+                                  - BAD
+                                  - INV
+                                  - EOT
+                                  - INC
+                            gainsReportedOnRtt:
+                              type: number
+                              description: |-
+                                The gains from this disposal reported through the Capital Gains Tax Real Time Transactions service for this disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsExceedingLifetimeLimit:
+                              type: number
+                              description: |-
+                                The portion of gains exceeding the applicable lifetime relief limit.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            gainsUnderSeis:
+                              type: number
+                              description: |-
+                                The gains eligible for Seed Enterprise Investment Scheme (SEIS) relief.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            lossUsedAgainstGeneralIncome:
+                              type: number
+                              description: |-
+                                The losses from this disposal applied against general income in the current tax year.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            eisOrSeisReliefDueCurrentYear:
+                              type: number
+                              description: |-
+                                The Enterprise Investment Scheme (EIS) or Seed Enterprise Investment Scheme (SEIS) relief due for the current tax year.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            lossesUsedAgainstGeneralIncomePreviousYear:
+                              type: number
+                              description: |-
+                                The losses applied against general income from the previous tax year.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            eisOrSeisReliefDuePreviousYear:
+                              type: number
+                              description: |-
+                                The Enterprise Investment Scheme (EIS) or Seed Enterprise Investment Scheme (SEIS) relief due from the previous tax year.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                            rttTaxPaid:
+                              type: number
+                              description: |-
+                                The total amount of tax paid through the Capital Gains Tax Real Time Transactions service for this disposal.
+
+                                The value must be between 0 and 99999999999.99 up to 2 decimal places.
+                              example: 1999.99
+                              multipleOf: 0.01
+                              minimum: 0
+                              maximum: 99999999999.99
+                          required:
+                            - numberOfDisposals
+                            - assetDescription
+                            - companyName
+                            - acquisitionDate
+                            - disposalDate
+                            - disposalProceeds
+                            - allowableCosts
+                            - gainsBeforeLosses
+                      gainExcludedIndexedSecurities:
+                        type: object
+                        description: Object containing details of gains from excluded indexed securities.
+                        properties: *ref_30
+                      qualifyingAssetHoldingCompany:
+                        type: object
+                        description: Object containing details of gains and losses from Qualifying Asset Holding Company (QAHC) disposals.
+                        properties: *ref_31
+                      losses:
+                        type: object
+                        description: Object containing details of Capital Gains Tax losses relating to other disposals and non-standard gains.
+                        properties: *ref_32
+                      adjustments:
+                        type: object
+                        description: Object containing details of Capital Gains Tax adjustment amounts.
+                        properties: &ref_45
+                          adjustmentAmount:
+                            type: number
+                            description: |-
+                              The amount of included adjustments to increase the Capital Gains Tax payable.
+
+                              The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.
+                            example: 1999.99
+                            multipleOf: 0.01
+                            minimum: -99999999999.99
+                            maximum: 99999999999.99
+                      lifetimeAllowance:
+                        type: object
+                        description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
+                        properties: *ref_33
+                    required:
+                      - submittedOn
               examples:
                 TY 2024-25 or before:
                   value:
                     $ref: ./examples/capital_gains_other_retrieve/def1/response.json
-                TY 2025-26 onwards:
+                TY 2025-26:
                   value:
                     $ref: ./examples/capital_gains_other_retrieve/def2/response.json
+                TY 2026-27 onwards:
+                  value:
+                    $ref: ./examples/capital_gains_other_retrieve/def3/response.json
         '400':
           description: Bad request
           headers:
@@ -3447,19 +4333,19 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
         '403':
           description: Forbidden
           headers:
@@ -3483,7 +4369,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -3529,7 +4415,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
     put:
       security:
         - User-Restricted:
@@ -3577,13 +4463,13 @@ paths:
           in: header
           description: |
             Specifies the format of the request body, which must be JSON.
-          schema: *ref_22
+          schema: *ref_24
           required: true
         - name: Authorization
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_18
+          schema: *ref_20
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -3603,15 +4489,15 @@ paths:
                     disposals:
                       type: array
                       description: An array of other Capital Gains disposals.
-                      items: *ref_27
+                      items: *ref_34
                     nonStandardGains:
                       type: object
                       description: 'One of these fields must be provided: carriedInterestGain, attributedGains or otherGains'
-                      properties: *ref_28
+                      properties: *ref_35
                     losses:
                       type: object
                       description: 'Details Capital Gains Tax losses relating to other disposals and non-standard gains. One of these fields must be provided: broughtForwardLossesUsedInCurrentYear, setAgainstInYearGains, setAgainstInYearGeneralIncome or setAgainstEarlierYear'
-                      properties: *ref_29
+                      properties: *ref_36
                     adjustments:
                       type: number
                       description: The amount of included adjustments to reduce or increase the Capital Gains Tax payable. The value must be between -99999999999.99 and 99999999999.99 up to 2 decimal places.
@@ -3620,52 +4506,91 @@ paths:
                       minimum: -99999999999.99
                       maximum: 99999999999.99
                 - $schema: http://json-schema.org/draft-04/schema#
-                  title: TY 2025-26 onwards
+                  title: TY 2025-26
                   type: object
                   properties:
                     cryptoassets:
                       type: array
                       description: An array of cryptoassets entries.
-                      items: *ref_30
+                      items: *ref_37
                     otherGains:
                       type: array
                       description: An array of other gains entries.
-                      items: *ref_31
+                      items: *ref_38
                     unlistedShares:
                       type: array
                       description: An array of unlisted shares entries.
-                      items: *ref_32
+                      items: *ref_39
                     gainExcludedIndexedSecurities:
                       type: object
                       description: Object containing details of gains from excluded indexed securities.
-                      properties: *ref_33
+                      properties: *ref_30
                     qualifyingAssetHoldingCompany:
                       type: object
                       description: Object containing details of gains and losses from Qualifying Asset Holding Company (QAHC) disposals.
-                      properties: *ref_34
+                      properties: *ref_31
                     nonStandardGains:
                       description: Object containing details of non-standard gains.
                       type: object
-                      properties: *ref_35
+                      properties: *ref_40
                     losses:
                       type: object
                       description: Object containing details of Capital Gains Tax losses relating to other disposals and non-standard gains.
-                      properties: *ref_36
+                      properties: *ref_32
                     adjustments:
                       type: object
                       description: Object containing details of Capital Gains Tax adjustment amounts.
-                      properties: *ref_37
+                      properties: *ref_41
                     lifetimeAllowance:
                       type: object
                       description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
-                      properties: *ref_38
+                      properties: *ref_33
+                - $schema: http://json-schema.org/draft-04/schema#
+                  title: TY 2026-27 onwards [Test Only]
+                  type: object
+                  properties:
+                    cryptoassets:
+                      type: array
+                      description: An array of cryptoassets entries.
+                      items: *ref_42
+                    otherGains:
+                      type: array
+                      description: An array of other gains entries.
+                      items: *ref_43
+                    unlistedShares:
+                      type: array
+                      description: An array of unlisted shares entries.
+                      items: *ref_44
+                    gainExcludedIndexedSecurities:
+                      type: object
+                      description: Object containing details of gains from excluded indexed securities.
+                      properties: *ref_30
+                    qualifyingAssetHoldingCompany:
+                      type: object
+                      description: Object containing details of gains and losses from Qualifying Asset Holding Company (QAHC) disposals.
+                      properties: *ref_31
+                    losses:
+                      type: object
+                      description: Object containing details of Capital Gains Tax losses relating to other disposals and non-standard gains.
+                      properties: *ref_32
+                    adjustments:
+                      type: object
+                      description: Object containing details of Capital Gains Tax adjustment amounts.
+                      properties: *ref_45
+                    lifetimeAllowance:
+                      type: object
+                      description: Object containing the total lifetime allowance of Business Asset Disposal Relief and Investors' Relief claimed to date.
+                      properties: *ref_33
             examples:
               TY 2024-25 or before:
                 value:
                   $ref: ./examples/capital_gains_other_create_amend/def1/request.json
-              TY 2025-26 onwards:
+              TY 2025-26:
                 value:
                   $ref: ./examples/capital_gains_other_create_amend/def2/request.json
+              TY 2026-27 onwards:
+                value:
+                  $ref: ./examples/capital_gains_other_create_amend/def3/request.json
       responses:
         '204':
           description: No Content
@@ -3699,16 +4624,16 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 FORMAT_VALUE:
                   description: One or more values have been added with the incorrect format.
-                  value: *ref_23
+                  value: *ref_25
                 FORMAT_DATE:
                   description: The supplied date format is invalid.
-                  value: *ref_24
+                  value: *ref_26
                 FORMAT_ASSET_DESCRIPTION:
                   description: The format of the supplied asset description is not valid.
                   value:
@@ -3736,16 +4661,16 @@ paths:
                     message: The format of the assetType value is invalid
                 FORMAT_CLAIM_OR_ELECTION_CODES:
                   description: The format of the supplied claimOrElectionCodes value is invalid.
-                  value: *ref_39
+                  value: *ref_46
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
                   description: An empty or non-matching body was submitted.
-                  value: *ref_26
+                  value: *ref_28
                 RULE_INCORRECT_NON_STANDARD_GAINS:
                   description: At least one of carriedInterestGain, attributedGains or otherGains must be provided.
                   value:
@@ -3768,7 +4693,7 @@ paths:
                     message: Only one of gain or loss values can be provided
                 RULE_AMOUNT_GAIN_LOSS:
                   description: Either amountOfNetGain or amountOfNetLoss, must be provided but not both.
-                  value: *ref_25
+                  value: *ref_27
                 RULE_GAIN_AFTER_RELIEF_LOSS_AFTER_RELIEF:
                   description: Only one of gainAfterRelief or lossAfterRelief values can be provided.
                   value:
@@ -3791,10 +4716,10 @@ paths:
                     message: INV relief code does not apply to non-UK residential property disposals
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_19
+                  value: *ref_21
         '403':
           description: Forbidden
           headers:
@@ -3818,7 +4743,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '422':
           description: Unprocessable Entity
           headers:
@@ -3840,7 +4765,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
     delete:
       security:
         - User-Restricted:
@@ -3886,7 +4811,7 @@ paths:
           in: header
           description: |
             An OAuth 2.0 Bearer Token with the *write:self-assessment* scope.
-          schema: *ref_18
+          schema: *ref_20
           required: true
         - name: Gov-Test-Scenario
           in: header
@@ -3927,22 +4852,22 @@ paths:
               examples:
                 FORMAT_NINO:
                   description: The format of the supplied NINO field is not valid.
-                  value: *ref_11
+                  value: *ref_13
                 FORMAT_TAX_YEAR:
                   description: The format of the supplied tax year field is not valid.
-                  value: *ref_12
+                  value: *ref_14
                 RULE_TAX_YEAR_RANGE_INVALID:
                   description: Tax year range invalid. A tax year range of one year is required
-                  value: *ref_14
+                  value: *ref_16
                 RULE_TAX_YEAR_NOT_SUPPORTED:
                   description: The specified tax year is not supported. Either the tax year specified is before the minimum tax year value, or it is after the maximum tax year value.
-                  value: *ref_13
+                  value: *ref_15
                 RULE_INCORRECT_GOV_TEST_SCENARIO:
                   description: The request did not match any available Sandbox data. Check that the supplied Gov-Test-Scenario is correct for this endpoint version. This error will only be returned in the Sandbox environment.
-                  value: *ref_15
+                  value: *ref_17
                 RULE_OUTSIDE_AMENDMENT_WINDOW:
                   description: The request cannot be completed as you are outside the amendment window.
-                  value: *ref_19
+                  value: *ref_21
         '403':
           description: Forbidden
           headers:
@@ -3966,7 +4891,7 @@ paths:
                   description: |
                     The client or agent is not authorised. This is because: the client is not subscribed to MTD, 
                     the agent is not subscribed to Agent Services, or the client has not authorised the agent to act on their behalf.
-                  value: *ref_16
+                  value: *ref_18
         '404':
           description: Not Found
           headers:
@@ -3988,7 +4913,7 @@ paths:
               examples:
                 MATCHING_RESOURCE_NOT_FOUND:
                   description: The supplied income source could not be found.
-                  value: *ref_20
+                  value: *ref_22
         '422':
           description: Unprocessable Entity
           headers:
@@ -4010,7 +4935,7 @@ paths:
               examples:
                 RULE_REQUEST_CANNOT_BE_FULFILLED:
                   description: The request cannot be fulfilled. More specific information is provided in the error message.
-                  value: *ref_17
+                  value: *ref_19
 components:
   securitySchemes:
     User-Restricted:
