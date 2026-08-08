@@ -1,22 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "TY 2025-26",
+  "title": "TY 2026-27 onwards [Test Only]",
   "type": "object",
   "properties": {
     "submittedOn": {
       "type": "string",
       "description": "The date the disposals were submitted to the 'Report and pay Capital Gains Tax on UK property' service. It is in the format `YYYY-MM-DDThh:mm:ssZ`.",
       "format": "date-time",
-      "example": "2026-02-07T16:18:44.403Z"
+      "example": "2027-02-07T16:18:44.403Z"
     },
-    "cryptoassets": {"$ref": "../../capital_gains_other_definitions.json#/definitions/cryptoassets"},
-    "otherGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/otherGains"},
-    "unlistedShares": {"$ref": "../../capital_gains_other_definitions.json#/definitions/unlistedShares"},
+    "cryptoassets": {"$ref": "../../capital_gains_other_definitions.json#/definitions/cryptoassets2627"},
+    "otherGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/otherGains2627"},
+    "unlistedShares": {"$ref": "../../capital_gains_other_definitions.json#/definitions/unlistedShares2627"},
     "gainExcludedIndexedSecurities": {"$ref": "../../capital_gains_other_definitions.json#/definitions/gainExcludedIndexedSecurities"},
     "qualifyingAssetHoldingCompany": {"$ref": "../../capital_gains_other_definitions.json#/definitions/qualifyingAssetHoldingCompany"},
-    "nonStandardGains": {"$ref": "../../capital_gains_other_definitions.json#/definitions/nonStandardGains2526"},
     "losses": {"$ref": "../../capital_gains_other_definitions.json#/definitions/losses2526"},
-    "adjustments": {"$ref": "../../capital_gains_other_definitions.json#/definitions/adjustments2526"},
+    "adjustments": {"$ref": "../../capital_gains_other_definitions.json#/definitions/adjustments2627"},
     "lifetimeAllowance": {"$ref": "../../capital_gains_other_definitions.json#/definitions/lifetimeAllowance"}
   },
   "required": [

@@ -44,15 +44,21 @@ requestBody:
           - $ref: './schemas/cgt_residential_non_ppd_create_amend/def1/request.json'
           - $ref: './schemas/cgt_residential_non_ppd_create_amend/def2/request.json'
           
+          - $ref: './schemas/cgt_residential_non_ppd_create_amend/def3/request.json'
+          
       examples:
         TY 2024-25 or before:
           value:
             $ref: './examples/cgt_residential_non_ppd_create_amend/def1/request.json'
         
-        TY 2025-26 onwards:
+        TY 2025-26:
         
           value:
             $ref: './examples/cgt_residential_non_ppd_create_amend/def2/request.json'
+        
+        TY 2026-27 onwards:
+          value:
+            $ref: './examples/cgt_residential_non_ppd_create_amend/def3/request.json'
         
 
 responses:

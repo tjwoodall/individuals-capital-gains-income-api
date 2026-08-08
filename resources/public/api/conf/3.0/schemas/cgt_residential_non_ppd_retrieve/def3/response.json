@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "TY 2025-26 ",
+  "title": "TY 2026-27 onwards [Test Only]",
   "type": "object",
   "properties": {
     "customerAddedDisposals": {
@@ -11,12 +11,12 @@
           "description": "The date the residential property disposals were submitted, in the format `YYYY-MM-DDThh:mm:ss.SSSZ`",
           "type": "string",
           "format": "date-time",
-          "example": "2025-07-07T10:59:47.544Z"
+          "example": "2026-07-07T10:59:47.544Z"
         },
         "disposals": {
           "type": "array",
           "description": "An array of residential property disposals.",
-          "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals2526"}
+          "items": {"$ref": "../../cgt_non_ppd_definitions.json#/definitions/disposals2627"}
         }
       },
       "required": [
