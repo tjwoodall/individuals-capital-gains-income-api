@@ -107,9 +107,10 @@
     "claimOrElectionCodesCryptoassets2627": {
       "type": "array",
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INC** - Incorporation Relief",
+      "example": ["BAD","OTH","INC"],
       "items":{
         "type": "string",
-        "example": "[\"BAD\",\"OTH\",\"INC\"]",
+        "example": "BAD",
         "enum":[
           "GHO",
           "ROR",
@@ -143,9 +144,10 @@
     "claimOrElectionCodesUnlistedShares2627": {
       "type": "array",
       "description": "The claim, election or notice codes related to the disposal. \n\nPossible values are: \n\n* **GHO** - Gift Hold-Over Relief\n\n* **ROR** - Rollover Relief\n\n* **PRO** - Provisional Rollover Relief\n\n* **NVC** - Negligible Value Claims\n\n* **ESH** - Employee Shares\n\n* **OTH** - Other claims\n\n* **BAD** - Business Asset Disposal Relief\n\n* **INV** - Investors' Relief\n\n* **EOT** - Employee Ownership Trust\n\n* **INC** - Incorporation Relief",
+      "example": ["BAD","OTH","INC"],
       "items":{
         "type": "string",
-        "example": "[\"BAD\",\"OTH\",\"INC\"]",
+        "example": "BAD",
         "enum":[
           "GHO",
           "ROR",
@@ -285,9 +287,10 @@
         {
           "type": "array",
           "title": "For listed shares",
+          "example": ["BAD","OTH","INC"],
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "example": "BAD",
             "enum": [
               "GHO",
               "ROR",
@@ -305,9 +308,10 @@
         {
           "type": "array",
           "title": "For non-uk residential property",
+          "example": ["BAD","OTH","INC"],
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "example": "BAD",
             "enum": [
               "PRR",
               "LET",
@@ -326,9 +330,10 @@
         {
           "type": "array",
           "title": "For other property and other assets",
+          "example": ["BAD","OTH","INC"],
           "items": {
             "type": "string",
-            "example": "[\"BAD\",\"OTH\",\"INC\"]",
+            "example": "BAD",
             "enum": [
               "PRR",
               "LET",
