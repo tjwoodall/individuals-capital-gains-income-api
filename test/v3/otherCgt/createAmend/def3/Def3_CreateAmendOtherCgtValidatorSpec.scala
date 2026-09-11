@@ -440,9 +440,12 @@ class Def3_CreateAmendOtherCgtValidatorSpec extends UnitSpec with JsonErrorValid
     "return RuleDisposalDateNotFutureError error" when {
       Seq("cryptoassets", "otherGains", "unlistedShares").foreach { arrayField =>
         s"passed a body with disposalDate in the future supplied for $arrayField" in {
-          val invalidJson: JsValue = updateArrayField(arrayField, "disposalDate", JsString("2026-09-04"))
+          val currentTaxYear: TaxYear    = TaxYear.currentTaxYear
+          val futureDisposalDate: String = getCurrentDate.plusDays(1).toString
+          val invalidJson: JsValue       = updateArrayField(arrayField, "disposalDate", JsString(futureDisposalDate))
 
           val result: Either[ErrorWrapper, CreateAmendOtherCgtRequestData] = validator(
+            taxYear = currentTaxYear.asMtd,
             body = invalidJson
           ).validateAndWrapResult()
 
