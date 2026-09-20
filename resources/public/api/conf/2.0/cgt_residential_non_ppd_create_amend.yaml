@@ -43,8 +43,7 @@ requestBody:
       examples:
         example-1:
           description: Full CGT Non PPD Amendment
-          value:
-            $ref: './examples/cgt_residential_non_ppd_create_amend/def1/request.json'
+          externalValue: './examples/cgt_residential_non_ppd_create_amend/def1/request.json'
 
 responses:
   "200":
