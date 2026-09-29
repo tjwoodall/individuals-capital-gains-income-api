@@ -14,8 +14,6 @@ description: |
   | NOT_FOUND                        | Simulates the scenario where no disposals were found to override.                                           |
   | PPD_SUBMISSION_ID_NOT_FOUND      | Simulates the scenario where a ppdSubmissionId used in the submission was not found.                        |
   | INCORRECT_DISPOSAL_TYPE          | Simulate the scenario where a ppdSubmissionId in the request is being used for the incorrect disposal type. |
-  | DUPLICATED_PPD_SUBMISSION_ID     | Simulates the scenario where a ppdSubmissionId is duplicated.                                               |
-  | TAX_YEAR_NOT_ENDED               | Simulates the scenario where the tax year provided has not ended.                                           |  
   | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.             |
   | STATEFUL                         | Performs a stateful create or update.                                                                       |
   | REQUEST_CANNOT_BE_FULFILLED      | Simulates the scenario where the request cannot be fulfilled for various reasons other than the ones triggering other errors. |
@@ -30,6 +28,7 @@ parameters:
   - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
   - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+  - $ref: './common/headers.yaml#/components/parameters/suspendTemporalValidationsHeader'
 
 security:
   - User-Restricted:
