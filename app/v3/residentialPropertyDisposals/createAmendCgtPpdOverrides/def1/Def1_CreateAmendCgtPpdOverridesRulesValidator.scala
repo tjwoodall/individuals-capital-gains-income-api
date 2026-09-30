@@ -22,7 +22,7 @@ import api.models.errors.*
 import cats.data.Validated
 import cats.data.Validated.*
 import cats.implicits.*
-import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError}
+import common.errors.{PpdSubmissionIdFormatError, RuleAmountGainLossError, RuleDuplicatedPpdSubmissionIdError}
 import v3.residentialPropertyDisposals.createAmendCgtPpdOverrides.def1.model.request.*
 
 object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1_CreateAmendCgtPpdOverridesRequestData] {
@@ -35,7 +35,8 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
     import parsed.*
     combine(
       validateBothSuppliedDisposals(body),
-      validateSuppliedDisposals(body)
+      validateSuppliedDisposals(body),
+      validateDuplicatePpdSubmissionIds(body)
     ).onSuccess(parsed)
   }
 
@@ -119,6 +120,31 @@ object Def1_CreateAmendCgtPpdOverridesRulesValidator extends RulesValidator[Def1
       resolveNonNegativeParsedNumber(value, path)
     }
     validatedNonNegatives
+  }
+
+  private def validateDuplicatePpdSubmissionIds(requestBody: Def1_CreateAmendCgtPpdOverridesRequestBody): Validated[Seq[MtdError], Unit] = {
+    val multiplePropertyIdsAndPaths: Seq[(String, String)] = requestBody.multiplePropertyDisposals
+      .getOrElse(Seq.empty)
+      .zipWithIndex
+      .map { case (disposal, index) =>
+        disposal.ppdSubmissionId -> s"/multiplePropertyDisposals/$index/ppdSubmissionId"
+      }
+
+    val singlePropertyIdsAndPaths: Seq[(String, String)] = requestBody.singlePropertyDisposals
+      .getOrElse(Seq.empty)
+      .zipWithIndex
+      .map { case (disposal, index) =>
+        disposal.ppdSubmissionId -> s"/singlePropertyDisposals/$index/ppdSubmissionId"
+      }
+
+    val duplicateErrors: Seq[MtdError] = (multiplePropertyIdsAndPaths ++ singlePropertyIdsAndPaths)
+      .groupMap(_._1)(_._2)
+      .collect {
+        case (id, paths) if paths.size > 1 => RuleDuplicatedPpdSubmissionIdError.forDuplicatedIdAndPaths(id, paths)
+      }
+      .toSeq
+
+    Validated.cond(duplicateErrors.isEmpty, (), duplicateErrors)
   }
 
   private def validateSinglePropertyDisposalsPpdId(singlePropertyDisposals: SinglePropertyDisposals,

@@ -16,7 +16,7 @@
 
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
-import api.config.AppConfig
+import api.config.{AppConfig, ConfigFeatureSwitches}
 import api.controllers.*
 import api.models.audit.*
 import api.models.auth.UserDetails
@@ -52,7 +52,7 @@ class CreateAmendCgtPpdOverridesController @Inject() (val authService: Enrolment
     authorisedAction(nino).async(parse.json) { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val validator = validatorFactory.validator(nino, taxYear, request.body)
+      val validator = validatorFactory.validator(nino, taxYear, request.body, ConfigFeatureSwitches().isTemporalValidationEnabled)
 
       RequestHandler
         .withValidator(validator)

@@ -203,13 +203,13 @@ class Def1_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseS
       |            "amountOfNetGain": 1234.787385
       |         },
       |         {
-      |            "ppdSubmissionId": "AB0000000092",
+      |            "ppdSubmissionId": "AB0000000093",
       |            "amountOfNetLoss": -134.99
       |         }
       |    ],
       |    "singlePropertyDisposals": [
       |         {
-      |             "ppdSubmissionId": "AB0000000092",
+      |             "ppdSubmissionId": "AB0000000094",
       |             "completionDate": "2020-02-28",
       |             "disposalProceeds": 454.24999,
       |             "acquisitionDate": "2020-03-29",
@@ -223,7 +223,7 @@ class Def1_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseS
       |             "amountOfNetGain": 4567.8974726
       |         },
       |         {
-      |             "ppdSubmissionId": "AB0000000092",
+      |             "ppdSubmissionId": "AB0000000095",
       |             "completionDate": "2020-02-28",
       |             "disposalProceeds": -454.24,
       |             "acquisitionDate": "2020-03-29",
@@ -347,7 +347,7 @@ class Def1_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseS
     def nino: String = "AA123456A"
     def taxYear: String
     def downstreamUri: String
-    def uri: String = s"/residential-property/$nino/$taxYear/ppd"
+    private def uri: String = s"/residential-property/$nino/$taxYear/ppd"
 
     def setupStubs(): StubMapping
 
@@ -462,9 +462,9 @@ class Def1_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseS
           ("AA123456A", "2020-21", gainAndLossJson, BAD_REQUEST, amountGainLossError, None, Some("gainAndLossRule")),
           ("AA123456A", "2020-21", invalidDateFormatJson, BAD_REQUEST, dateFormatError, None, Some("dateFormat")),
           ("AA123456A", "2020-21", invalidValueRequestBodyJson, BAD_REQUEST, invalidValueErrors, None, Some("invalidNumValues")),
-          ("AA123456A", "2020-21", jsonWithIds("notAnID", "notAnID"), BAD_REQUEST, ppdSubmissionFormatError, None, Some("badIDs"))
+          ("AA123456A", "2020-21", jsonWithIds("notAnID", "notAnID2"), BAD_REQUEST, ppdSubmissionFormatError, None, Some("badIDs"))
         )
-        input.foreach(args => (validationErrorTest).tupled(args))
+        input.foreach(args => validationErrorTest.tupled(args))
       }
 
       "ifs service error" when {
@@ -519,7 +519,7 @@ class Def1_CreateAmendCgtPpdOverridesControllerHipISpec extends IntegrationBaseS
           (BAD_REQUEST, "TAX_YEAR_NOT_SUPPORTED", BAD_REQUEST, RuleTaxYearNotSupportedError)
         )
 
-        (errors ++ extraTysErrors).foreach(args => (serviceErrorTest).tupled(args))
+        (errors ++ extraTysErrors).foreach(args => serviceErrorTest.tupled(args))
       }
     }
   }

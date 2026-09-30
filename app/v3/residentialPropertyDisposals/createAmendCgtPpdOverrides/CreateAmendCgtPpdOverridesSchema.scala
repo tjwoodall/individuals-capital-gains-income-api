@@ -32,8 +32,10 @@ object CreateAmendCgtPpdOverridesSchema {
   case object Def1 extends CreateAmendCgtPpdOverridesSchema
   case object Def2 extends CreateAmendCgtPpdOverridesSchema
 
-  def schemaFor(taxYearString: String)(implicit appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {
-    ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString) andThen schemaFor
+  def schemaFor(taxYearString: String, temporalValidationEnabled: Boolean)(implicit
+      appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {
+    ResolveTaxYearMinimum(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear), allowIncompleteTaxYear = !temporalValidationEnabled)(
+      taxYearString) andThen schemaFor
   }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {

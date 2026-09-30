@@ -52,21 +52,21 @@ class CreateAmendCgtPpdOverridesValidatorFactorySpec extends UnitSpec with MockA
   "CreateAmendCgtPpdOverridesValidatorFactory" when {
     "given a request corresponding to a Def1 schema" should {
       "return a Def1 validator" in new Test {
-        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, validTaxYear, validRequestBody)
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, validTaxYear, validRequestBody, false)
         result shouldBe a[Def1_CreateAmendCgtPpdOverridesValidator]
       }
     }
 
     "given a request corresponding to a Def2 schema" should {
       "return a Def2 validator" in new Test {
-        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "2025-26", validRequestBody)
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "2025-26", validRequestBody, false)
         result shouldBe a[Def2_CreateAmendCgtPpdOverridesValidator]
       }
     }
 
     "given a request where no valid schema could be determined" should {
       "return a validator returning the errors" in new Test {
-        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "BAD_TAX_YEAR", validRequestBody)
+        val result: Validator[CreateAmendCgtPpdOverridesRequestData] = validatorFactory.validator(validNino, "BAD_TAX_YEAR", validRequestBody, false)
         result shouldBe a[AlwaysErrorsValidator]
       }
     }

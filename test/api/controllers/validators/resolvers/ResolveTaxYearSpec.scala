@@ -70,12 +70,14 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
   }
 
   "ResolveTaxYearMinimum using the default errors" should {
-    val minimumTaxYear = TaxYear.fromMtd("2021-22")
-    val resolver       = ResolveTaxYearMinimum(minimumTaxYear)
+    val minimumTaxYear          = TaxYear.fromMtd("2021-22")
+    val currentTaxYear: TaxYear = TaxYear.currentTaxYear
+    def resolver(allowIncompleteTaxYear: Boolean = true): ResolveTaxYearMinimum =
+      ResolveTaxYearMinimum(minimumTaxYear = minimumTaxYear, allowIncompleteTaxYear = allowIncompleteTaxYear)
 
     "return no errors" when {
       "given the minimum allowed tax year" in {
-        val result: Validated[Seq[MtdError], TaxYear] = resolver("2021-22")
+        val result: Validated[Seq[MtdError], TaxYear] = resolver()("2021-22")
         result shouldBe Valid(minimumTaxYear)
       }
 
@@ -85,20 +87,32 @@ class ResolveTaxYearSpec extends UnitSpec with ResolverSupport {
       }
 
       "given the minimum allowed tax year in an Option" in {
-        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver(Option("2021-22"))
+        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver()(Option("2021-22"))
         result shouldBe Valid(Some(minimumTaxYear))
       }
 
       "given an empty Option" in {
-        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver(None)
+        val result: Validated[Seq[MtdError], Option[TaxYear]] = resolver()(None)
         result shouldBe Valid(None)
+      }
+
+      "given an incomplete tax year but incomplete years are allowed" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver()(currentTaxYear.asMtd)
+        result shouldBe Valid(currentTaxYear)
       }
     }
 
     "return RuleTaxYearNotSupportedError" when {
-      "when the tax year is before the minimum tax year" in {
-        val result: Validated[Seq[MtdError], TaxYear] = resolver("2020-21")
+      "given the tax year is before the minimum tax year" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver()("2020-21")
         result shouldBe Invalid(List(RuleTaxYearNotSupportedError))
+      }
+    }
+
+    "return RuleTaxYearNotEndedError" when {
+      "given an incomplete tax year and incomplete years are not allowed" in {
+        val result: Validated[Seq[MtdError], TaxYear] = resolver(false)(currentTaxYear.asMtd)
+        result shouldBe Invalid(List(RuleTaxYearNotEndedError))
       }
     }
   }

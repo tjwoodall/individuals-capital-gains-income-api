@@ -36,7 +36,14 @@ object ClaimOrElectionCodesFormatError
 
 // Rule Errors
 object RuleDuplicatedPpdSubmissionIdError
-    extends MtdError("RULE_DUPLICATED_PPD_SUBMISSION_ID", "A provided ppdSubmissionId is duplicated", BAD_REQUEST)
+    extends MtdError("RULE_DUPLICATED_PPD_SUBMISSION_ID", "A provided ppdSubmissionId is duplicated", BAD_REQUEST) {
+
+  def forDuplicatedIdAndPaths(id: String, paths: Seq[String]): MtdError = copy(
+    message = s"The ppdSubmissionId '$id' is duplicated",
+    paths = Some(paths)
+  )
+
+}
 
 object RuleIncorrectDisposalTypeError
     extends MtdError("RULE_INCORRECT_DISPOSAL_TYPE", "A provided ppdSubmissionId is being used for the incorrect disposal type", BAD_REQUEST)
