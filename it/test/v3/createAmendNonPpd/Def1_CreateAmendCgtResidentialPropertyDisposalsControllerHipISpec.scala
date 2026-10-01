@@ -30,9 +30,9 @@ import play.api.test.Helpers.AUTHORIZATION
 
 class Def1_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  val validDisposalDate: String    = "2020-03-27"
-  val validCompletionDate: String  = "2020-03-29"
-  val validAcquisitionDate: String = "2020-03-25"
+  val validDisposalDate: String    = "2024-03-27"
+  val validCompletionDate: String  = "2024-03-29"
+  val validAcquisitionDate: String = "2024-03-25"
 
   val validRequestJson: JsValue = Json.parse(
     s"""
@@ -57,6 +57,58 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
       |}
      """.stripMargin
   )
+
+  val disposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "2025-03-27",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "$validAcquisitionDate",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "lossesFromThisYear": 1999.99,
+       |         "lossesFromPreviousYear": 1999.99,
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+       """.stripMargin
+  )
+
+  val disposalDateError: MtdError = RuleDisposalDateError.withPath("/disposals/0/disposalDate")
+
+  val acquisitionDateAfterDisposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "$validDisposalDate",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "2024-03-28",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "lossesFromThisYear": 1999.99,
+       |         "lossesFromPreviousYear": 1999.99,
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+       """.stripMargin
+  )
+
+  val acquisitionDateAfterDisposalDateError: MtdError = RuleAcquisitionDateAfterDisposalDateError.withPath("/disposals/0")
 
   val noMeaningfulDataJson: JsValue = Json.parse(
     """
@@ -332,15 +384,24 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
           ("AA123456A", "2018-19", validRequestJson, BAD_REQUEST, RuleTaxYearNotSupportedError, None, None),
 
           // Body errors
-          ("AA123456A", "2019-20", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
-          ("AA123456A", "2019-20", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
-          ("AA123456A", "2019-20", missingFieldsJson, BAD_REQUEST, missingFieldsError, None, Some("missing all mandatory fields")),
-          ("AA123456A", "2019-20", decimalsTooBigJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too big")),
-          ("AA123456A", "2019-20", decimalsTooSmallJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too small")),
-          ("AA123456A", "2019-20", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
-          ("AA123456A", "2019-20", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
-          ("AA123456A", "2019-20", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
-          ("AA123456A", "2019-20", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided"))
+          ("AA123456A", "2023-24", JsObject.empty, BAD_REQUEST, RuleIncorrectOrEmptyBodyError, None, Some("emptyBody")),
+          ("AA123456A", "2023-24", emptyDisposalsJson, BAD_REQUEST, emptyDisposalsError, None, Some("empty disposals")),
+          ("AA123456A", "2023-24", missingFieldsJson, BAD_REQUEST, missingFieldsError, None, Some("missing all mandatory fields")),
+          ("AA123456A", "2023-24", decimalsTooBigJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too big")),
+          ("AA123456A", "2023-24", decimalsTooSmallJson, BAD_REQUEST, DecimalsOutOfRangeError, None, Some("Decimals too small")),
+          ("AA123456A", "2023-24", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
+          ("AA123456A", "2023-24", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
+          ("AA123456A", "2023-24", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
+          ("AA123456A", "2023-24", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided")),
+          ("AA123456A", "2023-24", disposalDateErrorJson, BAD_REQUEST, disposalDateError, None, Some("invalid disposal date")),
+          (
+            "AA123456A",
+            "2023-24",
+            acquisitionDateAfterDisposalDateErrorJson,
+            BAD_REQUEST,
+            acquisitionDateAfterDisposalDateError,
+            None,
+            Some("acquisition date after disposal date"))
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
@@ -383,7 +444,7 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
+          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
           (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, InternalError),

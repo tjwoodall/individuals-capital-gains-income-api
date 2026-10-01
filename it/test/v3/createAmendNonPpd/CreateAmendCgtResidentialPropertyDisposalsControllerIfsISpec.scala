@@ -58,6 +58,58 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
      """.stripMargin
   )
 
+  val disposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "2021-03-27",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "$validAcquisitionDate",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "lossesFromThisYear": 1999.99,
+       |         "lossesFromPreviousYear": 1999.99,
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+       """.stripMargin
+  )
+
+  val disposalDateError: MtdError = RuleDisposalDateError.withPath("/disposals/0/disposalDate").withPath("/disposals/0/disposalDate")
+
+  val acquisitionDateAfterDisposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "$validDisposalDate",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "2020-03-28",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "lossesFromThisYear": 1999.99,
+       |         "lossesFromPreviousYear": 1999.99,
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+       """.stripMargin
+  )
+
+  val acquisitionDateAfterDisposalDateError: MtdError = RuleAcquisitionDateAfterDisposalDateError.withPath("/disposals/0")
+
   val noMeaningfulDataJson: JsValue = Json.parse(
     """
       |{
@@ -345,7 +397,16 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           ("AA123456A", "2019-20", datesNotFormattedJson, BAD_REQUEST, datesNotFormattedError, None, Some("incorrect date formats")),
           ("AA123456A", "2019-20", customerRefTooLongJson, BAD_REQUEST, customerRefError, None, Some("bad customer reference")),
           ("AA123456A", "2019-20", customerRefTooShortJson, BAD_REQUEST, customerRefError, None, Some("empty customer reference string")),
-          ("AA123456A", "2019-20", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided"))
+          ("AA123456A", "2019-20", gainLossJson, BAD_REQUEST, gainLossError, None, Some("gain and loss provided")),
+          ("AA123456A", "2019-20", disposalDateErrorJson, BAD_REQUEST, disposalDateError, None, Some("invalid disposal date")),
+          (
+            "AA123456A",
+            "2019-20",
+            acquisitionDateAfterDisposalDateErrorJson,
+            BAD_REQUEST,
+            acquisitionDateAfterDisposalDateError,
+            None,
+            Some("acquisition date after disposal date"))
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
@@ -382,7 +443,7 @@ class CreateAmendCgtResidentialPropertyDisposalsControllerIfsISpec extends Integ
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, InternalError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
+          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),

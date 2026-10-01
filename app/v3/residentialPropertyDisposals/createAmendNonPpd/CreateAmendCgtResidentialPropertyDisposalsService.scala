@@ -43,7 +43,7 @@ class CreateAmendCgtResidentialPropertyDisposalsService @Inject() (connector: Cr
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "INVALID_CORRELATIONID"     -> InternalError,
       "INVALID_PAYLOAD"           -> InternalError,
-      "INVALID_DISPOSAL_DATE"     -> RuleDisposalDateErrorV1,
+      "INVALID_DISPOSAL_DATE"     -> RuleDisposalDateError,
       "INVALID_COMPLETION_DATE"   -> RuleCompletionDateError,
       "INVALID_ACQUISITION_DATE"  -> RuleAcquisitionDateAfterDisposalDateError,
       "OUTSIDE_AMENDMENT_WINDOW"  -> RuleOutsideAmendmentWindowError,

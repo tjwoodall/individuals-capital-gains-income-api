@@ -315,6 +315,54 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
          |""".stripMargin
   )
 
+  private val disposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "disposals": [
+       |    {
+       |      "customerReference":"$validCustomerReference",
+       |      "disposalDate":"2020-10-01",
+       |      "completionDate":"$validCompletionDate",
+       |      "disposalProceeds":$validValue,
+       |      "acquisitionDate":"$validAcquisitionDate",
+       |      "acquisitionAmount":$validValue,
+       |      "improvementCosts":$validValue,
+       |      "additionalCosts":$validValue,
+       |      "prfAmount":$validValue,
+       |      "otherReliefAmount":$validValue,
+       |      "lossesFromThisYear":$validValue,
+       |      "lossesFromPreviousYear":$validValue,
+       |      "amountOfNetLoss":$validValue
+       |    }
+       |  ]
+       |}
+  """.stripMargin
+  )
+
+  private val acquisitionDatAfterDisposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "disposals": [
+       |    {
+       |      "customerReference":"$validCustomerReference",
+       |      "disposalDate":"$validDisposalDate",
+       |      "completionDate":"$validCompletionDate",
+       |      "disposalProceeds":$validValue,
+       |      "acquisitionDate":"2020-03-05",
+       |      "acquisitionAmount":$validValue,
+       |      "improvementCosts":$validValue,
+       |      "additionalCosts":$validValue,
+       |      "prfAmount":$validValue,
+       |      "otherReliefAmount":$validValue,
+       |      "lossesFromThisYear":$validValue,
+       |      "lossesFromPreviousYear":$validValue,
+       |      "amountOfNetLoss":$validValue
+       |    }
+       |  ]
+       |}
+    """.stripMargin
+  )
+
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
@@ -593,6 +641,28 @@ class Def1_CreateAmendCgtResidentialPropertyDisposalsValidatorSpec extends UnitS
 
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleAmountGainLossError.withPath("/disposals/0"))
+        )
+      }
+    }
+
+    "return RuleDisposalDateError error" when {
+      "disposal date is outside the tax year" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, disposalDateErrorJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleDisposalDateError.withPath("/disposals/0/disposalDate"))
+        )
+      }
+    }
+
+    "return RuleAcquisitionDatAfterDisposalDate error" when {
+      "the acquisition date is after the disposal date" in {
+        val result: Either[ErrorWrapper, CreateAmendCgtResidentialPropertyDisposalsRequestData] =
+          validator(validNino, acquisitionDatAfterDisposalDateErrorJson).validateAndWrapResult()
+
+        result shouldBe Left(
+          ErrorWrapper(correlationId, RuleAcquisitionDateAfterDisposalDateError.withPath("/disposals/0"))
         )
       }
     }

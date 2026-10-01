@@ -17,12 +17,16 @@
 package v3.residentialPropertyDisposals.createAmendNonPpd.def3
 
 import api.controllers.validators.resolvers.*
+import api.models.domain.TaxYear
 import api.models.errors.{DateFormatError, MtdError}
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits.*
 import common.errors.*
 import v3.residentialPropertyDisposals.createAmendNonPpd.def3.model.request.{Def3_CreateAmendCgtResidentialPropertyDisposalsRequestData, Disposal}
+
+import java.time.LocalDate
+import scala.math.Ordered.orderingToOrdered
 
 object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator {
 
@@ -41,12 +45,30 @@ object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator {
 
     combine(
       disposals.zipWithIndex.traverse_ { case (disposal, index) =>
-        validateDisposal(disposal, index, r22CgtEnabled)
+        validateDisposal(disposal, index, parsed.taxYear, r22CgtEnabled)
       }
     ).map(_ => parsed)
   }
 
-  private def validateDisposal(disposal: Disposal, index: Int, r22CgtEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
+  private def validateAcquisitionAndDisposalDates(acquisitionDate: LocalDate,
+                                                  disposalDate: LocalDate,
+                                                  taxYear: TaxYear,
+                                                  basePath: String): Validated[Seq[MtdError], Unit] = {
+    combine(
+      Validated.cond(
+        acquisitionDate <= disposalDate,
+        (),
+        List(RuleAcquisitionDateAfterDisposalDateError.withPath(basePath))
+      ),
+      Validated.cond(
+        disposalDate >= taxYear.startDate && disposalDate <= taxYear.endDate,
+        (),
+        List(RuleDisposalDateError.withPath(s"$basePath/disposalDate"))
+      )
+    )
+  }
+
+  private def validateDisposal(disposal: Disposal, index: Int, taxYear: TaxYear, r22CgtEnabled: Boolean): Validated[Seq[MtdError], Unit] = {
     import disposal.*
 
     val validatedMandatoryDecimalNumbers = List(
@@ -70,13 +92,12 @@ object Def3_CreateAmendCgtResidentialPropertyDisposalsRulesValidator {
       resolveNonNegativeParsedNumber(value, path)
     }
 
-    val validatedDates = List(
-      (disposalDate, s"/disposals/$index/disposalDate"),
-      (completionDate, s"/disposals/$index/completionDate"),
-      (acquisitionDate, s"/disposals/$index/acquisitionDate")
-    ).traverse_ { case (value, path) =>
-      val resolveDate = ResolveIsoDate(DateFormatError.withPath(path))
-      resolveDate(value)
+    val validatedDates = (
+      ResolveIsoDate(disposalDate, DateFormatError.withPath(s"/disposals/$index/disposalDate")),
+      ResolveIsoDate(completionDate, DateFormatError.withPath(s"/disposals/$index/completionDate")),
+      ResolveIsoDate(acquisitionDate, DateFormatError.withPath(s"/disposals/$index/acquisitionDate"))
+    ).tupled.andThen { case (disposalDate, _, acquisitionDate) =>
+      validateAcquisitionAndDisposalDates(acquisitionDate, disposalDate, taxYear, s"/disposals/$index")
     }
 
     val validatedCustomerRef: Validated[Seq[MtdError], Option[String]] =

@@ -30,9 +30,9 @@ import play.api.test.Helpers.AUTHORIZATION
 
 class Def3_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends IntegrationBaseSpec with WireMockMethods {
 
-  val validDisposalDate: String    = "2020-03-27"
-  val validCompletionDate: String  = "2020-03-29"
-  val validAcquisitionDate: String = "2020-03-25"
+  val validDisposalDate: String    = "2026-05-27"
+  val validCompletionDate: String  = "2026-05-29"
+  val validAcquisitionDate: String = "2026-05-25"
 
   val validRequestJson: JsValue = Json.parse(
     s"""
@@ -360,6 +360,64 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
        """.stripMargin
   )
 
+  val disposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "numberOfDisposals": 3,
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "2027-05-27",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "$validAcquisitionDate",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "gainsWithBadr": 99999999999.99,
+       |         "gainsBeforeLosses": 99999999999.99,
+       |         "lossesFromThisYear": 1999.99,  
+       |         "claimOrElectionCodes": ["PRR", "INC"],
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+     """.stripMargin
+  )
+
+  val disposalDateError: MtdError = RuleDisposalDateError.withPath("/disposals/0/disposalDate")
+
+  val acquisitionDateAfterDisposalDateErrorJson: JsValue = Json.parse(
+    s"""
+       |{
+       |   "disposals":[
+       |      {
+       |         "numberOfDisposals": 3,
+       |         "customerReference": "CGTDISPOSAL01",
+       |         "disposalDate": "$validDisposalDate",
+       |         "completionDate": "$validCompletionDate",
+       |         "disposalProceeds": 1999.99,
+       |         "acquisitionDate": "2026-05-28",
+       |         "acquisitionAmount": 1999.99,
+       |         "improvementCosts": 1999.99,
+       |         "additionalCosts": 1999.99,
+       |         "prfAmount": 1999.99,
+       |         "otherReliefAmount": 1999.99,
+       |         "gainsWithBadr": 99999999999.99,
+       |         "gainsBeforeLosses": 99999999999.99,
+       |         "lossesFromThisYear": 1999.99,  
+       |         "claimOrElectionCodes": ["PRR", "INC"],
+       |         "amountOfNetGain": 1999.99
+       |      }
+       |   ]
+       |}
+       """.stripMargin
+  )
+
+  val acquisitionDateAfterDisposalDateError: MtdError = RuleAcquisitionDateAfterDisposalDateError.withPath("/disposals/0")
+
   val gainLossError: MtdError = RuleAmountGainLossError.withPath("/disposals/0")
 
   val lossesFromThisYearRuleError: MtdError = RuleIncorrectLossesSubmittedError.withPath("/disposals/0")
@@ -454,7 +512,16 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
             None,
             Some("numberOfDisposals and lossesFromThisYear provided")),
           ("AA123456A", "2026-27", numberOfDisposalsJson, BAD_REQUEST, numberOfDisposalsError, None, Some("numberOfDisposals is less than 1")),
-          ("AA123456A", "2026-27", badClaimOrElectionCodesJson, BAD_REQUEST, claimOrElectionCodesError, None, Some("invalid claimOrElectionCodes"))
+          ("AA123456A", "2026-27", badClaimOrElectionCodesJson, BAD_REQUEST, claimOrElectionCodesError, None, Some("invalid claimOrElectionCodes")),
+          ("AA123456A", "2026-27", disposalDateErrorJson, BAD_REQUEST, disposalDateError, None, Some("invalid disposal date")),
+          (
+            "AA123456A",
+            "2026-27",
+            acquisitionDateAfterDisposalDateErrorJson,
+            BAD_REQUEST,
+            acquisitionDateAfterDisposalDateError,
+            None,
+            Some("acquisition date after disposal date"))
         )
         input.foreach(args => validationErrorTest.tupled(args))
       }
@@ -497,7 +564,7 @@ class Def3_CreateAmendCgtResidentialPropertyDisposalsControllerHipISpec extends 
           (BAD_REQUEST, "INVALID_TAXABLE_ENTITY_ID", BAD_REQUEST, NinoFormatError),
           (BAD_REQUEST, "INVALID_TAX_YEAR", BAD_REQUEST, TaxYearFormatError),
           (BAD_REQUEST, "INVALID_PAYLOAD", INTERNAL_SERVER_ERROR, InternalError),
-          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateErrorV1),
+          (UNPROCESSABLE_ENTITY, "INVALID_DISPOSAL_DATE", BAD_REQUEST, RuleDisposalDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_COMPLETION_DATE", BAD_REQUEST, RuleCompletionDateError),
           (UNPROCESSABLE_ENTITY, "INVALID_ACQUISITION_DATE", BAD_REQUEST, RuleAcquisitionDateAfterDisposalDateError),
           (UNPROCESSABLE_ENTITY, "OUTSIDE_AMENDMENT_WINDOW", BAD_REQUEST, RuleOutsideAmendmentWindowError),
