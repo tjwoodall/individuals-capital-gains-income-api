@@ -33,10 +33,12 @@ class Def1_CreateAmendOtherCgtValidator(nino: String, taxYear: String, body: JsV
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
 
-  private lazy val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
-    RuleTaxYearNotSupportedError,
-    RuleTaxYearForVersionNotSupportedError)
+  private lazy val resolveTaxYear = ResolveDetailedTaxYear(
+    minimumTaxYear = TaxYear.fromDownstreamInt(minimumTaxYear),
+    maximumTaxYear = Some(TaxYear.fromMtd("2024-25")),
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearForVersionNotSupportedError
+  )
 
   private lazy val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendOtherCgtRequestBody]()
 

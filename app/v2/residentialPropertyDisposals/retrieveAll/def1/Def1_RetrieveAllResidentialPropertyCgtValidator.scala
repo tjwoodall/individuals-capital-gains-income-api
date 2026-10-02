@@ -18,7 +18,7 @@ package v2.residentialPropertyDisposals.retrieveAll.def1
 
 import api.config.AppConfig
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinMax}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.*
 import cats.data.Validated
@@ -39,10 +39,12 @@ class Def1_RetrieveAllResidentialPropertyCgtValidator @Inject() (nino: String, t
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
 
   private lazy val resolveTaxYear =
-    ResolveTaxYearMinMax(
-      (TaxYear.fromDownstreamInt(minimumTaxYear), TaxYear.fromMtd("2024-25")),
-      RuleTaxYearNotSupportedError,
-      RuleTaxYearForVersionNotSupportedError)
+    ResolveDetailedTaxYear(
+      minimumTaxYear = TaxYear.fromDownstreamInt(minimumTaxYear),
+      maximumTaxYear = Some(TaxYear.fromMtd("2024-25")),
+      minError = RuleTaxYearNotSupportedError,
+      maxError = RuleTaxYearForVersionNotSupportedError
+    )
 
   def validate: Validated[Seq[MtdError], RetrieveAllResidentialPropertyCgtRequestData] =
     (

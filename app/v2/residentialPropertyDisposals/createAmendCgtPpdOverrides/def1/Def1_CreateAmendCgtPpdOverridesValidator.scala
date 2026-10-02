@@ -34,10 +34,11 @@ import v2.residentialPropertyDisposals.createAmendCgtPpdOverrides.model.request.
 class Def1_CreateAmendCgtPpdOverridesValidator(nino: String, taxYear: String, body: JsValue)(appConfig: AppConfig)
     extends Validator[CreateAmendCgtPpdOverridesRequestData] {
 
-  private lazy val resolveTaxYear = ResolveTaxYearMinMax(
-    (TaxYear.fromDownstreamInt(appConfig.minimumPermittedTaxYear), TaxYear.fromMtd("2024-25")),
-    RuleTaxYearNotSupportedError,
-    RuleTaxYearForVersionNotSupportedError
+  private lazy val resolveTaxYear = ResolveDetailedTaxYear(
+    minimumTaxYear = TaxYear.fromDownstreamInt(appConfig.minimumPermittedTaxYear),
+    maximumTaxYear = Some(TaxYear.fromMtd("2024-25")),
+    minError = RuleTaxYearNotSupportedError,
+    maxError = RuleTaxYearForVersionNotSupportedError
   )
 
   private val resolveJson = new ResolveNonEmptyJsonObject[Def1_CreateAmendCgtPpdOverridesRequestBody]()

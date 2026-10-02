@@ -17,7 +17,7 @@
 package v3.residentialPropertyDisposals.createAmendCgtPpdOverrides
 
 import api.config.AppConfig
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -34,8 +34,8 @@ object CreateAmendCgtPpdOverridesSchema {
 
   def schemaFor(taxYearString: String, temporalValidationEnabled: Boolean)(implicit
       appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {
-    ResolveTaxYearMinimum(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear), allowIncompleteTaxYear = !temporalValidationEnabled)(
-      taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear), allowIncompleteTaxYear = !temporalValidationEnabled)
+      .apply(taxYearString) andThen schemaFor
   }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], CreateAmendCgtPpdOverridesSchema] = {

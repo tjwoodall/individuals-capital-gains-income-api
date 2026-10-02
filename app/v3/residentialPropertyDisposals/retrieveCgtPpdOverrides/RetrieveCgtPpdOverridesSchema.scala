@@ -17,7 +17,7 @@
 package v3.residentialPropertyDisposals.retrieveCgtPpdOverrides
 
 import api.config.AppConfig
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -45,7 +45,7 @@ object RetrieveCgtPpdOverridesSchema {
   }
 
   def schemaFor(taxYearString: String)(implicit appConfig: AppConfig): Validated[Seq[MtdError], RetrieveCgtPpdOverridesSchema] = {
-    ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear)).apply(taxYearString) andThen schemaFor
   }
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveCgtPpdOverridesSchema] = {

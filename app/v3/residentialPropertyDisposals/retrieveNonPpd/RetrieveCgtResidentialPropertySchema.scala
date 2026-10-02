@@ -17,7 +17,7 @@
 package v3.residentialPropertyDisposals.retrieveNonPpd
 
 import api.config.AppConfig
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import api.schema.DownstreamReadable
@@ -51,7 +51,7 @@ object RetrieveCgtResidentialPropertySchema {
   }
 
   def schemaFor(taxYearString: String)(implicit appConfig: AppConfig): Validated[Seq[MtdError], RetrieveCgtResidentialPropertySchema] =
-    ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString) andThen schemaFor
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear)).apply(taxYearString) andThen schemaFor
 
   def schemaFor(taxYear: TaxYear): Validated[Seq[MtdError], RetrieveCgtResidentialPropertySchema] = {
     if (taxYear >= TaxYear.fromMtd("2026-27")) Valid(Def3)

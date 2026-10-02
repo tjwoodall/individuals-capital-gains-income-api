@@ -17,7 +17,7 @@
 package v3.residentialPropertyDisposals.createAmendNonPpd
 
 import api.config.AppConfig
-import api.controllers.validators.resolvers.ResolveTaxYearMinimum
+import api.controllers.validators.resolvers.ResolveDetailedTaxYear
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -36,7 +36,8 @@ object CreateAmendCgtResidentialPropertyDisposalsSchema {
   def schemaFor(
       taxYearString: String
   )(implicit appConfig: AppConfig): Validated[Seq[MtdError], CreateAmendCgtResidentialPropertyDisposalsSchema] =
-    ResolveTaxYearMinimum(TaxYear.ending(appConfig.minimumPermittedTaxYear))(taxYearString)
+    ResolveDetailedTaxYear(minimumTaxYear = TaxYear.ending(appConfig.minimumPermittedTaxYear))
+      .apply(taxYearString)
       .andThen(schemaFor)
 
   private def schemaFor(

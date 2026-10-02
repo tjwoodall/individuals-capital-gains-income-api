@@ -18,7 +18,7 @@ package v3.otherCgt.delete.def1
 
 import api.config.AppConfig
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYearMinimum}
+import api.controllers.validators.resolvers.{ResolveDetailedTaxYear, ResolveNino}
 import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
@@ -32,7 +32,7 @@ class Def1_DeleteOtherCgtValidator @Inject() (nino: String, taxYear: String)(app
 
   private lazy val minimumTaxYear = appConfig.minimumPermittedTaxYear
 
-  private lazy val resolveTaxYear = ResolveTaxYearMinimum(TaxYear.fromDownstreamInt(minimumTaxYear))
+  private lazy val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = TaxYear.fromDownstreamInt(minimumTaxYear))
 
   def validate: Validated[Seq[MtdError], DeleteOtherCgtRequestData] =
     (
