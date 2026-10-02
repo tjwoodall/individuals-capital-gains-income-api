@@ -48,8 +48,7 @@ responses:
         examples:
           example-response:
             description: Example Response
-            value:
-              $ref: './examples/all_cgt_residential_overrides_retrieve/def1/response.json'
+            externalValue: './examples/all_cgt_residential_overrides_retrieve/def1/response.json'
 
   "400":
     description: Bad request
